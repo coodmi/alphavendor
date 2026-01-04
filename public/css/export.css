@@ -1,0 +1,282 @@
+/* Export Page Specific Styles */
+
+/* Export Hero Section */
+.export-hero {
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+    padding: 70px 0;
+    margin-bottom: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.export-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+    opacity: 0.5;
+}
+
+.export-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.export-hero .hero-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.export-hero .hero-text {
+    flex: 1;
+}
+
+.export-hero .hero-badge {
+    display: inline-block;
+    background: #FFE8C2;
+    color: #C05A00;
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border: 1px solid #FFD59E;
+}
+
+.export-hero .hero-badge i {
+    margin-right: 6px;
+}
+
+.export-hero h1 {
+    font-size: 44px;
+    color: var(--dark-color);
+    margin-bottom: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.export-hero .hero-text > p {
+    font-size: 17px;
+    color: #555;
+    margin-bottom: 24px;
+    line-height: 1.55;
+    max-width: 620px;
+}
+
+.export-hero .hero-stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.export-hero .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #FFE8C2;
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.08);
+}
+
+.export-hero .stat-item i {
+    font-size: 26px;
+    color: var(--primary-color);
+}
+
+.export-hero .stat-item h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--dark-color);
+    margin: 0;
+}
+
+.export-hero .stat-item span {
+    font-size: 12px;
+    color: #666;
+}
+
+.export-hero .hero-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.export-hero .btn-primary {
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 11px 22px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 14px rgba(255, 165, 0, 0.28);
+}
+
+.export-hero .btn-primary:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 165, 0, 0.45);
+}
+
+
+
+.export-hero .btn-secondary {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 10px 22px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.export-hero .btn-secondary:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(255, 165, 0, 0.3);
+}
+
+.export-hero .hero-image {
+    flex: 1;
+    max-width: 500px;
+}
+
+.export-hero .hero-image img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
+}
+
+/* Export Info in Product Card */
+.export-info {
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: #FFF4E5;
+    border-radius: 6px;
+    border-left: 3px solid #FFA500;
+}
+
+.export-info .moq-info,
+.export-info .destination-info {
+    font-size: 13px;
+    color: #C05A00;
+    font-weight: 600;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.export-info i {
+    color: #FFA500;
+}
+
+.export-info .moq,
+.export-info .destination {
+    color: #2C3E50;
+    font-weight: 500;
+}
+
+/* Override button color for export */
+.export-hero ~ .shop-section .btn-add-cart {
+    background: linear-gradient(135deg, #FFA500 0%, #FFB833 100%);
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.export-hero ~ .shop-section .btn-add-cart:hover {
+    background: linear-gradient(135deg, #FFB833 0%, #FFD280 100%);
+    transform: translateY(-2px);
+}
+
+/* Compact product cards for export */
+.export-hero ~ .shop-section .product-card {
+    padding: 14px;
+    border-radius: 14px;
+}
+
+.export-hero ~ .shop-section .product-image img {
+    border-radius: 12px;
+}
+
+.export-hero ~ .shop-section .product-title {
+    font-size: 16px;
+}
+
+/* Active filter tags for export */
+.export-hero ~ .shop-section .filter-tag {
+    background: #FFF4E5;
+    color: #C05A00;
+    border: 1px solid #FFB833;
+}
+
+.export-hero ~ .shop-section .filter-tag:hover {
+    background: #FFA500;
+    color: var(--white);
+}
+
+/* Pagination active for export */
+.export-hero ~ .shop-section .page-btn.active {
+    background: #FFA500;
+    color: var(--white);
+}
+
+.export-hero ~ .shop-section .page-btn:hover:not(:disabled):not(.active) {
+    background: #FFF4E5;
+    color: #C05A00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .export-hero .hero-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .export-hero h1 {
+        font-size: 32px;
+    }
+
+    .export-hero .hero-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .export-hero .hero-image {
+        max-width: 100%;
+    }
+
+    .export-hero .image-stack {
+        height: 250px;
+    }
+
+    .export-hero .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .export-hero .btn-primary,
+    .export-hero .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}
