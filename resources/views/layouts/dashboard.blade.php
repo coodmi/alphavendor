@@ -456,7 +456,7 @@
         function showToast(message, type = 'success') {
             const toastContainer = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            
+
             // Toast styling
             toast.style.cssText = `
                 background: ${type === 'success' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'};
@@ -472,12 +472,12 @@
                 position: relative;
                 overflow: hidden;
             `;
-            
+
             // Icon based on type
-            const icon = type === 'success' 
-                ? '<i class="fas fa-check-circle" style="font-size: 20px;"></i>' 
+            const icon = type === 'success'
+                ? '<i class="fas fa-check-circle" style="font-size: 20px;"></i>'
                 : '<i class="fas fa-exclamation-circle" style="font-size: 20px;"></i>';
-            
+
             // Toast content
             toast.innerHTML = `
                 ${icon}
@@ -486,9 +486,9 @@
                     <i class="fas fa-times"></i>
                 </button>
             `;
-            
+
             toastContainer.appendChild(toast);
-            
+
             // Auto remove after 5 seconds
             setTimeout(() => {
                 toast.style.animation = 'slideOut 0.3s ease-in';
