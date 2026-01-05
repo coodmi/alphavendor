@@ -14,9 +14,13 @@
             <i class="fas fa-shopping-cart"></i>
             <span>Orders</span>
         </a>
-        <a href="#" class="menu-item">
+        <a href="javascript:void(0)" onclick="showSection('products')" class="menu-item">
             <i class="fas fa-box"></i>
             <span>Products</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showSection('categories')" class="menu-item">
+            <i class="fas fa-tags"></i>
+            <span>Category</span>
         </a>
         <a href="#" class="menu-item">
             <i class="fas fa-boxes"></i>
@@ -392,6 +396,372 @@
     </div>
 </div>
 
+<!-- Products Section -->
+<div id="products-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Products Management</h2>
+                <p style="color: #7f8c8d;">Manage all products in your store</p>
+            </div>
+            <button onclick="openAddProductModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-plus"></i> Add Product
+            </button>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Image</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Product</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Category</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Vendor</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Price</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Stock</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Status</th>
+                        <th style="padding: 12px; text-align: center; color: #2c3e50;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($products as $product)
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            @if($product->image)
+                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                            @else
+                                <div style="width: 60px; height: 60px; background: #ecf0f1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-box" style="color: #95a5a6;"></i>
+                                </div>
+                            @endif
+                        </td>
+                        <td style="padding: 12px;">
+                            <strong>{{ $product->name }}</strong><br>
+                            <small style="color: #7f8c8d;">SKU: {{ $product->sku }}</small>
+                            @if($product->is_featured)
+                                <span style="display: inline-block; padding: 2px 8px; background: #ffd700; color: #000; border-radius: 8px; font-size: 11px; margin-left: 5px;">
+                                    <i class="fas fa-star"></i> Featured
+                                </span>
+                            @endif
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #e3f2fd; color: #1976d2; border-radius: 12px; font-size: 12px;">
+                                {{ $product->category->name ?? 'N/A' }}
+                            </span>
+                        </td>
+                        <td style="padding: 12px;">
+                            {{ $product->vendor->name ?? 'N/A' }}
+                        </td>
+                        <td style="padding: 12px;">
+                            <strong style="color: #27ae60;">${{ number_format($product->price, 2) }}</strong>
+                            @if($product->old_price)
+                                <br><small style="text-decoration: line-through; color: #95a5a6;">${{ number_format($product->old_price, 2) }}</small>
+                            @endif
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: {{ $product->stock > 10 ? '#d4edda' : ($product->stock > 0 ? '#fff3cd' : '#f8d7da') }}; color: {{ $product->stock > 10 ? '#155724' : ($product->stock > 0 ? '#856404' : '#721c24') }}; border-radius: 12px; font-size: 12px;">
+                                {{ $product->stock }} units
+                            </span>
+                        </td>
+                        <td style="padding: 12px;">
+                            @if($product->status === 'active')
+                                <span style="padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 12px; font-size: 12px;">Active</span>
+                            @elseif($product->status === 'out_of_stock')
+                                <span style="padding: 4px 12px; background: #f8d7da; color: #721c24; border-radius: 12px; font-size: 12px;">Out of Stock</span>
+                            @else
+                                <span style="padding: 4px 12px; background: #d1ecf1; color: #0c5460; border-radius: 12px; font-size: 12px;">Inactive</span>
+                            @endif
+                        </td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick='editProduct(@json($product))' style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button onclick="confirmDeleteProduct({{ $product->id }}, '{{ $product->name }}')" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" style="padding: 40px; text-align: center; color: #7f8c8d;">
+                            <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i><br>
+                            No products found. Click "Add Product" to create one.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Categories Section -->
+<div id="categories-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Categories Management</h2>
+                <p style="color: #7f8c8d;">Manage product categories</p>
+            </div>
+            <button onclick="openAddCategoryModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-plus"></i> Add Category
+            </button>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Image</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Name</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Products</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Status</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Sort Order</th>
+                        <th style="padding: 12px; text-align: center; color: #2c3e50;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($categories as $category)
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            @if($category->image)
+                                <img src="{{ str_starts_with($category->image, 'http') ? $category->image : asset('storage/' . $category->image) }}" alt="{{ $category->name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                            @else
+                                <div style="width: 50px; height: 50px; background: #ecf0f1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-image" style="color: #95a5a6;"></i>
+                                </div>
+                            @endif
+                        </td>
+                        <td style="padding: 12px;">
+                            <strong>{{ $category->name }}</strong><br>
+                            <small style="color: #7f8c8d;">{{ $category->description ?? 'No description' }}</small>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #e3f2fd; color: #1976d2; border-radius: 12px; font-size: 12px;">
+                                {{ $category->products_count }} Products
+                            </span>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: {{ $category->is_active ? '#d4edda' : '#f8d7da' }}; color: {{ $category->is_active ? '#155724' : '#721c24' }}; border-radius: 12px; font-size: 12px;">
+                                {{ $category->is_active ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+                        <td style="padding: 12px;">{{ $category->sort_order }}</td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick='editCategory(@json($category))' style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button onclick="confirmDeleteCategory({{ $category->id }}, '{{ $category->name }}')" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" style="padding: 40px; text-align: center; color: #7f8c8d;">
+                            <i class="fas fa-tags" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i><br>
+                            No categories found. Click "Add Category" to create one.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Product Modal -->
+<div id="productModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 10px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto;">
+        <div style="padding: 25px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; color: #2c3e50;" id="productModalTitle">Add Product</h3>
+            <button onclick="closeProductModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #7f8c8d;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="productForm" method="POST" enctype="multipart/form-data" style="padding: 25px;">
+            @csrf
+            <input type="hidden" name="_method" id="productFormMethod" value="POST">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Name *</label>
+                    <input type="text" name="name" id="productName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">SKU *</label>
+                    <input type="text" name="sku" id="productSku" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Category *</label>
+                    <select name="category_id" id="productCategory" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="">Select Category</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Vendor *</label>
+                    <select name="vendor_id" id="productVendor" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="">Select Vendor</option>
+                        @foreach($vendors as $vendor)
+                            <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Price ($) *</label>
+                    <input type="number" name="price" id="productPrice" required step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Old Price ($)</label>
+                    <input type="number" name="old_price" id="productOldPrice" step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Stock Quantity *</label>
+                    <input type="number" name="stock" id="productStock" required min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Status *</label>
+                    <select name="status" id="productStatus" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="out_of_stock">Out of Stock</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Description</label>
+                <textarea name="description" id="productDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Image <span id="productImageRequiredLabel">*</span></label>
+                <input type="file" name="image" id="productImage" accept="image/*" onchange="previewProductImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                <div id="productImagePreview" style="display: none; margin-top: 15px; position: relative;">
+                    <img id="productPreviewImg" src="" alt="Preview" style="max-width: 100%; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #3498db;">
+                    <button type="button" onclick="cancelProductImage()" style="position: absolute; top: 10px; right: 10px; width: 35px; height: 35px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 20px;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" name="is_featured" id="productFeatured" value="1" style="margin-right: 8px; width: 18px; height: 18px;">
+                    <span style="color: #2c3e50;">Featured Product</span>
+                </label>
+
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Badge (Optional)</label>
+                    <input type="text" name="badge" id="productBadge" placeholder="e.g., New, Sale, Hot" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" onclick="closeProductModal()" style="padding: 12px 24px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    Cancel
+                </button>
+                <button type="submit" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    <i class="fas fa-save"></i> Save Product
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Category Modal -->
+<div id="categoryModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 10px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+        <div style="padding: 25px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; color: #2c3e50;" id="categoryModalTitle">Add Category</h3>
+            <button onclick="closeCategoryModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #7f8c8d;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="categoryForm" method="POST" enctype="multipart/form-data" style="padding: 25px;">
+            @csrf
+            <input type="hidden" name="_method" id="categoryFormMethod" value="POST">
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Category Name *</label>
+                <input type="text" name="name" id="categoryName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Description</label>
+                <textarea name="description" id="categoryDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Category Image</label>
+                <input type="file" name="image" id="categoryImage" accept="image/*" onchange="previewCategoryImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                <div id="categoryImagePreview" style="display: none; margin-top: 15px; position: relative;">
+                    <img id="categoryPreviewImg" src="" alt="Preview" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 8px; border: 2px solid #3498db;">
+                    <button type="button" onclick="cancelCategoryImage()" style="position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" name="is_active" id="categoryStatus" value="1" checked style="margin-right: 8px; width: 18px; height: 18px;">
+                    <span style="color: #2c3e50;">Active Category</span>
+                </label>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Sort Order</label>
+                <input type="number" name="sort_order" id="categorySortOrder" value="0" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" onclick="closeCategoryModal()" style="padding: 12px 24px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    Cancel
+                </button>
+                <button type="submit" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    <i class="fas fa-save"></i> Save Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 10px; width: 90%; max-width: 400px; padding: 30px; text-align: center;">
+        <div style="width: 60px; height: 60px; background: #fee; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 30px; color: #e74c3c;"></i>
+        </div>
+        <h3 style="margin: 0 0 10px 0; color: #2c3e50;" id="deleteModalTitle">Delete Item?</h3>
+        <p style="color: #7f8c8d; margin-bottom: 25px;">Are you sure you want to delete "<strong id="deleteItemName"></strong>"? This action cannot be undone.</p>
+        <form id="deleteForm" method="POST" style="display: flex; gap: 10px; justify-content: center;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="closeDeleteModal()" style="padding: 10px 20px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                Cancel
+            </button>
+            <button type="submit" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </form>
+    </div>
+</div>
+
 <script>
 function showSection(section) {
     // Hide all sections
@@ -407,15 +777,198 @@ function showSection(section) {
     // Show selected section
     if (section === 'dashboard') {
         document.getElementById('dashboard-section').style.display = 'block';
-        document.querySelector('a[href="{{ route('admin.dashboard') }}"]').classList.add('active');
+        document.querySelector('a[onclick="showSection(\'dashboard\')"]').classList.add('active');
     } else if (section === 'customers') {
         document.getElementById('customers-section').style.display = 'block';
         event.target.closest('.menu-item').classList.add('active');
     } else if (section === 'applications') {
         document.getElementById('applications-section').style.display = 'block';
         event.target.closest('.menu-item').classList.add('active');
+    } else if (section === 'products') {
+        document.getElementById('products-section').style.display = 'block';
+        event.target.closest('.menu-item').classList.add('active');
+    } else if (section === 'categories') {
+        document.getElementById('categories-section').style.display = 'block';
+        event.target.closest('.menu-item').classList.add('active');
     }
 }
+
+// Product Modal Functions
+let isEditModeProduct = false;
+
+function openAddProductModal() {
+    isEditModeProduct = false;
+    document.getElementById('productModalTitle').textContent = 'Add Product';
+    document.getElementById('productForm').action = '{{ route('admin.products.store') }}';
+    document.getElementById('productFormMethod').value = 'POST';
+    document.getElementById('productForm').reset();
+    document.getElementById('productImagePreview').style.display = 'none';
+    document.getElementById('productImageRequiredLabel').textContent = '*';
+    document.getElementById('productImage').required = true;
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+function editProduct(product) {
+    isEditModeProduct = true;
+    document.getElementById('productModalTitle').textContent = 'Edit Product';
+    document.getElementById('productForm').action = `/admin/products/${product.id}`;
+    document.getElementById('productFormMethod').value = 'PUT';
+    document.getElementById('productName').value = product.name;
+    document.getElementById('productSku').value = product.sku;
+    document.getElementById('productCategory').value = product.category_id;
+    document.getElementById('productVendor').value = product.vendor_id;
+    document.getElementById('productPrice').value = product.price;
+    document.getElementById('productOldPrice').value = product.old_price || '';
+    document.getElementById('productStock').value = product.stock;
+    document.getElementById('productStatus').value = product.status;
+    document.getElementById('productDescription').value = product.description || '';
+    document.getElementById('productFeatured').checked = product.is_featured;
+    document.getElementById('productBadge').value = product.badge || '';
+    document.getElementById('productImageRequiredLabel').textContent = '';
+    document.getElementById('productImage').required = false;
+    
+    if (product.image) {
+        document.getElementById('productImagePreview').style.display = 'block';
+        // Check if image is Unsplash URL or local storage path
+        if (product.image.startsWith('http')) {
+            document.getElementById('productPreviewImg').src = product.image;
+        } else {
+            document.getElementById('productPreviewImg').src = `/storage/${product.image}`;
+        }
+    } else {
+        document.getElementById('productImagePreview').style.display = 'none';
+    }
+    
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
+function previewProductImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (file.size > 2097152) {
+            showToast('File size must be less than 2MB', 'error');
+            event.target.value = '';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('productPreviewImg').src = e.target.result;
+            document.getElementById('productImagePreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function cancelProductImage() {
+    document.getElementById('productImage').value = '';
+    if (!isEditModeProduct) {
+        document.getElementById('productImagePreview').style.display = 'none';
+    }
+}
+
+function confirmDeleteProduct(id, name) {
+    document.getElementById('deleteModalTitle').textContent = 'Delete Product?';
+    document.getElementById('deleteItemName').textContent = name;
+    document.getElementById('deleteForm').action = `/admin/products/${id}`;
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+// Category Modal Functions
+let isEditModeCategory = false;
+
+function openAddCategoryModal() {
+    isEditModeCategory = false;
+    document.getElementById('categoryModalTitle').textContent = 'Add Category';
+    document.getElementById('categoryForm').action = '{{ route('admin.categories.store') }}';
+    document.getElementById('categoryFormMethod').value = 'POST';
+    document.getElementById('categoryForm').reset();
+    document.getElementById('categoryImagePreview').style.display = 'none';
+    document.getElementById('categoryModal').style.display = 'flex';
+}
+
+function editCategory(category) {
+    isEditModeCategory = true;
+    document.getElementById('categoryModalTitle').textContent = 'Edit Category';
+    document.getElementById('categoryForm').action = `/admin/categories/${category.id}`;
+    document.getElementById('categoryFormMethod').value = 'PUT';
+    document.getElementById('categoryName').value = category.name;
+    document.getElementById('categoryDescription').value = category.description || '';
+    document.getElementById('categoryStatus').checked = category.is_active;
+    document.getElementById('categorySortOrder').value = category.sort_order;
+    
+    if (category.image) {
+        document.getElementById('categoryImagePreview').style.display = 'block';
+        // Check if image is Unsplash URL or local storage path
+        if (category.image.startsWith('http')) {
+            document.getElementById('categoryPreviewImg').src = category.image;
+        } else {
+            document.getElementById('categoryPreviewImg').src = `/storage/${category.image}`;
+        }
+    } else {
+        document.getElementById('categoryImagePreview').style.display = 'none';
+    }
+    
+    document.getElementById('categoryModal').style.display = 'flex';
+}
+
+function closeCategoryModal() {
+    document.getElementById('categoryModal').style.display = 'none';
+}
+
+function previewCategoryImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (file.size > 2097152) {
+            showToast('File size must be less than 2MB', 'error');
+            event.target.value = '';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('categoryPreviewImg').src = e.target.result;
+            document.getElementById('categoryImagePreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function cancelCategoryImage() {
+    document.getElementById('categoryImage').value = '';
+    if (!isEditModeCategory) {
+        document.getElementById('categoryImagePreview').style.display = 'none';
+    }
+}
+
+function confirmDeleteCategory(id, name) {
+    document.getElementById('deleteModalTitle').textContent = 'Delete Category?';
+    document.getElementById('deleteItemName').textContent = name;
+    document.getElementById('deleteForm').action = `/admin/categories/${id}`;
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+// Delete Modal
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Close modals on outside click
+document.getElementById('productModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeProductModal();
+});
+
+document.getElementById('categoryModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeCategoryModal();
+});
+
+document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+});
 </script>
 
 <style>

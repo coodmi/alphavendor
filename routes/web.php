@@ -14,10 +14,12 @@ use App\Http\Controllers\ExporterDashboardController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\RoleApplicationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 Route::get('/retail', [RetailController::class, 'index'])->name('retail');
 Route::get('/wholesale', [WholesaleController::class, 'index'])->name('wholesale');
 Route::get('/export', [ExportController::class, 'index'])->name('export');
@@ -53,6 +55,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/applications/{application}', [RoleApplicationController::class, 'show'])->name('applications.show');
         Route::post('/applications/{application}/approve', [RoleApplicationController::class, 'approve'])->name('applications.approve');
         Route::post('/applications/{application}/reject', [RoleApplicationController::class, 'reject'])->name('applications.reject');
+
+        // Category management
+        Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+        Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+        // Product management
+        Route::get('/products', [ProductController::class, 'index'])->name('products');
+        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+        Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
 
     // Retailer routes

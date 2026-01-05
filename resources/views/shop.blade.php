@@ -24,48 +24,17 @@
                 <div class="filter-box">
                     <h3 class="filter-title">Categories</h3>
                     <ul class="filter-list">
+                        @forelse($categories as $category)
                         <li>
                             <label class="filter-checkbox">
                                 <input type="checkbox">
-                                <span>Fashion</span>
-                                <span class="count">(234)</span>
+                                <span>{{ $category->name }}</span>
+                                <span class="count">({{ $category->products_count }})</span>
                             </label>
                         </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Home Living</span>
-                                <span class="count">(187)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Appliances</span>
-                                <span class="count">(156)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Beauty & Health</span>
-                                <span class="count">(298)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Automotive</span>
-                                <span class="count">(142)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Jewelry & Watches</span>
-                                <span class="count">(89)</span>
-                            </label>
-                        </li>
+                        @empty
+                        <li style="padding: 10px; color: #7f8c8d;">No categories available</li>
+                        @endforelse
                     </ul>
                 </div>
 
@@ -272,12 +241,16 @@
 
                 <!-- Products Grid -->
                 <div class="products-grid-view">
-                    @foreach($products as $product)
+                    @forelse($products as $product)
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product['name'] }}">
-                            @if($product['badge'])
-                            <span class="badge {{ strtolower($product['badge']) }}">{{ $product['badge'] }}</span>
+                            @if($product->image)
+                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                            @else
+                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
+                            @endif
+                            @if($product->badge)
+                            <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                             @endif
                             <div class="product-actions">
                                 <button class="action-btn" title="Add to Wishlist">
@@ -296,31 +269,39 @@
                             </button>
                         </div>
                         <div class="product-info">
-                            <div class="product-category">Fashion</div>
-                            <h4>{{ $product['name'] }}</h4>
+                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <h4>{{ $product->name }}</h4>
                             <div class="vendor-name">
-                                <i class="fas fa-store"></i> Fashion Store
+                                <i class="fas fa-store"></i> {{ $product->vendor->name ?? 'AlphaVendor' }}
                             </div>
                             <div class="rating">
                                 @for($i = 0; $i < 5; $i++)
-                                    @if($i < floor($product['rating']))
+                                    @if($i < floor($product->rating))
                                         <i class="fas fa-star"></i>
-                                    @elseif($i < $product['rating'])
+                                    @elseif($i < $product->rating)
                                         <i class="fas fa-star-half-alt"></i>
                                     @else
                                         <i class="far fa-star"></i>
                                     @endif
                                 @endfor
-                                <span>({{ $product['rating'] }}) {{ $product['reviews'] }} reviews</span>
+                                <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
                             <div class="price">
-                                <span class="current-price">${{ $product['price'] }}</span>
-                                <span class="old-price">${{ $product['old_price'] }}</span>
-                                <span class="discount">-{{ round((($product['old_price'] - $product['price']) / $product['old_price']) * 100) }}%</span>
+                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                @if($product->old_price)
+                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="discount">-{{ $product->discount_percentage }}%</span>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    @empty
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-box-open" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
+                        <h3 style="color: #2c3e50; margin-bottom: 10px;">No Products Found</h3>
+                        <p style="color: #7f8c8d;">Check back later for new products!</p>
+                    </div>
+                    @endforelse
                 </div>
 
                 <!-- Pagination -->

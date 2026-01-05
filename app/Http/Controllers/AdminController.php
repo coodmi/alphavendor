@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\RoleApplication;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -30,8 +32,13 @@ class AdminController extends Controller
 
         $users = User::latest()->get();
         $applications = RoleApplication::with('user')->latest()->get();
+        
+        // Fetch categories and products for dashboard
+        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $products = Product::with(['category', 'vendor'])->latest()->get();
+        $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])->get();
 
-        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications'));
+        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors'));
     }
 
     /**
