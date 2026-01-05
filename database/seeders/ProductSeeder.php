@@ -371,7 +371,7 @@ class ProductSeeder extends Seeder
 
 // Download image from Unsplash or Picsum as backup
             $imageUrl = "https://picsum.photos/800/800";
-            
+
             try {
                 $context = stream_context_create([
                     'http' => [
@@ -380,9 +380,9 @@ class ProductSeeder extends Seeder
                         'max_redirects' => 5
                     ]
                 ]);
-                
+
                 $imageContent = @file_get_contents($imageUrl, false, $context);
-                
+
                 if ($imageContent !== false && strlen($imageContent) > 1000) {
                     $filename = 'products/' . time() . '_' . uniqid() . '.jpg';
                     Storage::disk('public')->put($filename, $imageContent);

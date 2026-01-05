@@ -93,10 +93,10 @@ class CategorySeeder extends Seeder
 
             // Download image from Unsplash
             $imageUrl = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop&q=80";
-            
+
             // Alternative: Try picsum.photos as backup
             $backupUrl = "https://picsum.photos/800/600";
-            
+
             try {
                 $context = stream_context_create([
                     'http' => [
@@ -105,15 +105,15 @@ class CategorySeeder extends Seeder
                         'max_redirects' => 5
                     ]
                 ]);
-                
+
                 $imageContent = @file_get_contents($imageUrl, false, $context);
-                
+
                 // Try backup if first fails
                 if ($imageContent === false) {
                     sleep(1);
                     $imageContent = @file_get_contents($backupUrl, false, $context);
                 }
-                
+
                 if ($imageContent !== false && strlen($imageContent) > 1000) {
                     $filename = 'categories/' . time() . '_' . uniqid() . '.jpg';
                     Storage::disk('public')->put($filename, $imageContent);
