@@ -94,7 +94,7 @@
                 <div style="position: relative; display: inline-block;">
                     <img id="imagePreview" src="" alt="Preview"
                         style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #3498db; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <button type="button" onclick="cancelPreview()" 
+                    <button type="button" onclick="cancelPreview()"
                         style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-times"></i>
                     </button>
@@ -112,7 +112,11 @@
                 if (file) {
                     // Check file size (2MB = 2097152 bytes)
                     if (file.size > 2097152) {
-                        alert('File size must be less than 2MB');
+                        if (typeof showToast === 'function') {
+                            showToast('File size must be less than 2MB', 'error');
+                        } else {
+                            alert('File size must be less than 2MB');
+                        }
                         event.target.value = '';
                         return;
                     }
@@ -120,7 +124,11 @@
                     // Check file type
                     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
                     if (!allowedTypes.includes(file.type)) {
-                        alert('Please select a valid image file (JPG, PNG, or GIF)');
+                        if (typeof showToast === 'function') {
+                            showToast('Please select a valid image file (JPG, PNG, or GIF)', 'error');
+                        } else {
+                            alert('Please select a valid image file (JPG, PNG, or GIF)');
+                        }
                         event.target.value = '';
                         return;
                     }

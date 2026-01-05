@@ -315,32 +315,6 @@
             padding: 30px;
         }
 
-        /* Alerts */
-        .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-        }
-
-        .alert i {
-            font-size: 20px;
-        }
-
         /* Mobile Toggle */
         .sidebar-toggle {
             display: none;
@@ -453,24 +427,13 @@
 
             <!-- Content -->
             <div class="content-area">
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i>
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        {{ session('error') }}
-                    </div>
-                @endif
-
                 @yield('content')
             </div>
         </div>
     </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; max-width: 400px;"></div>
 
     <script>
         function toggleSidebar() {
@@ -488,6 +451,92 @@
                 profileMenu.classList.remove('active');
             }
         });
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            // Toast styling
+            toast.style.cssText = `
+                background: ${type === 'success' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'};
+                color: white;
+                padding: 16px 20px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                animation: slideIn 0.3s ease-out;
+                position: relative;
+                overflow: hidden;
+            `;
+            
+            // Icon based on type
+            const icon = type === 'success' 
+                ? '<i class="fas fa-check-circle" style="font-size: 20px;"></i>' 
+                : '<i class="fas fa-exclamation-circle" style="font-size: 20px;"></i>';
+            
+            // Toast content
+            toast.innerHTML = `
+                ${icon}
+                <span style="flex: 1; font-size: 14px;">${message}</span>
+                <button onclick="this.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px; opacity: 0.8; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // Show toasts for session messages
+        @if(session('success'))
+            showToast("{{ session('success') }}", 'success');
+        @endif
+
+        @if(session('error'))
+            showToast("{{ session('error') }}", 'error');
+        @endif
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #toastContainer {
+                left: 20px;
+                right: 20px;
+                min-width: auto;
+            }
+        }
+    </style>
 
         // Auto-close alerts after 5 seconds
         setTimeout(function() {

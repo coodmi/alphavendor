@@ -42,7 +42,7 @@
         <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
         <p style="color: #7f8c8d;">Here's what's happening with your platform today.</p>
     </div>
-    
+
     <!-- Profile Card -->
     <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); min-width: 250px;">
         <div style="display: flex; align-items: center; gap: 15px;">
