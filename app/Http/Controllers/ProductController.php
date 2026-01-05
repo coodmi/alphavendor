@@ -18,7 +18,7 @@ class ProductController extends Controller
         $products = Product::with(['category', 'vendor'])->latest()->get();
         $categories = Category::where('is_active', true)->get();
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin'])->get();
-        
+
         return view('admin.products.index', compact('products', 'categories', 'vendors'));
     }
 
@@ -117,7 +117,7 @@ class ProductController extends Controller
             ->where('status', 'active')
             ->latest()
             ->get();
-            
+
         $categories = Category::where('is_active', true)
             ->withCount('products')
             ->orderBy('sort_order')

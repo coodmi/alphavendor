@@ -116,7 +116,7 @@
         <form id="categoryForm" method="POST" enctype="multipart/form-data" style="padding: 25px;">
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
-            
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Category Name *</label>
                 <input type="text" name="name" id="categoryName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
@@ -201,14 +201,14 @@ function editCategory(category) {
     document.getElementById('categoryDescription').value = category.description || '';
     document.getElementById('categoryStatus').checked = category.is_active;
     document.getElementById('categorySortOrder').value = category.sort_order;
-    
+
     if (category.image) {
         document.getElementById('imagePreview').style.display = 'block';
         document.getElementById('previewImg').src = `/storage/${category.image}`;
     } else {
         document.getElementById('imagePreview').style.display = 'none';
     }
-    
+
     document.getElementById('categoryModal').style.display = 'flex';
 }
 
@@ -224,7 +224,7 @@ function previewImage(event) {
             event.target.value = '';
             return;
         }
-        
+
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('previewImg').src = e.target.result;

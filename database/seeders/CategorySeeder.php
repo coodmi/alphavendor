@@ -93,7 +93,7 @@ class CategorySeeder extends Seeder
 
             // Download image from Unsplash
             $imageUrl = "https://source.unsplash.com/800x600/?{$unsplashQuery}";
-            
+
             try {
                 $imageContent = @file_get_contents($imageUrl);
                 if ($imageContent !== false) {
@@ -109,7 +109,7 @@ class CategorySeeder extends Seeder
             }
 
             Category::create($categoryData);
-            
+
             // Small delay to avoid rate limiting
             usleep(500000); // 0.5 seconds
         }

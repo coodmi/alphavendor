@@ -140,7 +140,7 @@
         <form id="productForm" method="POST" enctype="multipart/form-data" style="padding: 25px;">
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
-            
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Name *</label>
@@ -291,14 +291,14 @@ function editProduct(product) {
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('imageRequiredLabel').textContent = '';
     document.getElementById('productImage').required = false;
-    
+
     if (product.image) {
         document.getElementById('imagePreview').style.display = 'block';
         document.getElementById('previewImg').src = `/storage/${product.image}`;
     } else {
         document.getElementById('imagePreview').style.display = 'none';
     }
-    
+
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -314,7 +314,7 @@ function previewImage(event) {
             event.target.value = '';
             return;
         }
-        
+
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('previewImg').src = e.target.result;

@@ -371,7 +371,7 @@ class ProductSeeder extends Seeder
 
             // Download image from Unsplash
             $imageUrl = "https://source.unsplash.com/800x800/?{$unsplashQuery}";
-            
+
             try {
                 $imageContent = @file_get_contents($imageUrl);
                 if ($imageContent !== false) {
@@ -389,7 +389,7 @@ class ProductSeeder extends Seeder
             }
 
             Product::create($productData);
-            
+
             // Small delay to avoid rate limiting
             usleep(500000); // 0.5 seconds
         }

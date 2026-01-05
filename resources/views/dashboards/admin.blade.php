@@ -586,7 +586,7 @@
         <form id="productForm" method="POST" enctype="multipart/form-data" style="padding: 25px;">
             @csrf
             <input type="hidden" name="_method" id="productFormMethod" value="POST">
-            
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Name *</label>
@@ -695,7 +695,7 @@
         <form id="categoryForm" method="POST" enctype="multipart/form-data" style="padding: 25px;">
             @csrf
             <input type="hidden" name="_method" id="categoryFormMethod" value="POST">
-            
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Category Name *</label>
                 <input type="text" name="name" id="categoryName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
@@ -826,7 +826,7 @@ function editProduct(product) {
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productImageRequiredLabel').textContent = '';
     document.getElementById('productImage').required = false;
-    
+
     if (product.image) {
         document.getElementById('productImagePreview').style.display = 'block';
         // Check if image is Unsplash URL or local storage path
@@ -838,7 +838,7 @@ function editProduct(product) {
     } else {
         document.getElementById('productImagePreview').style.display = 'none';
     }
-    
+
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -854,7 +854,7 @@ function previewProductImage(event) {
             event.target.value = '';
             return;
         }
-        
+
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('productPreviewImg').src = e.target.result;
@@ -900,7 +900,7 @@ function editCategory(category) {
     document.getElementById('categoryDescription').value = category.description || '';
     document.getElementById('categoryStatus').checked = category.is_active;
     document.getElementById('categorySortOrder').value = category.sort_order;
-    
+
     if (category.image) {
         document.getElementById('categoryImagePreview').style.display = 'block';
         // Check if image is Unsplash URL or local storage path
@@ -912,7 +912,7 @@ function editCategory(category) {
     } else {
         document.getElementById('categoryImagePreview').style.display = 'none';
     }
-    
+
     document.getElementById('categoryModal').style.display = 'flex';
 }
 
@@ -928,7 +928,7 @@ function previewCategoryImage(event) {
             event.target.value = '';
             return;
         }
-        
+
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('categoryPreviewImg').src = e.target.result;

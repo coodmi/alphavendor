@@ -32,7 +32,7 @@ class AdminController extends Controller
 
         $users = User::latest()->get();
         $applications = RoleApplication::with('user')->latest()->get();
-        
+
         // Fetch categories and products for dashboard
         $categories = Category::withCount('products')->orderBy('sort_order')->get();
         $products = Product::with(['category', 'vendor'])->latest()->get();
