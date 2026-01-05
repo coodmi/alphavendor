@@ -369,23 +369,34 @@ class ProductSeeder extends Seeder
             $productData['rating'] = rand(35, 50) / 10; // 3.5 to 5.0
             $productData['reviews_count'] = rand(10, 500);
 
-            // Download image from Unsplash
-            $imageUrl = "https://source.unsplash.com/800x800/?{$unsplashQuery}";
-
+// Download image from Unsplash or Picsum as backup
+            $imageUrl = "https://picsum.photos/800/800";
+            
             try {
-                $imageContent = @file_get_contents($imageUrl);
-                if ($imageContent !== false) {
+                $context = stream_context_create([
+                    'http' => [
+                        'timeout' => 15,
+                        'follow_location' => 1,
+                        'max_redirects' => 5
+                    ]
+                ]);
+                
+                $imageContent = @file_get_contents($imageUrl, false, $context);
+                
+                if ($imageContent !== false && strlen($imageContent) > 1000) {
                     $filename = 'products/' . time() . '_' . uniqid() . '.jpg';
                     Storage::disk('public')->put($filename, $imageContent);
                     $productData['image'] = $filename;
+                    $this->command->info("✓ Image downloaded for: {$productData['name']}");
                 } else {
-                    $this->command->warn("Failed to download image for: {$productData['name']}");
-                    continue;
+                    // Create product without image if download fails
+                    $productData['image'] = null;
+                    $this->command->warn("✗ No image for: {$productData['name']}");
                 }
             } catch (\Exception $e) {
-                // If download fails, skip this product
-                $this->command->warn("Failed to download image for: {$productData['name']}");
-                continue;
+                // Create product without image if download fails
+                $productData['image'] = null;
+                $this->command->warn("✗ Failed: {$productData['name']}");
             }
 
             Product::create($productData);
