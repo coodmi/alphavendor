@@ -66,7 +66,7 @@
         </div>
 
         <div class="detail-section">
-            <h2>Application Details</h2>
+            <h2>📋 Application Information</h2>
             <div class="detail-grid">
                 <div class="detail-item">
                     <strong>Status:</strong>
@@ -92,7 +92,92 @@
         </div>
 
         <div class="detail-section">
-            <h2>Reason for Application</h2>
+            <h2>🏢 Business Information</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <strong>Business Name:</strong>
+                    <span>{{ $application->business_name }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Business Type:</strong>
+                    <span>{{ ucfirst(str_replace('_', ' ', $application->business_type)) }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Years in Business:</strong>
+                    <span>{{ $application->years_in_business }} years</span>
+                </div>
+                @if($application->business_registration_number)
+                <div class="detail-item">
+                    <strong>Registration Number:</strong>
+                    <span>{{ $application->business_registration_number }}</span>
+                </div>
+                @endif
+                @if($application->tax_id)
+                <div class="detail-item">
+                    <strong>Tax ID:</strong>
+                    <span>{{ $application->tax_id }}</span>
+                </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>📞 Contact Information</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <strong>Business Phone:</strong>
+                    <span><a href="tel:{{ $application->business_phone }}">{{ $application->business_phone }}</a></span>
+                </div>
+                <div class="detail-item">
+                    <strong>Business Email:</strong>
+                    <span><a href="mailto:{{ $application->business_email }}">{{ $application->business_email }}</a></span>
+                </div>
+                @if($application->website)
+                <div class="detail-item">
+                    <strong>Website:</strong>
+                    <span><a href="{{ $application->website }}" target="_blank">{{ $application->website }}</a></span>
+                </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>📍 Business Address</h2>
+            <div class="address-box">
+                <p>{{ $application->business_address }}</p>
+                <p>{{ $application->city }}, {{ $application->state }} {{ $application->postal_code }}</p>
+                <p>{{ $application->country }}</p>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>📝 Business Details</h2>
+            <div class="detail-item" style="margin-bottom: 15px;">
+                <strong>Business Description:</strong>
+                <div class="reason-box">
+                    {{ $application->business_description }}
+                </div>
+            </div>
+            @if($application->product_categories)
+            <div class="detail-item" style="margin-bottom: 15px;">
+                <strong>Product Categories:</strong>
+                <div class="categories-list">
+                    @foreach(explode(',', $application->product_categories) as $category)
+                        <span class="category-badge">{{ trim($category) }}</span>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+            @if($application->estimated_monthly_sales)
+            <div class="detail-item">
+                <strong>Estimated Monthly Sales:</strong>
+                <span>${{ number_format($application->estimated_monthly_sales, 2) }}</span>
+            </div>
+            @endif
+        </div>
+
+        <div class="detail-section">
+            <h2>💭 Why They Want to Join</h2>
             <div class="reason-box">
                 {{ $application->reason }}
             </div>
@@ -202,6 +287,44 @@
     border-radius: 5px;
     line-height: 1.6;
     color: #333;
+}
+
+.address-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.address-box p {
+    margin: 0;
+}
+
+.categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.detail-item a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.detail-item a:hover {
+    text-decoration: underline;
 }
 
 .badge {

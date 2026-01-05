@@ -46,17 +46,57 @@ class RoleApplicationController extends Controller
         $validated = $request->validate([
             'requested_role' => 'required|in:retailer,wholesaler,exporter',
             'reason' => 'required|string|min:20|max:1000',
+            
+            // Business Information
+            'business_name' => 'required|string|max:255',
+            'business_registration_number' => 'nullable|string|max:255',
+            'tax_id' => 'nullable|string|max:255',
+            'business_type' => 'required|in:sole_proprietorship,partnership,llc,corporation,other',
+            'years_in_business' => 'required|integer|min:0|max:100',
+            
+            // Contact Information
+            'business_phone' => 'required|string|max:255',
+            'business_email' => 'required|email|max:255',
+            'website' => 'nullable|url|max:255',
+            
+            // Address Information
+            'business_address' => 'required|string|max:1000',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'postal_code' => 'required|string|max:20',
+            'country' => 'required|string|max:255',
+            
+            // Business Details
+            'business_description' => 'required|string|min:50|max:2000',
+            'product_categories' => 'nullable|string|max:500',
+            'estimated_monthly_sales' => 'nullable|numeric|min:0',
         ]);
 
         RoleApplication::create([
             'user_id' => $user->id,
             'requested_role' => $validated['requested_role'],
             'reason' => $validated['reason'],
+            'business_name' => $validated['business_name'],
+            'business_registration_number' => $validated['business_registration_number'] ?? null,
+            'tax_id' => $validated['tax_id'] ?? null,
+            'business_type' => $validated['business_type'],
+            'years_in_business' => $validated['years_in_business'],
+            'business_phone' => $validated['business_phone'],
+            'business_email' => $validated['business_email'],
+            'website' => $validated['website'] ?? null,
+            'business_address' => $validated['business_address'],
+            'city' => $validated['city'],
+            'state' => $validated['state'],
+            'postal_code' => $validated['postal_code'],
+            'country' => $validated['country'],
+            'business_description' => $validated['business_description'],
+            'product_categories' => $validated['product_categories'] ?? null,
+            'estimated_monthly_sales' => $validated['estimated_monthly_sales'] ?? null,
             'status' => 'pending',
         ]);
 
         return redirect()->route('user.dashboard')
-            ->with('success', 'Your role application has been submitted successfully!');
+            ->with('success', 'Your vendor application has been submitted successfully! We will review it shortly.');
     }
 
     /**
