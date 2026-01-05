@@ -1,0 +1,289 @@
+@extends('layouts.app')
+
+@section('title', 'View Application')
+
+@section('content')
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Application Details</h1>
+        <a href="{{ route('admin.applications') }}" class="btn btn-secondary">Back to Applications</a>
+    </div>
+
+    <div class="application-details">
+        <div class="detail-section">
+            <h2>Applicant Information</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <strong>Name:</strong>
+                    <span>{{ $application->user->name }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Email:</strong>
+                    <span>{{ $application->user->email }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Current Role:</strong>
+                    <span>{{ ucfirst($application->user->role) }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Requested Role:</strong>
+                    <span class="badge badge-{{ $application->requested_role }}">
+                        {{ ucfirst($application->requested_role) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>Application Details</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <strong>Status:</strong>
+                    <span class="status status-{{ $application->status }}">
+                        {{ ucfirst($application->status) }}
+                    </span>
+                </div>
+                <div class="detail-item">
+                    <strong>Applied Date:</strong>
+                    <span>{{ $application->created_at->format('M d, Y h:i A') }}</span>
+                </div>
+                @if($application->reviewed_at)
+                    <div class="detail-item">
+                        <strong>Reviewed Date:</strong>
+                        <span>{{ $application->reviewed_at->format('M d, Y h:i A') }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Reviewed By:</strong>
+                        <span>{{ $application->reviewer->name ?? 'N/A' }}</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>Reason for Application</h2>
+            <div class="reason-box">
+                {{ $application->reason }}
+            </div>
+        </div>
+
+        @if($application->admin_notes)
+            <div class="detail-section">
+                <h2>Admin Notes</h2>
+                <div class="reason-box">
+                    {{ $application->admin_notes }}
+                </div>
+            </div>
+        @endif
+
+        @if($application->status === 'pending')
+            <div class="detail-section">
+                <h2>Review Application</h2>
+                
+                <form action="{{ route('admin.applications.approve', $application) }}" method="POST" class="review-form">
+                    @csrf
+                    <div class="form-group">
+                        <label for="admin_notes">Admin Notes (Optional)</label>
+                        <textarea id="admin_notes" name="admin_notes" rows="3" placeholder="Add any notes about this approval..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">✓ Approve Application</button>
+                </form>
+
+                <form action="{{ route('admin.applications.reject', $application) }}" method="POST" class="review-form" style="margin-top: 20px;">
+                    @csrf
+                    <div class="form-group">
+                        <label for="admin_notes_reject">Reason for Rejection <span class="required">*</span></label>
+                        <textarea id="admin_notes_reject" name="admin_notes" rows="3" required placeholder="Explain why this application is being rejected..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">✗ Reject Application</button>
+                </form>
+            </div>
+        @endif
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-header h1 {
+    color: #333;
+}
+
+.application-details {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.detail-section {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detail-item strong {
+    color: #666;
+    font-size: 14px;
+}
+
+.detail-item span {
+    color: #333;
+    font-size: 16px;
+}
+
+.reason-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-retailer {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge-wholesaler {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.badge-exporter {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.review-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+.required {
+    color: #dc3545;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+</style>
+@endsection

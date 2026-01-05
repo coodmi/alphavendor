@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'status',
     ];
 
     /**
@@ -44,5 +46,61 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is retailer
+     */
+    public function isRetailer(): bool
+    {
+        return $this->role === 'retailer';
+    }
+
+    /**
+     * Check if user is wholesaler
+     */
+    public function isWholesaler(): bool
+    {
+        return $this->role === 'wholesaler';
+    }
+
+    /**
+     * Check if user is exporter
+     */
+    public function isExporter(): bool
+    {
+        return $this->role === 'exporter';
+    }
+
+    /**
+     * Check if user is normal user
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
+     * Get role applications for this user
+     */
+    public function roleApplications()
+    {
+        return $this->hasMany(\App\Models\RoleApplication::class);
+    }
+
+    /**
+     * Get pending role application
+     */
+    public function pendingRoleApplication()
+    {
+        return $this->hasOne(\App\Models\RoleApplication::class)->where('status', 'pending');
     }
 }

@@ -30,11 +30,25 @@
                     <a href="#" class="action-link">
                         <i class="fas fa-shopping-bag"></i>
                     </a>
-                    <a href="#" class="action-link user-menu">
-                        <i class="far fa-user"></i>
-                        <span>Dashboard</span>
-                        <small>Logout</small>
-                    </a>
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="action-link user-menu">
+                            <i class="far fa-user"></i>
+                            <span>{{ Auth::user()->name }}</span>
+                            <small>Dashboard</small>
+                        </a>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn-link" style="background: none; border: none; color: inherit; cursor: pointer; padding: 5px 10px;">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="action-link user-menu">
+                            <i class="far fa-user"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="{{ route('register') }}" class="action-link">
+                            <span>Register</span>
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -62,6 +76,18 @@
 
     <!-- Main Content -->
     <main>
+        @if(session('success'))
+            <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 15px; margin: 20px auto; max-width: 1200px; border-radius: 5px;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-error" style="background: #f8d7da; color: #721c24; padding: 15px; margin: 20px auto; max-width: 1200px; border-radius: 5px;">
+                {{ session('error') }}
+            </div>
+        @endif
+        
         @yield('content')
     </main>
 
