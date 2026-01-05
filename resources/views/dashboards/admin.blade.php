@@ -64,7 +64,7 @@
                     @foreach($recentApplications as $application)
                         <div class="application-item">
                             <div class="application-info">
-                                <strong>{{ $application->user->name }}</strong> 
+                                <strong>{{ $application->user->name }}</strong>
                                 <span class="badge badge-{{ $application->requested_role }}">{{ ucfirst($application->requested_role) }}</span>
                             </div>
                             <div class="application-date">

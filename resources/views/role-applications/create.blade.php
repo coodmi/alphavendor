@@ -7,7 +7,7 @@
     <div class="form-box">
         <h2>Apply for Vendor Role</h2>
         <p class="subtitle">Choose a vendor role and tell us why you want to join our platform</p>
-        
+
         @if($errors->any())
             <div class="alert alert-error">
                 <ul>
@@ -20,7 +20,7 @@
 
         <form action="{{ route('role.apply.store') }}" method="POST">
             @csrf
-            
+
             <div class="form-group">
                 <label for="requested_role">Select Vendor Role <span class="required">*</span></label>
                 <select id="requested_role" name="requested_role" required>

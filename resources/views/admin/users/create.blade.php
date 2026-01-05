@@ -6,7 +6,7 @@
 <div class="form-container">
     <div class="form-box">
         <h2>Add New User</h2>
-        
+
         @if($errors->any())
             <div class="alert alert-error">
                 <ul>
@@ -19,7 +19,7 @@
 
         <form action="{{ route('admin.users.store') }}" method="POST">
             @csrf
-            
+
             <div class="form-group">
                 <label for="name">Full Name <span class="required">*</span></label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required>

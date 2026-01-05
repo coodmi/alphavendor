@@ -58,7 +58,7 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-wrapper">
-            
+
                 <ul class="nav-menu">
                     <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
                     <li><a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a></li>
@@ -87,7 +87,7 @@
                 {{ session('error') }}
             </div>
         @endif
-        
+
         @yield('content')
     </main>
 

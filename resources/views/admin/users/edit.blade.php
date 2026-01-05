@@ -6,7 +6,7 @@
 <div class="form-container">
     <div class="form-box">
         <h2>Edit User</h2>
-        
+
         @if($errors->any())
             <div class="alert alert-error">
                 <ul>
@@ -20,7 +20,7 @@
         <form action="{{ route('admin.users.update', $user) }}" method="POST">
             @csrf
             @method('PUT')
-            
+
             <div class="form-group">
                 <label for="name">Full Name <span class="required">*</span></label>
                 <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required>

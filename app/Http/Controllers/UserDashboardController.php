@@ -13,7 +13,7 @@ class UserDashboardController extends Controller
     {
         $user = auth()->user();
         $pendingApplication = $user->pendingRoleApplication;
-        
+
         return view('dashboards.user', compact('pendingApplication'));
     }
 }

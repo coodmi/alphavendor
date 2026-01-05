@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     // Admin routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-        
+
         // User management
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
         Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
         Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
-        
+
         // Role applications management
         Route::get('/applications', [RoleApplicationController::class, 'index'])->name('applications');
         Route::get('/applications/{application}', [RoleApplicationController::class, 'show'])->name('applications.show');

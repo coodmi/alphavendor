@@ -14,7 +14,7 @@ class RoleApplicationController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
+
         // Check if user already has a pending application
         if ($user->pendingRoleApplication) {
             return redirect()->route('user.dashboard')

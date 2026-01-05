@@ -79,7 +79,7 @@
         @if($application->status === 'pending')
             <div class="detail-section">
                 <h2>Review Application</h2>
-                
+
                 <form action="{{ route('admin.applications.approve', $application) }}" method="POST" class="review-form">
                     @csrf
                     <div class="form-group">
