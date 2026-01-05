@@ -28,7 +28,10 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboards.admin', compact('stats', 'recentApplications'));
+        $users = User::latest()->get();
+        $applications = RoleApplication::with('user')->latest()->get();
+
+        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications'));
     }
 
     /**
