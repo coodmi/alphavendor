@@ -17,19 +17,19 @@ return new class extends Migration
             $table->string('business_registration_number')->nullable()->after('business_name');
             $table->string('tax_id')->nullable()->after('business_registration_number');
             $table->enum('business_type', ['sole_proprietorship', 'partnership', 'llc', 'corporation', 'other'])->after('tax_id');
-            
+
             // Contact Information
             $table->string('business_phone')->after('business_type');
             $table->string('business_email')->after('business_phone');
             $table->string('website')->nullable()->after('business_email');
-            
+
             // Address Information
             $table->text('business_address')->after('website');
             $table->string('city')->after('business_address');
             $table->string('state')->after('city');
             $table->string('postal_code')->after('state');
             $table->string('country')->after('postal_code');
-            
+
             // Business Details
             $table->integer('years_in_business')->after('country');
             $table->text('business_description')->after('years_in_business');

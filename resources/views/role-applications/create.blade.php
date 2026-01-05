@@ -71,7 +71,7 @@
             <!-- Business Information -->
             <div class="form-section">
                 <h3>🏢 Business Information</h3>
-                
+
                 <div class="form-group">
                     <label for="business_name">Business Name <span class="required">*</span></label>
                     <input type="text" id="business_name" name="business_name" value="{{ old('business_name') }}" required placeholder="Enter your registered business name">
@@ -110,7 +110,7 @@
             <!-- Contact Information -->
             <div class="form-section">
                 <h3>📞 Contact Information</h3>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="business_phone">Business Phone <span class="required">*</span></label>
@@ -132,7 +132,7 @@
             <!-- Business Address -->
             <div class="form-section">
                 <h3>📍 Business Address</h3>
-                
+
                 <div class="form-group">
                     <label for="business_address">Street Address <span class="required">*</span></label>
                     <textarea id="business_address" name="business_address" rows="2" required placeholder="Enter your complete business address">{{ old('business_address') }}</textarea>
@@ -166,7 +166,7 @@
             <!-- Business Description -->
             <div class="form-section">
                 <h3>📝 Business Details</h3>
-                
+
                 <div class="form-group">
                     <label for="business_description">Business Description <span class="required">*</span></label>
                     <textarea id="business_description" name="business_description" rows="4" required placeholder="Describe your business, products, and services (minimum 50 characters)">{{ old('business_description') }}</textarea>
