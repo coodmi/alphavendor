@@ -398,12 +398,12 @@ function showSection(section) {
     document.querySelectorAll('.content-section').forEach(el => {
         el.style.display = 'none';
     });
-    
+
     // Remove active class from all menu items
     document.querySelectorAll('.menu-item').forEach(el => {
         el.classList.remove('active');
     });
-    
+
     // Show selected section
     if (section === 'dashboard') {
         document.getElementById('dashboard-section').style.display = 'block';
