@@ -78,19 +78,68 @@
             </div>
         </div>
 
-        <form action="{{ route('profile.upload-image') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.upload-image') }}" method="POST" enctype="multipart/form-data" id="uploadImageForm">
             @csrf
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Upload New Photo</label>
-                <input type="file" name="profile_image" accept="image/*" required
-                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <input type="file" name="profile_image" id="profileImageInput" accept="image/*" required
+                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;"
+                    onchange="previewImage(event)">
                 <small style="display: block; margin-top: 5px; color: #7f8c8d;">Accepted formats: JPG, PNG, GIF (Max: 2MB)</small>
             </div>
 
-            <button type="submit" style="padding: 12px 30px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
+            <!-- Image Preview -->
+            <div id="imagePreviewContainer" style="display: none; margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Preview:</label>
+                <div style="position: relative; display: inline-block;">
+                    <img id="imagePreview" src="" alt="Preview"
+                        style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #3498db; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <button type="button" onclick="cancelPreview()" 
+                        style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" id="uploadButton" style="padding: 12px 30px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
                 Upload Photo
             </button>
         </form>
+
+        <script>
+            function previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    // Check file size (2MB = 2097152 bytes)
+                    if (file.size > 2097152) {
+                        alert('File size must be less than 2MB');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    // Check file type
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Please select a valid image file (JPG, PNG, or GIF)');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('imagePreview').src = e.target.result;
+                        document.getElementById('imagePreviewContainer').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function cancelPreview() {
+                document.getElementById('profileImageInput').value = '';
+                document.getElementById('imagePreview').src = '';
+                document.getElementById('imagePreviewContainer').style.display = 'none';
+            }
+        </script>
     </div>
 </div>
 @endsection
