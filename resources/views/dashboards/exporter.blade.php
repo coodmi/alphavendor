@@ -11,7 +11,7 @@
             <span>Dashboard</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Products</div>
         <a href="#" class="menu-item">
@@ -27,7 +27,7 @@
             <span>Inventory</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Orders & Shipping</div>
         <a href="#" class="menu-item">
@@ -39,7 +39,7 @@
             <span>Shipping Management</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Account</div>
         <a href="{{ route('profile.show') }}" class="menu-item">

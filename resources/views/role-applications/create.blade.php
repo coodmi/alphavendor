@@ -11,7 +11,7 @@
             <span>Dashboard</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Become a Vendor</div>
         <a href="{{ route('role.apply') }}" class="menu-item active">
@@ -19,7 +19,7 @@
             <span>Apply for Role</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Account</div>
         <a href="{{ route('profile.show') }}" class="menu-item">

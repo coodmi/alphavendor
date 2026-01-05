@@ -11,7 +11,7 @@
             <span>Dashboard</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Management</div>
         <a href="{{ route('admin.users') }}" class="menu-item active">
@@ -23,7 +23,7 @@
             <span>Applications</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Settings</div>
         <a href="{{ route('profile.show') }}" class="menu-item">

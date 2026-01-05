@@ -11,7 +11,7 @@
             <span>Dashboard</span>
         </a>
     </div>
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Shopping</div>
         <a href="{{ route('shop') }}" class="menu-item">
@@ -27,7 +27,7 @@
             <span>Wishlist</span>
         </a>
     </div>
-    
+
     @if(!$pendingApplication)
     <div class="menu-section">
         <div class="menu-section-title">Become a Vendor</div>
@@ -37,7 +37,7 @@
         </a>
     </div>
     @endif
-    
+
     <div class="menu-section">
         <div class="menu-section-title">Account</div>
         <a href="{{ route('profile.show') }}" class="menu-item">
