@@ -13,6 +13,7 @@ use App\Http\Controllers\WholesalerDashboardController;
 use App\Http\Controllers\ExporterDashboardController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\RoleApplicationController;
+use App\Http\Controllers\ProfileController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -79,4 +80,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/apply-role', [RoleApplicationController::class, 'create'])->name('role.apply');
         Route::post('/apply-role', [RoleApplicationController::class, 'store'])->name('role.apply.store');
     });
+
+    // Profile routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage'])->name('profile.upload-image');
+    Route::delete('/profile/delete-image', [ProfileController::class, 'deleteImage'])->name('profile.delete-image');
 });

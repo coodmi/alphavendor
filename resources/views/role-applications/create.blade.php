@@ -1,6 +1,33 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Apply for Vendor Role')
+@section('page-title', 'Apply for Vendor Role')
+
+@section('sidebar-menu')
+    <div class="menu-section">
+        <div class="menu-section-title">Main</div>
+        <a href="{{ route('user.dashboard') }}" class="menu-item">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Become a Vendor</div>
+        <a href="{{ route('role.apply') }}" class="menu-item active">
+            <i class="fas fa-rocket"></i>
+            <span>Apply for Role</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Account</div>
+        <a href="{{ route('profile.show') }}" class="menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+@endsection
 
 @section('content')
 <div class="form-container">

@@ -1,13 +1,59 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Exporter Dashboard')
+@section('page-title', 'Exporter Dashboard')
+
+@section('sidebar-menu')
+    <div class="menu-section">
+        <div class="menu-section-title">Main</div>
+        <a href="{{ route('exporter.dashboard') }}" class="menu-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Products</div>
+        <a href="#" class="menu-item">
+            <i class="fas fa-globe"></i>
+            <span>Export Products</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Product</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Inventory</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Orders & Shipping</div>
+        <a href="#" class="menu-item">
+            <i class="fas fa-shipping-fast"></i>
+            <span>International Orders</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-plane"></i>
+            <span>Shipping Management</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Account</div>
+        <a href="{{ route('profile.show') }}" class="menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+@endsection
 
 @section('content')
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1>Exporter Dashboard</h1>
-        <p>Welcome back, {{ Auth::user()->name }}!</p>
-    </div>
+<div style="margin-bottom: 20px;">
+    <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
+    <p style="color: #7f8c8d;">Manage your international export business.</p>
+</div>
 
     <div class="dashboard-stats">
         <div class="stat-card">

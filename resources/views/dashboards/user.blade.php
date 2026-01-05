@@ -1,13 +1,57 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'User Dashboard')
+@section('page-title', 'User Dashboard')
+
+@section('sidebar-menu')
+    <div class="menu-section">
+        <div class="menu-section-title">Main</div>
+        <a href="{{ route('user.dashboard') }}" class="menu-item active">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Shopping</div>
+        <a href="{{ route('shop') }}" class="menu-item">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Browse Products</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>My Orders</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+        </a>
+    </div>
+    
+    @if(!$pendingApplication)
+    <div class="menu-section">
+        <div class="menu-section-title">Become a Vendor</div>
+        <a href="{{ route('role.apply') }}" class="menu-item">
+            <i class="fas fa-rocket"></i>
+            <span>Apply for Role</span>
+        </a>
+    </div>
+    @endif
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Account</div>
+        <a href="{{ route('profile.show') }}" class="menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+@endsection
 
 @section('content')
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1>User Dashboard</h1>
-        <p>Welcome back, {{ Auth::user()->name }}!</p>
-    </div>
+<div style="margin-bottom: 20px;">
+    <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
+    <p style="color: #7f8c8d;">Your personal shopping dashboard.</p>
+</div>
 
     @if($pendingApplication)
         <div class="alert alert-info" style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 5px; margin-bottom: 30px;">

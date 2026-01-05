@@ -1,13 +1,55 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Retailer Dashboard')
+@section('page-title', 'Retailer Dashboard')
+
+@section('sidebar-menu')
+    <div class="menu-section">
+        <div class="menu-section-title">Main</div>
+        <a href="{{ route('retailer.dashboard') }}" class="menu-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Products</div>
+        <a href="#" class="menu-item">
+            <i class="fas fa-box"></i>
+            <span>My Products</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Product</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Inventory</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Orders</div>
+        <a href="#" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Account</div>
+        <a href="{{ route('profile.show') }}" class="menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+@endsection
 
 @section('content')
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1>Retailer Dashboard</h1>
-        <p>Welcome back, {{ Auth::user()->name }}!</p>
-    </div>
+<div style="margin-bottom: 20px;">
+    <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
+    <p style="color: #7f8c8d;">Manage your retail business efficiently.</p>
+</div>
 
     <div class="dashboard-stats">
         <div class="stat-card">

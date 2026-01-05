@@ -1,6 +1,37 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Add New User')
+@section('page-title', 'Add New User')
+
+@section('sidebar-menu')
+    <div class="menu-section">
+        <div class="menu-section-title">Main</div>
+        <a href="{{ route('admin.dashboard') }}" class="menu-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Management</div>
+        <a href="{{ route('admin.users') }}" class="menu-item active">
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+        </a>
+        <a href="{{ route('admin.applications') }}" class="menu-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Applications</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Settings</div>
+        <a href="{{ route('profile.show') }}" class="menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+@endsection
 
 @section('content')
 <div class="form-container">

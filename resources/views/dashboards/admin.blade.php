@@ -1,13 +1,46 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Admin Dashboard')
+@section('page-title', 'Admin Dashboard')
+
+@section('sidebar-menu')
+    <div class="menu-section">
+        <div class="menu-section-title">Main</div>
+        <a href="{{ route('admin.dashboard') }}" class="menu-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Management</div>
+        <a href="{{ route('admin.users') }}" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+        </a>
+        <a href="{{ route('admin.applications') }}" class="menu-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Applications</span>
+            @if($stats['pending_applications'] > 0)
+                <span class="badge">{{ $stats['pending_applications'] }}</span>
+            @endif
+        </a>
+    </div>
+    
+    <div class="menu-section">
+        <div class="menu-section-title">Settings</div>
+        <a href="{{ route('profile.show') }}" class="menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+@endsection
 
 @section('content')
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1>Admin Dashboard</h1>
-        <p>Welcome back, {{ Auth::user()->name }}!</p>
-    </div>
+<div style="margin-bottom: 20px;">
+    <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
+    <p style="color: #7f8c8d;">Here's what's happening with your platform today.</p>
+</div>
 
     <div class="dashboard-stats">
         <div class="stat-card">
@@ -236,5 +269,121 @@
     background: #e8f5e9;
     color: #388e3c;
 }
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    font-size: 40px;
+}
+
+.stat-info h3 {
+    font-size: 32px;
+    margin: 0;
+    color: #007bff;
+}
+
+.stat-info p {
+    margin: 5px 0 0;
+    color: #666;
+}
+
+.dashboard-content {
+    display: grid;
+    gap: 30px;
+}
+
+.dashboard-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.dashboard-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: #333;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.applications-list {
+    display: grid;
+    gap: 15px;
+}
+
+.application-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.application-info {
+    flex: 1;
+}
+
 </style>
 @endsection
