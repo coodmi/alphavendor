@@ -3,6 +3,17 @@
 @section('title', 'Retail - AlphaVendor Multi Vendor Marketplace')
 
 @section('content')
+<!-- Breadcrumb -->
+{{-- <section class="breadcrumb-section">
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <span class="separator">/</span>
+            <span>Retail</span>
+        </nav>
+    </div>
+</section> --}}
+
 <!-- Hero Banner -->
 <section class="retail-hero">
     <div class="container">
@@ -123,8 +134,7 @@
                     <ul class="filter-list rating-filter">
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="5"
-                                    {{ request('min_rating') == 5 ? 'checked' : '' }}>
+                                <input type="checkbox">
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -132,12 +142,12 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                 </span>
+                                <span class="count">(123)</span>
                             </label>
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="4"
-                                    {{ request('min_rating') == 4 ? 'checked' : '' }}>
+                                <input type="checkbox">
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -146,12 +156,12 @@
                                     <i class="far fa-star"></i>
                                 </span>
                                 <span>& Up</span>
+                                <span class="count">(267)</span>
                             </label>
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="3"
-                                    {{ request('min_rating') == 3 ? 'checked' : '' }}>
+                                <input type="checkbox">
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -160,6 +170,7 @@
                                     <i class="far fa-star"></i>
                                 </span>
                                 <span>& Up</span>
+                                <span class="count">(445)</span>
                             </label>
                         </li>
                     </ul>
@@ -176,7 +187,7 @@
                 <!-- Toolbar -->
                 <div class="shop-toolbar">
                     <div class="toolbar-left">
-                        <p class="results-count">Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> results</p>
+                        <p class="results-count">Showing <strong>1-24</strong> of <strong>1,234</strong> retail products</p>
                     </div>
                     <div class="toolbar-right">
                         <div class="view-mode">
@@ -189,79 +200,45 @@
                         </div>
                         <div class="sort-dropdown">
                             <select>
-                                <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Sort by: Default</option>
-                                <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
-                                <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
-                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Best Rating</option>
-                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
+                                <option>Sort by: Default</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Newest First</option>
+                                <option>Best Rating</option>
+                                <option>Most Popular</option>
                             </select>
                         </div>
                         <div class="per-page-dropdown">
                             <select>
-                                <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>Show: 12</option>
-                                <option value="24" {{ request('per_page', 12) == 24 ? 'selected' : '' }}>Show: 24</option>
-                                <option value="36" {{ request('per_page', 12) == 36 ? 'selected' : '' }}>Show: 36</option>
-                                <option value="48" {{ request('per_page', 12) == 48 ? 'selected' : '' }}>Show: 48</option>
+                                <option>Show: 24</option>
+                                <option>Show: 36</option>
+                                <option>Show: 48</option>
+                                <option>Show: 96</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <!-- Active Filters Tags -->
-                @if(request()->hasAny(['categories', 'brands', 'min_price', 'max_price', 'min_rating']))
                 <div class="active-filters">
-                    @if(request('categories'))
-                        @foreach(request('categories') as $categoryId)
-                            @php
-                                $category = $categories->firstWhere('id', $categoryId);
-                            @endphp
-                            @if($category)
-                            <span class="filter-tag" data-filter-type="category" data-filter-value="{{ $categoryId }}">
-                                {{ $category->name }}
-                                <button class="remove-filter"><i class="fas fa-times"></i></button>
-                            </span>
-                            @endif
-                        @endforeach
-                    @endif
-
-                    @if(request('min_price') || request('max_price'))
                     <span class="filter-tag">
-                        Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
+                        Electronics
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
-                    @endif
-
-                    @if(request('brands'))
-                        @foreach(request('brands') as $brand)
-                        <span class="filter-tag" data-filter-type="brand" data-filter-value="{{ $brand }}">
-                            {{ $brand }}
-                            <button class="remove-filter"><i class="fas fa-times"></i></button>
-                        </span>
-                        @endforeach
-                    @endif
-
-                    @if(request('min_rating'))
                     <span class="filter-tag">
-                        {{ request('min_rating') }}+ Stars
+                        Price: $50 - $200
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
-                    @endif
                 </div>
-                @endif
 
                 <!-- Products Grid -->
                 <div class="products-grid-view">
-                    @forelse($products as $product)
+                    @foreach($products as $product)
                     <div class="product-card">
                         <div class="product-image">
-                            @if($product->image)
-                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                            @else
-                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
-                            @endif
-                            @if($product->badge)
-                            <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product['name'] }}">
+                            @if($product['badge'])
+                            <span class="badge {{ strtolower($product['badge']) }}">{{ $product['badge'] }}</span>
                             @endif
                             <div class="product-actions">
                                 <button class="action-btn" title="Add to Wishlist">
@@ -280,126 +257,56 @@
                             </button>
                         </div>
                         <div class="product-info">
-                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4>{{ $product->name }}</h4>
+                            <div class="product-category">{{ $categories[array_rand($categories)]['name'] ?? 'Electronics' }}</div>
+                            <h4>{{ $product['name'] }}</h4>
                             <div class="vendor-name">
-                                <i class="fas fa-store"></i> {{ $product->vendor->name ?? 'AlphaVendor' }}
+                                <i class="fas fa-store"></i> {{ $stores[array_rand($stores)]['name'] ?? 'Retail Store' }}
                             </div>
                             <div class="rating">
                                 @for($i = 0; $i < 5; $i++)
-                                    @if($i < floor($product->rating))
+                                    @if($i < floor($product['rating']))
                                         <i class="fas fa-star"></i>
-                                    @elseif($i < $product->rating)
+                                    @elseif($i < $product['rating'])
                                         <i class="fas fa-star-half-alt"></i>
                                     @else
                                         <i class="far fa-star"></i>
                                     @endif
                                 @endfor
-                                <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                                <span>({{ $product['rating'] }}) {{ $product['reviews'] }} reviews</span>
                             </div>
                             <div class="price">
-                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
-                                @if($product->old_price)
-                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
-                                    <span class="discount">-{{ $product->discount_percentage }}%</span>
-                                @endif
+                                <span class="current-price">${{ $product['price'] }}</span>
+                                <span class="old-price">${{ $product['old_price'] }}</span>
+                                <span class="discount">-{{ round((($product['old_price'] - $product['price']) / $product['old_price']) * 100) }}%</span>
                             </div>
                         </div>
                     </div>
-                    @empty
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                        <i class="fas fa-box-open" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
-                        <h3 style="color: #2c3e50; margin-bottom: 10px;">No Products Found</h3>
-                        <p style="color: #7f8c8d;">Check back later for new products!</p>
-                    </div>
-                    @endforelse
+                    @endforeach
                 </div>
 
                 <!-- Pagination -->
-                @if($products->hasPages())
                 <div class="pagination-wrapper">
-                    {{ $products->links('vendor.pagination.custom') }}
+                    <nav class="pagination">
+                        <button class="page-btn prev" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <span class="page-dots">...</span>
+                        <button class="page-btn">25</button>
+                        <button class="page-btn next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
+                    <div class="pagination-info">
+                        Go to page: <input type="number" min="1" max="25" value="1">
+                    </div>
                 </div>
-                @endif
             </div>
         </div>
     </div>
 </section>
 @endsection
-
-@push('scripts')
-<script>
-// Price Range Slider - Synchronize sliders with inputs
-document.addEventListener('DOMContentLoaded', function() {
-    const rangeMin = document.querySelector(".range-min");
-    const rangeMax = document.querySelector(".range-max");
-    const minPriceInput = document.querySelector('.min-price-input');
-    const maxPriceInput = document.querySelector('.max-price-input');
-
-    if (!rangeMin || !rangeMax || !minPriceInput || !maxPriceInput) {
-        return;
-    }
-
-    // Update min slider
-    rangeMin.addEventListener('input', function() {
-        let min = parseInt(this.value);
-        let max = parseInt(rangeMax.value);
-
-        if (min > max - 100) {
-            min = max - 100;
-            this.value = min;
-        }
-
-        minPriceInput.value = min;
-    });
-
-    // Update max slider
-    rangeMax.addEventListener('input', function() {
-        let min = parseInt(rangeMin.value);
-        let max = parseInt(this.value);
-
-        if (max < min + 100) {
-            max = min + 100;
-            this.value = max;
-        }
-
-        maxPriceInput.value = max;
-    });
-
-    // Update min input
-    minPriceInput.addEventListener('input', function() {
-        let min = parseInt(this.value) || 0;
-        let max = parseInt(maxPriceInput.value) || 10000;
-
-        if (min < 0) {
-            min = 0;
-            this.value = min;
-        }
-        if (min > max - 100) {
-            min = max - 100;
-            this.value = min;
-        }
-
-        rangeMin.value = min;
-    });
-
-    // Update max input
-    maxPriceInput.addEventListener('input', function() {
-        let min = parseInt(minPriceInput.value) || 0;
-        let max = parseInt(this.value) || 10000;
-
-        if (max > 10000) {
-            max = 10000;
-            this.value = max;
-        }
-        if (max < min + 100) {
-            max = min + 100;
-            this.value = max;
-        }
-
-        rangeMax.value = max;
-    });
-});
-</script>
-<script src="{{ asset('js/shop.js') }}"></script>
-@endpush

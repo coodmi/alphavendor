@@ -2,45 +2,104 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\User;
+use App\Models\RetailPageContent;
 use Illuminate\Http\Request;
 
 class RetailController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Retail categories
-        $categories = [
-            ['name' => 'Electronics', 'count' => 234, 'icon' => 'fa-laptop'],
-            ['name' => 'Fashion & Apparel', 'count' => 567, 'icon' => 'fa-tshirt'],
-            ['name' => 'Home & Living', 'count' => 321, 'icon' => 'fa-couch'],
-            ['name' => 'Sports & Outdoor', 'count' => 198, 'icon' => 'fa-basketball-ball'],
-            ['name' => 'Beauty & Personal Care', 'count' => 445, 'icon' => 'fa-spa'],
-            ['name' => 'Toys & Games', 'count' => 276, 'icon' => 'fa-gamepad'],
-        ];
+        // Get dynamic content from database
+        $content = RetailPageContent::getAllContent();
 
-        // Featured retail products
-        $products = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $products[] = [
-                'id' => $i,
-                'name' => 'Retail Product ' . $i,
-                'price' => rand(15, 150),
-                'old_price' => rand(180, 250),
-                'rating' => rand(35, 50) / 10,
-                'reviews' => rand(20, 300),
-                'stock' => rand(5, 100),
-                'badge' => $i % 3 == 0 ? 'Hot Deal' : ($i % 5 == 0 ? 'Limited' : null)
-            ];
+        // Get products with filters (same logic as shop page)
+        $query = Product::with(['category', 'vendor', 'brand'])
+            ->where('status', 'active')
+            ->whereHas('vendor', function($q) {
+                $q->where('role', 'retailer');
+            });
+
+        // Category filter
+        if ($request->has('categories') && !empty($request->categories)) {
+            $query->whereIn('category_id', $request->categories);
         }
 
-        // Retail stores
-        $stores = [
-            ['name' => 'Tech Retail Hub', 'rating' => 4.8, 'products' => 156, 'sales' => 2340],
-            ['name' => 'Fashion Outlet', 'rating' => 4.9, 'products' => 289, 'sales' => 3890],
-            ['name' => 'Home Essentials', 'rating' => 4.7, 'products' => 234, 'sales' => 1920],
-            ['name' => 'Sports Arena', 'rating' => 4.6, 'products' => 178, 'sales' => 1450],
-        ];
+        // Price range filter
+        if ($request->has('min_price') && $request->min_price !== null) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price') && $request->max_price !== null) {
+            $query->where('price', '<=', $request->max_price);
+        }
 
-        return view('retail', compact('categories', 'products', 'stores'));
+        // Brand filter
+        if ($request->has('brands') && !empty($request->brands)) {
+            $query->whereIn('brand_id', $request->brands);
+        }
+
+        // Rating filter
+        if ($request->has('min_rating') && $request->min_rating !== null) {
+            $query->where('rating', '>=', $request->min_rating);
+        }
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Sorting
+        switch ($request->get('sort', 'default')) {
+            case 'price_low':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->latest();
+                break;
+            case 'rating':
+                $query->orderBy('rating', 'desc');
+                break;
+            case 'popular':
+                $query->orderBy('reviews_count', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        // Paginate
+        $perPage = $request->get('per_page', 12);
+        $products = $query->paginate($perPage)->withQueryString();
+
+        // Get categories with product counts (only for retailer products)
+        $categories = Category::where('is_active', true)
+            ->withCount(['products' => function($q) {
+                $q->where('status', 'active')
+                  ->whereHas('vendor', function($query) {
+                      $query->where('role', 'retailer');
+                  });
+            }])
+            ->having('products_count', '>', 0)
+            ->get();
+
+        // Get brands with product counts (only for retailer products)
+        $brands = Brand::withCount(['products' => function($q) {
+                $q->where('status', 'active')
+                  ->whereHas('vendor', function($query) {
+                      $query->where('role', 'retailer');
+                  });
+            }])
+            ->having('products_count', '>', 0)
+            ->get();
+
+        return view('retail', compact('content', 'products', 'categories', 'brands'));
     }
 }

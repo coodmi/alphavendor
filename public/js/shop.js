@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     const minPriceInput = document.querySelector(".min-price-input");
     const maxPriceInput = document.querySelector(".max-price-input");
+    const rangeMin = document.querySelector(".range-min");
+    const rangeMax = document.querySelector(".range-max");
     const sortDropdown = document.querySelector(".sort-dropdown select");
     const perPageDropdown = document.querySelector(".per-page-dropdown select");
     const viewButtons = document.querySelectorAll(".view-btn");
@@ -111,8 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (maxPriceInput) maxPriceInput.value = 10000;
 
             // Reset sliders
-            const rangeMin = document.querySelector(".range-min");
-            const rangeMax = document.querySelector(".range-max");
             if (rangeMin) rangeMin.value = 0;
             if (rangeMax) rangeMax.value = 10000;
 

@@ -36,8 +36,14 @@
         </a>
     </div>
 
-    <div class="menu-section">
-        <div class="menu-section-title">Settings</div>
+    <div class="menu-section">        <div class="menu-section-title">Pages</div>
+        <a href="{{ route('admin.retail-page') }}" class="menu-item">
+            <i class="fas fa-store"></i>
+            <span>Retail Page</span>
+        </a>
+    </div>
+
+    <div class="menu-section">        <div class="menu-section-title">Settings</div>
         <a href="{{ route('profile.show') }}" class="menu-item">
             <i class="fas fa-user-circle"></i>
             <span>Profile</span>

@@ -17,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -76,6 +77,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
         Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
         Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+
+        // Retail Page CMS
+        Route::get('/retail-page', [AdminRetailPageController::class, 'index'])->name('retail-page');
+        Route::post('/retail-page', [AdminRetailPageController::class, 'update'])->name('retail-page.update');
     });
 
     // Retailer routes
