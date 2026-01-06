@@ -21,6 +21,8 @@ class Product extends Model
         'price',
         'old_price',
         'stock',
+        'minimum_order',
+        'supplier_location',
         'sku',
         'status',
         'rating',
