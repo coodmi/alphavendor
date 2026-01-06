@@ -27,7 +27,7 @@
                         @forelse($categories as $category)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox" class="category-checkbox" value="{{ $category->id }}" 
+                                <input type="checkbox" class="category-checkbox" value="{{ $category->id }}"
                                     {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}>
                                 <span>{{ $category->name }}</span>
                                 <span class="count">({{ $category->products_count }})</span>
@@ -69,7 +69,7 @@
                         @forelse($brands ?? [] as $brand)
                         <li style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
                             <label class="filter-checkbox">
-                                <input type="checkbox" class="brand-checkbox" value="{{ $brand }}" 
+                                <input type="checkbox" class="brand-checkbox" value="{{ $brand }}"
                                     {{ in_array($brand, request('brands', [])) ? 'checked' : '' }}>
                                 <span>{{ $brand }}</span>
                             </label>
@@ -89,7 +89,7 @@
                     <ul class="filter-list rating-filter">
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="5" 
+                                <input type="radio" name="rating" class="rating-checkbox" value="5"
                                     {{ request('min_rating') == 5 ? 'checked' : '' }}>
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
@@ -102,7 +102,7 @@
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="4" 
+                                <input type="radio" name="rating" class="rating-checkbox" value="4"
                                     {{ request('min_rating') == 4 ? 'checked' : '' }}>
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
@@ -116,7 +116,7 @@
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="3" 
+                                <input type="radio" name="rating" class="rating-checkbox" value="3"
                                     {{ request('min_rating') == 3 ? 'checked' : '' }}>
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
@@ -145,7 +145,7 @@
                         @endphp
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox" class="vendor-type-checkbox" value="{{ $type }}" 
+                                <input type="checkbox" class="vendor-type-checkbox" value="{{ $type }}"
                                     {{ in_array($type, request('vendor_types', [])) ? 'checked' : '' }}>
                                 <span>{{ $vendorTypeLabels[$type] }}</span>
                                 <span class="count">({{ $count }})</span>
