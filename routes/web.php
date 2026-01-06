@@ -20,6 +20,9 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\RetailerBrandController;
 use App\Http\Controllers\RetailerCategoryController;
 use App\Http\Controllers\RetailerProductController;
+use App\Http\Controllers\Wholesaler\WholesalerBrandController;
+use App\Http\Controllers\Wholesaler\WholesalerCategoryController;
+use App\Http\Controllers\Wholesaler\WholesalerProductController;
 use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 

@@ -193,6 +193,236 @@
 </section>
 @endif
 
+<!-- Retailer Products Section -->
+<section class="py-10 md:py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-store text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Retail Products</h2>
+                    <p class="text-gray-500 text-sm">Top picks from our retailers</p>
+                </div>
+            </div>
+            <a href="{{ route('retail') }}" class="text-blue-500 hover:text-blue-600 flex items-center gap-2 font-medium transition-colors">
+                View All
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        @if($retailerProducts->count() > 0)
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($retailerProducts as $product)
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
+                <div class="relative overflow-hidden">
+                    @php
+                        $imageUrl = $product->image
+                            ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image))
+                            : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop';
+                    @endphp
+                    <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
+                    @if($product->old_price && $product->old_price > $product->price)
+                        <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">
+                            -{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%
+                        </span>
+                    @endif
+                    <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-blue-500 hover:text-white transition-colors">
+                            <i class="far fa-heart text-sm"></i>
+                        </button>
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-blue-500 hover:text-white transition-colors">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
+                    <div class="flex items-center gap-1 mb-2">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                        @endfor
+                        <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-xl font-bold text-blue-600">${{ number_format($product->price, 2) }}</span>
+                        @if($product->old_price && $product->old_price > $product->price)
+                            <span class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                        @endif
+                    </div>
+                    <button class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="text-center py-12 bg-gray-50 rounded-xl">
+            <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">No retail products available yet</p>
+        </div>
+        @endif
+    </div>
+</section>
+
+<!-- Wholesaler Products Section -->
+<section class="py-10 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-warehouse text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Wholesale Products</h2>
+                    <p class="text-gray-500 text-sm">Bulk deals from wholesalers</p>
+                </div>
+            </div>
+            <a href="{{ route('wholesale') }}" class="text-green-500 hover:text-green-600 flex items-center gap-2 font-medium transition-colors">
+                View All
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        @if($wholesalerProducts->count() > 0)
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($wholesalerProducts as $product)
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
+                <div class="relative overflow-hidden">
+                    @php
+                        $imageUrl = $product->image
+                            ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image))
+                            : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop';
+                    @endphp
+                    <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
+                    @if($product->minimum_order)
+                        <span class="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-lg">
+                            Min: {{ $product->minimum_order }} pcs
+                        </span>
+                    @endif
+                    <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-green-500 hover:text-white transition-colors">
+                            <i class="far fa-heart text-sm"></i>
+                        </button>
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-green-500 hover:text-white transition-colors">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
+                    <div class="flex items-center gap-1 mb-2">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                        @endfor
+                        <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl font-bold text-green-600">${{ number_format($product->price, 2) }}</span>
+                        @if($product->old_price && $product->old_price > $product->price)
+                            <span class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                        @endif
+                    </div>
+                    @if($product->supplier_location)
+                    <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                        <i class="fas fa-map-marker-alt"></i> {{ $product->supplier_location }}
+                    </p>
+                    @endif
+                    <button class="w-full py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-green-700 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-phone"></i> Contact Supplier
+                    </button>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="text-center py-12 bg-white rounded-xl">
+            <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">No wholesale products available yet</p>
+        </div>
+        @endif
+    </div>
+</section>
+
+<!-- Exporter Products Section -->
+<section class="py-10 md:py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-globe text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Export Products</h2>
+                    <p class="text-gray-500 text-sm">Global trade opportunities</p>
+                </div>
+            </div>
+            <a href="{{ route('export') }}" class="text-purple-500 hover:text-purple-600 flex items-center gap-2 font-medium transition-colors">
+                View All
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        @if($exporterProducts->count() > 0)
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($exporterProducts as $product)
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
+                <div class="relative overflow-hidden">
+                    @php
+                        $imageUrl = $product->image
+                            ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image))
+                            : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop';
+                    @endphp
+                    <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <span class="absolute top-3 left-3 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+                        <i class="fas fa-globe-americas"></i> Export Ready
+                    </span>
+                    <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-purple-500 hover:text-white transition-colors">
+                            <i class="far fa-heart text-sm"></i>
+                        </button>
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-purple-500 hover:text-white transition-colors">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
+                    <div class="flex items-center gap-1 mb-2">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                        @endfor
+                        <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl font-bold text-purple-600">${{ number_format($product->price, 2) }}</span>
+                        @if($product->old_price && $product->old_price > $product->price)
+                            <span class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                        @endif
+                    </div>
+                    @if($product->supplier_location)
+                    <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                        <i class="fas fa-shipping-fast"></i> Ships from {{ $product->supplier_location }}
+                    </p>
+                    @endif
+                    <button class="w-full py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg font-medium hover:from-purple-600 hover:to-purple-700 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-envelope"></i> Request Quote
+                    </button>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="text-center py-12 bg-gray-50 rounded-xl">
+            <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">No export products available yet</p>
+        </div>
+        @endif
+    </div>
+</section>
+
 <!-- Featured Vendors -->
 <section class="vendors-section">
     <div class="container">
