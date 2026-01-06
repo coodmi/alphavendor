@@ -13,46 +13,54 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@alphavendor.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'status' => 'active',
-        ]);
-
-        // Create sample users
-        User::create([
-            'name' => 'John Retailer',
-            'email' => 'retailer@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'retailer',
-            'status' => 'active',
-        ]);
-
-        User::create([
-            'name' => 'Jane Wholesaler',
-            'email' => 'wholesaler@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'wholesaler',
-            'status' => 'active',
-        ]);
-
-        User::create([
-            'name' => 'Mike Exporter',
-            'email' => 'exporter@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'exporter',
-            'status' => 'active',
-        ]);
-
-        User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'user',
-            'status' => 'active',
+        $hashedPassword = Hash::make('password');
+        
+        User::insert([
+            [
+                'name' => 'Admin User',
+                'email' => 'admin@alphavendor.com',
+                'password' => $hashedPassword,
+                'role' => 'admin',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'John Retailer',
+                'email' => 'retailer@example.com',
+                'password' => $hashedPassword,
+                'role' => 'retailer',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Jane Wholesaler',
+                'email' => 'wholesaler@example.com',
+                'password' => $hashedPassword,
+                'role' => 'wholesaler',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Mike Exporter',
+                'email' => 'exporter@example.com',
+                'password' => $hashedPassword,
+                'role' => 'exporter',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Regular User',
+                'email' => 'user@example.com',
+                'password' => $hashedPassword,
+                'role' => 'user',
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

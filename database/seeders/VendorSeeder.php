@@ -13,45 +13,56 @@ class VendorSeeder extends Seeder
      */
     public function run(): void
     {
-        $vendors = [
+        $hashedPassword = Hash::make('password');
+        $now = now();
+        
+        User::insert([
             [
                 'name' => 'Fashion Empire Store',
                 'email' => 'retailer@vendor.com',
-                'password' => Hash::make('password'),
+                'password' => $hashedPassword,
                 'role' => 'retailer',
+                'status' => 'active',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'name' => 'Tech Electronics Hub',
                 'email' => 'wholesaler@vendor.com',
-                'password' => Hash::make('password'),
+                'password' => $hashedPassword,
                 'role' => 'wholesaler',
+                'status' => 'active',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'name' => 'Global Exports Inc',
                 'email' => 'exporter@vendor.com',
-                'password' => Hash::make('password'),
+                'password' => $hashedPassword,
                 'role' => 'exporter',
+                'status' => 'active',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'name' => 'Beauty Paradise',
                 'email' => 'retailer2@vendor.com',
-                'password' => Hash::make('password'),
+                'password' => $hashedPassword,
                 'role' => 'retailer',
+                'status' => 'active',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'name' => 'Sports World',
                 'email' => 'wholesaler2@vendor.com',
-                'password' => Hash::make('password'),
+                'password' => $hashedPassword,
                 'role' => 'wholesaler',
+                'status' => 'active',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
-        ];
-
-        foreach ($vendors as $vendorData) {
-            User::firstOrCreate(
-                ['email' => $vendorData['email']],
-                $vendorData
-            );
-        }
+        ]);
 
         $this->command->info('Vendors seeded successfully!');
     }

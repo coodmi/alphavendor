@@ -44,7 +44,7 @@
                             <button type="submit" class="btn-link" style="background: none; border: none; color: inherit; cursor: pointer; padding: 5px 10px;">Logout</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" style="display: flex; flex-direction: column; align-items: center;" class="action-link user-menu ">
+                        <a href="{{ route('login') }}" style="display: flex; flex-direction: row; align-items: center;" class="action-link user-menu ">
                             <i class="far fa-user"></i>
                             <span>Login</span>
                         </a>

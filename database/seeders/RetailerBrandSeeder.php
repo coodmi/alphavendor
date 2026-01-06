@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Brand;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class RetailerBrandSeeder extends Seeder
 {
@@ -61,24 +62,35 @@ class RetailerBrandSeeder extends Seeder
         ];
 
         // Create brands for each retailer
+        $now = now();
+        $allBrands = [];
+        
         foreach ($retailers as $index => $retailer) {
             // Each retailer gets 2-3 brands
             $brandsCount = rand(2, 3);
-            
+
             for ($i = 0; $i < $brandsCount; $i++) {
                 $template = $brandTemplates[($index * 2 + $i) % count($brandTemplates)];
+                $name = $template['name'] . ' - ' . $retailer->name;
                 
-                Brand::create([
+                $allBrands[] = [
                     'vendor_id' => $retailer->id,
-                    'name' => $template['name'] . ' - ' . $retailer->name,
+                    'name' => $name,
+                    'slug' => Str::slug($name) . '-' . uniqid(),
                     'description' => $template['description'] . ' by ' . $retailer->name,
                     'logo' => $template['logo'],
                     'is_active' => $template['is_active'],
                     'sort_order' => $template['sort_order'],
-                ]);
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
 
             $this->command->info("✓ Created brands for retailer: {$retailer->name}");
+        }
+        
+        if (!empty($allBrands)) {
+            Brand::insert($allBrands);
         }
 
         $this->command->info('Retailer brands seeded successfully!');

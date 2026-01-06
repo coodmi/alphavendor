@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class RetailerCategorySeeder extends Seeder
 {
@@ -69,27 +69,37 @@ class RetailerCategorySeeder extends Seeder
         ];
 
         // Create categories for each retailer
+        $now = now();
+        $allCategories = [];
+        
         foreach ($retailers as $index => $retailer) {
             // Each retailer gets 3-4 categories
             $categoriesCount = rand(3, 4);
-            
+
             for ($i = 0; $i < $categoriesCount; $i++) {
                 $template = $categoryTemplates[($index * 2 + $i) % count($categoryTemplates)];
-                
+
                 // Create unique slug by appending retailer ID
                 $uniqueName = $template['name'] . ' ' . $retailer->id;
-                
-                Category::create([
+
+                $allCategories[] = [
                     'vendor_id' => $retailer->id,
                     'name' => $uniqueName,
+                    'slug' => Str::slug($uniqueName) . '-' . uniqid(),
                     'description' => $template['description'] . ' curated by ' . $retailer->name,
                     'image' => $template['image'],
                     'is_active' => $template['is_active'],
                     'sort_order' => $template['sort_order'],
-                ]);
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
 
             $this->command->info("✓ Created categories for retailer: {$retailer->name}");
+        }
+        
+        if (!empty($allCategories)) {
+            Category::insert($allCategories);
         }
 
         $this->command->info('Retailer categories seeded successfully!');
