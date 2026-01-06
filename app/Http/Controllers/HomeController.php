@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Banner;
 
 class HomeController extends Controller
 {
@@ -17,7 +18,10 @@ class HomeController extends Controller
             ['name' => 'Jewelry Watches', 'image' => 'jewelry.jpg'],
         ];
 
-        return view('home', compact('categories'));
+        // Fetch active banners ordered by sort_order
+        $banners = Banner::active()->ordered()->get();
+
+        return view('home', compact('categories', 'banners'));
     }
 
     public function about()

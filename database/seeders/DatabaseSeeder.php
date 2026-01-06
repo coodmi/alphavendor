@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
             RetailerBrandSeeder::class,      // Retailer brands
             RetailerCategorySeeder::class,   // Retailer categories
             RetailerProductsSeeder::class,   // Retailer products
+            WholesalerBrandSeeder::class,    // Wholesaler brands
+            WholesalerCategorySeeder::class, // Wholesaler categories
+            WholesalerProductSeeder::class,  // Wholesaler products
+            BannerSeeder::class,             // Homepage banners
         ]);
     }
 }

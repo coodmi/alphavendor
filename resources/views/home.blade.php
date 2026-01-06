@@ -106,6 +106,93 @@
     </div>
 </section>
 
+<!-- Promotional Banners Section -->
+@if($banners->count() > 0)
+<section class="py-10 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Special Offers</h2>
+            <a href="{{ route('shop') }}" class="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-medium transition-colors">
+                View All Offers
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        @if($banners->count() == 1)
+            {{-- Single Banner - Full Width --}}
+            <a href="{{ $banners->first()->link ?? '#' }}" class="block group">
+                <div class="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                    <img src="{{ $banners->first()->image_url }}" alt="{{ $banners->first()->title ?? 'Banner' }}" class="w-full h-48 md:h-72 lg:h-96 object-cover group-hover:scale-105 transition-transform duration-500">
+                    @if($banners->first()->title)
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                        <h3 class="text-white text-xl md:text-2xl font-bold p-4 md:p-6">{{ $banners->first()->title }}</h3>
+                    </div>
+                    @endif
+                </div>
+            </a>
+        @elseif($banners->count() == 2)
+            {{-- Two Banners - Side by Side --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                @foreach($banners as $banner)
+                <a href="{{ $banner->link ?? '#' }}" class="block group">
+                    <div class="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                        <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Banner' }}" class="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                        @if($banner->title)
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                            <h3 class="text-white text-lg md:text-xl font-bold p-4">{{ $banner->title }}</h3>
+                        </div>
+                        @endif
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        @elseif($banners->count() == 3)
+            {{-- Three Banners - One Large + Two Small --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <a href="{{ $banners[0]->link ?? '#' }}" class="block group md:row-span-2">
+                    <div class="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full">
+                        <img src="{{ $banners[0]->image_url }}" alt="{{ $banners[0]->title ?? 'Banner' }}" class="w-full h-48 md:h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        @if($banners[0]->title)
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                            <h3 class="text-white text-lg md:text-2xl font-bold p-4 md:p-6">{{ $banners[0]->title }}</h3>
+                        </div>
+                        @endif
+                    </div>
+                </a>
+                @foreach($banners->slice(1) as $banner)
+                <a href="{{ $banner->link ?? '#' }}" class="block group">
+                    <div class="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                        <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Banner' }}" class="w-full h-48 md:h-52 object-cover group-hover:scale-105 transition-transform duration-500">
+                        @if($banner->title)
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                            <h3 class="text-white text-lg font-bold p-4">{{ $banner->title }}</h3>
+                        </div>
+                        @endif
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        @else
+            {{-- Four+ Banners - Grid with Auto-Scroll on Mobile --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                @foreach($banners->take(4) as $banner)
+                <a href="{{ $banner->link ?? '#' }}" class="block group">
+                    <div class="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                        <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Banner' }}" class="w-full h-48 md:h-52 object-cover group-hover:scale-105 transition-transform duration-500">
+                        @if($banner->title)
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                            <h3 class="text-white text-lg font-bold p-4">{{ $banner->title }}</h3>
+                        </div>
+                        @endif
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</section>
+@endif
+
 <!-- Featured Vendors -->
 <section class="vendors-section">
     <div class="container">

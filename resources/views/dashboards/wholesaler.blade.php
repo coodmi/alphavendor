@@ -13,26 +13,18 @@
     </div>
 
     <div class="menu-section">
-        <div class="menu-section-title">Products</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-boxes"></i>
-            <span>Bulk Products</span>
+        <div class="menu-section-title">Management</div>
+        <a href="{{ route('wholesaler.products') }}" class="menu-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-plus-circle"></i>
-            <span>Add Product</span>
+        <a href="{{ route('wholesaler.categories') }}" class="menu-item">
+            <i class="fas fa-tags"></i>
+            <span>Categories</span>
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-warehouse"></i>
-            <span>Inventory</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Orders</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Wholesale Orders</span>
+        <a href="{{ route('wholesaler.brands') }}" class="menu-item">
+            <i class="fas fa-copyright"></i>
+            <span>Brands</span>
         </a>
     </div>
 

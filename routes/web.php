@@ -21,6 +21,7 @@ use App\Http\Controllers\RetailerBrandController;
 use App\Http\Controllers\RetailerCategoryController;
 use App\Http\Controllers\RetailerProductController;
 use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
+use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -84,6 +85,12 @@ Route::middleware('auth')->group(function () {
         // Retail Page CMS
         Route::get('/retail-page', [AdminRetailPageController::class, 'index'])->name('retail-page');
         Route::post('/retail-page', [AdminRetailPageController::class, 'update'])->name('retail-page.update');
+
+        // Banner management
+        Route::get('/banners', [AdminBannerController::class, 'index'])->name('banners');
+        Route::post('/banners', [AdminBannerController::class, 'store'])->name('banners.store');
+        Route::put('/banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');
+        Route::delete('/banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
     });
 
     // Retailer routes
@@ -112,6 +119,24 @@ Route::middleware('auth')->group(function () {
     // Wholesaler routes
     Route::middleware('role:wholesaler')->prefix('wholesaler')->name('wholesaler.')->group(function () {
         Route::get('/dashboard', [WholesalerDashboardController::class, 'index'])->name('dashboard');
+
+        // Brand management
+        Route::get('/brands', [WholesalerBrandController::class, 'index'])->name('brands');
+        Route::post('/brands', [WholesalerBrandController::class, 'store'])->name('brands.store');
+        Route::put('/brands/{brand}', [WholesalerBrandController::class, 'update'])->name('brands.update');
+        Route::delete('/brands/{brand}', [WholesalerBrandController::class, 'destroy'])->name('brands.destroy');
+
+        // Category management
+        Route::get('/categories', [WholesalerCategoryController::class, 'index'])->name('categories');
+        Route::post('/categories', [WholesalerCategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [WholesalerCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [WholesalerCategoryController::class, 'destroy'])->name('categories.destroy');
+
+        // Product management
+        Route::get('/products', [WholesalerProductController::class, 'index'])->name('products');
+        Route::post('/products', [WholesalerProductController::class, 'store'])->name('products.store');
+        Route::put('/products/{product}', [WholesalerProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [WholesalerProductController::class, 'destroy'])->name('products.destroy');
     });
 
     // Exporter routes
