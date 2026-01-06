@@ -331,7 +331,7 @@
 // Price Range Slider - Immediate Execution
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded - Initializing price range');
-    
+
     const rangeMin = document.querySelector(".range-min");
     const rangeMax = document.querySelector(".range-max");
     const minPriceInput = document.querySelector('.min-price-input');
@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
     rangeMin.oninput = function() {
         let min = parseInt(this.value);
         let max = parseInt(rangeMax.value);
-        
+
         console.log('Min slider moved:', min);
 
         if (min > max - 100) {
@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
     rangeMax.oninput = function() {
         let min = parseInt(rangeMin.value);
         let max = parseInt(this.value);
-        
+
         console.log('Max slider moved:', max);
 
         if (max < min + 100) {

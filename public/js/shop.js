@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const vendorTypeCheckboxes = document.querySelectorAll(
         ".vendor-type-checkbox"
     );
-    const minPriceInput = document.querySelector('.min-price-input');
-    const maxPriceInput = document.querySelector('.max-price-input');
+    const minPriceInput = document.querySelector(".min-price-input");
+    const maxPriceInput = document.querySelector(".max-price-input");
     const sortDropdown = document.querySelector(".sort-dropdown select");
     const perPageDropdown = document.querySelector(".per-page-dropdown select");
     const viewButtons = document.querySelectorAll(".view-btn");
@@ -49,10 +49,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Price filter apply
     if (applyPriceBtn) {
-        applyPriceBtn.addEventListener("click", function(e) {
+        applyPriceBtn.addEventListener("click", function (e) {
             e.preventDefault();
-            console.log('Apply Filter button clicked');
-            console.log('Min:', minPriceInput?.value, 'Max:', maxPriceInput?.value);
+            console.log("Apply Filter button clicked");
+            console.log(
+                "Min:",
+                minPriceInput?.value,
+                "Max:",
+                maxPriceInput?.value
+            );
             applyFilters();
         });
     }
@@ -89,10 +94,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Reset price inputs
             if (minPriceInput) minPriceInput.value = 0;
             if (maxPriceInput) maxPriceInput.value = 10000;
-            
+
             // Reset sliders
-            const rangeMin = document.querySelector('.range-min');
-            const rangeMax = document.querySelector('.range-max');
+            const rangeMin = document.querySelector(".range-min");
+            const rangeMax = document.querySelector(".range-max");
             if (rangeMin) rangeMin.value = 0;
             if (rangeMax) rangeMax.value = 10000;
 
@@ -182,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Apply filters function
     // Apply filters function
     function applyFilters() {
-        console.log('applyFilters called');
+        console.log("applyFilters called");
         const params = new URLSearchParams();
 
         // Get selected categories
@@ -216,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Get price range
         const minPrice = minPriceInput ? parseInt(minPriceInput.value) : 0;
         const maxPrice = maxPriceInput ? parseInt(maxPriceInput.value) : 10000;
-        
+
         if (minPrice > 0) {
             params.append("min_price", minPrice);
         }
