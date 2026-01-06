@@ -10,21 +10,17 @@
             <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
         </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Products</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-globe"></i>
-            <span>Export Products</span>
+        <a href="{{ route('exporter.products') }}" class="menu-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-plus-circle"></i>
-            <span>Add Product</span>
+        <a href="{{ route('exporter.categories') }}" class="menu-item">
+            <i class="fas fa-tags"></i>
+            <span>Categories</span>
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-warehouse"></i>
-            <span>Inventory</span>
+        <a href="{{ route('exporter.brands') }}" class="menu-item">
+            <i class="fas fa-copyright"></i>
+            <span>Brands</span>
         </a>
     </div>
 

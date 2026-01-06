@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
             WholesalerBrandSeeder::class,    // Wholesaler brands
             WholesalerCategorySeeder::class, // Wholesaler categories
             WholesalerProductSeeder::class,  // Wholesaler products
+            ExporterBrandSeeder::class,      // Exporter brands
+            ExporterCategorySeeder::class,   // Exporter categories
+            ExporterProductSeeder::class,    // Exporter products
             BannerSeeder::class,             // Homepage banners
         ]);
     }

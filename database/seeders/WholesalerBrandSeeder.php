@@ -10,16 +10,16 @@ class WholesalerBrandSeeder extends Seeder
 {
     public function run(): void
     {
-        $wholesaler = User::where('email', 'wholesaler@vendor.com')->first();
+        // Get all wholesaler users
+        $wholesalers = User::where('role', 'wholesaler')->where('status', 'active')->get();
 
-        if (!$wholesaler) {
-            $this->command->warn('Wholesaler user not found. Run WholesalerUserSeeder first.');
+        if ($wholesalers->isEmpty()) {
+            $this->command->warn('No wholesaler users found. Run WholesalerUserSeeder first.');
             return;
         }
 
-        $brands = [
+        $brandTemplates = [
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'BulkTech Pro',
                 'slug' => 'bulktech-pro',
                 'description' => 'Professional bulk technology solutions for businesses',
@@ -28,7 +28,6 @@ class WholesalerBrandSeeder extends Seeder
                 'sort_order' => 1,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'MegaSupply Co',
                 'slug' => 'megasupply-co',
                 'description' => 'Your trusted partner for wholesale supplies',
@@ -37,7 +36,6 @@ class WholesalerBrandSeeder extends Seeder
                 'sort_order' => 2,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'GlobalTrade Brands',
                 'slug' => 'globaltrade-brands',
                 'description' => 'International wholesale brand distributor',
@@ -46,7 +44,6 @@ class WholesalerBrandSeeder extends Seeder
                 'sort_order' => 3,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'ValueBulk',
                 'slug' => 'valuebulk',
                 'description' => 'Quality products at wholesale prices',
@@ -55,7 +52,6 @@ class WholesalerBrandSeeder extends Seeder
                 'sort_order' => 4,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'TradeGiant',
                 'slug' => 'tradegiant',
                 'description' => 'Giant selections for trade professionals',
@@ -65,10 +61,25 @@ class WholesalerBrandSeeder extends Seeder
             ],
         ];
 
-        foreach ($brands as $brand) {
-            Brand::create($brand);
+        foreach ($wholesalers as $index => $wholesaler) {
+            foreach ($brandTemplates as $template) {
+                // Make slug unique per vendor
+                $uniqueSlug = $template['slug'] . '-' . $wholesaler->id;
+                $uniqueName = $template['name'] . ' (W' . $wholesaler->id . ')';
+                
+                Brand::create([
+                    'vendor_id' => $wholesaler->id,
+                    'name' => $uniqueName,
+                    'slug' => $uniqueSlug,
+                    'description' => $template['description'],
+                    'logo' => $template['logo'],
+                    'is_active' => $template['is_active'],
+                    'sort_order' => $template['sort_order'],
+                ]);
+            }
+            $this->command->info("Brands seeded for wholesaler: {$wholesaler->email}");
         }
 
-        $this->command->info('Wholesaler brands seeded successfully!');
+        $this->command->info('All wholesaler brands seeded successfully!');
     }
 }

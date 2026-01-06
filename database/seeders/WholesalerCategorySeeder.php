@@ -10,16 +10,16 @@ class WholesalerCategorySeeder extends Seeder
 {
     public function run(): void
     {
-        $wholesaler = User::where('email', 'wholesaler@vendor.com')->first();
+        // Get all wholesaler users
+        $wholesalers = User::where('role', 'wholesaler')->where('status', 'active')->get();
 
-        if (!$wholesaler) {
-            $this->command->warn('Wholesaler user not found. Run WholesalerUserSeeder first.');
+        if ($wholesalers->isEmpty()) {
+            $this->command->warn('No wholesaler users found. Run WholesalerUserSeeder first.');
             return;
         }
 
-        $categories = [
+        $categoryTemplates = [
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'Bulk Electronics',
                 'slug' => 'bulk-electronics',
                 'description' => 'Wholesale electronic products and components',
@@ -28,7 +28,6 @@ class WholesalerCategorySeeder extends Seeder
                 'sort_order' => 1,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'Industrial Supplies',
                 'slug' => 'industrial-supplies',
                 'description' => 'Industrial equipment and supplies in bulk',
@@ -37,7 +36,6 @@ class WholesalerCategorySeeder extends Seeder
                 'sort_order' => 2,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'Office Bulk Supplies',
                 'slug' => 'office-bulk-supplies',
                 'description' => 'Office supplies and equipment wholesale',
@@ -46,7 +44,6 @@ class WholesalerCategorySeeder extends Seeder
                 'sort_order' => 3,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'Wholesale Home Goods',
                 'slug' => 'wholesale-home-goods',
                 'description' => 'Home goods and furnishings in bulk quantities',
@@ -55,7 +52,6 @@ class WholesalerCategorySeeder extends Seeder
                 'sort_order' => 4,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'Bulk Clothing & Textiles',
                 'slug' => 'bulk-clothing-textiles',
                 'description' => 'Clothing and textile products wholesale',
@@ -64,7 +60,6 @@ class WholesalerCategorySeeder extends Seeder
                 'sort_order' => 5,
             ],
             [
-                'vendor_id' => $wholesaler->id,
                 'name' => 'Food & Beverage Bulk',
                 'slug' => 'food-beverage-bulk',
                 'description' => 'Food and beverage products in bulk',
@@ -74,10 +69,25 @@ class WholesalerCategorySeeder extends Seeder
             ],
         ];
 
-        foreach ($categories as $category) {
-            Category::create($category);
+        foreach ($wholesalers as $wholesaler) {
+            foreach ($categoryTemplates as $template) {
+                // Make slug and name unique per vendor
+                $uniqueSlug = $template['slug'] . '-' . $wholesaler->id;
+                $uniqueName = $template['name'] . ' (W' . $wholesaler->id . ')';
+                
+                Category::create([
+                    'vendor_id' => $wholesaler->id,
+                    'name' => $uniqueName,
+                    'slug' => $uniqueSlug,
+                    'description' => $template['description'],
+                    'image' => $template['image'],
+                    'is_active' => $template['is_active'],
+                    'sort_order' => $template['sort_order'],
+                ]);
+            }
+            $this->command->info("Categories seeded for wholesaler: {$wholesaler->email}");
         }
 
-        $this->command->info('Wholesaler categories seeded successfully!');
+        $this->command->info('All wholesaler categories seeded successfully!');
     }
 }

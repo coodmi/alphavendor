@@ -12,18 +12,11 @@ class WholesalerProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $wholesaler = User::where('email', 'wholesaler@vendor.com')->first();
+        // Get all wholesaler users
+        $wholesalers = User::where('role', 'wholesaler')->where('status', 'active')->get();
 
-        if (!$wholesaler) {
-            $this->command->warn('Wholesaler user not found. Run WholesalerUserSeeder first.');
-            return;
-        }
-
-        $categories = Category::where('vendor_id', $wholesaler->id)->get();
-        $brands = Brand::where('vendor_id', $wholesaler->id)->get();
-
-        if ($categories->isEmpty() || $brands->isEmpty()) {
-            $this->command->warn('Categories or Brands not found. Run WholesalerCategorySeeder and WholesalerBrandSeeder first.');
+        if ($wholesalers->isEmpty()) {
+            $this->command->warn('No wholesaler users found. Run WholesalerUserSeeder first.');
             return;
         }
 
@@ -56,31 +49,45 @@ class WholesalerProductSeeder extends Seeder
 
         $skuCounter = 1000;
 
-        foreach ($productTemplates as $template) {
-            $category = $categories->random();
-            $brand = $brands->random();
+        foreach ($wholesalers as $wholesaler) {
+            $categories = Category::where('vendor_id', $wholesaler->id)->get();
+            $brands = Brand::where('vendor_id', $wholesaler->id)->get();
 
-            Product::create([
-                'vendor_id' => $wholesaler->id,
-                'category_id' => $category->id,
-                'brand_id' => $brand->id,
-                'name' => $template['name'],
-                'description' => 'Bulk wholesale product available at competitive prices. Perfect for retailers and businesses looking to stock inventory. High quality guaranteed with fast shipping options.',
-                'image' => 'https://picsum.photos/seed/wproduct' . $skuCounter . '/800/800',
-                'price' => $template['price'],
-                'old_price' => $template['old_price'],
-                'stock' => $template['stock'],
-                'minimum_order' => $template['min_order'],
-                'supplier_location' => $locations[array_rand($locations)],
-                'sku' => 'WS-' . str_pad($skuCounter++, 6, '0', STR_PAD_LEFT),
-                'status' => $statuses[array_rand($statuses)],
-                'rating' => rand(35, 50) / 10,
-                'reviews_count' => rand(10, 500),
-                'is_featured' => rand(0, 1) ? true : false,
-                'badge' => $badges[array_rand($badges)],
-            ]);
+            if ($categories->isEmpty() || $brands->isEmpty()) {
+                $this->command->warn("Skipping products for {$wholesaler->email} - no categories or brands found.");
+                continue;
+            }
+
+            foreach ($productTemplates as $template) {
+                $category = $categories->random();
+                $brand = $brands->random();
+                
+                // Make product name unique per vendor
+                $uniqueName = $template['name'] . ' (W' . $wholesaler->id . ')';
+
+                Product::create([
+                    'vendor_id' => $wholesaler->id,
+                    'category_id' => $category->id,
+                    'brand_id' => $brand->id,
+                    'name' => $uniqueName,
+                    'description' => 'Bulk wholesale product available at competitive prices. Perfect for retailers and businesses looking to stock inventory. High quality guaranteed with fast shipping options.',
+                    'image' => 'https://picsum.photos/seed/wproduct' . $skuCounter . '/800/800',
+                    'price' => $template['price'],
+                    'old_price' => $template['old_price'],
+                    'stock' => $template['stock'],
+                    'minimum_order' => $template['min_order'],
+                    'supplier_location' => $locations[array_rand($locations)],
+                    'sku' => 'WS-' . $wholesaler->id . '-' . str_pad($skuCounter++, 6, '0', STR_PAD_LEFT),
+                    'status' => $statuses[array_rand($statuses)],
+                    'rating' => rand(35, 50) / 10,
+                    'reviews_count' => rand(10, 500),
+                    'is_featured' => rand(0, 1) ? true : false,
+                    'badge' => $badges[array_rand($badges)],
+                ]);
+            }
+            $this->command->info("Products seeded for wholesaler: {$wholesaler->email}");
         }
 
-        $this->command->info('Wholesaler products seeded successfully!');
+        $this->command->info('All wholesaler products seeded successfully!');
     }
 }

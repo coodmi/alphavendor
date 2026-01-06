@@ -20,9 +20,9 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\RetailerBrandController;
 use App\Http\Controllers\RetailerCategoryController;
 use App\Http\Controllers\RetailerProductController;
-use App\Http\Controllers\Wholesaler\WholesalerBrandController;
-use App\Http\Controllers\Wholesaler\WholesalerCategoryController;
-use App\Http\Controllers\Wholesaler\WholesalerProductController;
+use App\Http\Controllers\ExporterBrandController;
+use App\Http\Controllers\ExporterCategoryController;
+use App\Http\Controllers\ExporterProductController;
 use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 
@@ -145,6 +145,24 @@ Route::middleware('auth')->group(function () {
     // Exporter routes
     Route::middleware('role:exporter')->prefix('exporter')->name('exporter.')->group(function () {
         Route::get('/dashboard', [ExporterDashboardController::class, 'index'])->name('dashboard');
+
+        // Brand management
+        Route::get('/brands', [ExporterBrandController::class, 'index'])->name('brands');
+        Route::post('/brands', [ExporterBrandController::class, 'store'])->name('brands.store');
+        Route::put('/brands/{brand}', [ExporterBrandController::class, 'update'])->name('brands.update');
+        Route::delete('/brands/{brand}', [ExporterBrandController::class, 'destroy'])->name('brands.destroy');
+
+        // Category management
+        Route::get('/categories', [ExporterCategoryController::class, 'index'])->name('categories');
+        Route::post('/categories', [ExporterCategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [ExporterCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [ExporterCategoryController::class, 'destroy'])->name('categories.destroy');
+
+        // Product management
+        Route::get('/products', [ExporterProductController::class, 'index'])->name('products');
+        Route::post('/products', [ExporterProductController::class, 'store'])->name('products.store');
+        Route::put('/products/{product}', [ExporterProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [ExporterProductController::class, 'destroy'])->name('products.destroy');
     });
 
     // User routes

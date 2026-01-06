@@ -4,24 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Banner;
+use App\Models\PromoBanner;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\User;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $categories = [
-            ['name' => 'Fashion', 'image' => 'fashion.jpg'],
-            ['name' => 'Home Living', 'image' => 'home-living.jpg'],
-            ['name' => 'Appliances', 'image' => 'appliances.jpg'],
-            ['name' => 'Beauty Health', 'image' => 'beauty.jpg'],
-            ['name' => 'Automotive', 'image' => 'automotive.jpg'],
-            ['name' => 'Jewelry Watches', 'image' => 'jewelry.jpg'],
-        ];
+        // Fetch active global categories (same as Shop page)
+        $categories = Category::whereNull('vendor_id')
+            ->where('is_active', true)
+            ->orderBy('sort_order', 'asc')
+            ->get();
 
         // Fetch active banners ordered by sort_order
         $banners = Banner::active()->ordered()->get();
+
+        // Fetch active promo banners ordered by sort_order
+        $promoBanners = PromoBanner::active()->ordered()->get();
+
+        // Get Today's Deals - Featured products or products with discount
+        $todayDeals = Product::where('status', 'active')
+            ->where(function($query) {
+                $query->where('is_featured', true)
+                    ->orWhereColumn('old_price', '>', 'price');
+            })
+            ->orderBy('created_at', 'desc')
+            ->take(8)
+            ->get();
 
         // Get retailer vendor IDs
         $retailerIds = User::where('role', 'retailer')->pluck('id');
@@ -50,6 +62,8 @@ class HomeController extends Controller
         return view('home', compact(
             'categories',
             'banners',
+            'promoBanners',
+            'todayDeals',
             'retailerProducts',
             'wholesalerProducts',
             'exporterProducts'
