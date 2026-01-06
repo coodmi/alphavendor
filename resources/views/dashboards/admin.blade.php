@@ -177,7 +177,7 @@
 
     <div class="menu-section">
         <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item">
+        <a href="javascript:void(0)" onclick="showSection('retail-page')" class="menu-item">
             <i class="fas fa-store"></i>
             <span>Retail Page</span>
         </a>
@@ -681,6 +681,130 @@
     </div>
 </div>
 
+<!-- Retail Page Section -->
+<div id="retail-page-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Retail Page Management</h2>
+                <p style="color: #7f8c8d;">Customize the retail marketplace page content</p>
+            </div>
+            <a href="{{ route('retail') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-external-link-alt"></i> Preview Page
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.retail-page.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Hero Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
+                Hero Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
+                    <input type="text" name="hero_title" value="{{ $retailPageContent['hero_title'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
+                    <textarea name="hero_description" rows="3"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $retailPageContent['hero_description'] ?? '' }}</textarea>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
+                    <div style="margin-bottom: 12px;" id="retailImagePreviewContainer">
+                        @if(isset($retailPageContent['hero_image']) && $retailPageContent['hero_image'])
+                            @php
+                                $retailImageUrl = str_starts_with($retailPageContent['hero_image'], 'http') ? $retailPageContent['hero_image'] : asset('storage/' . $retailPageContent['hero_image']);
+                                $retailImageUrl .= '?v=' . time();
+                            @endphp
+                            <img src="{{ $retailImageUrl }}"
+                                alt="Current Hero Image"
+                                id="retailImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+                        @else
+                            <img src=""
+                                alt="Image Preview"
+                                id="retailImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                        @endif
+                    </div>
+                    <input type="file" name="hero_image" id="retailHeroImageInput" accept="image/*"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-chart-bar" style="margin-right: 10px; color: #667eea;"></i>
+                Statistics Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <!-- Stat 1 -->
+                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                    <h4 style="font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 15px;">Statistic 1</h4>
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Number</label>
+                    <input type="text" name="stat1_number" value="{{ $retailPageContent['stat1_number'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;"
+                        placeholder="e.g., 500+" required>
+
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Label</label>
+                    <input type="text" name="stat1_label" value="{{ $retailPageContent['stat1_label'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                        placeholder="e.g., Retail Stores" required>
+                </div>
+
+                <!-- Stat 2 -->
+                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                    <h4 style="font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 15px;">Statistic 2</h4>
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Number</label>
+                    <input type="text" name="stat2_number" value="{{ $retailPageContent['stat2_number'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;"
+                        placeholder="e.g., 10K+" required>
+
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Label</label>
+                    <input type="text" name="stat2_label" value="{{ $retailPageContent['stat2_label'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                        placeholder="e.g., Products" required>
+                </div>
+
+                <!-- Stat 3 -->
+                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                    <h4 style="font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 15px;">Statistic 3</h4>
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Number</label>
+                    <input type="text" name="stat3_number" value="{{ $retailPageContent['stat3_number'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;"
+                        placeholder="e.g., 50K+" required>
+
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Label</label>
+                    <input type="text" name="stat3_label" value="{{ $retailPageContent['stat3_label'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                        placeholder="e.g., Happy Customers" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
 <!-- Product Modal -->
 <div id="productModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
     <div style="background: white; border-radius: 10px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto;">
@@ -1011,6 +1135,9 @@ function showSection(section) {
     } else if (section === 'brands') {
         document.getElementById('brands-section').style.display = 'block';
         event.target.closest('.menu-item').classList.add('active');
+    } else if (section === 'retail-page') {
+        document.getElementById('retail-page-section').style.display = 'block';
+        event.target.closest('.menu-item').classList.add('active');
     }
 }
 
@@ -1259,6 +1386,33 @@ document.getElementById('brandModal')?.addEventListener('click', function(e) {
 
 document.getElementById('deleteModal')?.addEventListener('click', function(e) {
     if (e.target === this) closeDeleteModal();
+});
+
+// Retail Page Image Preview
+document.getElementById('retailHeroImageInput')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('retailImagePreview');
+
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            e.target.value = '';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
 });
 </script>
 

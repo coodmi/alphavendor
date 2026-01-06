@@ -8,6 +8,7 @@ use App\Models\RoleApplication;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Brand;
+use App\Models\RetailPageContent;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -40,7 +41,10 @@ class AdminController extends Controller
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])->get();
         $brands = Brand::withCount('products')->orderBy('sort_order')->get();
 
-        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors', 'brands'));
+        // Fetch retail page content
+        $retailPageContent = RetailPageContent::getAllContent();
+
+        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors', 'brands', 'retailPageContent'));
     }
 
     /**

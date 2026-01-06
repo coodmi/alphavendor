@@ -26,7 +26,7 @@
 
     <div class="menu-section">
         <div class="menu-section-title">Pages</div>
-        <a href="#" class="menu-item" onclick="return false;" style="cursor: pointer;">
+        <a href="{{ route('admin.dashboard') }}" class="menu-item">
             <i class="fas fa-store"></i>
             <span>Retail Page</span>
         </a>

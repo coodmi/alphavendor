@@ -73,7 +73,7 @@ class RetailPageController extends Controller
             }
         }
 
-        return redirect()->route('admin.retail-page')
+        return redirect()->route('admin.dashboard')
             ->with('success', 'Retail page content updated successfully!');
     }
 }
