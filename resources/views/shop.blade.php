@@ -49,11 +49,11 @@
                     <div class="price-inputs">
                         <div class="price-input">
                             <label>Min</label>
-                            <input type="number" value="{{ request('min_price', 0) }}" min="0">
+                            <input type="number" class="min-price-input" value="{{ request('min_price', 0) }}" min="0" max="10000">
                         </div>
                         <div class="price-input">
                             <label>Max</label>
-                            <input type="number" value="{{ request('max_price', 10000) }}" max="10000">
+                            <input type="number" class="max-price-input" value="{{ request('max_price', 10000) }}" min="0" max="10000">
                         </div>
                     </div>
                     <button class="btn-apply-filter">Apply Filter</button>
@@ -327,5 +327,95 @@
 @endsection
 
 @push('scripts')
+<script>
+// Price Range Slider - Immediate Execution
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Initializing price range');
+    
+    const rangeMin = document.querySelector(".range-min");
+    const rangeMax = document.querySelector(".range-max");
+    const minPriceInput = document.querySelector('.min-price-input');
+    const maxPriceInput = document.querySelector('.max-price-input');
+
+    console.log('Elements:', {rangeMin, rangeMax, minPriceInput, maxPriceInput});
+
+    if (!rangeMin || !rangeMax || !minPriceInput || !maxPriceInput) {
+        console.error('Price range elements not found!');
+        return;
+    }
+
+    console.log('All price range elements found successfully');
+
+    // Update min slider
+    rangeMin.oninput = function() {
+        let min = parseInt(this.value);
+        let max = parseInt(rangeMax.value);
+        
+        console.log('Min slider moved:', min);
+
+        if (min > max - 100) {
+            min = max - 100;
+            this.value = min;
+        }
+
+        minPriceInput.value = min;
+    };
+
+    // Update max slider
+    rangeMax.oninput = function() {
+        let min = parseInt(rangeMin.value);
+        let max = parseInt(this.value);
+        
+        console.log('Max slider moved:', max);
+
+        if (max < min + 100) {
+            max = min + 100;
+            this.value = max;
+        }
+
+        maxPriceInput.value = max;
+    };
+
+    // Update min input
+    minPriceInput.oninput = function() {
+        let min = parseInt(this.value) || 0;
+        let max = parseInt(maxPriceInput.value) || 10000;
+
+        console.log('Min input changed:', min);
+
+        if (min < 0) {
+            min = 0;
+            this.value = min;
+        }
+        if (min > max - 100) {
+            min = max - 100;
+            this.value = min;
+        }
+
+        rangeMin.value = min;
+    };
+
+    // Update max input
+    maxPriceInput.oninput = function() {
+        let min = parseInt(minPriceInput.value) || 0;
+        let max = parseInt(this.value) || 10000;
+
+        console.log('Max input changed:', max);
+
+        if (max > 10000) {
+            max = 10000;
+            this.value = max;
+        }
+        if (max < min + 100) {
+            max = min + 100;
+            this.value = max;
+        }
+
+        rangeMax.value = max;
+    };
+
+    console.log('Price range event listeners attached successfully');
+});
+</script>
 <script src="{{ asset('js/shop.js') }}"></script>
 @endpush

@@ -9,12 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const vendorTypeCheckboxes = document.querySelectorAll(
         ".vendor-type-checkbox"
     );
-    const minPriceInput = document.querySelector(
-        '.price-input input[type="number"]:first-child'
-    );
-    const maxPriceInput = document.querySelector(
-        '.price-input input[type="number"]:last-child'
-    );
+    const minPriceInput = document.querySelector('.min-price-input');
+    const maxPriceInput = document.querySelector('.max-price-input');
     const sortDropdown = document.querySelector(".sort-dropdown select");
     const perPageDropdown = document.querySelector(".per-page-dropdown select");
     const viewButtons = document.querySelectorAll(".view-btn");
@@ -53,7 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Price filter apply
     if (applyPriceBtn) {
-        applyPriceBtn.addEventListener("click", applyFilters);
+        applyPriceBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            console.log('Apply Filter button clicked');
+            console.log('Min:', minPriceInput?.value, 'Max:', maxPriceInput?.value);
+            applyFilters();
+        });
     }
 
     // Price input enter key
@@ -87,7 +88,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Reset price inputs
             if (minPriceInput) minPriceInput.value = 0;
-            if (maxPriceInput) maxPriceInput.value = 1000;
+            if (maxPriceInput) maxPriceInput.value = 10000;
+            
+            // Reset sliders
+            const rangeMin = document.querySelector('.range-min');
+            const rangeMax = document.querySelector('.range-max');
+            if (rangeMin) rangeMin.value = 0;
+            if (rangeMax) rangeMax.value = 10000;
 
             // Reset sort and per page
             if (sortDropdown) sortDropdown.value = "default";
@@ -136,50 +143,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Price range sliders
-    const rangeMin = document.querySelector(".range-min");
-    const rangeMax = document.querySelector(".range-max");
-
-    if (rangeMin && rangeMax) {
-        rangeMin.addEventListener("input", function () {
-            const min = parseInt(this.value);
-            const max = parseInt(rangeMax.value);
-
-            if (min > max - 10) {
-                this.value = max - 10;
-            }
-
-            if (minPriceInput) {
-                minPriceInput.value = this.value;
-            }
-        });
-
-        rangeMax.addEventListener("input", function () {
-            const min = parseInt(rangeMin.value);
-            const max = parseInt(this.value);
-
-            if (max < min + 10) {
-                this.value = min + 10;
-            }
-
-            if (maxPriceInput) {
-                maxPriceInput.value = this.value;
-            }
-        });
-
-        // Sync number inputs with sliders
-        if (minPriceInput) {
-            minPriceInput.addEventListener("input", function () {
-                rangeMin.value = this.value;
-            });
-        }
-
-        if (maxPriceInput) {
-            maxPriceInput.addEventListener("input", function () {
-                rangeMax.value = this.value;
-            });
-        }
-    }
+    // Price range sliders - Handled in inline script for immediate execution
+    // Code moved to blade template for better reliability
 
     // Brand search functionality
     const brandSearch = document.querySelector(".search-filter input");
@@ -215,7 +180,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Apply filters function
+    // Apply filters function
     function applyFilters() {
+        console.log('applyFilters called');
         const params = new URLSearchParams();
 
         // Get selected categories
@@ -247,19 +214,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Get price range
-        if (
-            minPriceInput &&
-            minPriceInput.value &&
-            minPriceInput.value !== "0"
-        ) {
-            params.append("min_price", minPriceInput.value);
+        const minPrice = minPriceInput ? parseInt(minPriceInput.value) : 0;
+        const maxPrice = maxPriceInput ? parseInt(maxPriceInput.value) : 10000;
+        
+        if (minPrice > 0) {
+            params.append("min_price", minPrice);
         }
-        if (
-            maxPriceInput &&
-            maxPriceInput.value &&
-            maxPriceInput.value !== "1000"
-        ) {
-            params.append("max_price", maxPriceInput.value);
+        if (maxPrice < 10000) {
+            params.append("max_price", maxPrice);
         }
 
         // Get sort option
