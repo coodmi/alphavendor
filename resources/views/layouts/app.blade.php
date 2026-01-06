@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/wholesale.css') }}">
     <link rel="stylesheet" href="{{ asset('css/export.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @stack('styles')
 </head>
 <body>
@@ -34,15 +35,61 @@
                         <i class="fas fa-shopping-bag"></i>
                     </a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="action-link user-menu">
-                            <i class="far fa-user"></i>
-                            <span>{{ Auth::user()->name }}</span>
-                            <small>Dashboard</small>
-                        </a>
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="btn-link" style="background: none; border: none; color: inherit; cursor: pointer; padding: 5px 10px;">Logout</button>
-                        </form>
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" @click.away="open = false" class="action-link user-menu flex items-center gap-2 focus:outline-none">
+                                <i class="far fa-user"></i>
+                            </button>
+
+                            <div x-show="open"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 transform scale-95"
+                                 x-transition:enter-end="opacity-100 transform scale-100"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100 transform scale-100"
+                                 x-transition:leave-end="opacity-0 transform scale-95"
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+
+                                <div class="px-4 py-3 border-b border-gray-200">
+                                    <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{ Auth::user()->email }}</p>
+                                </div>
+
+                                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-dashboard w-5"></i>
+                                    <span>Dashboard</span>
+                                </a>
+
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-user w-5"></i>
+                                    <span>My Profile</span>
+                                </a>
+
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-shopping-bag w-5"></i>
+                                    <span>My Orders</span>
+                                </a>
+
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-heart w-5"></i>
+                                    <span>Wishlist</span>
+                                </a>
+
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-cog w-5"></i>
+                                    <span>Settings</span>
+                                </a>
+
+                                <div class="border-t border-gray-200 mt-2 pt-2">
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left">
+                                            <i class="fas fa-sign-out-alt w-5"></i>
+                                            <span>Logout</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     @else
                         <a href="{{ route('login') }}" style="display: flex; flex-direction: row; align-items: center;" class="action-link user-menu ">
                             <i class="far fa-user"></i>
