@@ -81,23 +81,33 @@ class RetailController extends Controller
 
         // Get categories with product counts (only for retailer products)
         $categories = Category::where('is_active', true)
+            ->whereHas('products', function($q) {
+                $q->where('status', 'active')
+                  ->whereHas('vendor', function($query) {
+                      $query->where('role', 'retailer');
+                  });
+            })
             ->withCount(['products' => function($q) {
                 $q->where('status', 'active')
                   ->whereHas('vendor', function($query) {
                       $query->where('role', 'retailer');
                   });
             }])
-            ->having('products_count', '>', 0)
             ->get();
 
         // Get brands with product counts (only for retailer products)
-        $brands = Brand::withCount(['products' => function($q) {
+        $brands = Brand::whereHas('products', function($q) {
+                $q->where('status', 'active')
+                  ->whereHas('vendor', function($query) {
+                      $query->where('role', 'retailer');
+                  });
+            })
+            ->withCount(['products' => function($q) {
                 $q->where('status', 'active')
                   ->whereHas('vendor', function($query) {
                       $query->where('role', 'retailer');
                   });
             }])
-            ->having('products_count', '>', 0)
             ->get();
 
         return view('retail', compact('content', 'products', 'categories', 'brands'));

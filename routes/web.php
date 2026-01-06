@@ -17,6 +17,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\RetailerBrandController;
+use App\Http\Controllers\RetailerCategoryController;
+use App\Http\Controllers\RetailerProductController;
 use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
 
 // Public routes
@@ -86,6 +89,24 @@ Route::middleware('auth')->group(function () {
     // Retailer routes
     Route::middleware('role:retailer')->prefix('retailer')->name('retailer.')->group(function () {
         Route::get('/dashboard', [RetailerDashboardController::class, 'index'])->name('dashboard');
+
+        // Brand management
+        Route::get('/brands', [RetailerBrandController::class, 'index'])->name('brands');
+        Route::post('/brands', [RetailerBrandController::class, 'store'])->name('brands.store');
+        Route::put('/brands/{brand}', [RetailerBrandController::class, 'update'])->name('brands.update');
+        Route::delete('/brands/{brand}', [RetailerBrandController::class, 'destroy'])->name('brands.destroy');
+
+        // Category management
+        Route::get('/categories', [RetailerCategoryController::class, 'index'])->name('categories');
+        Route::post('/categories', [RetailerCategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [RetailerCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [RetailerCategoryController::class, 'destroy'])->name('categories.destroy');
+
+        // Product management
+        Route::get('/products', [RetailerProductController::class, 'index'])->name('products');
+        Route::post('/products', [RetailerProductController::class, 'store'])->name('products.store');
+        Route::put('/products/{product}', [RetailerProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [RetailerProductController::class, 'destroy'])->name('products.destroy');
     });
 
     // Wholesaler routes
