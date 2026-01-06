@@ -83,208 +83,74 @@
         <div class="shop-wrapper">
             <!-- Sidebar Filters -->
             <aside class="shop-sidebar">
-                <!-- Categories Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Categories</h3>
-                    <ul class="filter-list">
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Apparel & Fashion</span>
-                                <span class="count">(10,500)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Electronics</span>
-                                <span class="count">(8,200)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Home & Garden</span>
-                                <span class="count">(12,800)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Furniture</span>
-                                <span class="count">(5,400)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Food & Beverage</span>
-                                <span class="count">(7,600)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Health & Beauty</span>
-                                <span class="count">(9,300)</span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Price Range Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Price Range</h3>
-                    <div class="price-range-slider">
-                        <input type="range" min="0" max="10000" value="0" class="range-min">
-                        <input type="range" min="0" max="10000" value="10000" class="range-max">
+                <form method="GET" action="{{ route('wholesale') }}" id="filterForm">
+                    <!-- Categories Filter -->
+                    <div class="filter-box">
+                        <h3 class="filter-title">Categories</h3>
+                        <ul class="filter-list">
+                            @foreach($categories as $category)
+                            <li>
+                                <label class="filter-checkbox">
+                                    <input type="radio" name="category" value="{{ $category->id }}" {{ request('category') == $category->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()">
+                                    <span>{{ $category->name }}</span>
+                                    <span class="count">({{ $category->products_count }})</span>
+                                </label>
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <div class="price-inputs">
-                        <div class="price-input">
-                            <label>Min</label>
-                            <input type="number" value="0" min="0">
-                        </div>
-                        <div class="price-input">
-                            <label>Max</label>
-                            <input type="number" value="10000" max="10000">
-                        </div>
+
+                    <!-- Minimum Order Filter -->
+                    <div class="filter-box">
+                        <h3 class="filter-title">Minimum Order</h3>
+                        <ul class="filter-list">
+                            @foreach($minOrderRanges as $value => $label)
+                            <li>
+                                <label class="filter-checkbox">
+                                    <input type="radio" name="minimum_order" value="{{ $value }}" {{ request('minimum_order') == $value ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()">
+                                    <span>{{ $label }}</span>
+                                </label>
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <button class="btn-apply-filter">Apply Filter</button>
-                </div>
 
-                <!-- Minimum Order Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Minimum Order</h3>
-                    <ul class="filter-list">
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>10-50 Units</span>
-                                <span class="count">(234)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>50-100 Units</span>
-                                <span class="count">(187)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>100-500 Units</span>
-                                <span class="count">(156)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>500+ Units</span>
-                                <span class="count">(98)</span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Supplier Location Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Supplier Location</h3>
-                    <div class="search-filter">
-                        <input type="text" placeholder="Search location...">
+                    <!-- Supplier Location Filter -->
+                    <div class="filter-box">
+                        <h3 class="filter-title">Supplier Location</h3>
+                        <ul class="filter-list">
+                            @foreach($supplierLocations as $location)
+                            <li>
+                                <label class="filter-checkbox">
+                                    <input type="radio" name="supplier_location" value="{{ $location }}" {{ request('supplier_location') == $location ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()">
+                                    <span>{{ $location }}</span>
+                                </label>
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <ul class="filter-list">
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>China</span>
-                                <span class="count">(450)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>India</span>
-                                <span class="count">(320)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Taiwan</span>
-                                <span class="count">(210)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>South Korea</span>
-                                <span class="count">(180)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>USA</span>
-                                <span class="count">(145)</span>
-                            </label>
-                        </li>
-                    </ul>
-                    <button class="show-more-btn">Show More +</button>
-                </div>
 
-                <!-- Rating Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Supplier Rating</h3>
-                    <ul class="filter-list rating-filter">
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="count">(123)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                <span>& Up</span>
-                                <span class="count">(267)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                <span>& Up</span>
-                                <span class="count">(445)</span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
+                    <!-- Brands Filter -->
+                    <div class="filter-box">
+                        <h3 class="filter-title">Brands</h3>
+                        <ul class="filter-list">
+                            @foreach($brands as $brand)
+                            <li>
+                                <label class="filter-checkbox">
+                                    <input type="radio" name="brand" value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()">
+                                    <span>{{ $brand->name }}</span>
+                                    <span class="count">({{ $brand->products_count }})</span>
+                                </label>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
 
-                <!-- Clear All Filters -->
-                <button class="btn-clear-filters">
-                    <i class="fas fa-times"></i> Clear All Filters
-                </button>
+                    <!-- Clear All Filters -->
+                    <a href="{{ route('wholesale') }}" class="btn-clear-filters">
+                        <i class="fas fa-times"></i> Clear All Filters
+                    </a>
+                </form>
             </aside>
 
             <!-- Products Area -->
@@ -292,7 +158,7 @@
                 <!-- Toolbar -->
                 <div class="shop-toolbar">
                     <div class="toolbar-left">
-                        <p class="results-count">Showing <strong>1-24</strong> of <strong>2,845</strong> wholesale products</p>
+                        <p class="results-count">Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> wholesale products</p>
                     </div>
                     <div class="toolbar-right">
                         <div class="view-mode">
@@ -303,49 +169,61 @@
                                 <i class="fas fa-list"></i>
                             </button>
                         </div>
-                        <div class="sort-dropdown">
-                            <select>
-                                <option>Sort by: Default</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Minimum Order: Low to High</option>
-                                <option>Best Rating</option>
-                                <option>Most Popular</option>
-                            </select>
-                        </div>
-                        <div class="per-page-dropdown">
-                            <select>
-                                <option>Show: 24</option>
-                                <option>Show: 36</option>
-                                <option>Show: 48</option>
-                                <option>Show: 96</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Active Filters Tags -->
+                @if(request()->hasAny(['category', 'minimum_order', 'supplier_location', 'brand']))
                 <div class="active-filters">
-                    <span class="filter-tag">
-                        Apparel & Fashion
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
-                    <span class="filter-tag">
-                        Price: $100 - $5000
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
+                    @if(request('category'))
+                        @php $selectedCategory = $categories->firstWhere('id', request('category')); @endphp
+                        @if($selectedCategory)
+                        <span class="filter-tag">
+                            {{ $selectedCategory->name }}
+                            <a href="{{ request()->fullUrlWithoutQuery('category') }}" class="remove-filter"><i class="fas fa-times"></i></a>
+                        </span>
+                        @endif
+                    @endif
+                    @if(request('minimum_order'))
+                        <span class="filter-tag">
+                            Min Order: {{ $minOrderRanges[request('minimum_order')] ?? request('minimum_order') }}
+                            <a href="{{ request()->fullUrlWithoutQuery('minimum_order') }}" class="remove-filter"><i class="fas fa-times"></i></a>
+                        </span>
+                    @endif
+                    @if(request('supplier_location'))
+                        <span class="filter-tag">
+                            Location: {{ request('supplier_location') }}
+                            <a href="{{ request()->fullUrlWithoutQuery('supplier_location') }}" class="remove-filter"><i class="fas fa-times"></i></a>
+                        </span>
+                    @endif
+                    @if(request('brand'))
+                        @php $selectedBrand = $brands->firstWhere('id', request('brand')); @endphp
+                        @if($selectedBrand)
+                        <span class="filter-tag">
+                            {{ $selectedBrand->name }}
+                            <a href="{{ request()->fullUrlWithoutQuery('brand') }}" class="remove-filter"><i class="fas fa-times"></i></a>
+                        </span>
+                        @endif
+                    @endif
                 </div>
+                @endif
 
                 <!-- Products Grid -->
                 <div class="products-grid-view">
-                    @for($i = 1; $i <= 24; $i++)
+                    @forelse($products as $product)
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="Wholesale Product {{ $i }}">
-                            @if($i % 3 == 0)
-                            <span class="badge hot">Hot Deal</span>
-                            @elseif($i % 4 == 0)
-                            <span class="badge new">New</span>
+                            @if($product->image)
+                                @if(filter_var($product->image, FILTER_VALIDATE_URL))
+                                    <img src="{{ $product->image }}" alt="{{ $product->name }}">
+                                @else
+                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                                @endif
+                            @else
+                                <img src="https://via.placeholder.com/300x300?text=No+Image" alt="{{ $product->name }}">
+                            @endif
+                            @if($product->badge)
+                                <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                             @endif
                             <div class="product-actions">
                                 <button class="action-btn" title="Add to Wishlist">
@@ -364,53 +242,55 @@
                             </button>
                         </div>
                         <div class="product-info">
-                            <div class="product-category">Electronics</div>
-                            <h4>Wholesale Product {{ $i }}</h4>
+                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <h4>{{ $product->name }}</h4>
                             <div class="vendor-name">
-                                <i class="fas fa-industry"></i> Global Manufacturer Co.
+                                <i class="fas fa-industry"></i> {{ $product->vendor->name ?? 'Unknown Vendor' }}
                             </div>
+                            @if($product->supplier_location)
+                            <div class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ $product->supplier_location }}
+                            </div>
+                            @endif
                             <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span>(4.5) 250 reviews</span>
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= floor($product->rating))
+                                        <i class="fas fa-star"></i>
+                                    @elseif($i - 0.5 <= $product->rating)
+                                        <i class="fas fa-star-half-alt"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
+                                <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
                             <div class="wholesale-info">
-                                <span class="min-order"><i class="fas fa-boxes"></i> Min: 50 units</span>
+                                <span class="min-order"><i class="fas fa-boxes"></i> Min: {{ $product->minimum_order }} units</span>
                             </div>
                             <div class="price">
-                                <span class="current-price">${{ 50 + ($i * 10) }}</span>
-                                <span class="old-price">${{ 80 + ($i * 10) }}</span>
-                                <span class="discount">-30%</span>
+                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                @if($product->old_price)
+                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="discount">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    @endfor
+                    @empty
+                    <div class="no-products" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-box-open" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
+                        <h3 style="color: #666; margin-bottom: 10px;">No Products Found</h3>
+                        <p style="color: #999;">Try adjusting your filters or <a href="{{ route('wholesale') }}">clear all filters</a>.</p>
+                    </div>
+                    @endforelse
                 </div>
 
                 <!-- Pagination -->
+                @if($products->hasPages())
                 <div class="pagination-wrapper">
-                    <nav class="pagination">
-                        <button class="page-btn prev" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="page-btn active">1</button>
-                        <button class="page-btn">2</button>
-                        <button class="page-btn">3</button>
-                        <button class="page-btn">4</button>
-                        <button class="page-btn">5</button>
-                        <span class="page-dots">...</span>
-                        <button class="page-btn">35</button>
-                        <button class="page-btn next">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </nav>
-                    <div class="pagination-info">
-                        Go to page: <input type="number" min="1" max="35" value="1">
-                    </div>
+                    {{ $products->withQueryString()->links() }}
                 </div>
+                @endif
             </div>
         </div>
     </div>

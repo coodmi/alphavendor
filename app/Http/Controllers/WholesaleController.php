@@ -81,8 +81,8 @@ class WholesaleController extends Controller
                 $q->where('role', 'wholesaler');
             })
             ->where('is_active', true)
+            ->has('products')
             ->withCount('products')
-            ->having('products_count', '>', 0)
             ->orderBy('name')
             ->get();
 
@@ -91,8 +91,8 @@ class WholesaleController extends Controller
                 $q->where('role', 'wholesaler');
             })
             ->where('is_active', true)
+            ->has('products')
             ->withCount('products')
-            ->having('products_count', '>', 0)
             ->orderBy('name')
             ->get();
 
