@@ -15,7 +15,7 @@ class VendorSeeder extends Seeder
     {
         $hashedPassword = Hash::make('password');
         $now = now();
-        
+
         User::insert([
             [
                 'name' => 'Fashion Empire Store',

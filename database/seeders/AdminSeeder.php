@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $hashedPassword = Hash::make('password');
-        
+
         User::insert([
             [
                 'name' => 'Admin User',
