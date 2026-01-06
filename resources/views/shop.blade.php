@@ -419,29 +419,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     console.log('Price range event listeners attached successfully');
-    
+
     // Filter application function
     function triggerFilterApplication() {
         const params = new URLSearchParams(window.location.search);
-        
+
         const minVal = parseInt(minPriceInput.value) || 0;
         const maxVal = parseInt(maxPriceInput.value) || 10000;
-        
+
         params.delete('min_price');
         params.delete('max_price');
-        
+
         if (minVal > 0) {
             params.set('min_price', minVal);
         }
         if (maxVal < 10000) {
             params.set('max_price', maxVal);
         }
-        
+
         const newUrl = window.location.pathname + '?' + params.toString();
         console.log('Navigating to:', newUrl);
         window.location.href = newUrl;
     }
-    
+
     // Apply Filter Button Handler
     function attachApplyFilterHandler() {
         const btn = document.querySelector('.btn-apply-filter');
@@ -459,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Apply Filter button NOT found!');
         }
     }
-    
+
     // Attach handler immediately and after short delay
     attachApplyFilterHandler();
     setTimeout(attachApplyFilterHandler, 500);

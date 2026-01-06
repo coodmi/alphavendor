@@ -51,23 +51,31 @@ document.addEventListener("DOMContentLoaded", function () {
     window.applyFilters = applyFilters;
 
     // Listen for custom filter apply event
-    document.addEventListener('filterApply', function() {
-        console.log('Custom filterApply event received');
+    document.addEventListener("filterApply", function () {
+        console.log("Custom filterApply event received");
         applyFilters();
     });
 
     // Price filter apply - Using event delegation
-    document.body.addEventListener('click', function(e) {
+    document.body.addEventListener("click", function (e) {
         const target = e.target;
-        if (target.classList.contains('btn-apply-filter') || target.closest('.btn-apply-filter')) {
+        if (
+            target.classList.contains("btn-apply-filter") ||
+            target.closest(".btn-apply-filter")
+        ) {
             e.preventDefault();
             e.stopPropagation();
             console.log("Apply Filter button clicked - main delegated handler");
-            console.log("Min:", minPriceInput?.value, "Max:", maxPriceInput?.value);
+            console.log(
+                "Min:",
+                minPriceInput?.value,
+                "Max:",
+                maxPriceInput?.value
+            );
             applyFilters();
         }
     });
-    console.log('Apply Filter delegated handler attached in main script');
+    console.log("Apply Filter delegated handler attached in main script");
 
     // Price input enter key
     [minPriceInput, maxPriceInput].forEach((input) => {
@@ -343,19 +351,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     // Brand search functionality
-    const brandSearchInput = document.querySelector('.brand-search-input');
-    const brandFilterItems = document.querySelectorAll('.brand-filter-item');
-    
+    const brandSearchInput = document.querySelector(".brand-search-input");
+    const brandFilterItems = document.querySelectorAll(".brand-filter-item");
+
     if (brandSearchInput && brandFilterItems.length > 0) {
-        brandSearchInput.addEventListener('input', function(e) {
+        brandSearchInput.addEventListener("input", function (e) {
             const searchTerm = e.target.value.toLowerCase().trim();
-            
-            brandFilterItems.forEach(item => {
-                const brandName = item.getAttribute('data-brand-name');
+
+            brandFilterItems.forEach((item) => {
+                const brandName = item.getAttribute("data-brand-name");
                 if (brandName.includes(searchTerm)) {
-                    item.style.display = '';
+                    item.style.display = "";
                 } else {
-                    item.style.display = 'none';
+                    item.style.display = "none";
                 }
             });
         });
@@ -363,11 +371,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Make applyFilters globally accessible for inline script
     window.applyFilters = applyFilters;
-    console.log('applyFilters function exposed globally');
+    console.log("applyFilters function exposed globally");
 
     // Listen for custom filterApply event from inline handler
-    document.addEventListener('filterApply', function() {
-        console.log('Custom filterApply event received');
+    document.addEventListener("filterApply", function () {
+        console.log("Custom filterApply event received");
         applyFilters();
     });
 });

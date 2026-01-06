@@ -185,12 +185,12 @@ function editBrand(brand) {
     document.getElementById('modalTitle').textContent = 'Edit Brand';
     document.getElementById('brandForm').action = `/admin/brands/${brand.id}`;
     document.getElementById('formMethod').value = 'PUT';
-    
+
     document.getElementById('brandName').value = brand.name;
     document.getElementById('brandDescription').value = brand.description || '';
     document.getElementById('brandSortOrder').value = brand.sort_order;
     document.getElementById('brandStatus').checked = brand.is_active;
-    
+
     // Show current logo if exists
     if (brand.logo) {
         document.getElementById('previewImg').src = `/storage/${brand.logo}`;
@@ -198,7 +198,7 @@ function editBrand(brand) {
     } else {
         document.getElementById('imagePreview').style.display = 'none';
     }
-    
+
     document.getElementById('brandModal').style.display = 'flex';
 }
 

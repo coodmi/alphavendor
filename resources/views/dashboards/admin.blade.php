@@ -917,7 +917,7 @@
                 <i class="fas fa-trash-alt" style="font-size: 36px; color: white;"></i>
             </div>
         </div>
-        
+
         <!-- Content -->
         <div style="padding: 30px;">
             <h3 style="margin: 0 0 12px 0; color: #2c3e50; font-size: 24px; font-weight: 600;" id="deleteModalTitle">Delete Item?</h3>
@@ -926,7 +926,7 @@
             <p style="color: #e74c3c; font-size: 13px; margin-bottom: 25px; padding: 10px; background: #fee; border-radius: 6px;">
                 <i class="fas fa-exclamation-circle"></i> This action cannot be undone
             </p>
-            
+
             <!-- Action Buttons -->
             <form id="deleteForm" method="POST" style="display: flex; gap: 12px; justify-content: center;">
                 @csrf
@@ -949,11 +949,11 @@
 }
 
 @keyframes slideDown {
-    from { 
+    from {
         opacity: 0;
         transform: translateY(-30px) scale(0.95);
     }
-    to { 
+    to {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
@@ -1185,19 +1185,19 @@ function editBrand(brand) {
     document.getElementById('brandModalTitle').textContent = 'Edit Brand';
     document.getElementById('brandForm').action = `/admin/brands/${brand.id}`;
     document.getElementById('brandFormMethod').value = 'PUT';
-    
+
     document.getElementById('brandName').value = brand.name;
     document.getElementById('brandDescription').value = brand.description || '';
     document.getElementById('brandSortOrder').value = brand.sort_order;
     document.getElementById('brandStatus').checked = brand.is_active;
-    
+
     if (brand.logo) {
         document.getElementById('brandPreviewImg').src = `/storage/${brand.logo}`;
         document.getElementById('brandImagePreview').style.display = 'block';
     } else {
         document.getElementById('brandImagePreview').style.display = 'none';
     }
-    
+
     document.getElementById('brandModal').style.display = 'flex';
 }
 
