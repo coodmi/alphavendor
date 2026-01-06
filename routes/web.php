@@ -21,6 +21,7 @@ use App\Http\Controllers\BrandController;
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 Route::get('/retail', [RetailController::class, 'index'])->name('retail');
 Route::get('/wholesale', [WholesaleController::class, 'index'])->name('wholesale');

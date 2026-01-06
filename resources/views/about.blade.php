@@ -88,18 +88,18 @@
 @section('content')
 <!-- Hero Section -->
     <section class="relative bg-[#FFA500] text-white py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-        <div class="absolute inset-0 bg-yellow-600 opacity-30"></div>
+        <div class="absolute inset-0 bg-[#FF8C00] opacity-30"></div>
         <div class="absolute inset-0">
             <div class="absolute top-10 left-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-white rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float"></div>
-            <div class="absolute bottom-10 right-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 2s;"></div>
+            <div class="absolute bottom-10 right-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-[#FFB347] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 2s;"></div>
         </div>
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 animate-fadeInUp">About AlphaVendor</h1>
                 <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 animate-fadeInUp delay-100 max-w-3xl mx-auto px-4">Your trusted partner in global commerce, connecting businesses worldwide</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 animate-fadeInUp delay-200 px-4">
-                    <a href="{{ route('shop') }}" class="bg-white text-yellow-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">Start Shopping</a>
-                    <a href="#contact" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-yellow-600 transition-all duration-300 transform hover:scale-105">Contact Us</a>
+                    <a href="{{ route('shop') }}" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">Start Shopping</a>
+                    <a href="#contact" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
                 </div>
                 <div class="animate-fadeInRight mt-8 md:mt-0">
                     <div class="relative">
-                        <div class="absolute -top-4 -left-4 w-full h-full bg-yellow-400 rounded-2xl"></div>
+                        <div class="absolute -top-4 -left-4 w-full h-full bg-[#FFB347] rounded-2xl"></div>
                         <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop" alt="Our Story" class="relative rounded-2xl shadow-2xl w-full">
                     </div>
                 </div>
@@ -163,21 +163,21 @@
                 <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">The principles that guide everything we do at AlphaVendor</p>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                <div class="bg-yellow-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-100">
+                <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-100">
                     <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-shield-alt text-white text-xl sm:text-2xl"></i>
                     </div>
                     <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">Trust & Security</h3>
                     <p class="text-gray-600 text-sm sm:text-base leading-relaxed">We prioritize the security of your transactions and data, ensuring a safe marketplace for all users.</p>
                 </div>
-                <div class="bg-yellow-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-200">
+                <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-200">
                     <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-lightbulb text-white text-xl sm:text-2xl"></i>
                     </div>
                     <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">Innovation</h3>
                     <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Constantly evolving with cutting-edge technology to provide the best trading experience.</p>
                 </div>
-                <div class="bg-yellow-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-300">
+                <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-300">
                     <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-users text-white text-xl sm:text-2xl"></i>
                     </div>
@@ -222,7 +222,7 @@
                 <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">Discover the advantages that set us apart</p>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-yellow-50 transition-all duration-300 animate-fadeInUp delay-100">
+                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-orange-50 transition-all duration-300 animate-fadeInUp delay-100">
                     <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#FFA500] rounded-lg flex items-center justify-center">
                         <i class="fas fa-check text-white text-lg sm:text-xl"></i>
                     </div>
@@ -231,7 +231,7 @@
                         <p class="text-gray-600 text-sm sm:text-base">All our vendors go through a rigorous verification process</p>
                     </div>
                 </div>
-                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-yellow-50 transition-all duration-300 animate-fadeInUp delay-200">
+                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-orange-50 transition-all duration-300 animate-fadeInUp delay-200">
                     <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#FFA500] rounded-lg flex items-center justify-center">
                         <i class="fas fa-shipping-fast text-white text-lg sm:text-xl"></i>
                     </div>
@@ -240,7 +240,7 @@
                         <p class="text-gray-600 text-sm sm:text-base">Quick and reliable delivery to your doorstep</p>
                     </div>
                 </div>
-                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-yellow-50 transition-all duration-300 animate-fadeInUp delay-300">
+                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-orange-50 transition-all duration-300 animate-fadeInUp delay-300">
                     <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#FFA500] rounded-lg flex items-center justify-center">
                         <i class="fas fa-headset text-white text-lg sm:text-xl"></i>
                     </div>
@@ -249,7 +249,7 @@
                         <p class="text-gray-600 text-sm sm:text-base">Our team is always here to help you</p>
                     </div>
                 </div>
-                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-yellow-50 transition-all duration-300 animate-fadeInUp delay-100">
+                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-orange-50 transition-all duration-300 animate-fadeInUp delay-100">
                     <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#FFA500] rounded-lg flex items-center justify-center">
                         <i class="fas fa-lock text-white text-lg sm:text-xl"></i>
                     </div>
@@ -258,7 +258,7 @@
                         <p class="text-gray-600 text-sm sm:text-base">Protected transactions with multiple payment options</p>
                     </div>
                 </div>
-                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-yellow-50 transition-all duration-300 animate-fadeInUp delay-200">
+                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-orange-50 transition-all duration-300 animate-fadeInUp delay-200">
                     <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#FFA500] rounded-lg flex items-center justify-center">
                         <i class="fas fa-globe text-white text-lg sm:text-xl"></i>
                     </div>
@@ -267,7 +267,7 @@
                         <p class="text-gray-600 text-sm sm:text-base">Connect with suppliers and buyers worldwide</p>
                     </div>
                 </div>
-                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-yellow-50 transition-all duration-300 animate-fadeInUp delay-300">
+                <div class="flex items-start space-x-3 sm:space-x-4 p-4 sm:p-6 rounded-xl hover:bg-orange-50 transition-all duration-300 animate-fadeInUp delay-300">
                     <div class="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-[#FFA500] rounded-lg flex items-center justify-center">
                         <i class="fas fa-chart-line text-white text-lg sm:text-xl"></i>
                     </div>
@@ -287,10 +287,10 @@
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Ready to Start Your Journey?</h2>
                 <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 px-4">Join thousands of successful vendors and buyers on AlphaVendor today</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
-                    <a href="{{ route('register') }}" class="bg-white text-yellow-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <a href="{{ route('register') }}" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
                         Register as Vendor
                     </a>
-                    <a href="{{ route('shop') }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-yellow-600 transition-all duration-300 transform hover:scale-105">
+                    <a href="{{ route('shop') }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">
                         Start Shopping
                     </a>
                 </div>
