@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class RetailerCategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')->orderBy('sort_order')->orderBy('name')->get();
+        $categories = Category::where('vendor_id', Auth::id())
+            ->withCount('products')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
         return view('retailer.categories.index', compact('categories'));
     }
 
@@ -35,6 +40,7 @@ class RetailerCategoryController extends Controller
 
         $validated['is_active'] = $request->has('is_active');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['vendor_id'] = Auth::id();
 
         $category = Category::create($validated);
 
@@ -47,6 +53,14 @@ class RetailerCategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
+        // Ensure retailer can only update their own categories
+        if ($category->vendor_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to update this category!'
+            ], 403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
@@ -86,6 +100,14 @@ class RetailerCategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        // Ensure retailer can only delete their own categories
+        if ($category->vendor_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this category!'
+            ], 403);
+        }
+
         // Check if category has products
         if ($category->products()->count() > 0) {
             return response()->json([

@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Brand;
+use Illuminate\Support\Str;
 
 class RetailerProductSeeder extends Seeder
 {
@@ -54,6 +55,7 @@ class RetailerProductSeeder extends Seeder
                 'category_id' => $categories->random()->id,
                 'brand_id' => $brands->random()->id,
                 'name' => $productData['name'],
+                'slug' => Str::slug($productData['name']) . '-' . uniqid(),
                 'description' => 'High quality ' . strtolower($productData['name']) . ' for everyday use.',
                 'price' => $productData['price'],
                 'old_price' => $productData['old_price'],

@@ -19,7 +19,8 @@
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                    <h1><span class="logo-icon">R</span></h1>
+                    {{-- <h1><span class="logo-icon">R</span></h1> --}}
+                    <img src="{{ asset('/alphainno.png') }}" alt="AlphaVendor Logo" style="height: 40px;">
                 </div>
                 <div class="search-bar">
                     <input type="text" placeholder="I am looking for...">
@@ -43,7 +44,7 @@
                             <button type="submit" class="btn-link" style="background: none; border: none; color: inherit; cursor: pointer; padding: 5px 10px;">Logout</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="action-link user-menu">
+                        <a href="{{ route('login') }}" style="display: flex; flex-direction: column; align-items: center;" class="action-link user-menu ">
                             <i class="far fa-user"></i>
                             <span>Login</span>
                         </a>

@@ -18,9 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             VendorSeeder::class,
-            CategorySeeder::class,
-            BrandSeeder::class,
-            ProductSeeder::class,
+            CategorySeeder::class,      // Admin categories
+            BrandSeeder::class,          // Admin brands
+            ProductSeeder::class,        // Admin products
+            RetailerBrandSeeder::class,      // Retailer brands
+            RetailerCategorySeeder::class,   // Retailer categories
+            RetailerProductsSeeder::class,   // Retailer products
         ]);
     }
 }

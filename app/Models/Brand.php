@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class Brand extends Model
 {
     protected $fillable = [
+        'vendor_id',
         'name',
         'slug',
         'description',
@@ -35,5 +36,13 @@ class Brand extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Get the vendor who owns this brand
+     */
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
     }
 }

@@ -13,7 +13,11 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::orderBy('sort_order')->orderBy('name')->get();
+        // Admin sees only brands with no vendor_id (global brands)
+        $brands = Brand::whereNull('vendor_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
         return view('admin.brands.index', compact('brands'));
     }
 

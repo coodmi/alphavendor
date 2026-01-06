@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class RetailerBrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::orderBy('sort_order')->orderBy('name')->get();
+        $brands = Brand::where('vendor_id', Auth::id())
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
         return view('retailer.brands.index', compact('brands'));
     }
 
@@ -35,6 +39,7 @@ class RetailerBrandController extends Controller
 
         $validated['is_active'] = $request->has('is_active');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['vendor_id'] = Auth::id();
 
         $brand = Brand::create($validated);
 
@@ -47,6 +52,14 @@ class RetailerBrandController extends Controller
 
     public function update(Request $request, Brand $brand)
     {
+        // Ensure retailer can only update their own brands
+        if ($brand->vendor_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to update this brand!'
+            ], 403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:brands,name,' . $brand->id,
             'description' => 'nullable|string',
@@ -86,6 +99,14 @@ class RetailerBrandController extends Controller
 
     public function destroy(Brand $brand)
     {
+        // Ensure retailer can only delete their own brands
+        if ($brand->vendor_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this brand!'
+            ], 403);
+        }
+
         // Delete logo if it's a stored file
         if ($brand->logo && !filter_var($brand->logo, FILTER_VALIDATE_URL)) {
             Storage::disk('public')->delete($brand->logo);

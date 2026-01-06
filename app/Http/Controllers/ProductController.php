@@ -16,11 +16,17 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category', 'vendor'])->latest()->get();
-        $categories = Category::where('is_active', true)->get();
+        $products = Product::with(['category', 'vendor', 'brand'])->latest()->get();
+        // Admin sees only global categories and brands (with null vendor_id)
+        $categories = Category::whereNull('vendor_id')
+            ->where('is_active', true)
+            ->get();
+        $brands = Brand::whereNull('vendor_id')
+            ->where('is_active', true)
+            ->get();
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin'])->get();
 
-        return view('admin.products.index', compact('products', 'categories', 'vendors'));
+        return view('admin.products.index', compact('products', 'categories', 'brands', 'vendors'));
     }
 
     /**

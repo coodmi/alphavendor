@@ -6,8 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -29,7 +28,7 @@ class ProductSeeder extends Seeder
             return;
         }
 
-        $products = [
+        $productsData = [
             // Fashion Products
             [
                 'category_name' => 'Fashion',
@@ -42,7 +41,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'New',
-                'unsplash_query' => 'leather-jacket',
             ],
             [
                 'category_name' => 'Fashion',
@@ -55,7 +53,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => 'Sale',
-                'unsplash_query' => 'sunglasses',
             ],
             [
                 'category_name' => 'Fashion',
@@ -68,7 +65,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'sneakers-shoes',
             ],
 
             // Electronics Products
@@ -83,7 +79,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'Hot',
-                'unsplash_query' => 'wireless-headphones',
             ],
             [
                 'category_name' => 'Electronics',
@@ -96,7 +91,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'New',
-                'unsplash_query' => 'smartwatch',
             ],
             [
                 'category_name' => 'Electronics',
@@ -109,7 +103,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'action-camera',
             ],
 
             // Home & Living Products
@@ -124,7 +117,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'table-lamp',
             ],
             [
                 'category_name' => 'Home & Living',
@@ -137,7 +129,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => 'Sale',
-                'unsplash_query' => 'wall-art',
             ],
             [
                 'category_name' => 'Home & Living',
@@ -150,7 +141,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'cozy-blanket',
             ],
 
             // Beauty & Health Products
@@ -165,7 +155,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'Hot',
-                'unsplash_query' => 'skincare-products',
             ],
             [
                 'category_name' => 'Beauty & Health',
@@ -178,7 +167,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'hair-dryer',
             ],
 
             // Sports & Outdoors Products
@@ -193,7 +181,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'yoga-mat',
             ],
             [
                 'category_name' => 'Sports & Outdoors',
@@ -206,7 +193,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'New',
-                'unsplash_query' => 'camping-tent',
             ],
 
             // Books & Media Products
@@ -221,7 +207,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'books-stack',
             ],
             [
                 'category_name' => 'Books & Media',
@@ -234,7 +219,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'Hot',
-                'unsplash_query' => 'vinyl-player',
             ],
 
             // Toys & Games Products
@@ -249,7 +233,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'building-blocks',
             ],
             [
                 'category_name' => 'Toys & Games',
@@ -262,7 +245,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => 'Sale',
-                'unsplash_query' => 'board-games',
             ],
 
             // Automotive Products
@@ -277,7 +259,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'dash-camera',
             ],
             [
                 'category_name' => 'Automotive',
@@ -290,7 +271,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'car-phone-mount',
             ],
 
             // Jewelry & Watches Products
@@ -305,7 +285,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'New',
-                'unsplash_query' => 'silver-necklace',
             ],
             [
                 'category_name' => 'Jewelry & Watches',
@@ -318,7 +297,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => true,
                 'badge' => 'Hot',
-                'unsplash_query' => 'luxury-watch',
             ],
 
             // Pet Supplies Products
@@ -333,7 +311,6 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'pet-bed',
             ],
             [
                 'category_name' => 'Pet Supplies',
@@ -346,65 +323,32 @@ class ProductSeeder extends Seeder
                 'status' => 'active',
                 'is_featured' => false,
                 'badge' => null,
-                'unsplash_query' => 'pet-toys',
             ],
         ];
 
-        foreach ($products as $productData) {
+        $products = [];
+        foreach ($productsData as $productData) {
             $categoryName = $productData['category_name'];
-            $unsplashQuery = $productData['unsplash_query'];
-            unset($productData['category_name'], $productData['unsplash_query']);
+            unset($productData['category_name']);
 
-            // Find category
             $category = $categories->firstWhere('name', $categoryName);
             if (!$category) {
                 continue;
             }
 
-            // Assign random vendor
             $vendor = $vendors->random();
 
             $productData['category_id'] = $category->id;
             $productData['vendor_id'] = $vendor->id;
-            $productData['rating'] = rand(35, 50) / 10; // 3.5 to 5.0
+            $productData['slug'] = Str::slug($productData['name']) . '-' . uniqid();
+            $productData['rating'] = rand(35, 50) / 10;
             $productData['reviews_count'] = rand(10, 500);
+            $productData['image'] = 'products/placeholder.jpg';
 
-// Download image from Unsplash or Picsum as backup
-            $imageUrl = "https://picsum.photos/800/800";
-
-            try {
-                $context = stream_context_create([
-                    'http' => [
-                        'timeout' => 15,
-                        'follow_location' => 1,
-                        'max_redirects' => 5
-                    ]
-                ]);
-
-                $imageContent = @file_get_contents($imageUrl, false, $context);
-
-                if ($imageContent !== false && strlen($imageContent) > 1000) {
-                    $filename = 'products/' . time() . '_' . uniqid() . '.jpg';
-                    Storage::disk('public')->put($filename, $imageContent);
-                    $productData['image'] = $filename;
-                    $this->command->info("✓ Image downloaded for: {$productData['name']}");
-                } else {
-                    // Create product without image if download fails
-                    $productData['image'] = null;
-                    $this->command->warn("✗ No image for: {$productData['name']}");
-                }
-            } catch (\Exception $e) {
-                // Create product without image if download fails
-                $productData['image'] = null;
-                $this->command->warn("✗ Failed: {$productData['name']}");
-            }
-
-            Product::create($productData);
-
-            // Small delay to avoid rate limiting
-            usleep(500000); // 0.5 seconds
+            $products[] = $productData;
         }
 
-        $this->command->info('Products seeded successfully with Unsplash images!');
+        Product::insert($products);
+        $this->command->info('Products seeded successfully!');
     }
 }

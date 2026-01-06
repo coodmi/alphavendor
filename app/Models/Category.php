@@ -11,6 +11,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
+        'vendor_id',
         'name',
         'slug',
         'description',
@@ -46,5 +47,13 @@ class Category extends Model
     public function getProductsCountAttribute()
     {
         return $this->products()->where('status', 'active')->count();
+    }
+
+    /**
+     * Get the vendor who owns this category
+     */
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
     }
 }

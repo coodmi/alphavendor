@@ -19,8 +19,15 @@ class RetailerProductController extends Controller
             ->latest()
             ->get();
 
-        $categories = Category::where('is_active', true)->orderBy('name')->get();
-        $brands = Brand::where('is_active', true)->orderBy('name')->get();
+        // Get only categories and brands belonging to the authenticated retailer
+        $categories = Category::where('vendor_id', Auth::id())
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+        $brands = Brand::where('vendor_id', Auth::id())
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
 
         return view('retailer.products.index', compact('products', 'categories', 'brands'));
     }
@@ -42,6 +49,30 @@ class RetailerProductController extends Controller
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50'
         ]);
+
+        // Verify category belongs to this retailer
+        $category = Category::where('id', $validated['category_id'])
+            ->where('vendor_id', Auth::id())
+            ->first();
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid category selected!'
+            ], 422);
+        }
+
+        // Verify brand belongs to this retailer (if provided)
+        if (!empty($validated['brand_id'])) {
+            $brand = Brand::where('id', $validated['brand_id'])
+                ->where('vendor_id', Auth::id())
+                ->first();
+            if (!$brand) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid brand selected!'
+                ], 422);
+            }
+        }
 
         // Handle image upload or URL
         if ($request->hasFile('image')) {
@@ -88,6 +119,30 @@ class RetailerProductController extends Controller
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50'
         ]);
+
+        // Verify category belongs to this retailer
+        $category = Category::where('id', $validated['category_id'])
+            ->where('vendor_id', Auth::id())
+            ->first();
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid category selected!'
+            ], 422);
+        }
+
+        // Verify brand belongs to this retailer (if provided)
+        if (!empty($validated['brand_id'])) {
+            $brand = Brand::where('id', $validated['brand_id'])
+                ->where('vendor_id', Auth::id())
+                ->first();
+            if (!$brand) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid brand selected!'
+                ], 422);
+            }
+        }
 
         // Handle image update
         if ($request->hasFile('image')) {

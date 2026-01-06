@@ -13,7 +13,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withCount('products')->latest()->get();
+        // Admin sees only categories with no vendor_id (global categories)
+        $categories = Category::whereNull('vendor_id')
+            ->withCount('products')
+            ->latest()
+            ->get();
         return view('admin.categories.index', compact('categories'));
     }
 
