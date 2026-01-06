@@ -40,6 +40,7 @@ class ProductController extends Controller
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50',
+            'brand' => 'nullable|string|max:100',
         ]);
 
         if ($request->hasFile('image')) {
@@ -74,6 +75,7 @@ class ProductController extends Controller
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50',
+            'brand' => 'nullable|string|max:100',
         ]);
 
         if ($request->hasFile('image')) {
@@ -111,18 +113,89 @@ class ProductController extends Controller
     /**
      * Display shop page with products
      */
-    public function shop()
+    public function shop(Request $request)
     {
-        $products = Product::with(['category', 'vendor'])
-            ->where('status', 'active')
-            ->latest()
-            ->get();
+        $query = Product::with(['category', 'vendor'])
+            ->where('status', 'active');
 
+        // Category filter
+        if ($request->has('categories') && !empty($request->categories)) {
+            $query->whereIn('category_id', $request->categories);
+        }
+
+        // Price range filter
+        if ($request->has('min_price') && $request->min_price !== null) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price') && $request->max_price !== null) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Brand filter
+        if ($request->has('brands') && !empty($request->brands)) {
+            $query->whereIn('brand', $request->brands);
+        }
+
+        // Rating filter
+        if ($request->has('min_rating') && $request->min_rating !== null) {
+            $query->where('rating', '>=', $request->min_rating);
+        }
+
+        // Vendor type filter
+        if ($request->has('vendor_types') && !empty($request->vendor_types)) {
+            $query->whereHas('vendor', function($q) use ($request) {
+                $q->whereIn('role', $request->vendor_types);
+            });
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort', 'default');
+        switch ($sortBy) {
+            case 'price_low':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->latest();
+                break;
+            case 'rating':
+                $query->orderBy('rating', 'desc');
+                break;
+            case 'popular':
+                $query->orderBy('reviews_count', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        // Pagination
+        $perPage = $request->get('per_page', 24);
+        $products = $query->paginate($perPage)->withQueryString();
+
+        // Get categories with product counts
         $categories = Category::where('is_active', true)
             ->withCount('products')
             ->orderBy('sort_order')
             ->get();
 
-        return view('shop', compact('products', 'categories'));
+        // Get available brands
+        $brands = Product::whereNotNull('brand')
+            ->where('brand', '!=', '')
+            ->distinct()
+            ->pluck('brand')
+            ->sort()
+            ->values();
+
+        // Get vendor types with counts
+        $vendorTypes = User::selectRaw('role, COUNT(DISTINCT products.id) as products_count')
+            ->join('products', 'users.id', '=', 'products.vendor_id')
+            ->whereIn('role', ['retailer', 'wholesaler', 'exporter'])
+            ->where('products.status', 'active')
+            ->groupBy('role')
+            ->get();
+
+        return view('shop', compact('products', 'categories', 'brands', 'vendorTypes'));
     }
 }

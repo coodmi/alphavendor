@@ -27,7 +27,8 @@
                         @forelse($categories as $category)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="checkbox" class="category-checkbox" value="{{ $category->id }}" 
+                                    {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}>
                                 <span>{{ $category->name }}</span>
                                 <span class="count">({{ $category->products_count }})</span>
                             </label>
@@ -42,17 +43,17 @@
                 <div class="filter-box">
                     <h3 class="filter-title">Price Range</h3>
                     <div class="price-range-slider">
-                        <input type="range" min="0" max="1000" value="0" class="range-min">
-                        <input type="range" min="0" max="1000" value="1000" class="range-max">
+                        <input type="range" min="0" max="10000" value="{{ request('min_price', 0) }}" class="range-min">
+                        <input type="range" min="0" max="10000" value="{{ request('max_price', 10000) }}" class="range-max">
                     </div>
                     <div class="price-inputs">
                         <div class="price-input">
                             <label>Min</label>
-                            <input type="number" value="0" min="0">
+                            <input type="number" value="{{ request('min_price', 0) }}" min="0">
                         </div>
                         <div class="price-input">
                             <label>Max</label>
-                            <input type="number" value="1000" max="1000">
+                            <input type="number" value="{{ request('max_price', 10000) }}" max="10000">
                         </div>
                     </div>
                     <button class="btn-apply-filter">Apply Filter</button>
@@ -65,43 +66,21 @@
                         <input type="text" placeholder="Search brands...">
                     </div>
                     <ul class="filter-list">
-                        <li>
+                        @forelse($brands ?? [] as $brand)
+                        <li style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
                             <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Nike</span>
-                                <span class="count">(67)</span>
+                                <input type="checkbox" class="brand-checkbox" value="{{ $brand }}" 
+                                    {{ in_array($brand, request('brands', [])) ? 'checked' : '' }}>
+                                <span>{{ $brand }}</span>
                             </label>
                         </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Adidas</span>
-                                <span class="count">(54)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Samsung</span>
-                                <span class="count">(92)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Apple</span>
-                                <span class="count">(45)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Sony</span>
-                                <span class="count">(38)</span>
-                            </label>
-                        </li>
+                        @empty
+                        <li style="padding: 10px; color: #7f8c8d;">No brands available</li>
+                        @endforelse
                     </ul>
+                    @if(isset($brands) && $brands->count() > 5)
                     <button class="show-more-btn">Show More +</button>
+                    @endif
                 </div>
 
                 <!-- Rating Filter -->
@@ -110,7 +89,8 @@
                     <ul class="filter-list rating-filter">
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="radio" name="rating" class="rating-checkbox" value="5" 
+                                    {{ request('min_rating') == 5 ? 'checked' : '' }}>
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -118,12 +98,12 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                 </span>
-                                <span class="count">(123)</span>
                             </label>
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="radio" name="rating" class="rating-checkbox" value="4" 
+                                    {{ request('min_rating') == 4 ? 'checked' : '' }}>
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -132,12 +112,12 @@
                                     <i class="far fa-star"></i>
                                 </span>
                                 <span>& Up</span>
-                                <span class="count">(267)</span>
                             </label>
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="radio" name="rating" class="rating-checkbox" value="3" 
+                                    {{ request('min_rating') == 3 ? 'checked' : '' }}>
                                 <span class="rating-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -146,7 +126,6 @@
                                     <i class="far fa-star"></i>
                                 </span>
                                 <span>& Up</span>
-                                <span class="count">(445)</span>
                             </label>
                         </li>
                     </ul>
@@ -156,27 +135,23 @@
                 <div class="filter-box">
                     <h3 class="filter-title">Vendor Type</h3>
                     <ul class="filter-list">
+                        @php
+                            $vendorTypeLabels = ['retailer' => 'Retail', 'wholesaler' => 'Wholesale', 'exporter' => 'Export'];
+                        @endphp
+                        @foreach(['retailer', 'wholesaler', 'exporter'] as $type)
+                        @php
+                            $vendorType = isset($vendorTypes) ? $vendorTypes->firstWhere('role', $type) : null;
+                            $count = $vendorType ? $vendorType->products_count : 0;
+                        @endphp
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Retail</span>
-                                <span class="count">(543)</span>
+                                <input type="checkbox" class="vendor-type-checkbox" value="{{ $type }}" 
+                                    {{ in_array($type, request('vendor_types', [])) ? 'checked' : '' }}>
+                                <span>{{ $vendorTypeLabels[$type] }}</span>
+                                <span class="count">({{ $count }})</span>
                             </label>
                         </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Wholesale</span>
-                                <span class="count">(321)</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Export</span>
-                                <span class="count">(189)</span>
-                            </label>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
 
@@ -191,7 +166,7 @@
                 <!-- Toolbar -->
                 <div class="shop-toolbar">
                     <div class="toolbar-left">
-                        <p class="results-count">Showing <strong>1-24</strong> of <strong>1,234</strong> results</p>
+                        <p class="results-count">Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> results</p>
                     </div>
                     <div class="toolbar-right">
                         <div class="view-mode">
@@ -204,40 +179,75 @@
                         </div>
                         <div class="sort-dropdown">
                             <select>
-                                <option>Sort by: Default</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Newest First</option>
-                                <option>Best Rating</option>
-                                <option>Most Popular</option>
+                                <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Sort by: Default</option>
+                                <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
+                                <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
+                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
+                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Best Rating</option>
+                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
                             </select>
                         </div>
                         <div class="per-page-dropdown">
                             <select>
-                                <option>Show: 24</option>
-                                <option>Show: 36</option>
-                                <option>Show: 48</option>
-                                <option>Show: 96</option>
+                                <option value="24" {{ request('per_page', 24) == 24 ? 'selected' : '' }}>Show: 24</option>
+                                <option value="36" {{ request('per_page', 24) == 36 ? 'selected' : '' }}>Show: 36</option>
+                                <option value="48" {{ request('per_page', 24) == 48 ? 'selected' : '' }}>Show: 48</option>
+                                <option value="96" {{ request('per_page', 24) == 96 ? 'selected' : '' }}>Show: 96</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <!-- Active Filters Tags -->
+                @if(request()->hasAny(['categories', 'brands', 'min_price', 'max_price', 'min_rating', 'vendor_types']))
                 <div class="active-filters">
+                    @if(request('categories'))
+                        @foreach(request('categories') as $categoryId)
+                            @php
+                                $category = $categories->firstWhere('id', $categoryId);
+                            @endphp
+                            @if($category)
+                            <span class="filter-tag" data-filter-type="category" data-filter-value="{{ $categoryId }}">
+                                {{ $category->name }}
+                                <button class="remove-filter"><i class="fas fa-times"></i></button>
+                            </span>
+                            @endif
+                        @endforeach
+                    @endif
+
+                    @if(request('min_price') || request('max_price'))
                     <span class="filter-tag">
-                        Fashion
+                        Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
+                    @endif
+
+                    @if(request('brands'))
+                        @foreach(request('brands') as $brand)
+                        <span class="filter-tag" data-filter-type="brand" data-filter-value="{{ $brand }}">
+                            {{ $brand }}
+                            <button class="remove-filter"><i class="fas fa-times"></i></button>
+                        </span>
+                        @endforeach
+                    @endif
+
+                    @if(request('min_rating'))
                     <span class="filter-tag">
-                        Price: $50 - $200
+                        {{ request('min_rating') }}+ Stars
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
-                    <span class="filter-tag">
-                        Nike
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
+                    @endif
+
+                    @if(request('vendor_types'))
+                        @foreach(request('vendor_types') as $type)
+                        <span class="filter-tag" data-filter-type="vendor_type" data-filter-value="{{ $type }}">
+                            {{ ucfirst($type) }}
+                            <button class="remove-filter"><i class="fas fa-times"></i></button>
+                        </span>
+                        @endforeach
+                    @endif
                 </div>
+                @endif
 
                 <!-- Products Grid -->
                 <div class="products-grid-view">
@@ -305,28 +315,17 @@
                 </div>
 
                 <!-- Pagination -->
+                @if($products->hasPages())
                 <div class="pagination-wrapper">
-                    <nav class="pagination">
-                        <button class="page-btn prev" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="page-btn active">1</button>
-                        <button class="page-btn">2</button>
-                        <button class="page-btn">3</button>
-                        <button class="page-btn">4</button>
-                        <button class="page-btn">5</button>
-                        <span class="page-dots">...</span>
-                        <button class="page-btn">52</button>
-                        <button class="page-btn next">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </nav>
-                    <div class="pagination-info">
-                        Go to page: <input type="number" min="1" max="52" value="1">
-                    </div>
+                    {{ $products->links() }}
                 </div>
+                @endif
             </div>
         </div>
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/shop.js') }}"></script>
+@endpush

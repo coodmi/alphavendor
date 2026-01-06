@@ -26,6 +26,7 @@ class Product extends Model
         'reviews_count',
         'is_featured',
         'badge',
+        'brand',
     ];
 
     protected $casts = [
