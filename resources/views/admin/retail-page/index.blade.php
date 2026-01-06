@@ -42,61 +42,58 @@
 @endsection
 
 @section('content')
-<div class="mb-8">
-    <div class="flex justify-between items-center">
+<div style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-1">Retail Page Management</h2>
-            <p class="text-gray-600">Customize the retail marketplace page content</p>
+            <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Retail Page Management</h2>
+            <p style="color: #7f8c8d;">Customize the retail marketplace page content</p>
         </div>
-        <a href="{{ route('retail') }}" target="_blank" class="px-6 py-3 text-white rounded-lg transition-all flex items-center gap-2" style="background: linear-gradient(135deg, #2D3F51 0%, #1a252f 100%);" onmouseover="this.style.background='linear-gradient(135deg, #1a252f 0%, #0f1419 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #2D3F51 0%, #1a252f 100%)'">
+        <a href="{{ route('retail') }}" target="_blank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: all 0.3s;">
             <i class="fas fa-external-link-alt"></i> Preview Page
         </a>
     </div>
 </div>
 
-@if(session('success'))
-<div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r-lg">
-    <div class="flex items-center">
-        <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
-        <p class="text-green-700">{{ session('success') }}</p>
-    </div>
+{{-- @if(session('success'))
+<div style="background-color: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin-bottom: 25px; border-radius: 4px;">
+    <p style="color: #155724; margin: 0;">
+        <i class="fas fa-check-circle" style="margin-right: 8px;"></i>{{ session('success') }}
+    </p>
 </div>
-@endif
+@endif --}}
 
 <form action="{{ route('admin.retail-page.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <!-- Hero Section -->
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <i class="fas fa-image mr-2" style="color: #2D3F51;"></i>
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+        <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+            <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
             Hero Section
         </h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Title</label>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+            <div>
+                <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
                 <input type="text" name="hero_title" value="{{ old('hero_title', $content['hero_title'] ?? '') }}"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                    style="--tw-ring-color: #2D3F51;" required>
+                    style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
                 @error('hero_title')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p style="color: #dc3545; font-size: 13px; margin-top: 5px;">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Description</label>
+            <div>
+                <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
                 <textarea name="hero_description" rows="3"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                    style="--tw-ring-color: #2D3F51;" required>{{ old('hero_description', $content['hero_description'] ?? '') }}</textarea>
+                    style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ old('hero_description', $content['hero_description'] ?? '') }}</textarea>
                 @error('hero_description')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p style="color: #dc3545; font-size: 13px; margin-top: 5px;">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image</label>
-                <div class="mb-3" id="imagePreviewContainer">
+            <div>
+                <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
+                <div style="margin-bottom: 12px;" id="imagePreviewContainer">
                     @if(isset($content['hero_image']) && $content['hero_image'])
                         @php
                             $imageUrl = str_starts_with($content['hero_image'], 'http') ? $content['hero_image'] : asset('storage/' . $content['hero_image']);
@@ -105,80 +102,79 @@
                         <img src="{{ $imageUrl }}"
                             alt="Current Hero Image"
                             id="imagePreview"
-                            class="w-48 h-32 object-cover rounded-lg border border-gray-300">
+                            style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
                     @else
                         <img src=""
                             alt="Image Preview"
                             id="imagePreview"
-                            class="w-48 h-32 object-cover rounded-lg border border-gray-300 hidden">
+                            style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
                     @endif
                 </div>
                 <input type="file" name="hero_image" id="heroImageInput" accept="image/*"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                    style="--tw-ring-color: #2D3F51;">
-                <p class="text-sm text-gray-500 mt-1">Upload a new image to replace the current one (max 2MB)</p>
+                    style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
                 @error('hero_image')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p style="color: #dc3545; font-size: 13px; margin-top: 5px;">{{ $message }}</p>
                 @enderror
             </div>
         </div>
     </div>
 
     <!-- Statistics Section -->
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <i class="fas fa-chart-bar mr-2" style="color: #2D3F51;"></i>
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+        <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+            <i class="fas fa-chart-bar" style="margin-right: 10px; color: #667eea;"></i>
             Statistics Section
         </h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
             <!-- Stat 1 -->
-            <div class="border border-gray-200 rounded-lg p-4">
-                <h4 class="text-sm font-medium text-gray-700 mb-3">Statistic 1</h4>
-                <label class="block text-xs text-gray-600 mb-1">Number</label>
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                <h4 style="font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 15px;">Statistic 1</h4>
+                <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Number</label>
                 <input type="text" name="stat1_number" value="{{ old('stat1_number', $content['stat1_number'] ?? '') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent mb-3"
-                    style="--tw-ring-color: #2D3F51;" placeholder="e.g., 500+" required>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;"
+                    placeholder="e.g., 500+" required>
 
-                <label class="block text-xs text-gray-600 mb-1">Label</label>
+                <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Label</label>
                 <input type="text" name="stat1_label" value="{{ old('stat1_label', $content['stat1_label'] ?? '') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                    style="--tw-ring-color: #2D3F51;" placeholder="e.g., Retail Stores" required>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                    placeholder="e.g., Retail Stores" required>
             </div>
 
             <!-- Stat 2 -->
-            <div class="border border-gray-200 rounded-lg p-4">
-                <h4 class="text-sm font-medium text-gray-700 mb-3">Statistic 2</h4>
-                <label class="block text-xs text-gray-600 mb-1">Number</label>
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                <h4 style="font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 15px;">Statistic 2</h4>
+                <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Number</label>
                 <input type="text" name="stat2_number" value="{{ old('stat2_number', $content['stat2_number'] ?? '') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent mb-3"
-                    style="--tw-ring-color: #2D3F51;" placeholder="e.g., 10K+" required>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;"
+                    placeholder="e.g., 10K+" required>
 
-                <label class="block text-xs text-gray-600 mb-1">Label</label>
+                <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Label</label>
                 <input type="text" name="stat2_label" value="{{ old('stat2_label', $content['stat2_label'] ?? '') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                    style="--tw-ring-color: #2D3F51;" placeholder="e.g., Products" required>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                    placeholder="e.g., Products" required>
             </div>
 
             <!-- Stat 3 -->
-            <div class="border border-gray-200 rounded-lg p-4">
-                <h4 class="text-sm font-medium text-gray-700 mb-3">Statistic 3</h4>
-                <label class="block text-xs text-gray-600 mb-1">Number</label>
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                <h4 style="font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 15px;">Statistic 3</h4>
+                <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Number</label>
                 <input type="text" name="stat3_number" value="{{ old('stat3_number', $content['stat3_number'] ?? '') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent mb-3"
-                    style="--tw-ring-color: #2D3F51;" placeholder="e.g., 50K+" required>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;"
+                    placeholder="e.g., 50K+" required>
 
-                <label class="block text-xs text-gray-600 mb-1">Label</label>
+                <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Label</label>
                 <input type="text" name="stat3_label" value="{{ old('stat3_label', $content['stat3_label'] ?? '') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                    style="--tw-ring-color: #2D3F51;" placeholder="e.g., Happy Customers" required>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                    placeholder="e.g., Happy Customers" required>
             </div>
         </div>
     </div>
 
     <!-- Save Button -->
-    <div class="flex justify-end">
-        <button type="submit" class="px-8 py-3 text-white rounded-lg transition-all flex items-center gap-2 font-semibold" style="background: linear-gradient(135deg, #2D3F51 0%, #1a252f 100%);" onmouseover="this.style.background='linear-gradient(135deg, #1a252f 0%, #0f1419 100%)'" onmouseout="this.style.background='linear-gradient(135deg, #2D3F51 0%, #1a252f 100%)'">
+    <div style="display: flex; justify-content: flex-end;">
+        <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
             <i class="fas fa-save"></i> Save Changes
         </button>
     </div>
