@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ asset('css/retail.css') }}">
     <link rel="stylesheet" href="{{ asset('css/wholesale.css') }}">
     <link rel="stylesheet" href="{{ asset('css/export.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    @stack('styles')
 </head>
 <body>
     <!-- Header -->
@@ -62,6 +64,7 @@
                 <ul class="nav-menu">
                     <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
                     <li><a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a></li>
+                    <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About Us</a></li>
                     <li><a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">Retail</a></li>
                     <li><a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">Wholesale</a></li>
                     <li><a href="{{ route('export') }}" class="{{ request()->routeIs('export') ? 'active' : '' }}">Export</a></li>
@@ -102,7 +105,7 @@
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#">About</a></li>
+                        <li><a href="{{ route('about') }}">About</a></li>
                         <li><a href="#">Contact</a></li>
                         <li><a href="#">Terms & Conditions</a></li>
                         <li><a href="#">Privacy Policy</a></li>
