@@ -174,7 +174,7 @@ class ProductController extends Controller
         }
 
         // Pagination
-        $perPage = $request->get('per_page', 24);
+        $perPage = $request->get('per_page', 12);
         $products = $query->paginate($perPage)->withQueryString();
 
         // Get categories with product counts

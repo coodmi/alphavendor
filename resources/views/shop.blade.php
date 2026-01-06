@@ -189,10 +189,10 @@
                         </div>
                         <div class="per-page-dropdown">
                             <select>
-                                <option value="24" {{ request('per_page', 24) == 24 ? 'selected' : '' }}>Show: 24</option>
-                                <option value="36" {{ request('per_page', 24) == 36 ? 'selected' : '' }}>Show: 36</option>
-                                <option value="48" {{ request('per_page', 24) == 48 ? 'selected' : '' }}>Show: 48</option>
-                                <option value="96" {{ request('per_page', 24) == 96 ? 'selected' : '' }}>Show: 96</option>
+                                <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>Show: 12</option>
+                                <option value="24" {{ request('per_page', 12) == 24 ? 'selected' : '' }}>Show: 24</option>
+                                <option value="36" {{ request('per_page', 12) == 36 ? 'selected' : '' }}>Show: 36</option>
+                                <option value="48" {{ request('per_page', 12) == 48 ? 'selected' : '' }}>Show: 48</option>
                             </select>
                         </div>
                     </div>
@@ -317,7 +317,7 @@
                 <!-- Pagination -->
                 @if($products->hasPages())
                 <div class="pagination-wrapper">
-                    {{ $products->links() }}
+                    {{ $products->links('vendor.pagination.custom') }}
                 </div>
                 @endif
             </div>
