@@ -51,7 +51,7 @@
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
-        
+
         @if($categories->count() > 0)
         <!-- Carousel Container -->
         <div class="relative">
@@ -59,7 +59,7 @@
             <button onclick="scrollCategoriesLeft()" id="catPrevBtn" class="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-600 hover:text-yellow-500 hover:bg-yellow-50 hover:shadow-xl transition-all border border-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            
+
             <!-- Categories Grid - Scrollable with 3 cards per click -->
             <div class="overflow-hidden mx-6">
                 <div id="categoriesSlider" class="flex gap-3 md:gap-4 transition-transform duration-500 ease-in-out">
@@ -68,7 +68,7 @@
                         <div class="bg-white border border-gray-100 rounded-xl p-3 md:p-4 text-center cursor-pointer hover:border-yellow-400 hover:shadow-lg transition-all duration-300 group">
                             <div class="w-16 h-16 md:w-20 md:h-20 mx-auto mb-2 rounded-lg overflow-hidden border-2 border-gray-100 group-hover:border-yellow-400 transition-colors">
                                 @php
-                                    $catImage = $category->image 
+                                    $catImage = $category->image
                                         ? (str_starts_with($category->image, 'http') ? $category->image : asset('storage/' . $category->image))
                                         : 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&h=200&fit=crop';
                                 @endphp
@@ -80,12 +80,12 @@
                     @endforeach
                 </div>
             </div>
-            
+
             <!-- Right Arrow -->
             <button onclick="scrollCategoriesRight()" id="catNextBtn" class="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-600 hover:text-yellow-500 hover:bg-yellow-50 hover:shadow-xl transition-all border border-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
                 <i class="fas fa-chevron-right"></i>
             </button>
-            
+
             <!-- Dots Indicator -->
             @if($categories->count() > 6)
             <div class="flex justify-center gap-2 mt-4" id="categoryDots">
@@ -126,13 +126,13 @@ function updateCategorySlider() {
         const cardWidth = getCardWidth();
         slider.style.transform = `translateX(-${currentCategoryPosition * cardWidth}px)`;
     }
-    
+
     // Update button states
     const prevBtn = document.getElementById('catPrevBtn');
     const nextBtn = document.getElementById('catNextBtn');
     if (prevBtn) prevBtn.disabled = currentCategoryPosition === 0;
     if (nextBtn) nextBtn.disabled = currentCategoryPosition >= maxPosition;
-    
+
     // Update dots
     updateCategoryDots();
 }
@@ -140,10 +140,10 @@ function updateCategorySlider() {
 function updateCategoryDots() {
     const dotsContainer = document.getElementById('categoryDots');
     if (!dotsContainer) return;
-    
+
     const totalDots = Math.ceil((totalCategories - visibleCards + cardsPerClick) / cardsPerClick);
     const currentDot = Math.floor(currentCategoryPosition / cardsPerClick);
-    
+
     dotsContainer.innerHTML = '';
     for (let i = 0; i < totalDots; i++) {
         const dot = document.createElement('button');
@@ -188,14 +188,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
-        
+
         @if($todayDeals->count() > 0)
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             @foreach($todayDeals as $product)
             <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100">
                 <div class="relative overflow-hidden">
                     @php
-                        $imageUrl = $product->image 
+                        $imageUrl = $product->image
                             ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image))
                             : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop';
                     @endphp
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             @endforeach
         </div>
-        
+
         <!-- See More Button -->
         <div class="text-center mt-8">
             <a href="{{ route('shop') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-yellow-500 hover:bg-amber-600 text-white font-semibold rounded-full transition-all duration-300 shadow-md hover:shadow-lg">

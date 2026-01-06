@@ -61,7 +61,7 @@ class WholesalerProductSeeder extends Seeder
             foreach ($productTemplates as $template) {
                 $category = $categories->random();
                 $brand = $brands->random();
-                
+
                 // Make product name unique per vendor
                 $uniqueName = $template['name'] . ' (W' . $wholesaler->id . ')';
 

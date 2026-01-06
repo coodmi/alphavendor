@@ -74,7 +74,7 @@ class WholesalerCategorySeeder extends Seeder
                 // Make slug and name unique per vendor
                 $uniqueSlug = $template['slug'] . '-' . $wholesaler->id;
                 $uniqueName = $template['name'] . ' (W' . $wholesaler->id . ')';
-                
+
                 Category::create([
                     'vendor_id' => $wholesaler->id,
                     'name' => $uniqueName,

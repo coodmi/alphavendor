@@ -66,7 +66,7 @@ class WholesalerBrandSeeder extends Seeder
                 // Make slug unique per vendor
                 $uniqueSlug = $template['slug'] . '-' . $wholesaler->id;
                 $uniqueName = $template['name'] . ' (W' . $wholesaler->id . ')';
-                
+
                 Brand::create([
                     'vendor_id' => $wholesaler->id,
                     'name' => $uniqueName,
