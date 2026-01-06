@@ -26,7 +26,7 @@
 
     <div class="menu-section">
         <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item active">
+        <a href="#" class="menu-item active" onclick="return false;" style="cursor: default;">
             <i class="fas fa-store"></i>
             <span>Retail Page</span>
         </a>
@@ -40,6 +40,7 @@
         </a>
     </div>
 @endsection
+
 
 @section('content')
 <div style="margin-bottom: 30px;">
