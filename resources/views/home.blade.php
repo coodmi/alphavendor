@@ -117,7 +117,7 @@
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
-        
+
         @if($banners->count() == 1)
             {{-- Single Banner - Full Width --}}
             <a href="{{ $banners->first()->link ?? '#' }}" class="block group">

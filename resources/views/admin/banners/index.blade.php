@@ -290,15 +290,15 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
     const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-    
+
     toast.className = `${bgColor} text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 transform translate-x-full transition-transform duration-300`;
     toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
-    
+
     document.getElementById('toastContainer').appendChild(toast);
-    
+
     // Animate in
     setTimeout(() => toast.classList.remove('translate-x-full'), 10);
-    
+
     // Remove after 3 seconds
     setTimeout(() => {
         toast.classList.add('translate-x-full');

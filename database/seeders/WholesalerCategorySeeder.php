@@ -11,7 +11,7 @@ class WholesalerCategorySeeder extends Seeder
     public function run(): void
     {
         $wholesaler = User::where('email', 'wholesaler@vendor.com')->first();
-        
+
         if (!$wholesaler) {
             $this->command->warn('Wholesaler user not found. Run WholesalerUserSeeder first.');
             return;

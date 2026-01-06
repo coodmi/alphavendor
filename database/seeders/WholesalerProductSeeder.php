@@ -13,7 +13,7 @@ class WholesalerProductSeeder extends Seeder
     public function run(): void
     {
         $wholesaler = User::where('email', 'wholesaler@vendor.com')->first();
-        
+
         if (!$wholesaler) {
             $this->command->warn('Wholesaler user not found. Run WholesalerUserSeeder first.');
             return;
@@ -59,7 +59,7 @@ class WholesalerProductSeeder extends Seeder
         foreach ($productTemplates as $template) {
             $category = $categories->random();
             $brand = $brands->random();
-            
+
             Product::create([
                 'vendor_id' => $wholesaler->id,
                 'category_id' => $category->id,
