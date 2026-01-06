@@ -96,18 +96,24 @@
 
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Hero Image</label>
-                @if(isset($content['hero_image']) && $content['hero_image'])
-                <div class="mb-3">
-                    @php
-                        $imageUrl = str_starts_with($content['hero_image'], 'http') ? $content['hero_image'] : asset('storage/' . $content['hero_image']);
-                        $imageUrl .= '?v=' . time(); // Cache busting
-                    @endphp
-                    <img src="{{ $imageUrl }}"
-                        alt="Current Hero Image"
-                        class="w-48 h-32 object-cover rounded-lg border border-gray-300">
+                <div class="mb-3" id="imagePreviewContainer">
+                    @if(isset($content['hero_image']) && $content['hero_image'])
+                        @php
+                            $imageUrl = str_starts_with($content['hero_image'], 'http') ? $content['hero_image'] : asset('storage/' . $content['hero_image']);
+                            $imageUrl .= '?v=' . time(); // Cache busting
+                        @endphp
+                        <img src="{{ $imageUrl }}"
+                            alt="Current Hero Image"
+                            id="imagePreview"
+                            class="w-48 h-32 object-cover rounded-lg border border-gray-300">
+                    @else
+                        <img src=""
+                            alt="Image Preview"
+                            id="imagePreview"
+                            class="w-48 h-32 object-cover rounded-lg border border-gray-300 hidden">
+                    @endif
                 </div>
-                @endif
-                <input type="file" name="hero_image" accept="image/*"
+                <input type="file" name="hero_image" id="heroImageInput" accept="image/*"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
                     style="--tw-ring-color: #2D3F51;">
                 <p class="text-sm text-gray-500 mt-1">Upload a new image to replace the current one (max 2MB)</p>
@@ -177,4 +183,36 @@
         </button>
     </div>
 </form>
+
+<script>
+document.getElementById('heroImageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    const container = document.getElementById('imagePreviewContainer');
+
+    if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            e.target.value = '';
+            return;
+        }
+
+        // Validate file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+
+        // Read and display the image
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
 @endsection
