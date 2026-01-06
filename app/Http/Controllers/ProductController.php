@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,6 +31,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'vendor_id' => 'required|exists:users,id',
+            'brand_id' => 'nullable|exists:brands,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -65,6 +67,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'vendor_id' => 'required|exists:users,id',
+            'brand_id' => 'nullable|exists:brands,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -133,7 +136,7 @@ class ProductController extends Controller
 
         // Brand filter
         if ($request->has('brands') && !empty($request->brands)) {
-            $query->whereIn('brand', $request->brands);
+            $query->whereIn('brand_id', $request->brands);
         }
 
         // Rating filter
@@ -180,13 +183,11 @@ class ProductController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        // Get available brands
-        $brands = Product::whereNotNull('brand')
-            ->where('brand', '!=', '')
-            ->distinct()
-            ->pluck('brand')
-            ->sort()
-            ->values();
+        // Get available brands from Brand model
+        $brands = Brand::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
 
         // Get vendor types with counts
         $vendorTypes = User::selectRaw('role, COUNT(DISTINCT products.id) as products_count')

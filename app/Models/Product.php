@@ -13,6 +13,7 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'vendor_id',
+        'brand_id',
         'name',
         'slug',
         'description',
@@ -59,6 +60,14 @@ class Product extends Model
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    /**
+     * Get the brand
+     */
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     /**

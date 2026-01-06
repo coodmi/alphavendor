@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\RoleApplication;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -37,8 +38,9 @@ class AdminController extends Controller
         $categories = Category::withCount('products')->orderBy('sort_order')->get();
         $products = Product::with(['category', 'vendor'])->latest()->get();
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])->get();
+        $brands = Brand::withCount('products')->orderBy('sort_order')->get();
 
-        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors'));
+        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors', 'brands'));
     }
 
     /**

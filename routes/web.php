@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleApplicationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BrandController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -67,6 +68,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/products', [ProductController::class, 'store'])->name('products.store');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+        // Brand management
+        Route::get('/brands', [BrandController::class, 'index'])->name('brands');
+        Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
+        Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
+        Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
     });
 
     // Retailer routes

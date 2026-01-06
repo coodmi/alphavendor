@@ -16,7 +16,11 @@
         </a>
         <a href="{{ route('admin.categories') }}" class="menu-item">
             <i class="fas fa-tags"></i>
-            <span>Category</span>
+            <span>Categories</span>
+        </a>
+        <a href="{{ route('admin.brands') }}" class="menu-item">
+            <i class="fas fa-copyright"></i>
+            <span>Brands</span>
         </a>
     </div>
 

@@ -22,6 +22,18 @@
             <i class="fas fa-file-alt"></i>
             <span>Applications</span>
         </a>
+        <a href="{{ route('admin.products') }}" class="menu-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="{{ route('admin.categories') }}" class="menu-item">
+            <i class="fas fa-tags"></i>
+            <span>Categories</span>
+        </a>
+        <a href="{{ route('admin.brands') }}" class="menu-item">
+            <i class="fas fa-copyright"></i>
+            <span>Brands</span>
+        </a>
     </div>
 
     <div class="menu-section">

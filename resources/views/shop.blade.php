@@ -63,15 +63,15 @@
                 <div class="filter-box">
                     <h3 class="filter-title">Brands</h3>
                     <div class="search-filter">
-                        <input type="text" placeholder="Search brands...">
+                        <input type="text" placeholder="Search brands..." class="brand-search-input">
                     </div>
-                    <ul class="filter-list">
+                    <ul class="filter-list brand-filter-list">
                         @forelse($brands ?? [] as $brand)
-                        <li style="{{ $loop->index >= 5 ? 'display: none;' : '' }}">
+                        <li style="{{ $loop->index >= 5 ? 'display: none;' : '' }}" class="brand-filter-item" data-brand-name="{{ strtolower($brand->name) }}">
                             <label class="filter-checkbox">
-                                <input type="checkbox" class="brand-checkbox" value="{{ $brand }}"
-                                    {{ in_array($brand, request('brands', [])) ? 'checked' : '' }}>
-                                <span>{{ $brand }}</span>
+                                <input type="checkbox" class="brand-checkbox" value="{{ $brand->id }}"
+                                    {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
+                                <span>{{ $brand->name }}</span>
                             </label>
                         </li>
                         @empty

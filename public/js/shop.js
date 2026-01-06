@@ -342,6 +342,25 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
+    // Brand search functionality
+    const brandSearchInput = document.querySelector('.brand-search-input');
+    const brandFilterItems = document.querySelectorAll('.brand-filter-item');
+    
+    if (brandSearchInput && brandFilterItems.length > 0) {
+        brandSearchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            brandFilterItems.forEach(item => {
+                const brandName = item.getAttribute('data-brand-name');
+                if (brandName.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+
     // Make applyFilters globally accessible for inline script
     window.applyFilters = applyFilters;
     console.log('applyFilters function exposed globally');
