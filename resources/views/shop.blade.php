@@ -56,7 +56,7 @@
                             <input type="number" class="max-price-input" value="{{ request('max_price', 10000) }}" min="0" max="10000">
                         </div>
                     </div>
-                    <button class="btn-apply-filter">Apply Filter</button>
+                    <button type="button" class="btn-apply-filter">Apply Filter</button>
                 </div>
 
                 <!-- Brands Filter -->
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('All price range elements found successfully');
 
     // Update min slider
-    rangeMin.oninput = function() {
+    rangeMin.addEventListener('input', function() {
         let min = parseInt(this.value);
         let max = parseInt(rangeMax.value);
 
@@ -359,10 +359,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         minPriceInput.value = min;
-    };
+        console.log('Updated min input to:', minPriceInput.value);
+    });
 
     // Update max slider
-    rangeMax.oninput = function() {
+    rangeMax.addEventListener('input', function() {
         let min = parseInt(rangeMin.value);
         let max = parseInt(this.value);
 
@@ -374,10 +375,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         maxPriceInput.value = max;
-    };
+        console.log('Updated max input to:', maxPriceInput.value);
+    });
 
     // Update min input
-    minPriceInput.oninput = function() {
+    minPriceInput.addEventListener('input', function() {
         let min = parseInt(this.value) || 0;
         let max = parseInt(maxPriceInput.value) || 10000;
 
@@ -393,10 +395,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         rangeMin.value = min;
-    };
+        console.log('Updated min slider to:', rangeMin.value);
+    });
 
     // Update max input
-    maxPriceInput.oninput = function() {
+    maxPriceInput.addEventListener('input', function() {
         let min = parseInt(minPriceInput.value) || 0;
         let max = parseInt(this.value) || 10000;
 
@@ -412,9 +415,54 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         rangeMax.value = max;
-    };
+        console.log('Updated max slider to:', rangeMax.value);
+    });
 
     console.log('Price range event listeners attached successfully');
+    
+    // Filter application function
+    function triggerFilterApplication() {
+        const params = new URLSearchParams(window.location.search);
+        
+        const minVal = parseInt(minPriceInput.value) || 0;
+        const maxVal = parseInt(maxPriceInput.value) || 10000;
+        
+        params.delete('min_price');
+        params.delete('max_price');
+        
+        if (minVal > 0) {
+            params.set('min_price', minVal);
+        }
+        if (maxVal < 10000) {
+            params.set('max_price', maxVal);
+        }
+        
+        const newUrl = window.location.pathname + '?' + params.toString();
+        console.log('Navigating to:', newUrl);
+        window.location.href = newUrl;
+    }
+    
+    // Apply Filter Button Handler
+    function attachApplyFilterHandler() {
+        const btn = document.querySelector('.btn-apply-filter');
+        if (btn) {
+            console.log('Apply Filter button found');
+            btn.onclick = function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                console.log('Apply Filter clicked! Min:', minPriceInput.value, 'Max:', maxPriceInput.value);
+                triggerFilterApplication();
+                return false;
+            };
+            console.log('Apply Filter handler attached');
+        } else {
+            console.error('Apply Filter button NOT found!');
+        }
+    }
+    
+    // Attach handler immediately and after short delay
+    attachApplyFilterHandler();
+    setTimeout(attachApplyFilterHandler, 500);
 });
 </script>
 <script src="{{ asset('js/shop.js') }}"></script>

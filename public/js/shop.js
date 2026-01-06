@@ -47,20 +47,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Price filter apply
-    if (applyPriceBtn) {
-        applyPriceBtn.addEventListener("click", function (e) {
+    // Make applyFilters globally accessible
+    window.applyFilters = applyFilters;
+
+    // Listen for custom filter apply event
+    document.addEventListener('filterApply', function() {
+        console.log('Custom filterApply event received');
+        applyFilters();
+    });
+
+    // Price filter apply - Using event delegation
+    document.body.addEventListener('click', function(e) {
+        const target = e.target;
+        if (target.classList.contains('btn-apply-filter') || target.closest('.btn-apply-filter')) {
             e.preventDefault();
-            console.log("Apply Filter button clicked");
-            console.log(
-                "Min:",
-                minPriceInput?.value,
-                "Max:",
-                maxPriceInput?.value
-            );
+            e.stopPropagation();
+            console.log("Apply Filter button clicked - main delegated handler");
+            console.log("Min:", minPriceInput?.value, "Max:", maxPriceInput?.value);
             applyFilters();
-        });
-    }
+        }
+    });
+    console.log('Apply Filter delegated handler attached in main script');
 
     // Price input enter key
     [minPriceInput, maxPriceInput].forEach((input) => {
@@ -184,7 +191,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Apply filters function
     // Apply filters function
     function applyFilters() {
         console.log("applyFilters called");
@@ -335,4 +341,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon.classList.toggle("fas");
             });
         });
+
+    // Make applyFilters globally accessible for inline script
+    window.applyFilters = applyFilters;
+    console.log('applyFilters function exposed globally');
+
+    // Listen for custom filterApply event from inline handler
+    document.addEventListener('filterApply', function() {
+        console.log('Custom filterApply event received');
+        applyFilters();
+    });
 });
