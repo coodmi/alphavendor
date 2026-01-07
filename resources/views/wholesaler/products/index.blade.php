@@ -22,6 +22,10 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
+        <a href="{{ route('wholesaler.supplier-locations.index') }}" class="menu-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Supplier Locations</span>
+        </a>
     </div>
 
     <div class="menu-section">
@@ -107,10 +111,10 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onclick='editProduct(@json($product))' class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
+                        <button data-product='@json($product)' onclick="editProductFromData(this)" class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </button>
-                        <button onclick="confirmDelete({{ $product->id }}, '{{ $product->name }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
+                        <button onclick="confirmDelete({{ $product->id }}, '{{ addslashes($product->name) }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
                             <i class="fas fa-trash mr-1"></i> Delete
                         </button>
                     </td>
@@ -233,6 +237,23 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Minimum Order Quantity *</label>
+                    <input type="number" name="minimum_order" id="productMinOrder" min="1" value="1" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Supplier Location *</label>
+                    <select name="supplier_location_id" id="productSupplierLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                        <option value="">Select Supplier Location</option>
+                        @foreach($supplierLocations as $location)
+                            <option value="{{ $location->id }}">{{ $location->name }}{{ $location->country ? ' - ' . $location->country : '' }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
                     <select name="status" id="productStatus" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                         <option value="active">Active</option>
@@ -321,6 +342,11 @@ function openAddModal() {
     document.getElementById('productModal').classList.remove('hidden');
 }
 
+function editProductFromData(button) {
+    const product = JSON.parse(button.getAttribute('data-product'));
+    editProduct(product);
+}
+
 function editProduct(product) {
     editingProductId = product.id;
     document.getElementById('modalTitle').textContent = 'Edit Product';
@@ -335,9 +361,7 @@ function editProduct(product) {
     document.getElementById('productOldPrice').value = product.old_price || '';
     document.getElementById('productStock').value = product.stock;
     document.getElementById('productMinOrder').value = product.minimum_order || 1;
-    document.getElementById('productSupplierLocation').value = product.supplier_location || '';
-    document.getElementById('productMinOrder').value = product.minimum_order || 1;
-    document.getElementById('productSupplierLocation').value = product.supplier_location || '';
+    document.getElementById('productSupplierLocation').value = product.supplier_location_id || '';
     document.getElementById('productStatus').value = product.status;
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productFeatured').checked = product.is_featured;

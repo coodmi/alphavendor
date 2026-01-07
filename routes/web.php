@@ -23,6 +23,7 @@ use App\Http\Controllers\RetailerProductController;
 use App\Http\Controllers\Wholesaler\WholesalerBrandController;
 use App\Http\Controllers\Wholesaler\WholesalerCategoryController;
 use App\Http\Controllers\Wholesaler\WholesalerProductController;
+use App\Http\Controllers\SupplierLocationController;
 use App\Http\Controllers\ExporterBrandController;
 use App\Http\Controllers\ExporterCategoryController;
 use App\Http\Controllers\ExporterProductController;
@@ -156,6 +157,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/products', [WholesalerProductController::class, 'store'])->name('products.store');
         Route::put('/products/{product}', [WholesalerProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [WholesalerProductController::class, 'destroy'])->name('products.destroy');
+
+        // Supplier Location management
+        Route::get('/supplier-locations', [SupplierLocationController::class, 'index'])->name('supplier-locations.index');
+        Route::post('/supplier-locations', [SupplierLocationController::class, 'store'])->name('supplier-locations.store');
+        Route::put('/supplier-locations/{supplierLocation}', [SupplierLocationController::class, 'update'])->name('supplier-locations.update');
+        Route::delete('/supplier-locations/{supplierLocation}', [SupplierLocationController::class, 'destroy'])->name('supplier-locations.destroy');
     });
 
     // Exporter routes

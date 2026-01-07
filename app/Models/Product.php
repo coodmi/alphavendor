@@ -23,6 +23,7 @@ class Product extends Model
         'stock',
         'minimum_order',
         'supplier_location',
+        'supplier_location_id',
         'sku',
         'status',
         'rating',
@@ -74,6 +75,14 @@ class Product extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Get the supplier location
+     */
+    public function supplierLocation()
+    {
+        return $this->belongsTo(SupplierLocation::class);
     }
 
     /**

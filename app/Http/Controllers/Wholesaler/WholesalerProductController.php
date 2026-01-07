@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\SupplierLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,13 @@ class WholesalerProductController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('wholesaler.products.index', compact('products', 'categories', 'brands'));
+        // Get all active supplier locations
+        $supplierLocations = SupplierLocation::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+
+        return view('wholesaler.products.index', compact('products', 'categories', 'brands', 'supplierLocations'));
     }
 
     public function store(Request $request)
@@ -46,7 +53,7 @@ class WholesalerProductController extends Controller
             'old_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'minimum_order' => 'required|integer|min:1',
-            'supplier_location' => 'required|string|max:255',
+            'supplier_location_id' => 'required|exists:supplier_locations,id',
             'sku' => 'required|string|max:255|unique:products,sku',
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
@@ -118,7 +125,7 @@ class WholesalerProductController extends Controller
             'old_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'minimum_order' => 'required|integer|min:1',
-            'supplier_location' => 'required|string|max:255',
+            'supplier_location_id' => 'required|exists:supplier_locations,id',
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',

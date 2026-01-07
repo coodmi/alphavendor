@@ -26,6 +26,10 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
+        <a href="{{ route('wholesaler.supplier-locations.index') }}" class="menu-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Supplier Locations</span>
+        </a>
     </div>
 
     <div class="menu-section">

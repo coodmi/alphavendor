@@ -22,6 +22,10 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
+        <a href="{{ route('wholesaler.supplier-locations.index') }}" class="menu-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Supplier Locations</span>
+        </a>
     </div>
 
     <div class="menu-section">
@@ -91,10 +95,10 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $category->sort_order }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onclick='editCategory(@json($category))' class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
+                        <button data-category='@json($category)' onclick="editCategoryFromData(this)" class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </button>
-                        <button onclick="confirmDelete({{ $category->id }}, '{{ $category->name }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
+                        <button onclick="confirmDelete({{ $category->id }}, '{{ addslashes($category->name) }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
                             <i class="fas fa-trash mr-1"></i> Delete
                         </button>
                     </td>
@@ -247,6 +251,11 @@ function openAddModal() {
     toggleImageSource();
     document.getElementById('imagePreview').classList.add('hidden');
     document.getElementById('categoryModal').classList.remove('hidden');
+}
+
+function editCategoryFromData(button) {
+    const category = JSON.parse(button.getAttribute('data-category'));
+    editCategory(category);
 }
 
 function editCategory(category) {

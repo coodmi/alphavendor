@@ -142,8 +142,8 @@
                             @foreach($supplierLocations as $location)
                             <li>
                                 <label class="filter-checkbox">
-                                    <input type="radio" name="supplier_location" value="{{ $location }}" {{ request('supplier_location') == $location ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()">
-                                    <span>{{ $location }}</span>
+                                    <input type="radio" name="supplier_location" value="{{ $location->country }}" {{ request('supplier_location') == $location->country ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()">
+                                    <span>{{ $location->country }}</span>
                                 </label>
                             </li>
                             @endforeach

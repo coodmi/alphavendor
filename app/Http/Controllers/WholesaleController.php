@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\User;
+use App\Models\SupplierLocation;
 
 class WholesaleController extends Controller
 {
@@ -41,7 +42,7 @@ class WholesaleController extends Controller
 
         // Filter by supplier location if provided
         if ($request->has('supplier_location') && $request->supplier_location) {
-            $query->where('supplier_location', $request->supplier_location);
+            $query->where('supplier_location_id', $request->supplier_location);
         }
 
         // Filter by category if provided
@@ -65,16 +66,11 @@ class WholesaleController extends Controller
         // Get products
         $products = $query->latest()->paginate(16);
 
-        // Get unique supplier locations from products
-        $supplierLocations = Product::whereHas('vendor', function($q) {
-                $q->where('role', 'wholesaler')->where('status', 'active');
-            })
-            ->where('status', 'active')
-            ->whereNotNull('supplier_location')
-            ->distinct()
-            ->pluck('supplier_location')
-            ->sort()
-            ->values();
+        // Get active supplier locations from database
+        $supplierLocations = SupplierLocation::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
 
         // Get minimum order ranges
         $minOrderRanges = [
