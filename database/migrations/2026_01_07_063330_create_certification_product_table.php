@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('certification_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->unique(['certification_id', 'product_id']);
         });
     }

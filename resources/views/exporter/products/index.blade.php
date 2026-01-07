@@ -291,7 +291,7 @@
                 @else
                     <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                         <p class="text-sm text-yellow-800">
-                            <i class="fas fa-info-circle mr-2"></i>No certifications available. 
+                            <i class="fas fa-info-circle mr-2"></i>No certifications available.
                             <a href="{{ route('exporter.certifications') }}" class="font-semibold text-indigo-600 hover:text-indigo-700 underline">Create certifications</a> first to assign them to products.
                         </p>
                     </div>

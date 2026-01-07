@@ -105,7 +105,7 @@ class CertificationSeeder extends Seeder
         foreach ($exporters as $exporter) {
             // Give each exporter ALL certifications
             $selectedTemplates = array_keys($certificationTemplates);
-            
+
             // Ensure it's always an array
             if (!is_array($selectedTemplates)) {
                 $selectedTemplates = [$selectedTemplates];
@@ -113,13 +113,13 @@ class CertificationSeeder extends Seeder
 
             foreach ($selectedTemplates as $index) {
                 $template = $certificationTemplates[$index];
-                
+
                 // Generate random issue date (between 1-3 years ago)
                 $issueDate = Carbon::now()->subMonths(rand(12, 36));
-                
+
                 // Generate random expiry date (1-3 years from issue date)
                 $expiryDate = $issueDate->copy()->addYears(rand(1, 3));
-                
+
                 $allCertifications[] = [
                     'vendor_id' => $exporter->id,
                     'name' => $template['name'],
