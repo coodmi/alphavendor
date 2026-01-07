@@ -476,16 +476,16 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.quick-add-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const button = this.querySelector('.quick-add-btn');
             const originalContent = button.innerHTML;
-            
+
             // Disable button and show loading
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
-            
+
             const formData = new FormData(this);
-            
+
             fetch(this.action, {
                 method: 'POST',
                 body: formData,
@@ -500,10 +500,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Show success state
                     button.innerHTML = '<i class="fas fa-check"></i> Added!';
                     button.style.background = '#27ae60';
-                    
+
                     // Show notification
                     showNotification('Product added to cart!', 'success');
-                    
+
                     // Reset button after 2 seconds
                     setTimeout(() => {
                         button.disabled = false;
@@ -541,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         notification.textContent = message;
         document.body.appendChild(notification);
-        
+
         setTimeout(() => {
             notification.style.animation = 'slideOut 0.3s ease';
             setTimeout(() => notification.remove(), 300);
