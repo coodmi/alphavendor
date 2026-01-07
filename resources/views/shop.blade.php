@@ -276,8 +276,9 @@
                                 </div>
                             </div>
                         </a>
-                        <form action="{{ route('cart.add', $product->id) }}" method="POST" style="position: relative;">
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST" class="quick-add-form" style="position: relative;">
                             @csrf
+                            <input type="hidden" name="quantity" value="1">
                             <button type="submit" class="quick-add-btn">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
@@ -470,6 +471,108 @@ document.addEventListener('DOMContentLoaded', function() {
     // Attach handler immediately and after short delay
     attachApplyFilterHandler();
     setTimeout(attachApplyFilterHandler, 500);
+
+    // Quick Add to Cart functionality
+    document.querySelectorAll('.quick-add-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('.quick-add-btn');
+            const originalContent = button.innerHTML;
+            
+            // Disable button and show loading
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success state
+                    button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    button.style.background = '#27ae60';
+                    
+                    // Show notification
+                    showNotification('Product added to cart!', 'success');
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.innerHTML = originalContent;
+                        button.style.background = '';
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Failed to add product');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                button.disabled = false;
+                button.innerHTML = originalContent;
+                showNotification('Failed to add product to cart', 'error');
+            });
+        });
+    });
+
+    // Notification function
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-weight: 600;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 });
 </script>
 <script src="{{ asset('js/shop.js') }}"></script>
