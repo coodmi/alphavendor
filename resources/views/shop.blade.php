@@ -189,10 +189,10 @@
                         </div>
                         <div class="per-page-dropdown">
                             <select>
-                                <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>Show: 12</option>
-                                <option value="24" {{ request('per_page', 12) == 24 ? 'selected' : '' }}>Show: 24</option>
-                                <option value="36" {{ request('per_page', 12) == 36 ? 'selected' : '' }}>Show: 36</option>
-                                <option value="48" {{ request('per_page', 12) == 48 ? 'selected' : '' }}>Show: 48</option>
+                                <option value="16" {{ request('per_page', 16) == 16 ? 'selected' : '' }}>Show: 16</option>
+                                <option value="24" {{ request('per_page', 16) == 24 ? 'selected' : '' }}>Show: 24</option>
+                                <option value="36" {{ request('per_page', 16) == 36 ? 'selected' : '' }}>Show: 36</option>
+                                <option value="48" {{ request('per_page', 16) == 48 ? 'selected' : '' }}>Show: 48</option>
                             </select>
                         </div>
                     </div>
@@ -253,57 +253,64 @@
                 <div class="products-grid-view">
                     @forelse($products as $product)
                     <div class="product-card">
-                        <div class="product-image">
-                            @if($product->image)
-                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                            @else
-                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
-                            @endif
-                            @if($product->badge)
-                            <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
-                            @endif
-                            <div class="product-actions">
-                                <button class="action-btn" title="Add to Wishlist">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                                <button class="action-btn" title="Quick View">
-                                    <i class="far fa-eye"></i>
-                                </button>
-                                <button class="action-btn" title="Compare">
-                                    <i class="fas fa-sync-alt"></i>
-                                </button>
+                        <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none; color: inherit;">
+                            <div class="product-image">
+                                @if($product->image)
+                                    <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                                @else
+                                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
+                                @endif
+                                @if($product->badge)
+                                <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
+                                @endif
+                                <div class="product-actions">
+                                    <button class="action-btn" title="Add to Wishlist" onclick="event.preventDefault();">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn" title="Quick View" onclick="event.preventDefault(); window.location.href='{{ route('product.show', $product->id) }}';">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn" title="Compare" onclick="event.preventDefault();">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <button class="quick-add-btn">
+                        </a>
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST" style="position: relative;">
+                            @csrf
+                            <button type="submit" class="quick-add-btn">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
                             </button>
-                        </div>
-                        <div class="product-info">
-                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4>{{ $product->name }}</h4>
-                            <div class="vendor-name">
-                                <i class="fas fa-store"></i> {{ $product->vendor->name ?? 'AlphaVendor' }}
-                            </div>
-                            <div class="rating">
-                                @for($i = 0; $i < 5; $i++)
-                                    @if($i < floor($product->rating))
-                                        <i class="fas fa-star"></i>
-                                    @elseif($i < $product->rating)
-                                        <i class="fas fa-star-half-alt"></i>
-                                    @else
-                                        <i class="far fa-star"></i>
+                        </form>
+                        <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none; color: inherit;">
+                            <div class="product-info">
+                                <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                                <h4>{{ $product->name }}</h4>
+                                <div class="vendor-name">
+                                    <i class="fas fa-store"></i> {{ $product->vendor->name ?? 'AlphaVendor' }}
+                                </div>
+                                <div class="rating">
+                                    @for($i = 0; $i < 5; $i++)
+                                        @if($i < floor($product->rating))
+                                            <i class="fas fa-star"></i>
+                                        @elseif($i < $product->rating)
+                                            <i class="fas fa-star-half-alt"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                    <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                                </div>
+                                <div class="price">
+                                    <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                    @if($product->old_price)
+                                        <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
+                                        <span class="discount">-{{ $product->discount_percentage }}%</span>
                                     @endif
-                                @endfor
-                                <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                                </div>
                             </div>
-                            <div class="price">
-                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
-                                @if($product->old_price)
-                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
-                                    <span class="discount">-{{ $product->discount_percentage }}%</span>
-                                @endif
-                            </div>
-                        </div>
+                        </a>
                     </div>
                     @empty
                     <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">

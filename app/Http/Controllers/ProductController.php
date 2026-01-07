@@ -205,4 +205,22 @@ class ProductController extends Controller
 
         return view('shop', compact('products', 'categories', 'brands', 'vendorTypes'));
     }
+
+    /**
+     * Display the specified product
+     */
+    public function show($id)
+    {
+        $product = Product::with(['category', 'vendor', 'brand'])->findOrFail($id);
+
+        // Get related products from same category
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('status', 'active')
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        return view('products.show', compact('product', 'relatedProducts'));
+    }
 }

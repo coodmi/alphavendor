@@ -24,6 +24,8 @@ class User extends Authenticatable
         'role',
         'status',
         'profile_image',
+        'certifications',
+        'exporter_rating',
     ];
 
     /**
@@ -46,6 +48,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'certifications' => 'array',
+            'exporter_rating' => 'decimal:2',
         ];
     }
 

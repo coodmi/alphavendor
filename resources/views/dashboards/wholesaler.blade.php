@@ -29,6 +29,26 @@
     </div>
 
     <div class="menu-section">
+        <div class="menu-section-title">Orders</div>
+        <a href="{{ route('vendor.orders') }}" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Bulk Orders</span>
+        </a>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-section-title">Earnings</div>
+        <a href="{{ route('wallet.index') }}" class="menu-item">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="{{ route('withdrawals.index') }}" class="menu-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Withdrawals</span>
+        </a>
+    </div>
+
+    <div class="menu-section">
         <div class="menu-section-title">Account</div>
         <a href="{{ route('profile.show') }}" class="menu-item">
             <i class="fas fa-user-circle"></i>
@@ -68,22 +88,29 @@
         <div class="stat-card">
             <div class="stat-icon">📦</div>
             <div class="stat-info">
-                <h3>0</h3>
+                <h3>{{ $totalProducts }}</h3>
                 <p>Bulk Products</p>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">🛒</div>
             <div class="stat-info">
-                <h3>0</h3>
+                <h3>{{ $totalOrders }}</h3>
                 <p>Wholesale Orders</p>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
-                <h3>$0</h3>
-                <p>Revenue</p>
+                <h3>${{ number_format($wallet->total_earned, 2) }}</h3>
+                <p>Total Earnings</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💵</div>
+            <div class="stat-info">
+                <h3>${{ number_format($wallet->balance, 2) }}</h3>
+                <p>Available Balance</p>
             </div>
         </div>
     </div>

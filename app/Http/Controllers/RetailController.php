@@ -76,7 +76,7 @@ class RetailController extends Controller
         }
 
         // Paginate
-        $perPage = $request->get('per_page', 12);
+        $perPage = $request->get('per_page', 16);
         $products = $query->paginate($perPage)->withQueryString();
 
         // Get categories with product counts (only for retailer products)

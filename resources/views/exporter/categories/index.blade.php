@@ -22,6 +22,10 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
+        <a href="{{ route('exporter.certifications') }}" class="menu-item">
+            <i class="fas fa-certificate"></i>
+            <span>Certifications</span>
+        </a>
     </div>
 
     <div class="menu-section">

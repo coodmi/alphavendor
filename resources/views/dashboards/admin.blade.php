@@ -10,42 +10,26 @@
             <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
         <a href="javascript:void(0)" onclick="showSection('products')" class="menu-item">
             <i class="fas fa-box"></i>
             <span>Products</span>
         </a>
         <a href="javascript:void(0)" onclick="showSection('categories')" class="menu-item">
             <i class="fas fa-tags"></i>
-            <span>Category</span>
+            <span>Categories</span>
         </a>
         <a href="javascript:void(0)" onclick="showSection('brands')" class="menu-item">
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-boxes"></i>
-            <span>Wholesale + Product</span>
-        </a>
         <a href="javascript:void(0)" onclick="showSection('customers')" class="menu-item">
             <i class="fas fa-users"></i>
-            <span>Customers</span>
+            <span>Users</span>
         </a>
     </div>
 
     <div class="menu-section">
         <div class="menu-section-title">Vendor Management</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-wallet"></i>
-            <span>Wallet Requests</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Sellers</span>
-        </a>
         <a href="javascript:void(0)" onclick="showSection('applications')" class="menu-item">
             <i class="fas fa-file-alt"></i>
             <span>Applications</span>
@@ -53,125 +37,9 @@
                 <span class="badge">{{ $stats['pending_applications'] }}</span>
             @endif
         </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-award"></i>
-            <span>Badges</span>
-        </a>
-        <a href="#" class="menu-item">
+        <a href="{{ route('admin.commissions') }}" class="menu-item">
             <i class="fas fa-percent"></i>
-            <span>Commission</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Operations</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-truck"></i>
-            <span>Delivery Mens</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-shipping-fast"></i>
-            <span>Shipping</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-undo"></i>
-            <span>Refund</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-id-card"></i>
-            <span>KYC Verification</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-shield-alt"></i>
-            <span>Fraud Detection</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Finance</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-credit-card"></i>
-            <span>Payment Gateway</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-money-bill-wave"></i>
-            <span>Advance Payments</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-cash-register"></i>
-            <span>Offline Payment</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-chart-bar"></i>
-            <span>Reports</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-file-invoice"></i>
-            <span>Invoices</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Content</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-images"></i>
-            <span>Media Library</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-file-alt"></i>
-            <span>Pages</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-blog"></i>
-            <span>Blog</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-bullhorn"></i>
-            <span>Marketing</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Communication</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-headset"></i>
-            <span>Support</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-comments"></i>
-            <span>Chat Messenger</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-sms"></i>
-            <span>OTP System</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">System</div>
-        <a href="#" class="menu-item">
-            <i class="fas fa-store-alt"></i>
-            <span>Store Front</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-cog"></i>
-            <span>System Setup</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-user-shield"></i>
-            <span>Manage Staffs</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-mobile-alt"></i>
-            <span>Mobile App</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-puzzle-piece"></i>
-            <span>Addons</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-sync-alt"></i>
-            <span>System Update</span>
+            <span>Commission Settings</span>
         </a>
     </div>
 

@@ -54,8 +54,16 @@ class WholesaleController extends Controller
             $query->where('brand_id', $request->brand);
         }
 
+        // Filter by price range if provided
+        if ($request->has('min_price') && $request->min_price !== null) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price') && $request->max_price !== null) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
         // Get products
-        $products = $query->latest()->paginate(12);
+        $products = $query->latest()->paginate(16);
 
         // Get unique supplier locations from products
         $supplierLocations = Product::whereHas('vendor', function($q) {

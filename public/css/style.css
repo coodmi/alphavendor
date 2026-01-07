@@ -29,7 +29,7 @@ body {
 
 /* Header */
 .header {
-    background: var(--primary-color);
+    background: #ffd000;
     padding: 15px 0;
 }
 
@@ -90,7 +90,7 @@ body {
 }
 
 .action-link {
-    color: var(--white);
+    color: var(--text-color);
     text-decoration: none;
     font-size: 20px;
     transition: transform 0.3s;
@@ -98,6 +98,7 @@ body {
 
 .action-link:hover {
     transform: scale(1.1);
+    color: var(--primary-color);
 }
 
 .user-menu {

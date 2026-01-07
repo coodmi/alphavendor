@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="text-gray-500 text-sm">Bulk deals from wholesalers</p>
                 </div>
             </div>
-            <a href="{{ route('wholesale') }}" class="text-emerald-500 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
+            <a href="{{ route('wholesale') }}" class="text-[#FFA500] hover:text-[#FFB833] flex items-center gap-2 font-medium transition-colors">
                 View All
                 <i class="fas fa-arrow-right"></i>
             </a>
@@ -492,15 +492,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     @endphp
                     <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
                     @if($product->minimum_order)
-                        <span class="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-lg">
+                        <span class="absolute top-3 left-3 bg-[#FFA500] text-white text-xs font-bold px-2 py-1 rounded-lg">
                             Min: {{ $product->minimum_order }} pcs
                         </span>
                     @endif
                     <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-colors">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-[#FFA500] hover:text-white transition-colors">
                             <i class="far fa-heart text-sm"></i>
                         </button>
-                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-colors">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-[#FFA500] hover:text-white transition-colors">
                             <i class="far fa-eye text-sm"></i>
                         </button>
                     </div>
@@ -514,7 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                     </div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl font-bold text-emerald-600">${{ number_format($product->price, 2) }}</span>
+                        <span class="text-xl font-bold text-[#FFA500]">${{ number_format($product->price, 2) }}</span>
                         @if($product->old_price && $product->old_price > $product->price)
                             <span class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
                         @endif
@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="fas fa-map-marker-alt"></i> {{ $product->supplier_location }}
                     </p>
                     @endif
-                    <button class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-lg font-medium hover:from-emerald-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
+                    <button class="w-full py-2.5 bg-gradient-to-r from-[#FFA500] to-[#FFB833] text-white rounded-lg font-medium hover:from-[#FFB833] hover:to-[#FFA500] transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-phone"></i> Contact Supplier
                     </button>
                 </div>
@@ -553,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="text-gray-500 text-sm">Global trade opportunities</p>
                 </div>
             </div>
-            <a href="{{ route('export') }}" class="text-orange-500 hover:text-red-600 flex items-center gap-2 font-medium transition-colors">
+            <a href="{{ route('export') }}" class="text-[#FFA500] hover:text-[#FFB833] flex items-center gap-2 font-medium transition-colors">
                 View All
                 <i class="fas fa-arrow-right"></i>
             </a>
@@ -570,14 +570,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop';
                     @endphp
                     <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
-                    <span class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+                    <span class="absolute top-3 left-3 bg-[#FFA500] text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
                         <i class="fas fa-globe-americas"></i> Export Ready
                     </span>
                     <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-[#FFA500] hover:text-white transition-colors">
                             <i class="far fa-heart text-sm"></i>
                         </button>
-                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                        <button class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-[#FFA500] hover:text-white transition-colors">
                             <i class="far fa-eye text-sm"></i>
                         </button>
                     </div>
@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                     </div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl font-bold text-orange-600">${{ number_format($product->price, 2) }}</span>
+                        <span class="text-xl font-bold text-[#FFA500]">${{ number_format($product->price, 2) }}</span>
                         @if($product->old_price && $product->old_price > $product->price)
                             <span class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
                         @endif
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="fas fa-shipping-fast"></i> Ships from {{ $product->supplier_location }}
                     </p>
                     @endif
-                    <button class="w-full py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-red-600 transition-all flex items-center justify-center gap-2">
+                    <button class="w-full py-2.5 bg-gradient-to-r from-[#FFA500] to-[#FFB833] text-white rounded-lg font-medium hover:from-[#FFB833] hover:to-[#FFA500] transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-envelope"></i> Request Quote
                     </button>
                 </div>

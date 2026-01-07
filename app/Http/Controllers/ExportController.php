@@ -61,6 +61,21 @@ class ExportController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
+        // Apply certification filter
+        if ($request->filled('certifications')) {
+            $certifications = is_array($request->certifications) ? $request->certifications : explode(',', $request->certifications);
+            $query->where(function ($q) use ($certifications) {
+                foreach ($certifications as $cert) {
+                    $q->orWhereJsonContains('certifications', $cert);
+                }
+            });
+        }
+
+        // Apply exporter rating filter
+        if ($request->filled('min_rating')) {
+            $query->where('exporter_rating', '>=', $request->min_rating);
+        }
+
         // Apply sorting
         $sort = $request->get('sort', 'featured');
         switch ($sort) {
@@ -84,7 +99,7 @@ class ExportController extends Controller
         }
 
         // Paginate products
-        $products = $query->paginate(24);
+        $products = $query->paginate(16);
 
         // Get categories with product counts for exporters
         $categories = Category::whereIn('vendor_id', $exporterIds)
@@ -113,6 +128,12 @@ class ExportController extends Controller
             ['range' => '5000+', 'label' => '5000+ units', 'count' => Product::whereIn('vendor_id', $exporterIds)->where('status', 'active')->where('minimum_order', '>=', 5000)->count()],
         ];
 
+        // Get active certifications from exporters
+        $certifications = \App\Models\Certification::whereIn('vendor_id', $exporterIds)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
         // If AJAX request, return JSON
         if ($request->ajax()) {
             return response()->json([
@@ -120,9 +141,10 @@ class ExportController extends Controller
                 'categories' => $categories,
                 'locations' => $locations,
                 'moqRanges' => $moqRanges,
+                'certifications' => $certifications,
             ]);
         }
 
-        return view('export', compact('products', 'categories', 'locations', 'moqRanges'));
+        return view('export', compact('products', 'categories', 'locations', 'moqRanges', 'certifications'));
     }
 }

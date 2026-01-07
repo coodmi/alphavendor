@@ -30,6 +30,8 @@ class Product extends Model
         'is_featured',
         'badge',
         'brand',
+        'certifications',
+        'exporter_rating',
     ];
 
     protected $casts = [
@@ -37,6 +39,8 @@ class Product extends Model
         'old_price' => 'decimal:2',
         'rating' => 'decimal:2',
         'is_featured' => 'boolean',
+        'certifications' => 'array',
+        'exporter_rating' => 'decimal:2',
     ];
 
     /**

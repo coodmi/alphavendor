@@ -105,12 +105,12 @@
 }
 
 .btn-primary {
-    background: #007bff;
+    background: #FFA500;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #0056b3;
+    background: #FFB833;
 }
 
 .auth-link {
@@ -120,12 +120,13 @@
 }
 
 .auth-link a {
-    color: #007bff;
+    color: #FFA500;
     text-decoration: none;
 }
 
 .auth-link a:hover {
     text-decoration: underline;
+    color: #FFB833;
 }
 
 .alert {

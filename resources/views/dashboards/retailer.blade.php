@@ -5,7 +5,7 @@
 
 @section('sidebar-menu')
     <div class="menu-section">
-        <div class="menu-section-title">Main</div>
+        <div class="menu-section-title">MAIN</div>
         <a href="{{ route('retailer.dashboard') }}" class="menu-item active">
             <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
@@ -13,10 +13,14 @@
     </div>
 
     <div class="menu-section">
-        <div class="menu-section-title">Products</div>
+        <div class="menu-section-title">PRODUCTS</div>
         <a href="{{ route('retailer.products') }}" class="menu-item">
             <i class="fas fa-box"></i>
-            <span>Products</span>
+            <span>All Products</span>
+        </a>
+        <a href="{{ route('retailer.products') }}" class="menu-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Product</span>
         </a>
         <a href="{{ route('retailer.categories') }}" class="menu-item">
             <i class="fas fa-tags"></i>
@@ -29,15 +33,30 @@
     </div>
 
     <div class="menu-section">
-        <div class="menu-section-title">Orders</div>
-        <a href="#" class="menu-item">
+        <div class="menu-section-title">ORDERS</div>
+        <a href="{{ route('vendor.orders') }}" class="menu-item">
             <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
+            <span>All Orders</span>
+            @if($pendingOrders > 0)
+                <span class="badge">{{ $pendingOrders }}</span>
+            @endif
         </a>
     </div>
 
     <div class="menu-section">
-        <div class="menu-section-title">Account</div>
+        <div class="menu-section-title">EARNINGS</div>
+        <a href="{{ route('wallet.index') }}" class="menu-item">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="{{ route('withdrawals.index') }}" class="menu-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Withdrawals</span>
+        </a>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-section-title">ACCOUNT</div>
         <a href="{{ route('profile.show') }}" class="menu-item">
             <i class="fas fa-user-circle"></i>
             <span>Profile</span>
@@ -73,42 +92,188 @@
 </div>
 
     <div class="dashboard-stats">
-        <div class="stat-card">
+        <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <div class="stat-icon">📦</div>
             <div class="stat-info">
-                <h3>0</h3>
+                <h3>{{ $totalProducts }}</h3>
                 <p>Total Products</p>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
             <div class="stat-icon">🛒</div>
             <div class="stat-info">
-                <h3>0</h3>
-                <p>Orders</p>
+                <h3>{{ $totalOrders }}</h3>
+                <p>Total Orders</p>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <h3>{{ $pendingOrders }}</h3>
+                <p>Pending Orders</p>
+            </div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
-                <h3>$0</h3>
-                <p>Revenue</p>
+                <h3>${{ number_format($wallet->total_earned, 2) }}</h3>
+                <p>Total Earnings</p>
+            </div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <div class="stat-icon">💵</div>
+            <div class="stat-info">
+                <h3>${{ number_format($wallet->balance, 2) }}</h3>
+                <p>Available Balance</p>
+            </div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+            <div class="stat-icon">⏸️</div>
+            <div class="stat-info">
+                <h3>${{ number_format($wallet->pending_balance, 2) }}</h3>
+                <p>Pending Balance</p>
             </div>
         </div>
     </div>
 
     <div class="dashboard-content">
         <div class="dashboard-section">
-            <h2>Quick Actions</h2>
+            <h2 style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-bolt" style="color: #f39c12;"></i> Quick Actions
+            </h2>
             <div class="action-buttons">
-                <a href="#" class="btn btn-primary">Add Product</a>
-                <a href="#" class="btn btn-success">View Orders</a>
-                <a href="#" class="btn btn-info">Manage Inventory</a>
+                <a href="{{ route('retailer.products') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Add Product
+                </a>
+                <a href="{{ route('vendor.orders') }}" class="btn btn-success">
+                    <i class="fas fa-shopping-cart"></i> View Orders
+                </a>
+                <a href="{{ route('wallet.index') }}" class="btn btn-warning">
+                    <i class="fas fa-wallet"></i> View Wallet
+                </a>
+                <a href="{{ route('withdrawals.create') }}" class="btn btn-info">
+                    <i class="fas fa-money-bill-wave"></i> Request Withdrawal
+                </a>
             </div>
         </div>
 
-        <div class="dashboard-section">
-            <h2>Recent Activity</h2>
-            <p>No recent activity yet. Start by adding your first product!</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <!-- Order Statistics -->
+            <div class="dashboard-section">
+                <h2 style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-chart-pie" style="color: #3498db;"></i> Order Status
+                </h2>
+                <div style="display: grid; gap: 15px; margin-top: 20px;">
+                    @php
+                        $statusStats = [
+                            ['label' => 'Pending', 'count' => $ordersByStatus['pending'] ?? 0, 'color' => '#f39c12', 'icon' => '⏳'],
+                            ['label' => 'Processing', 'count' => $ordersByStatus['processing'] ?? 0, 'color' => '#3498db', 'icon' => '⚙️'],
+                            ['label' => 'Shipped', 'count' => $ordersByStatus['shipped'] ?? 0, 'color' => '#9b59b6', 'icon' => '🚚'],
+                            ['label' => 'Delivered', 'count' => $ordersByStatus['delivered'] ?? 0, 'color' => '#27ae60', 'icon' => '✅'],
+                            ['label' => 'Cancelled', 'count' => $ordersByStatus['cancelled'] ?? 0, 'color' => '#e74c3c', 'icon' => '❌'],
+                        ];
+                    @endphp
+                    @foreach($statusStats as $stat)
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid {{ $stat['color'] }};">
+                            <span style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 20px;">{{ $stat['icon'] }}</span>
+                                <strong>{{ $stat['label'] }}</strong>
+                            </span>
+                            <span style="background: {{ $stat['color'] }}; color: white; padding: 4px 12px; border-radius: 20px; font-weight: bold;">
+                                {{ $stat['count'] }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Sales Overview -->
+            <div class="dashboard-section">
+                <h2 style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-chart-line" style="color: #27ae60;"></i> Sales Overview
+                </h2>
+                <div style="display: grid; gap: 15px; margin-top: 20px;">
+                    <div style="padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">
+                        <div style="font-size: 14px; opacity: 0.9;">This Month Sales</div>
+                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;">${{ number_format($thisMonthSales, 2) }}</div>
+                    </div>
+                    <div style="padding: 15px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 10px; color: white;">
+                        <div style="font-size: 14px; opacity: 0.9;">Last Month Sales</div>
+                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;">${{ number_format($lastMonthSales, 2) }}</div>
+                    </div>
+                    <div style="padding: 15px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 10px; color: white;">
+                        <div style="font-size: 14px; opacity: 0.9;">Average Order Value</div>
+                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;">${{ number_format($avgOrderValue, 2) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="dashboard-section" style="margin-top: 20px;">
+            <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                <i class="fas fa-shopping-bag" style="color: #e74c3c;"></i> Recent Orders
+            </h2>
+            @if($recentOrders->count() > 0)
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f8f9fa; text-align: left;">
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Order #</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Customer</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Items</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Total</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Your Earning</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Status</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($recentOrders as $order)
+                                <tr style="border-bottom: 1px solid #dee2e6;">
+                                    <td style="padding: 12px;">
+                                        <a href="{{ route('orders.show', $order->id) }}" style="color: #3498db; text-decoration: none; font-weight: 600;">
+                                            #{{ $order->order_number }}
+                                        </a>
+                                    </td>
+                                    <td style="padding: 12px;">{{ $order->user->name }}</td>
+                                    <td style="padding: 12px;">{{ $order->items->count() }} items</td>
+                                    <td style="padding: 12px; font-weight: 600;">${{ number_format($order->total, 2) }}</td>
+                                    <td style="padding: 12px; color: #27ae60; font-weight: 600;">${{ number_format($order->vendor_earning, 2) }}</td>
+                                    <td style="padding: 12px;">
+                                        @php
+                                            $statusColors = [
+                                                'pending' => '#f39c12',
+                                                'processing' => '#3498db',
+                                                'shipped' => '#9b59b6',
+                                                'delivered' => '#27ae60',
+                                                'cancelled' => '#e74c3c'
+                                            ];
+                                        @endphp
+                                        <span style="background: {{ $statusColors[$order->status] ?? '#95a5a6' }}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                                            {{ $order->status }}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 12px; color: #7f8c8d;">{{ $order->created_at->format('M d, Y') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <a href="{{ route('vendor.orders') }}" style="color: #3498db; text-decoration: none; font-weight: 600;">
+                        View All Orders <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            @else
+                <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                    <i class="fas fa-shopping-cart" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                    <p>No orders yet. Start by adding products to your store!</p>
+                    <a href="{{ route('retailer.products') }}" class="btn btn-primary" style="margin-top: 15px;">
+                        <i class="fas fa-plus-circle"></i> Add Your First Product
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -144,6 +309,13 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .stat-icon {
@@ -153,12 +325,14 @@
 .stat-info h3 {
     font-size: 32px;
     margin: 0;
-    color: #007bff;
+    color: white;
+    font-weight: 700;
 }
 
 .stat-info p {
     margin: 5px 0 0;
-    color: #666;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
 }
 
 .dashboard-content {
@@ -187,12 +361,20 @@
 .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 600;
     transition: all 0.3s;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .btn-primary {
@@ -220,6 +402,15 @@
 
 .btn-info:hover {
     background: #138496;
+}
+
+.btn-warning {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #e67e22;
 }
 </style>
 @endsection

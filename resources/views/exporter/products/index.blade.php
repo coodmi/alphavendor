@@ -22,6 +22,10 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
+        <a href="{{ route('exporter.certifications') }}" class="menu-item">
+            <i class="fas fa-certificate"></i>
+            <span>Certifications</span>
+        </a>
     </div>
 
     <div class="menu-section">
@@ -57,7 +61,7 @@
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Brand</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Price</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">MOQ</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Stock</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Certifications</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
                 </tr>
@@ -101,10 +105,19 @@
                             {{ $product->minimum_order ?? 1 }} units
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $product->stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $product->stock }} units
-                        </span>
+                    <td class="px-6 py-4">
+                        @if($product->certifications && count($product->certifications) > 0)
+                            <div class="flex flex-wrap gap-1">
+                                @foreach($product->certifications as $cert)
+                                    <span class="px-2 py-1 inline-flex text-xs leading-4 font-medium rounded bg-green-100 text-green-800">
+                                        <i class="fas fa-certificate mr-1"></i>
+                                        {{ strtoupper(explode('_', $cert)[0]) }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @else
+                            <span class="text-xs text-gray-400">None</span>
+                        @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -263,6 +276,37 @@
                 </div>
             </div>
 
+            <!-- Export Certifications -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Export Certifications</label>
+                @if($certifications && $certifications->count() > 0)
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        @foreach($certifications as $cert)
+                            <label class="flex items-center cursor-pointer p-3 border border-gray-300 rounded-lg hover:bg-indigo-50 transition-colors duration-150">
+                                <input type="checkbox" name="certifications[]" value="cert_{{ $cert->id }}" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                <span class="ml-2 text-sm text-gray-700">{{ $cert->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p class="text-sm text-yellow-800">
+                            <i class="fas fa-info-circle mr-2"></i>No certifications available. 
+                            <a href="{{ route('exporter.certifications') }}" class="font-semibold text-indigo-600 hover:text-indigo-700 underline">Create certifications</a> first to assign them to products.
+                        </p>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Exporter Rating -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Exporter Rating</label>
+                <div class="flex items-center gap-4">
+                    <input type="number" name="exporter_rating" id="exporterRating" min="0" max="5" step="0.1" placeholder="0.0" class="w-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                    <span class="text-sm text-gray-500">Rating out of 5 stars (e.g., 4.5)</span>
+                </div>
+            </div>
+
             <div>
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" name="is_featured" id="productFeatured" value="1" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
@@ -355,6 +399,18 @@ function editProduct(product) {
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productLocation').value = product.supplier_location || '';
     document.getElementById('productFeatured').checked = product.is_featured;
+    document.getElementById('exporterRating').value = product.exporter_rating || '';
+
+    // Set certifications checkboxes
+    document.querySelectorAll('input[name="certifications[]"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    if (product.certifications && Array.isArray(product.certifications)) {
+        product.certifications.forEach(cert => {
+            const checkbox = document.querySelector(`input[name="certifications[]"][value="${cert}"]`);
+            if (checkbox) checkbox.checked = true;
+        });
+    }
 
     // Show current image if exists
     if (product.image) {

@@ -115,6 +115,26 @@
                         </ul>
                     </div>
 
+                    <!-- Price Range Filter -->
+                    <div class="filter-box">
+                        <h3 class="filter-title">Price Range</h3>
+                        <div class="price-range-slider">
+                            <input type="range" min="0" max="10000" value="{{ request('min_price', 0) }}" class="range-min" id="wholesale-range-min">
+                            <input type="range" min="0" max="10000" value="{{ request('max_price', 10000) }}" class="range-max" id="wholesale-range-max">
+                        </div>
+                        <div class="price-inputs">
+                            <div class="price-input">
+                                <label>Min</label>
+                                <input type="number" name="min_price" class="min-price-input" value="{{ request('min_price', 0) }}" min="0" max="10000" id="wholesale-min-price">
+                            </div>
+                            <div class="price-input">
+                                <label>Max</label>
+                                <input type="number" name="max_price" class="max-price-input" value="{{ request('max_price', 10000) }}" min="0" max="10000" id="wholesale-max-price">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-apply-filter">Apply Filter</button>
+                    </div>
+
                     <!-- Supplier Location Filter -->
                     <div class="filter-box">
                         <h3 class="filter-title">Supplier Location</h3>
@@ -173,7 +193,7 @@
                 </div>
 
                 <!-- Active Filters Tags -->
-                @if(request()->hasAny(['category', 'minimum_order', 'supplier_location', 'brand']))
+                @if(request()->hasAny(['category', 'minimum_order', 'supplier_location', 'brand', 'min_price', 'max_price']))
                 <div class="active-filters">
                     @if(request('category'))
                         @php $selectedCategory = $categories->firstWhere('id', request('category')); @endphp
@@ -204,6 +224,12 @@
                             <a href="{{ request()->fullUrlWithoutQuery('brand') }}" class="remove-filter"><i class="fas fa-times"></i></a>
                         </span>
                         @endif
+                    @endif
+                    @if(request('min_price') || request('max_price'))
+                        <span class="filter-tag">
+                            Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
+                            <a href="{{ request()->fullUrlWithoutQuery(['min_price', 'max_price']) }}" class="remove-filter"><i class="fas fa-times"></i></a>
+                        </span>
                     @endif
                 </div>
                 @endif
@@ -297,3 +323,79 @@
 </section>
 
 @endsection
+
+@push('scripts')
+<script>
+// Price Range Slider - Synchronize sliders with inputs
+document.addEventListener('DOMContentLoaded', function() {
+    const rangeMin = document.querySelector("#wholesale-range-min");
+    const rangeMax = document.querySelector("#wholesale-range-max");
+    const minPriceInput = document.querySelector('#wholesale-min-price');
+    const maxPriceInput = document.querySelector('#wholesale-max-price');
+
+    if (!rangeMin || !rangeMax || !minPriceInput || !maxPriceInput) {
+        return;
+    }
+
+    // Update min slider
+    rangeMin.addEventListener('input', function() {
+        let min = parseInt(this.value);
+        let max = parseInt(rangeMax.value);
+
+        if (min > max - 100) {
+            min = max - 100;
+            this.value = min;
+        }
+
+        minPriceInput.value = min;
+    });
+
+    // Update max slider
+    rangeMax.addEventListener('input', function() {
+        let min = parseInt(rangeMin.value);
+        let max = parseInt(this.value);
+
+        if (max < min + 100) {
+            max = min + 100;
+            this.value = max;
+        }
+
+        maxPriceInput.value = max;
+    });
+
+    // Update min input
+    minPriceInput.addEventListener('input', function() {
+        let min = parseInt(this.value) || 0;
+        let max = parseInt(maxPriceInput.value) || 10000;
+
+        if (min < 0) {
+            min = 0;
+            this.value = min;
+        }
+        if (min > max - 100) {
+            min = max - 100;
+            this.value = min;
+        }
+
+        rangeMin.value = min;
+    });
+
+    // Update max input
+    maxPriceInput.addEventListener('input', function() {
+        let min = parseInt(minPriceInput.value) || 0;
+        let max = parseInt(this.value) || 10000;
+
+        if (max > 10000) {
+            max = 10000;
+            this.value = max;
+        }
+        if (max < min + 100) {
+            max = min + 100;
+            this.value = max;
+        }
+
+        rangeMax.value = max;
+    });
+});
+</script>
+@endpush

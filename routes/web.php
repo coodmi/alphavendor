@@ -20,17 +20,27 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\RetailerBrandController;
 use App\Http\Controllers\RetailerCategoryController;
 use App\Http\Controllers\RetailerProductController;
+use App\Http\Controllers\Wholesaler\WholesalerBrandController;
+use App\Http\Controllers\Wholesaler\WholesalerCategoryController;
+use App\Http\Controllers\Wholesaler\WholesalerProductController;
 use App\Http\Controllers\ExporterBrandController;
 use App\Http\Controllers\ExporterCategoryController;
 use App\Http\Controllers\ExporterProductController;
+use App\Http\Controllers\ExporterCertificationController;
 use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
+use App\Http\Controllers\Admin\CommissionController as AdminCommissionController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WalletController;
+use App\Http\Controllers\WithdrawalController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/retail', [RetailController::class, 'index'])->name('retail');
 Route::get('/wholesale', [WholesaleController::class, 'index'])->name('wholesale');
 Route::get('/export', [ExportController::class, 'index'])->name('export');
@@ -94,6 +104,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/banners', [AdminBannerController::class, 'store'])->name('banners.store');
         Route::put('/banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');
         Route::delete('/banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
+
+        // Commission management
+        Route::get('/commissions', [AdminCommissionController::class, 'index'])->name('commissions');
+        Route::post('/commissions', [AdminCommissionController::class, 'store'])->name('commissions.store');
+        Route::put('/commissions/{commission}', [AdminCommissionController::class, 'update'])->name('commissions.update');
+        Route::delete('/commissions/{commission}', [AdminCommissionController::class, 'destroy'])->name('commissions.destroy');
     });
 
     // Retailer routes
@@ -146,6 +162,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:exporter')->prefix('exporter')->name('exporter.')->group(function () {
         Route::get('/dashboard', [ExporterDashboardController::class, 'index'])->name('dashboard');
 
+        // Certification management
+        Route::get('/certifications', [ExporterCertificationController::class, 'index'])->name('certifications');
+        Route::post('/certifications', [ExporterCertificationController::class, 'store'])->name('certifications.store');
+        Route::post('/certifications/bulk-update', [ExporterCertificationController::class, 'bulkUpdate'])->name('certifications.bulk-update');
+        Route::put('/certifications/{certification}', [ExporterCertificationController::class, 'update'])->name('certifications.update');
+        Route::delete('/certifications/{certification}', [ExporterCertificationController::class, 'destroy'])->name('certifications.destroy');
+
         // Brand management
         Route::get('/brands', [ExporterBrandController::class, 'index'])->name('brands');
         Route::post('/brands', [ExporterBrandController::class, 'store'])->name('brands.store');
@@ -181,4 +204,37 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage'])->name('profile.upload-image');
     Route::delete('/profile/delete-image', [ProfileController::class, 'deleteImage'])->name('profile.delete-image');
+
+    // Cart routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+    // Order routes
+    Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
+    Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Vendor order routes
+    Route::middleware('role:retailer,wholesaler,exporter')->group(function () {
+        Route::get('/vendor/orders', [OrderController::class, 'vendorOrders'])->name('vendor.orders');
+        Route::patch('/vendor/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('vendor.orders.update-status');
+
+        // Wallet routes
+        Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+
+        // Withdrawal routes
+        Route::get('/withdrawals', [WithdrawalController::class, 'index'])->name('withdrawals.index');
+        Route::get('/withdrawals/create', [WithdrawalController::class, 'create'])->name('withdrawals.create');
+        Route::post('/withdrawals', [WithdrawalController::class, 'store'])->name('withdrawals.store');
+
+        // Payment methods
+        Route::get('/withdrawals/payment-methods', [WithdrawalController::class, 'paymentMethods'])->name('withdrawals.payment-methods');
+        Route::post('/withdrawals/payment-methods', [WithdrawalController::class, 'storePaymentMethod'])->name('withdrawals.payment-methods.store');
+        Route::delete('/withdrawals/payment-methods/{id}', [WithdrawalController::class, 'deletePaymentMethod'])->name('withdrawals.payment-methods.delete');
+    });
 });

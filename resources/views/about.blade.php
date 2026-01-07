@@ -106,25 +106,24 @@
     </section>
 
     <!-- Our Story Section -->
-    <section class="py-12 sm:py-16 md:py-20">
+    <section class="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div class="animate-fadeInLeft">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">Our Story</h2>
-                    <p class="text-gray-600 text-base sm:text-lg mb-3 sm:mb-4 leading-relaxed">
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+                <div class="animate-fadeInLeft bg-white p-8 rounded-2xl shadow-lg h-full flex flex-col justify-center">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+                    <p class="text-gray-700 text-base sm:text-lg mb-5 leading-relaxed">
                         Founded with a vision to revolutionize B2B commerce, AlphaVendor has grown into a leading multi-vendor marketplace serving thousands of businesses worldwide.
                     </p>
-                    <p class="text-gray-600 text-base sm:text-lg mb-3 sm:mb-4 leading-relaxed">
+                    <p class="text-gray-700 text-base sm:text-lg mb-5 leading-relaxed">
                         We believe in creating seamless connections between retailers, wholesalers, and exporters, making global trade accessible and efficient for businesses of all sizes.
                     </p>
-                    <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
                         Our platform is built on trust, transparency, and innovation, empowering vendors to reach new markets and buyers to discover quality products from verified suppliers.
                     </p>
                 </div>
                 <div class="animate-fadeInRight mt-8 md:mt-0">
-                    <div class="relative">
-                        <div class="absolute -top-4 -left-4 w-full h-full bg-[#FFB347] rounded-2xl"></div>
-                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop" alt="Our Story" class="relative rounded-2xl shadow-2xl w-full">
+                    <div class="bg-gradient-to-br from-[#FFA500] to-[#FFB347] p-8 rounded-2xl shadow-lg h-full flex items-center justify-center">
+                        <img src="{{ asset('About logo.png') }}" alt="Our Story" class="w-full h-auto rounded-xl">
                     </div>
                 </div>
             </div>

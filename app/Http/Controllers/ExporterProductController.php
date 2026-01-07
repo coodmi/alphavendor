@@ -29,7 +29,13 @@ class ExporterProductController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('exporter.products.index', compact('products', 'categories', 'brands'));
+        // Get certifications belonging to the authenticated exporter
+        $certifications = \App\Models\Certification::where('vendor_id', Auth::id())
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('exporter.products.index', compact('products', 'categories', 'brands', 'certifications'));
     }
 
     public function store(Request $request)
@@ -49,7 +55,10 @@ class ExporterProductController extends Controller
             'sku' => 'required|string|max:255|unique:products,sku',
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
-            'badge' => 'nullable|string|max:50'
+            'badge' => 'nullable|string|max:50',
+            'certifications' => 'nullable|array',
+            'certifications.*' => 'string',
+            'exporter_rating' => 'nullable|numeric|min:0|max:5'
         ]);
 
         // Verify category belongs to this exporter
@@ -122,7 +131,10 @@ class ExporterProductController extends Controller
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
-            'badge' => 'nullable|string|max:50'
+            'badge' => 'nullable|string|max:50',
+            'certifications' => 'nullable|array',
+            'certifications.*' => 'string',
+            'exporter_rating' => 'nullable|numeric|min:0|max:5'
         ]);
 
         // Verify category belongs to this exporter

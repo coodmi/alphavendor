@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             ExporterBrandSeeder::class,      // Exporter brands
             ExporterCategorySeeder::class,   // Exporter categories
             ExporterProductSeeder::class,    // Exporter products
+            CertificationSeeder::class,      // Exporter certifications
             BannerSeeder::class,             // Homepage banners
         ]);
     }

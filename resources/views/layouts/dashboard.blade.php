@@ -35,26 +35,40 @@
             overflow-y: auto;
             z-index: 1000;
             transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
         .sidebar-header {
             padding: 20px;
             text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header .logo-img {
+            width: 60px;
+            height: auto;
+            margin: 0 auto 12px;
+            display: block;
         }
 
         .sidebar-header h2 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #ffffff;
         }
 
         .sidebar-header .role-badge {
             display: inline-block;
             padding: 4px 12px;
-            background: rgba(255,255,255,0.2);
+            background: #FFA500;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 10px;
             text-transform: uppercase;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.5px;
         }
 
         .sidebar-menu {
@@ -69,31 +83,33 @@
             padding: 0 20px;
             font-size: 11px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.5);
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
             padding: 12px 20px;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.85);
             text-decoration: none;
             transition: all 0.3s;
             border-left: 3px solid transparent;
+            font-size: 14px;
         }
 
         .menu-item:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border-left-color: #3498db;
+            background: rgba(255,165,0,0.15);
+            color: #ffffff;
+            border-left-color: #FFA500;
         }
 
         .menu-item.active {
-            background: rgba(52, 152, 219, 0.2);
-            color: white;
-            border-left-color: #3498db;
+            background: rgba(255,165,0,0.2);
+            color: #ffffff;
+            border-left-color: #FFA500;
         }
 
         .menu-item i {
@@ -356,7 +372,7 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2>AlphaVendor</h2>
+                <img src="{{ asset('airmarket.png') }}" alt="AlphaVendor Logo" class="logo-img">
                 <span class="role-badge">{{ ucfirst(Auth::user()->role) }}</span>
             </div>
             <nav class="sidebar-menu">

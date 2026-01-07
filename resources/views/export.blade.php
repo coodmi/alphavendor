@@ -63,7 +63,8 @@
                         @forelse($categories as $category)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="{{ $category->id }}" class="category-filter">
+                                <input type="checkbox" name="category" value="{{ $category->id }}" class="category-filter"
+                                    {{ in_array($category->id, explode(',', request('categories', ''))) ? 'checked' : '' }}>
                                 <span>{{ $category->name }}</span>
                                 <span class="count">({{ $category->products_count }})</span>
                             </label>
@@ -83,7 +84,8 @@
                         @forelse($locations as $location)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox" name="location" value="{{ $location }}" class="location-filter">
+                                <input type="checkbox" name="location" value="{{ $location }}" class="location-filter"
+                                    {{ request('location') == $location ? 'checked' : '' }}>
                                 <span>{{ $location }}</span>
                             </label>
                         </li>
@@ -98,13 +100,21 @@
                 <!-- Price Range Filter -->
                 <div class="filter-box">
                     <h3 class="filter-title">Price Range (FOB)</h3>
-                    <div class="price-range">
-                        <input type="range" min="0" max="10000" value="5000" class="range-slider">
-                        <div class="price-labels">
-                            <span>$0</span>
-                            <span>$10,000+</span>
+                    <div class="price-range-slider">
+                        <input type="range" min="0" max="10000" value="{{ request('min_price', 0) }}" class="range-min">
+                        <input type="range" min="0" max="10000" value="{{ request('max_price', 10000) }}" class="range-max">
+                    </div>
+                    <div class="price-inputs">
+                        <div class="price-input">
+                            <label>Min</label>
+                            <input type="number" class="min-price-input" value="{{ request('min_price', 0) }}" min="0" max="10000">
+                        </div>
+                        <div class="price-input">
+                            <label>Max</label>
+                            <input type="number" class="max-price-input" value="{{ request('max_price', 10000) }}" min="0" max="10000">
                         </div>
                     </div>
+                    <button type="button" class="btn-apply-filter">Apply Filter</button>
                 </div>
 
                 <!-- Minimum Order Quantity Filter -->
@@ -115,7 +125,8 @@
                         @if($moq['count'] > 0)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox" name="moq" value="{{ $moq['range'] }}" class="moq-filter">
+                                <input type="checkbox" name="moq" value="{{ $moq['range'] }}" class="moq-filter"
+                                    {{ request('moq') == $moq['range'] ? 'checked' : '' }}>
                                 <span>{{ $moq['label'] }}</span>
                                 <span class="count">({{ $moq['count'] }})</span>
                             </label>
@@ -128,32 +139,25 @@
                 <!-- Certifications Filter -->
                 <div class="filter-box">
                     <h3 class="filter-title">Export Certifications</h3>
-                    <ul class="filter-list">
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>ISO Certified</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>CE Certified</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>FDA Approved</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox">
-                                <span>Export License</span>
-                            </label>
-                        </li>
-                    </ul>
+                    @if($certifications && $certifications->count() > 0)
+                        <ul class="filter-list">
+                            @php
+                                $selectedCertifications = request('certifications', []);
+                                $selectedCertifications = is_array($selectedCertifications) ? $selectedCertifications : [$selectedCertifications];
+                            @endphp
+                            @foreach($certifications as $cert)
+                                <li>
+                                    <label class="filter-checkbox">
+                                        <input type="checkbox" name="certifications" value="cert_{{ $cert->id }}" class="certification-filter"
+                                            {{ in_array('cert_' . $cert->id, $selectedCertifications) ? 'checked' : '' }}>
+                                        <span>{{ $cert->name }}</span>
+                                    </label>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-gray-500 text-sm px-4 py-2">No certifications available</p>
+                    @endif
                 </div>
 
                 <!-- Supplier Rating Filter -->
@@ -162,19 +166,22 @@
                     <ul class="filter-list">
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="radio" name="rating" class="rating-filter" value="4.5"
+                                    {{ request('min_rating') == '4.5' ? 'checked' : '' }}>
                                 <span><i class="fas fa-star"></i> 4.5+ Stars</span>
                             </label>
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="radio" name="rating" class="rating-filter" value="4.0"
+                                    {{ request('min_rating') == '4.0' ? 'checked' : '' }}>
                                 <span><i class="fas fa-star"></i> 4.0+ Stars</span>
                             </label>
                         </li>
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox">
+                                <input type="radio" name="rating" class="rating-filter" value="3.5"
+                                    {{ request('min_rating') == '3.5' ? 'checked' : '' }}>
                                 <span><i class="fas fa-star"></i> 3.5+ Stars</span>
                             </label>
                         </li>
@@ -257,6 +264,9 @@
                                     <i class="fas fa-exchange-alt"></i>
                                 </button>
                             </div>
+                            <button class="quick-add-btn">
+                                <i class="fas fa-shopping-cart"></i> Quick Add
+                            </button>
                         </div>
                         <div class="product-info">
                             <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
@@ -358,6 +368,8 @@ function applyFilters() {
     const categoryFilters = document.querySelectorAll('.category-filter:checked');
     const locationFilters = document.querySelectorAll('.location-filter:checked');
     const moqFilters = document.querySelectorAll('.moq-filter:checked');
+    const certificationFilters = document.querySelectorAll('.certification-filter:checked');
+    const ratingFilters = document.querySelectorAll('.rating-filter:checked');
     const sortSelect = document.getElementById('sortSelect');
 
     const params = new URLSearchParams();
@@ -378,6 +390,29 @@ function applyFilters() {
         params.set('moq', moqFilters[0].value);
     }
 
+    // Certifications
+    if (certificationFilters.length > 0) {
+        const certifications = Array.from(certificationFilters).map(cb => cb.value);
+        params.set('certifications', certifications.join(','));
+    }
+
+    // Rating
+    if (ratingFilters.length > 0) {
+        params.set('min_rating', ratingFilters[0].value);
+    }
+
+    // Preserve price range if set
+    const minPriceInput = document.querySelector('.min-price-input');
+    const maxPriceInput = document.querySelector('.max-price-input');
+    if (minPriceInput && maxPriceInput) {
+        const minPrice = minPriceInput.value;
+        const maxPrice = maxPriceInput.value;
+        if (minPrice != 0 || maxPrice != 10000) {
+            params.set('min_price', minPrice);
+            params.set('max_price', maxPrice);
+        }
+    }
+
     // Sort
     if (sortSelect.value !== 'featured') {
         params.set('sort', sortSelect.value);
@@ -388,7 +423,7 @@ function applyFilters() {
 }
 
 // Add event listeners to filter checkboxes
-document.querySelectorAll('.category-filter, .location-filter, .moq-filter').forEach(checkbox => {
+document.querySelectorAll('.category-filter, .location-filter, .moq-filter, .certification-filter, .rating-filter').forEach(checkbox => {
     checkbox.addEventListener('change', applyFilters);
 });
 
@@ -402,7 +437,7 @@ function updateActiveFilters() {
     const activeFilters = document.getElementById('activeFilters');
     activeFilters.innerHTML = '';
 
-    document.querySelectorAll('.category-filter:checked, .location-filter:checked, .moq-filter:checked').forEach(checkbox => {
+    document.querySelectorAll('.category-filter:checked, .location-filter:checked, .moq-filter:checked, .certification-filter:checked, .rating-filter:checked').forEach(checkbox => {
         const label = checkbox.closest('label').querySelector('span:first-of-type').textContent;
         const tag = document.createElement('span');
         tag.className = 'filter-tag';
@@ -429,5 +464,73 @@ function removeFilter(element) {
 
 // Initialize active filters on page load
 document.addEventListener('DOMContentLoaded', updateActiveFilters);
+
+// Price Range Slider Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const rangeMin = document.querySelector('.range-min');
+    const rangeMax = document.querySelector('.range-max');
+    const minInput = document.querySelector('.min-price-input');
+    const maxInput = document.querySelector('.max-price-input');
+    const applyFilterBtn = document.querySelector('.btn-apply-filter');
+    const priceRangeSlider = document.querySelector('.price-range-slider');
+
+    function updateSliderBackground() {
+        const min = parseInt(rangeMin.value);
+        const max = parseInt(rangeMax.value);
+        const percent1 = (min / 10000) * 100;
+        const percent2 = (max / 10000) * 100;
+
+        priceRangeSlider.style.background = `linear-gradient(to right, #e0e0e0 ${percent1}%, #FF8C00 ${percent1}%, #FF8C00 ${percent2}%, #e0e0e0 ${percent2}%)`;
+    }
+
+    function syncSliderToInput() {
+        let min = parseInt(rangeMin.value);
+        let max = parseInt(rangeMax.value);
+
+        if (min > max - 100) {
+            rangeMin.value = max - 100;
+            min = max - 100;
+        }
+
+        minInput.value = min;
+        maxInput.value = max;
+        updateSliderBackground();
+    }
+
+    function syncInputToSlider() {
+        let min = parseInt(minInput.value) || 0;
+        let max = parseInt(maxInput.value) || 10000;
+
+        if (min < 0) min = 0;
+        if (max > 10000) max = 10000;
+        if (min > max - 100) min = max - 100;
+
+        rangeMin.value = min;
+        rangeMax.value = max;
+        minInput.value = min;
+        maxInput.value = max;
+        updateSliderBackground();
+    }
+
+    rangeMin.addEventListener('input', syncSliderToInput);
+    rangeMax.addEventListener('input', syncSliderToInput);
+    minInput.addEventListener('change', syncInputToSlider);
+    maxInput.addEventListener('change', syncInputToSlider);
+
+    applyFilterBtn.addEventListener('click', function() {
+        const params = new URLSearchParams(window.location.search);
+
+        // Set price range
+        if (minInput.value != 0 || maxInput.value != 10000) {
+            params.set('min_price', minInput.value);
+            params.set('max_price', maxInput.value);
+        }
+
+        window.location.href = '{{ route("export") }}?' + params.toString();
+    });
+
+    // Initialize
+    updateSliderBackground();
+});
 </script>
 @endsection

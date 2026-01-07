@@ -21,7 +21,7 @@
             <div class="header-top">
                 <div class="logo">
                     {{-- <h1><span class="logo-icon">R</span></h1> --}}
-                    <img src="{{ asset('/alphainno.png') }}" alt="AlphaVendor Logo" style="height: 40px;">
+                    <img src="{{ asset('/airmarket.png') }}" alt="AlphaVendor Logo" style="height: 40px;">
                 </div>
                 <div class="search-bar">
                     <input type="text" placeholder="I am looking for...">
@@ -31,8 +31,15 @@
                     <a href="#" class="action-link">
                         <i class="far fa-heart"></i>
                     </a>
-                    <a href="#" class="action-link">
+                    <a href="{{ route('cart.index') }}" class="action-link" style="position: relative;">
                         <i class="fas fa-shopping-bag"></i>
+                        @php
+                            $cart = Session::get('cart', []);
+                            $cartCount = array_sum(array_column($cart, 'quantity'));
+                        @endphp
+                        @if($cartCount > 0)
+                            <span style="position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">{{ $cartCount }}</span>
+                        @endif
                     </a>
                     @auth
                         <div class="relative" x-data="{ open: false }">
@@ -64,7 +71,7 @@
                                     <span>My Profile</span>
                                 </a>
 
-                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                <a href="{{ route('orders.my') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                                     <i class="fas fa-shopping-bag w-5"></i>
                                     <span>My Orders</span>
                                 </a>
