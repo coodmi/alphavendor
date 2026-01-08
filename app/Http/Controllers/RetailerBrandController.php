@@ -12,15 +12,24 @@ class RetailerBrandController extends Controller
     public function index()
     {
         $brands = Brand::where('vendor_id', Auth::id())
+            ->with('parent')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
-        return view('retailer.brands.index', compact('brands'));
+        
+        // Get all admin brands for the dropdown
+        $adminBrands = Brand::whereNull('vendor_id')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+        
+        return view('retailer.brands.index', compact('brands', 'adminBrands'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'parent_brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255|unique:brands,name',
             'description' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -28,6 +37,15 @@ class RetailerBrandController extends Controller
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer'
         ]);
+
+        // Verify that parent_brand_id is an admin brand
+        $parentBrand = Brand::find($validated['parent_brand_id']);
+        if (!$parentBrand || !$parentBrand->isAdminBrand()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Parent brand must be an admin brand!'
+            ], 422);
+        }
 
         // Handle logo upload or URL
         if ($request->hasFile('logo')) {
@@ -46,7 +64,7 @@ class RetailerBrandController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Brand created successfully!',
-            'brand' => $brand
+            'brand' => $brand->load('parent')
         ]);
     }
 
@@ -61,6 +79,7 @@ class RetailerBrandController extends Controller
         }
 
         $validated = $request->validate([
+            'parent_brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255|unique:brands,name,' . $brand->id,
             'description' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -68,6 +87,15 @@ class RetailerBrandController extends Controller
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer'
         ]);
+
+        // Verify that parent_brand_id is an admin brand
+        $parentBrand = Brand::find($validated['parent_brand_id']);
+        if (!$parentBrand || !$parentBrand->isAdminBrand()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Parent brand must be an admin brand!'
+            ], 422);
+        }
 
         // Handle logo update
         if ($request->hasFile('logo')) {
@@ -93,7 +121,7 @@ class RetailerBrandController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Brand updated successfully!',
-            'brand' => $brand
+            'brand' => $brand->load('parent')
         ]);
     }
 

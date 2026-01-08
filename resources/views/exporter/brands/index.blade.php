@@ -61,6 +61,7 @@
                 <tr>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Logo</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Brand Name</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Parent Brand</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Products</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Sort Order</th>
@@ -87,6 +88,15 @@
                         <div class="font-semibold text-gray-900">{{ $brand->name }}</div>
                         <div class="text-sm text-gray-500">{{ $brand->description ? Str::limit($brand->description, 50) : 'No description' }}</div>
                     </td>
+                    <td class="px-6 py-4">
+                        @if($brand->parent)
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                <i class="fas fa-sitemap mr-1"></i> {{ $brand->parent->name }}
+                            </span>
+                        @else
+                            <span class="text-sm text-gray-400">-</span>
+                        @endif
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                             {{ $brand->products_count ?? 0 }} Products
@@ -109,7 +119,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-16 text-center">
+                    <td colspan="7" class="px-6 py-16 text-center">
                         <i class="fas fa-copyright text-gray-300 text-6xl mb-4"></i>
                         <p class="text-gray-500 text-lg">No brands found. Click "Add Brand" to create one.</p>
                     </td>
@@ -132,6 +142,17 @@
         <form id="brandForm" class="p-6 space-y-5">
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Parent Brand (Admin) *</label>
+                <select name="parent_brand_id" id="parentBrandId" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                    <option value="">Select Admin Brand</option>
+                    @foreach($adminBrands as $adminBrand)
+                        <option value="{{ $adminBrand->id }}">{{ $adminBrand->name }}</option>
+                    @endforeach
+                </select>
+                <p class="text-xs text-gray-500 mt-1">Link your custom brand to an admin brand</p>
+            </div>
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Brand Name *</label>
@@ -262,6 +283,7 @@ function editBrand(brand) {
     document.getElementById('modalTitle').textContent = 'Edit Brand';
     document.getElementById('formMethod').value = 'PUT';
 
+    document.getElementById('parentBrandId').value = brand.parent_brand_id || '';
     document.getElementById('brandName').value = brand.name;
     document.getElementById('brandDescription').value = brand.description || '';
     document.getElementById('brandSortOrder').value = brand.sort_order;
