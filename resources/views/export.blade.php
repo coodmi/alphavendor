@@ -350,4 +350,215 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Apply Filters Function
+    function applyFilters() {
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams();
+
+        // Category filters (collect all checked categories)
+        const categoryCheckboxes = document.querySelectorAll('.category-filter:checked');
+        const categoryIds = Array.from(categoryCheckboxes).map(cb => cb.value);
+        if (categoryIds.length > 0) {
+            params.set('categories', categoryIds.join(','));
+        }
+
+        // Location filter
+        const locationCheckboxes = document.querySelectorAll('.location-filter:checked');
+        locationCheckboxes.forEach(cb => {
+            params.set('location', cb.value);
+        });
+
+        // Price range
+        const minPrice = document.querySelector('.min-price-input').value;
+        const maxPrice = document.querySelector('.max-price-input').value;
+        if (minPrice && minPrice != 0) {
+            params.set('min_price', minPrice);
+        }
+        if (maxPrice && maxPrice != 10000) {
+            params.set('max_price', maxPrice);
+        }
+
+        // MOQ filter (only one can be selected at a time)
+        const moqCheckbox = document.querySelector('.moq-filter:checked');
+        if (moqCheckbox) {
+            params.set('moq', moqCheckbox.value);
+        }
+
+        // Certification filters
+        const certCheckboxes = document.querySelectorAll('.certification-filter:checked');
+        const certIds = Array.from(certCheckboxes).map(cb => cb.value);
+        if (certIds.length > 0) {
+            params.set('certifications', certIds.join(','));
+        }
+
+        // Rating filter
+        const ratingRadio = document.querySelector('.rating-filter:checked');
+        if (ratingRadio) {
+            params.set('min_rating', ratingRadio.value);
+        }
+
+        // Sort
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect && sortSelect.value !== 'featured') {
+            params.set('sort', sortSelect.value);
+        }
+
+        // Redirect with filters
+        window.location.href = url.pathname + '?' + params.toString();
+    }
+
+    // Category filters
+    document.querySelectorAll('.category-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', applyFilters);
+    });
+
+    // Location filters
+    document.querySelectorAll('.location-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Uncheck other location checkboxes (single selection)
+            document.querySelectorAll('.location-filter').forEach(cb => {
+                if (cb !== this) cb.checked = false;
+            });
+            applyFilters();
+        });
+    });
+
+    // MOQ filters
+    document.querySelectorAll('.moq-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Uncheck other MOQ checkboxes (single selection)
+            document.querySelectorAll('.moq-filter').forEach(cb => {
+                if (cb !== this) cb.checked = false;
+            });
+            applyFilters();
+        });
+    });
+
+    // Certification filters
+    document.querySelectorAll('.certification-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', applyFilters);
+    });
+
+    // Rating filters
+    document.querySelectorAll('.rating-filter').forEach(radio => {
+        radio.addEventListener('change', applyFilters);
+    });
+
+    // Price range apply button
+    const applyPriceBtn = document.querySelector('.btn-apply-filter');
+    if (applyPriceBtn) {
+        applyPriceBtn.addEventListener('click', applyFilters);
+    }
+
+    // Price range sliders
+    const rangeMin = document.querySelector('.range-min');
+    const rangeMax = document.querySelector('.range-max');
+    const minPriceInput = document.querySelector('.min-price-input');
+    const maxPriceInput = document.querySelector('.max-price-input');
+
+    if (rangeMin && rangeMax) {
+        rangeMin.addEventListener('input', function() {
+            if (parseInt(this.value) > parseInt(rangeMax.value)) {
+                this.value = rangeMax.value;
+            }
+            minPriceInput.value = this.value;
+        });
+
+        rangeMax.addEventListener('input', function() {
+            if (parseInt(this.value) < parseInt(rangeMin.value)) {
+                this.value = rangeMin.value;
+            }
+            maxPriceInput.value = this.value;
+        });
+
+        minPriceInput.addEventListener('input', function() {
+            rangeMin.value = this.value;
+        });
+
+        maxPriceInput.addEventListener('input', function() {
+            rangeMax.value = this.value;
+        });
+    }
+
+    // Clear all filters
+    const clearFiltersBtn = document.querySelector('.clear-filters');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+            window.location.href = window.location.pathname;
+        });
+    }
+
+    // Set sort value from URL
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sortValue = urlParams.get('sort');
+        if (sortValue) {
+            sortSelect.value = sortValue;
+        }
+    }
+});
+
+// Make applyFilters available globally for inline onchange handlers
+function applyFilters() {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams();
+
+    // Category filters (collect all checked categories)
+    const categoryCheckboxes = document.querySelectorAll('.category-filter:checked');
+    const categoryIds = Array.from(categoryCheckboxes).map(cb => cb.value);
+    if (categoryIds.length > 0) {
+        params.set('categories', categoryIds.join(','));
+    }
+
+    // Location filter
+    const locationCheckboxes = document.querySelectorAll('.location-filter:checked');
+    locationCheckboxes.forEach(cb => {
+        params.set('location', cb.value);
+    });
+
+    // Price range
+    const minPrice = document.querySelector('.min-price-input').value;
+    const maxPrice = document.querySelector('.max-price-input').value;
+    if (minPrice && minPrice != 0) {
+        params.set('min_price', minPrice);
+    }
+    if (maxPrice && maxPrice != 10000) {
+        params.set('max_price', maxPrice);
+    }
+
+    // MOQ filter
+    const moqCheckbox = document.querySelector('.moq-filter:checked');
+    if (moqCheckbox) {
+        params.set('moq', moqCheckbox.value);
+    }
+
+    // Certification filters
+    const certCheckboxes = document.querySelectorAll('.certification-filter:checked');
+    const certIds = Array.from(certCheckboxes).map(cb => cb.value);
+    if (certIds.length > 0) {
+        params.set('certifications', certIds.join(','));
+    }
+
+    // Rating filter
+    const ratingRadio = document.querySelector('.rating-filter:checked');
+    if (ratingRadio) {
+        params.set('min_rating', ratingRadio.value);
+    }
+
+    // Sort
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect && sortSelect.value !== 'featured') {
+        params.set('sort', sortSelect.value);
+    }
+
+    // Redirect with filters
+    window.location.href = url.pathname + '?' + params.toString();
+}
+</script>
+@endpush
 @endsection

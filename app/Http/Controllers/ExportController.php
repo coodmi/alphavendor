@@ -109,7 +109,8 @@ class ExportController extends Controller
         $categories = Category::where('is_active', true)
             ->whereNull('vendor_id') // Only admin categories
             ->with(['children' => function($q) use ($exporterIds) {
-                $q->whereIn('vendor_id', $exporterIds);
+                $q->where('is_active', true)
+                  ->whereIn('vendor_id', $exporterIds);
             }])
             ->get()
             ->map(function($category) use ($exporterIds) {
