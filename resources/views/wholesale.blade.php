@@ -418,12 +418,12 @@ function showToast(message, type = 'success') {
         gap: 10px;
         animation: slideIn 0.3s ease-out;
     `;
-    
+
     const icon = type === 'success' ? '✓' : '✕';
     toast.innerHTML = `<span style="font-size: 20px;">${icon}</span>${message}`;
-    
+
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.style.animation = 'slideOut 0.3s ease-in';
         setTimeout(() => toast.remove(), 300);
@@ -466,11 +466,11 @@ function updateCartBadge(count) {
 // Quick Add to Cart function
 function quickAddToCart(productId, button) {
     const originalContent = button.innerHTML;
-    
+
     // Disable button and show loading
     button.disabled = true;
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
-    
+
     fetch(`/cart/add/${productId}`, {
         method: 'POST',
         headers: {
@@ -486,13 +486,13 @@ function quickAddToCart(productId, button) {
             // Show success state
             button.innerHTML = '<i class="fas fa-check"></i> Added!';
             button.style.background = '#27ae60';
-            
+
             // Show toast notification
             showToast('Product added to cart successfully!', 'success');
-            
+
             // Update cart badge
             updateCartBadge(data.cartCount);
-            
+
             // Reset button after 2 seconds
             setTimeout(() => {
                 button.disabled = false;
