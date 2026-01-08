@@ -17,13 +17,13 @@ class ExporterCategoryController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
-        
+
         // Get admin categories for dropdown
         $adminCategories = Category::whereNull('vendor_id')
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
-        
+
         return view('exporter.categories.index', compact('categories', 'adminCategories'));
     }
 

@@ -88,14 +88,14 @@ class Category extends Model
     public function getAllProducts()
     {
         $productIds = $this->products()->pluck('id');
-        
+
         // Get products from child categories
         $childCategories = $this->children()->pluck('id');
         if ($childCategories->isNotEmpty()) {
             $childProductIds = Product::whereIn('category_id', $childCategories)->pluck('id');
             $productIds = $productIds->merge($childProductIds);
         }
-        
+
         return Product::whereIn('id', $productIds);
     }
 }

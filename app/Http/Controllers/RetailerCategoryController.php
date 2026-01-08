@@ -17,13 +17,13 @@ class RetailerCategoryController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
-        
+
         // Get admin categories for dropdown
         $adminCategories = Category::whereNull('vendor_id')
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
-        
+
         return view('retailer.categories.index', compact('categories', 'adminCategories'));
     }
 
