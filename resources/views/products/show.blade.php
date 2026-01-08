@@ -223,7 +223,7 @@
 
 <script>
     const unitPrice = {{ $product->price }};
-    
+
     function updateTotalPrice() {
         const quantity = parseInt(document.getElementById('quantity').value);
         const total = unitPrice * quantity;
@@ -255,14 +255,14 @@
             type === 'success' ? 'bg-green-500' : 'bg-red-500'
         } text-white font-semibold flex items-center gap-3`;
         toast.style.animation = 'slideInRight 0.3s ease-out';
-        
+
         toast.innerHTML = `
             <i class="fas fa-check-circle text-xl"></i>
             <span>${message}</span>
         `;
-        
+
         document.body.appendChild(toast);
-        
+
         // Fade out after 2.7 seconds
         setTimeout(() => {
             toast.style.animation = 'slideOutRight 0.3s ease-in';
@@ -321,7 +321,7 @@
         .then(response => {
             console.log('Response status:', response.status);
             console.log('Response headers:', response.headers);
-            
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -329,11 +329,11 @@
         })
         .then(data => {
             console.log('Response data:', data);
-            
+
             if (data.success) {
                 // Show success toast
                 showToast('Product added to cart successfully!');
-                
+
                 // Redirect to cart page after 3 seconds
                 setTimeout(() => {
                     window.location.href = '{{ route("cart.index") }}';

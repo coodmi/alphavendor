@@ -106,10 +106,10 @@
 <script>
 function updateQuantity(productId, change) {
     console.log('updateQuantity called with productId:', productId, 'change:', change);
-    
+
     const quantityInput = document.querySelector(`input[data-quantity="${productId}"]`);
     console.log('quantityInput:', quantityInput);
-    
+
     const currentQuantity = parseInt(quantityInput.value);
     const newQuantity = currentQuantity + change;
 
@@ -122,7 +122,7 @@ function updateQuantity(productId, change) {
 
     // Update UI immediately for better UX
     quantityInput.value = newQuantity;
-    
+
     // Send AJAX request
     fetch(`/cart/update/${productId}`, {
         method: 'PATCH',
@@ -155,25 +155,25 @@ function updateQuantity(productId, change) {
 
 function updateCartDisplay(productId, quantity) {
     console.log('updateCartDisplay called with productId:', productId, 'quantity:', quantity);
-    
+
     const itemRow = document.querySelector(`[data-product-id="${productId}"]`);
     console.log('itemRow:', itemRow);
-    
+
     const unitPriceElement = itemRow.querySelector('[data-unit-price]');
     console.log('unitPriceElement:', unitPriceElement);
-    
+
     const unitPrice = parseFloat(unitPriceElement.dataset.unitPrice);
     console.log('unitPrice:', unitPrice);
-    
+
     const itemTotal = unitPrice * quantity;
     console.log('itemTotal:', itemTotal);
-    
+
     // Update item total
     const itemTotalElement = itemRow.querySelector(`[data-item-total="${productId}"]`);
     console.log('itemTotalElement:', itemTotalElement);
-    
+
     itemTotalElement.textContent = '$' + itemTotal.toFixed(2);
-    
+
     // Calculate new cart total
     let cartTotal = 0;
     document.querySelectorAll('[data-item-total]').forEach(element => {
@@ -181,13 +181,13 @@ function updateCartDisplay(productId, quantity) {
         cartTotal += total;
         console.log('Adding to cart total:', total, 'New cart total:', cartTotal);
     });
-    
+
     console.log('Final cart total:', cartTotal);
-    
+
     // Update totals
     document.getElementById('subtotal').textContent = '$' + cartTotal.toFixed(2);
     document.getElementById('total').textContent = '$' + cartTotal.toFixed(2);
-    
+
     console.log('Cart display updated successfully');
 }
 
@@ -209,17 +209,17 @@ function removeFromCart(productId) {
             // Remove item from DOM
             const itemRow = document.querySelector(`[data-product-id="${productId}"]`);
             itemRow.remove();
-            
+
             // Recalculate totals
             let cartTotal = 0;
             document.querySelectorAll('[data-item-total]').forEach(element => {
                 const total = parseFloat(element.textContent.replace('$', ''));
                 cartTotal += total;
             });
-            
+
             document.getElementById('subtotal').textContent = '$' + cartTotal.toFixed(2);
             document.getElementById('total').textContent = '$' + cartTotal.toFixed(2);
-            
+
             // Reload if cart is empty
             if (document.querySelectorAll('[data-product-id]').length === 0) {
                 window.location.reload();

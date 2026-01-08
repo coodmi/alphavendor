@@ -84,12 +84,12 @@
                             <div class="flex gap-3 pb-4 border-b">
                                 <div class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
                                     @if($item['image'])
-                                        <img src="{{ str_starts_with($item['image'], 'http') ? $item['image'] : asset('storage/' . $item['image']) }}" 
-                                             alt="{{ $item['name'] }}" 
+                                        <img src="{{ str_starts_with($item['image'], 'http') ? $item['image'] : asset('storage/' . $item['image']) }}"
+                                             alt="{{ $item['name'] }}"
                                              class="w-full h-full object-cover">
                                     @else
-                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" 
-                                             alt="{{ $item['name'] }}" 
+                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop"
+                                             alt="{{ $item['name'] }}"
                                              class="w-full h-full object-cover">
                                     @endif
                                 </div>

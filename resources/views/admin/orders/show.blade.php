@@ -70,7 +70,7 @@
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Order #{{ $order->order_number }}</h2>
-                
+
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
                         <p class="text-sm text-gray-500">Order Date</p>
@@ -78,7 +78,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Status</p>
-                        <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full 
+                        <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full
                             {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
                             {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
                             {{ $order->status === 'shipped' ? 'bg-purple-100 text-purple-800' : '' }}
@@ -96,12 +96,12 @@
                             <div class="flex gap-4 pb-4 border-b">
                                 <div class="w-20 h-20 flex-shrink-0 rounded overflow-hidden border">
                                     @if($item->product && $item->product->image)
-                                        <img src="{{ str_starts_with($item->product->image, 'http') ? $item->product->image : asset('storage/' . $item->product->image) }}" 
-                                             alt="{{ $item->product_name }}" 
+                                        <img src="{{ str_starts_with($item->product->image, 'http') ? $item->product->image : asset('storage/' . $item->product->image) }}"
+                                             alt="{{ $item->product_name }}"
                                              class="w-full h-full object-cover">
                                     @else
-                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" 
-                                             alt="{{ $item->product_name }}" 
+                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop"
+                                             alt="{{ $item->product_name }}"
                                              class="w-full h-full object-cover">
                                     @endif
                                 </div>
@@ -165,7 +165,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="font-semibold text-lg mb-4">Payment</h3>
                 <p class="text-sm mb-2"><span class="font-semibold">Method:</span> {{ ucfirst(str_replace('_', ' ', $order->payment_method)) }}</p>
-                <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full 
+                <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full
                     {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
                     {{ ucfirst($order->payment_status) }}
                 </span>
