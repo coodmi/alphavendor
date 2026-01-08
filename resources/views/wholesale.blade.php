@@ -4,73 +4,53 @@
 
 @section('content')
 
-<!-- Hero Banner with Tailwind -->
-<section class="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 py-20 mb-10 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);"></div>
-    </div>
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-            <div class="flex-1 text-white">
-                <span class="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-semibold mb-3 border border-white/30">B2B Solutions</span>
-                <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Wholesale Marketplace</h1>
-                <p class="text-lg text-white/90 mb-6 max-w-2xl">Connect with verified suppliers and manufacturers. Buy in bulk with competitive wholesale prices for your business.</p>
+<!-- Hero Banner -->
+<section class="wholesale-hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="hero-badge"><i class="fas fa-warehouse"></i> B2B Solutions</span>
+                <h1>Wholesale Marketplace</h1>
+                <p>Connect with verified suppliers and manufacturers. Buy in bulk with competitive wholesale prices for your business.</p>
 
                 <!-- Stats -->
-                <div class="flex flex-wrap gap-4 mb-6">
-                    <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20">
-                        <i class="fas fa-industry text-3xl"></i>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-industry"></i>
                         <div>
-                            <h3 class="text-2xl font-bold">2,500+</h3>
-                            <span class="text-sm text-white/80">Manufacturers</span>
+                            <h3>2,500+</h3>
+                            <span>Manufacturers</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20">
-                        <i class="fas fa-boxes text-3xl"></i>
+                    <div class="stat-item">
+                        <i class="fas fa-boxes"></i>
                         <div>
-                            <h3 class="text-2xl font-bold">50K+</h3>
-                            <span class="text-sm text-white/80">Bulk Products</span>
+                            <h3>50K+</h3>
+                            <span>Bulk Products</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20">
-                        <i class="fas fa-handshake text-3xl"></i>
+                    <div class="stat-item">
+                        <i class="fas fa-handshake"></i>
                         <div>
-                            <h3 class="text-2xl font-bold">15K+</h3>
-                            <span class="text-sm text-white/80">Business Partners</span>
+                            <h3>15K+</h3>
+                            <span>Business Partners</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex flex-wrap gap-4">
-                    <button class="bg-white text-orange-500 px-6 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors flex items-center gap-2">
+                <div class="hero-buttons">
+                    <button class="btn-primary">
                         <i class="fas fa-shopping-cart"></i> Start Ordering
                     </button>
-                    <button class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors flex items-center gap-2">
+                    <button class="btn-secondary">
                         <i class="fas fa-user-plus"></i> Register as Buyer
                     </button>
                 </div>
             </div>
 
-            <!-- Feature Cards -->
-            <div class="flex-1 relative">
-                <div class="grid grid-cols-1 gap-4 max-w-md mx-auto">
-                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 transform hover:scale-105 transition-transform">
-                        <i class="fas fa-truck text-4xl text-white mb-3"></i>
-                        <h4 class="text-xl font-bold text-white mb-1">Fast Shipping</h4>
-                        <p class="text-white/80">Global delivery</p>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 transform hover:scale-105 transition-transform ml-8">
-                        <i class="fas fa-shield-alt text-4xl text-white mb-3"></i>
-                        <h4 class="text-xl font-bold text-white mb-1">Secure Payment</h4>
-                        <p class="text-white/80">100% protected</p>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 transform hover:scale-105 transition-transform">
-                        <i class="fas fa-percentage text-4xl text-white mb-3"></i>
-                        <h4 class="text-xl font-bold text-white mb-1">Best Prices</h4>
-                        <p class="text-white/80">Bulk discounts</p>
-                    </div>
-                </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=1100&h=750&fit=crop" alt="Wholesale Business">
             </div>
         </div>
     </div>

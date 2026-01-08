@@ -59,6 +59,20 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
+        // Get top featured vendors (sellers with most sales)
+        $featuredVendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])
+            ->where('status', 'active')
+            ->with(['roleApplications' => function($q) {
+                $q->where('status', 'approved')->latest();
+            }])
+            ->withCount('products')
+            ->withCount(['orders as total_sales' => function($query) {
+                $query->where('orders.status', 'completed');
+            }])
+            ->orderBy('total_sales', 'desc')
+            ->take(4)
+            ->get();
+
         return view('home', compact(
             'categories',
             'banners',
@@ -66,7 +80,8 @@ class HomeController extends Controller
             'todayDeals',
             'retailerProducts',
             'wholesalerProducts',
-            'exporterProducts'
+            'exporterProducts',
+            'featuredVendors'
         ));
     }
 

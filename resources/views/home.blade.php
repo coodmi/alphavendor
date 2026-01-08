@@ -618,39 +618,333 @@ document.addEventListener('DOMContentLoaded', function() {
 </section>
 
 <!-- Featured Vendors -->
-<section class="vendors-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Featured Vendors</h2>
-            <a href="#" class="view-all">
+<section class="vendors-section" style="background: #f8f9fa; padding: 60px 0;">
+    <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+            <h2 style="font-size: 32px; font-weight: 700; color: #333; margin: 0;">Featured Vendors</h2>
+            <a href="{{ route('sellers.index') }}" class="view-all" style="color: #FFA500; font-weight: 600; text-decoration: none; font-size: 16px; transition: color 0.3s;"
+               onmouseover="this.style.color='#e69500'"
+               onmouseout="this.style.color='#FFA500'">
                 View All Vendors
-                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
             </a>
         </div>
-        <div class="vendors-grid">
-            @foreach(['Retail Store', 'Wholesale Hub', 'Export Experts', 'Fashion World'] as $vendor)
-            <div class="vendor-card">
-                <div class="vendor-header">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($vendor) }}&size=80&background=FFA500&color=fff" alt="{{ $vendor }}">
-                    <div class="vendor-info">
-                        <h3>{{ $vendor }}</h3>
-                        <div class="vendor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>5.0 (234 reviews)</span>
+
+        @if($featuredVendors->count() > 0)
+            <!-- Slider Container -->
+            <div style="position: relative;">
+                <!-- Navigation Buttons -->
+                <button class="vendor-slider-prev" style="position: absolute; left: -20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 50px; height: 50px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;"
+                        onmouseover="this.style.background='#FFA500'; this.style.color='white'"
+                        onmouseout="this.style.background='white'; this.style.color='#333'">
+                    <i class="fas fa-chevron-left" style="font-size: 20px;"></i>
+                </button>
+                <button class="vendor-slider-next" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 50px; height: 50px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;"
+                        onmouseover="this.style.background='#FFA500'; this.style.color='white'"
+                        onmouseout="this.style.background='white'; this.style.color='#333'">
+                    <i class="fas fa-chevron-right" style="font-size: 20px;"></i>
+                </button>
+
+                <!-- Slider Wrapper -->
+                <div class="vendor-slider-wrapper" style="overflow: hidden; position: relative;">
+                    <div class="vendor-slider-track" style="display: flex; transition: transform 0.5s ease-in-out;">
+                        @foreach($featuredVendors as $vendor)
+                            @php
+                                $businessInfo = $vendor->roleApplications->first() ?? null;
+                                $roleIcon = $vendor->role === 'retailer' ? 'fa-store' :
+                                           ($vendor->role === 'wholesaler' ? 'fa-warehouse' : 'fa-globe');
+                                $roleColor = $vendor->role === 'retailer' ? '#4CAF50' :
+                                            ($vendor->role === 'wholesaler' ? '#2196F3' : '#9C27B0');
+                                $vendorName = $businessInfo->business_name ?? $vendor->name;
+                                $firstLetter = strtoupper(substr($vendorName, 0, 1));
+                            @endphp
+
+                            <div class="featured-vendor-card" style="min-width: calc(25% - 19px); margin-right: 25px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s; flex-shrink: 0;">
+                        <!-- Vendor Photo/Avatar -->
+                        <div style="position: relative; background: linear-gradient(135deg, {{ $roleColor }}15 0%, {{ $roleColor }}05 100%); padding: 30px 20px; text-align: center;">
+                            <div style="width: 100px; height: 100px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; border: 4px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; background: {{ $roleColor }};">
+                                @if($vendor->profile_image)
+                                    <img src="{{ asset('storage/' . $vendor->profile_image) }}"
+                                         alt="{{ $vendorName }}"
+                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                @else
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, {{ $roleColor }} 0%, {{ $roleColor }}dd 100%); color: white; font-size: 40px; font-weight: 700;">
+                                        {{ $firstLetter }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Seller Type Badge -->
+                            <span style="background: {{ $roleColor }}; color: white; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; display: inline-block;">
+                                <i class="fas {{ $roleIcon }}" style="margin-right: 4px;"></i>
+                                {{ ucfirst($vendor->role) }}
+                            </span>
+
+                            @if($vendor->role === 'exporter' && $vendor->exporter_rating)
+                                <div style="margin-top: 8px;">
+                                    <span style="background: #FFD700; color: #333; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;">
+                                        <i class="fas fa-star"></i>
+                                        {{ number_format($vendor->exporter_rating, 1) }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
+
+                        <!-- Vendor Info -->
+                        <div style="padding: 20px;">
+                            <h3 style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 4px; text-align: center;">
+                                {{ $vendorName }}
+                            </h3>
+                            <p style="text-align: center; color: #888; font-size: 12px; margin-bottom: 15px;">
+                                Trusted vendor with wide range of quality products
+                            </p>
+
+                            <!-- Stats Row -->
+                            <div style="display: flex; justify-content: space-around; padding: 12px 0; margin-bottom: 15px; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 18px; font-weight: 700; color: {{ $roleColor }};">{{ $vendor->products_count ?? 0 }}</div>
+                                    <div style="font-size: 10px; color: #999; text-transform: uppercase; margin-top: 2px;">Products</div>
+                                </div>
+                                <div style="width: 1px; background: #e0e0e0;"></div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 18px; font-weight: 700; color: {{ $roleColor }};">{{ $vendor->total_sales ?? 0 }}</div>
+                                    <div style="font-size: 10px; color: #999; text-transform: uppercase; margin-top: 2px;">Sales</div>
+                                </div>
+                                <div style="width: 1px; background: #e0e0e0;"></div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 18px; font-weight: 700; color: #FFB800;">
+                                        @if($vendor->role === 'exporter' && $vendor->exporter_rating)
+                                            {{ number_format($vendor->exporter_rating, 1) }}
+                                        @else
+                                            5.0
+                                        @endif
+                                    </div>
+                                    <div style="font-size: 10px; color: #999; text-transform: uppercase; margin-top: 2px;">
+                                        <i class="fas fa-star" style="color: #FFB800; font-size: 9px;"></i> Rating
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Visit Store Button -->
+                            <a href="{{ route('sellers.products', $vendor->id) }}"
+                               style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(255,165,0,0.3);"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(255,165,0,0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(255,165,0,0.3)'">
+                                <span>Visit Store</span>
+                            </a>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
-                <p>Trusted vendor with wide range of quality products</p>
-                <a href="#" class="btn-vendor">Visit Store</a>
+
+                <!-- Pagination Dots -->
+                <div class="vendor-slider-pagination" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;">
+                    <!-- Dots will be generated by JavaScript -->
+                </div>
             </div>
-            @endforeach
-        </div>
+        @else
+            <div style="background: white; padding: 60px 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <i class="fas fa-store-slash" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
+                <h3 style="font-size: 24px; color: #333; margin-bottom: 10px;">No Featured Vendors</h3>
+                <p style="color: #666; margin-bottom: 20px;">Check back soon for featured vendors</p>
+            </div>
+        @endif
     </div>
 </section>
+
+<style>
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        .featured-vendor-card {
+            min-width: calc(33.333% - 17px) !important;
+        }
+    }
+    @media (max-width: 768px) {
+        .featured-vendor-card {
+            min-width: calc(50% - 13px) !important;
+        }
+        .vendor-slider-prev, .vendor-slider-next {
+            width: 40px !important;
+            height: 40px !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .featured-vendor-card {
+            min-width: 100% !important;
+        }
+    }
+
+    .vendor-slider-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #ddd;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        padding: 0;
+    }
+    .vendor-slider-dot.active {
+        background: #FFA500;
+        width: 30px;
+        border-radius: 6px;
+    }
+    .vendor-slider-dot:hover {
+        background: #FFB800;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.vendor-slider-track');
+    const prevBtn = document.querySelector('.vendor-slider-prev');
+    const nextBtn = document.querySelector('.vendor-slider-next');
+    const pagination = document.querySelector('.vendor-slider-pagination');
+    const cards = document.querySelectorAll('.featured-vendor-card');
+
+    if (!track || cards.length === 0) return;
+
+    let currentIndex = 0;
+    let cardsPerView = 4;
+    let autoplayInterval;
+
+    // Calculate cards per view based on screen size
+    function updateCardsPerView() {
+        const width = window.innerWidth;
+        if (width <= 480) cardsPerView = 1;
+        else if (width <= 768) cardsPerView = 2;
+        else if (width <= 1200) cardsPerView = 3;
+        else cardsPerView = 4;
+    }
+
+    const totalSlides = Math.ceil(cards.length / cardsPerView);
+
+    // Create pagination dots
+    function createPagination() {
+        pagination.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'vendor-slider-dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToSlide(i));
+            pagination.appendChild(dot);
+        }
+    }
+
+    // Update slider position
+    function updateSlider() {
+        const cardWidth = cards[0].offsetWidth;
+        const gap = 25;
+        const offset = -(currentIndex * cardsPerView * (cardWidth + gap));
+        track.style.transform = `translateX(${offset}px)`;
+
+        // Update pagination
+        document.querySelectorAll('.vendor-slider-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+
+        // Update button states
+        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+        prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+        nextBtn.style.opacity = currentIndex >= totalSlides - 1 ? '0.5' : '1';
+        nextBtn.style.cursor = currentIndex >= totalSlides - 1 ? 'not-allowed' : 'pointer';
+    }
+
+    function goToSlide(index) {
+        currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
+        updateSlider();
+        resetAutoplay();
+    }
+
+    function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0; // Loop back to start
+        }
+        updateSlider();
+    }
+
+    function prevSlide() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlider();
+        }
+    }
+
+    // Autoplay functionality
+    function startAutoplay() {
+        autoplayInterval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
+    }
+
+    function resetAutoplay() {
+        clearInterval(autoplayInterval);
+        startAutoplay();
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        resetAutoplay();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        resetAutoplay();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    track.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    track.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) nextSlide(); // Swipe left
+        if (touchEndX > touchStartX + 50) prevSlide(); // Swipe right
+        resetAutoplay();
+    }
+
+    // Pause autoplay on hover
+    track.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+    track.addEventListener('mouseleave', startAutoplay);
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        updateCardsPerView();
+        currentIndex = 0;
+        createPagination();
+        updateSlider();
+    });
+
+    // Initialize
+    updateCardsPerView();
+    createPagination();
+    updateSlider();
+    startAutoplay();
+});
+</scriptatured-vendor-card {
+        transition: all 0.3s ease;
+    }
+    .featured-vendor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+    }
+</style>
 
 <!-- Newsletter -->
 <section class="newsletter-section">

@@ -35,6 +35,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\SellerController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -45,6 +46,10 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.s
 Route::get('/retail', [RetailController::class, 'index'])->name('retail');
 Route::get('/wholesale', [WholesaleController::class, 'index'])->name('wholesale');
 Route::get('/export', [ExportController::class, 'index'])->name('export');
+
+// Sellers routes
+Route::get('/sellers', [SellerController::class, 'index'])->name('sellers.index');
+Route::get('/sellers/{seller}/products', [SellerController::class, 'products'])->name('sellers.products');
 
 // Cart routes (accessible to all users)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

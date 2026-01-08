@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/retail.css') }}">
     <link rel="stylesheet" href="{{ asset('css/wholesale.css') }}">
     <link rel="stylesheet" href="{{ asset('css/export.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sellers.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @stack('styles')
@@ -124,6 +125,7 @@
                     <li><a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">Retail</a></li>
                     <li><a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">Wholesale</a></li>
                     <li><a href="{{ route('export') }}" class="{{ request()->routeIs('export') ? 'active' : '' }}">Export</a></li>
+                    <li><a href="{{ route('sellers.index') }}" class="{{ request()->routeIs('sellers.*') ? 'active' : '' }}">Sellers</a></li>
                     <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About Us</a></li>
                     <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact Us</a></li>
                 </ul>

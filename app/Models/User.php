@@ -108,4 +108,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\RoleApplication::class)->where('status', 'pending');
     }
+
+    /**
+     * Get products owned by this vendor
+     */
+    public function products()
+    {
+        return $this->hasMany(\App\Models\Product::class, 'vendor_id');
+    }
+
+    /**
+     * Get orders for this vendor's products
+     */
+    public function orders()
+    {
+        return $this->hasManyThrough(\App\Models\Order::class, \App\Models\Product::class, 'vendor_id', 'id', 'id', 'id');
+    }
 }

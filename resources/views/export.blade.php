@@ -232,89 +232,78 @@
                 </div>
 
                 <!-- Products Grid -->
-                <div class="products-grid" id="productsGrid">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @forelse($products as $product)
-                    <a href="{{ route('product.show', $product->id) }}?quantity={{ $product->minimum_order ?? 1 }}" class="product-card" style="text-decoration: none; color: inherit; display: block;">
-                        <div class="product-image">
+                    <a href="{{ route('product.show', $product->id) }}?quantity={{ $product->minimum_order ?? 1 }}" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group block">
+                        <div class="relative overflow-hidden aspect-square">
                             @if($product->image)
                                 @if(filter_var($product->image, FILTER_VALIDATE_URL))
-                                    <img src="{{ $product->image }}" alt="{{ $product->name }}">
+                                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 @else
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 @endif
                             @else
-                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
+                                <img src="https://via.placeholder.com/300x300?text=No+Image" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             @endif
-                            <div class="product-badges">
-                                @if($product->badge)
-                                    <span class="badge badge-hot">{{ $product->badge }}</span>
-                                @endif
-                                @if($product->is_featured)
-                                    <span class="badge badge-new">Featured</span>
-                                @endif
-                            </div>
-                            <div class="product-actions">
-                                <button class="action-btn" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
+                            @if($product->badge)
+                                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">{{ $product->badge }}</span>
+                            @endif
+                            @if($product->is_featured)
+                                <span class="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded" style="margin-top: {{ $product->badge ? '30px' : '0' }}">Featured</span>
+                            @endif
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-heart"></i>
                                 </button>
-                                <button class="action-btn" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>
-                                <button class="action-btn" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
-                                    <i class="fas fa-exchange-alt"></i>
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
+                                    <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
-                            <button class="quick-add-btn" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this);">
-                                <i class="fas fa-shopping-cart"></i> Quick Add
+                            <button class="absolute bottom-0 left-0 right-0 bg-orange-500 text-white py-3 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                                <i class="fas fa-shopping-cart"></i>
+                                Quick Add
                             </button>
                         </div>
-                        <div class="product-info">
-                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h3 class="product-title">{{ $product->name }}</h3>
-                            <div class="product-vendor">
-                                <i class="fas fa-building"></i> {{ $product->vendor->name ?? 'Unknown Vendor' }}
+                        <div class="p-4">
+                            <div class="text-xs text-orange-600 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-orange-500 transition-colors">{{ $product->name }}</h4>
+                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-1">
+                                <i class="fas fa-building text-orange-500"></i>
+                                <span>{{ $product->vendor->name ?? 'Unknown Vendor' }}</span>
                             </div>
-                            <div class="product-rating">
-                                <div class="stars">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= floor($product->rating))
-                                            <i class="fas fa-star"></i>
-                                        @elseif($i - 0.5 <= $product->rating)
-                                            <i class="fas fa-star-half-alt"></i>
-                                        @else
-                                            <i class="far fa-star"></i>
-                                        @endif
-                                    @endfor
-                                </div>
-                                <span class="rating-count">({{ number_format($product->rating, 1) }})</span>
+                            @if($product->supplier_location)
+                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
+                                <i class="fas fa-map-marker-alt text-orange-500"></i>
+                                <span>{{ $product->supplier_location }}</span>
                             </div>
-                            <div class="export-info">
-                                <div class="moq-info">
-                                    <i class="fas fa-boxes"></i>
-                                    <span class="moq">MOQ: {{ $product->minimum_order ?? 1 }} units</span>
-                                </div>
-                                @if($product->supplier_location)
-                                <div class="destination-info">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span class="destination">{{ $product->supplier_location }}</span>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="product-price">
-                                <div class="price-group">
-                                    <span class="current-price">${{ number_format($product->price, 2) }}</span>
-                                    @if($product->old_price)
-                                        <span class="original-price">${{ number_format($product->old_price, 2) }}</span>
+                            @endif
+                            <div class="flex items-center gap-1 mb-2">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= floor($product->rating))
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    @elseif($i - 0.5 <= $product->rating)
+                                        <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                                    @else
+                                        <i class="far fa-star text-yellow-400 text-xs"></i>
                                     @endif
-                                    <span class="price-unit">per unit (FOB)</span>
-                                </div>
+                                @endfor
+                                <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                            </div>
+                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-3">
+                                <i class="fas fa-boxes text-orange-500"></i>
+                                <span>MOQ: {{ $product->minimum_order ?? 1 }} units</span>
+                            </div>
+                            <div class="flex items-center gap-2 flex-wrap mb-2">
+                                <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
                                 @if($product->old_price)
-                                    <span class="discount-badge">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
+                                    <span class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="text-xs font-semibold text-red-500">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
                                 @endif
                             </div>
-                            <button class="btn-add-cart" onclick="event.preventDefault(); event.stopPropagation();">
-                                <i class="fas fa-file-invoice"></i> Request Quote
-                            </button>
+                            <div class="text-xs text-gray-500">per unit (FOB)</div>
                         </div>
                     </a>
                     @empty
