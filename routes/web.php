@@ -146,6 +146,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/products', [RetailerProductController::class, 'store'])->name('products.store');
         Route::put('/products/{product}', [RetailerProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [RetailerProductController::class, 'destroy'])->name('products.destroy');
+
+        // Order management
+        Route::get('/orders', [RetailerDashboardController::class, 'orders'])->name('orders');
+        Route::get('/orders/{order}', [RetailerDashboardController::class, 'showOrder'])->name('orders.show');
+        Route::patch('/orders/{order}/status', [RetailerDashboardController::class, 'updateOrderStatus'])->name('orders.update-status');
     });
 
     // Wholesaler routes

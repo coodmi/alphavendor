@@ -253,7 +253,7 @@
                 <!-- Products Grid -->
                 <div class="products-grid-view">
                     @forelse($products as $product)
-                    <div class="product-card">
+                    <a href="{{ route('product.show', $product->id) }}" class="product-card">
                         <div class="product-image">
                             @if($product->image)
                                 <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
@@ -305,7 +305,7 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
+                    </a>
                     @empty
                     <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
                         <i class="fas fa-box-open" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>

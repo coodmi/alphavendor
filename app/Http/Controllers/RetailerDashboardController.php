@@ -69,4 +69,58 @@ class RetailerDashboardController extends Controller
             'avgOrderValue'
         ));
     }
-}
+
+    /**
+     * Show all orders for the retailer
+     */
+    public function orders()
+    {
+        $vendorId = Auth::id();
+        
+        $orders = Order::where('vendor_id', $vendorId)
+            ->with(['user', 'items.product'])
+            ->latest()
+            ->paginate(15);
+
+        return view('retailer.orders.index', compact('orders'));
+    }
+
+    /**
+     * Show a specific order for the retailer
+     */
+    public function showOrder(Order $order)
+    {
+        $vendorId = Auth::id();
+        
+        // Make sure retailer can only view their own orders
+        if ($order->vendor_id !== $vendorId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $order->load(['user', 'items.product']);
+
+        return view('retailer.orders.show', compact('order'));
+    }
+
+    /**
+     * Update order status
+     */
+    public function updateOrderStatus(Request $request, Order $order)
+    {
+        $vendorId = Auth::id();
+        
+        // Make sure retailer can only update their own orders
+        if ($order->vendor_id !== $vendorId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+        ]);
+
+        $order->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->back()->with('success', 'Order status updated successfully!');
+    }}

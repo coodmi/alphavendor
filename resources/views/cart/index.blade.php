@@ -103,7 +103,30 @@
     @endif
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
+        <div class="p-6">
+            <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <i class="fas fa-trash-alt text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 text-center mb-2">Remove Item</h3>
+            <p class="text-gray-600 text-center mb-6">Are you sure you want to remove this item from your cart?</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-semibold">
+                    Cancel
+                </button>
+                <button onclick="confirmDelete()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">
+                    Yes, Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+let productToDelete = null;
+
 function updateQuantity(productId, change) {
     console.log('updateQuantity called with productId:', productId, 'change:', change);
 
@@ -192,9 +215,20 @@ function updateCartDisplay(productId, quantity) {
 }
 
 function removeFromCart(productId) {
-    if (!confirm('Are you sure you want to remove this item from cart?')) {
-        return;
-    }
+    productToDelete = productId;
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    productToDelete = null;
+}
+
+function confirmDelete() {
+    if (!productToDelete) return;
+
+    const productId = productToDelete;
+    closeDeleteModal();
 
     fetch(`/cart/remove/${productId}`, {
         method: 'DELETE',

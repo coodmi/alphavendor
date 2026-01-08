@@ -10,6 +10,13 @@
             <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
         </a>
+        <a href="{{ route('retailer.orders') }}" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+            @if($pendingOrders > 0)
+                <span class="badge">{{ $pendingOrders }}</span>
+            @endif
+        </a>
     </div>
 
     <div class="menu-section">
@@ -29,17 +36,6 @@
         <a href="{{ route('retailer.brands') }}" class="menu-item">
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">ORDERS</div>
-        <a href="{{ route('vendor.orders') }}" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>All Orders</span>
-            @if($pendingOrders > 0)
-                <span class="badge">{{ $pendingOrders }}</span>
-            @endif
         </a>
     </div>
 
