@@ -234,7 +234,7 @@
                 <!-- Products Grid -->
                 <div class="products-grid" id="productsGrid">
                     @forelse($products as $product)
-                    <div class="product-card">
+                    <a href="{{ route('product.show', $product->id) }}?quantity={{ $product->minimum_order ?? 1 }}" class="product-card" style="text-decoration: none; color: inherit; display: block;">
                         <div class="product-image">
                             @if($product->image)
                                 @if(filter_var($product->image, FILTER_VALIDATE_URL))
@@ -312,11 +312,11 @@
                                     <span class="discount-badge">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
                                 @endif
                             </div>
-                            <button class="btn-add-cart">
+                            <button class="btn-add-cart" onclick="event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-file-invoice"></i> Request Quote
                             </button>
                         </div>
-                    </div>
+                    </a>
                     @empty
                     <div class="col-span-full text-center py-16">
                         <i class="fas fa-box-open text-gray-300 text-6xl mb-4"></i>

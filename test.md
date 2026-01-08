@@ -20,3 +20,7 @@ when clicked retail page card then it should redirect to product details page wh
 
 
 When clicked wholesale page card then product detais page must be start the initial quantity based on wholesale minimum order quantity.
+
+
+
+When clicked Export page card then it should redirect to product details page where user can see product details  like description, price, add to cart button ,increase and decrease quantity buttons and other relevant information.ActuallY I want to here similar feature like retail and wholesale product details page.and must be the order data saved in database with user id, product id, quantity, total amount and order date. and these data must be added to the Exporter dashboard named " Orders" and these data must be added to the admin dashboard order section...make an option to the sidebar named "Orders" where admin can see all the orders placed by users with their details.

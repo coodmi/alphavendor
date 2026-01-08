@@ -186,6 +186,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:exporter')->prefix('exporter')->name('exporter.')->group(function () {
         Route::get('/dashboard', [ExporterDashboardController::class, 'index'])->name('dashboard');
 
+        // Orders
+        Route::get('/orders', [ExporterDashboardController::class, 'orders'])->name('orders');
+        Route::get('/orders/{order}', [ExporterDashboardController::class, 'showOrder'])->name('orders.show');
+
         // Certification management
         Route::get('/certifications', [ExporterCertificationController::class, 'index'])->name('certifications');
         Route::post('/certifications', [ExporterCertificationController::class, 'store'])->name('certifications.store');

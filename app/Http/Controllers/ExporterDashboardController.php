@@ -65,4 +65,34 @@ class ExporterDashboardController extends Controller
             'exporter_rating' => $user->exporter_rating
         ]);
     }
+
+    /**
+     * Show all orders for exporter's products
+     */
+    public function orders()
+    {
+        $vendorId = Auth::id();
+
+        $orders = Order::where('vendor_id', $vendorId)
+            ->with(['user', 'items.product'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        return view('exporter.orders.index', compact('orders'));
+    }
+
+    /**
+     * Show individual order details
+     */
+    public function showOrder(Order $order)
+    {
+        // Ensure the order belongs to this exporter
+        if ($order->vendor_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this order.');
+        }
+
+        $order->load(['user', 'items.product']);
+
+        return view('exporter.orders.show', compact('order'));
+    }
 }

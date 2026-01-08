@@ -6,6 +6,7 @@
 <div class="menu-section-title">Main</div>
 <a href="{{ route('exporter.dashboard') }}" class="menu-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
 <a href="{{ route('exporter.products') }}" class="menu-item"><i class="fas fa-box"></i><span>Products</span></a>
+<a href="{{ route('exporter.orders') }}" class="menu-item"><i class="fas fa-shopping-cart"></i><span>Orders</span></a>
 <a href="{{ route('exporter.categories') }}" class="menu-item"><i class="fas fa-tags"></i><span>Categories</span></a>
 <a href="{{ route('exporter.brands') }}" class="menu-item"><i class="fas fa-copyright"></i><span>Brands</span></a>
 <a href="{{ route('exporter.certifications') }}" class="menu-item active"><i class="fas fa-certificate"></i><span>Certifications</span></a>

@@ -14,6 +14,10 @@
             <i class="fas fa-box"></i>
             <span>Products</span>
         </a>
+        <a href="{{ route('exporter.orders') }}" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+        </a>
         <a href="{{ route('exporter.categories') }}" class="menu-item">
             <i class="fas fa-tags"></i>
             <span>Categories</span>
