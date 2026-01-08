@@ -35,3 +35,8 @@ I want to here will show the vendor photo , vendor name, vendor address, vendor 
 
 
 On the retailer,wholesaler and exporter page i want to when add product on dashboard bY vendor then here will be dropdown admin categorY and vendors create custom categorY and must be link to the main categorY table in database.and on the frontend will be show onlY admin categorY and then when user clicked a specific categorY then here will be show all the products under that categorY from both admin categorY and vendor custom categorY.
+
+
+I want to this form must be contains parent categorY option field for vendors...add this field on the create and edit categorY form on vendor dashboard.
+
+I want to on frontend such that shop,retail,wholesale,export will be show onlY parent categorY and when user clicked on a specific parent categorY then here will be show all the products under that parent categorY including sub-categorY products.

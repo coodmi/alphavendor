@@ -53,6 +53,7 @@
                 <tr>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Image</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Category Name</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Parent Category</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Products</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Sort Order</th>
@@ -79,6 +80,15 @@
                         <div class="font-semibold text-gray-900">{{ $category->name }}</div>
                         <div class="text-sm text-gray-500">{{ $category->description ? Str::limit($category->description, 50) : 'No description' }}</div>
                     </td>
+                    <td class="px-6 py-4">
+                        @if($category->parent)
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                <i class="fas fa-sitemap mr-1"></i> {{ $category->parent->name }}
+                            </span>
+                        @else
+                            <span class="text-sm text-gray-400">-</span>
+                        @endif
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                             {{ $category->products_count ?? 0 }} Products
@@ -101,7 +111,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-16 text-center">
+                    <td colspan="7" class="px-6 py-16 text-center">
                         <i class="fas fa-tags text-gray-300 text-6xl mb-4"></i>
                         <p class="text-gray-500 text-lg">No categories found. Click "Add Category" to create one.</p>
                     </td>
@@ -124,6 +134,17 @@
         <form id="categoryForm" class="p-6 space-y-5">
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Parent Category (Admin) *</label>
+                <select name="parent_category_id" id="parentCategoryId" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                    <option value="">Select Admin Category</option>
+                    @foreach($adminCategories as $adminCategory)
+                        <option value="{{ $adminCategory->id }}">{{ $adminCategory->name }}</option>
+                    @endforeach
+                </select>
+                <p class="text-xs text-gray-500 mt-1">Link your custom category to an admin category</p>
+            </div>
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Category Name *</label>
@@ -254,6 +275,7 @@ function editCategory(category) {
     document.getElementById('modalTitle').textContent = 'Edit Category';
     document.getElementById('formMethod').value = 'PUT';
 
+    document.getElementById('parentCategoryId').value = category.parent_category_id || '';
     document.getElementById('categoryName').value = category.name;
     document.getElementById('categoryDescription').value = category.description || '';
     document.getElementById('categorySortOrder').value = category.sort_order;

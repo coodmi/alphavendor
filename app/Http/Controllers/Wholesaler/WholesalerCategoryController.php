@@ -13,16 +13,25 @@ class WholesalerCategoryController extends Controller
     public function index()
     {
         $categories = Category::where('vendor_id', Auth::id())
+            ->with('parent')
             ->withCount('products')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
-        return view('wholesaler.categories.index', compact('categories'));
+        
+        // Get admin categories for dropdown
+        $adminCategories = Category::whereNull('vendor_id')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+        
+        return view('wholesaler.categories.index', compact('categories', 'adminCategories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'parent_category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255|unique:categories,name',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -42,6 +51,15 @@ class WholesalerCategoryController extends Controller
         $validated['is_active'] = $request->has('is_active');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
         $validated['vendor_id'] = Auth::id();
+
+        // Verify parent category is an admin category
+        $parentCategory = Category::find($validated['parent_category_id']);
+        if ($parentCategory && !$parentCategory->isAdminCategory()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Parent category must be an admin category!'
+            ], 422);
+        }
 
         $category = Category::create($validated);
 
@@ -63,6 +81,7 @@ class WholesalerCategoryController extends Controller
         }
 
         $validated = $request->validate([
+            'parent_category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
