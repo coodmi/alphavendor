@@ -22,6 +22,10 @@
             <i class="fas fa-file-alt"></i>
             <span>Applications</span>
         </a>
+        <a href="{{ route('admin.orders') }}" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+        </a>
         <a href="{{ route('admin.products') }}" class="menu-item">
             <i class="fas fa-box"></i>
             <span>Products</span>

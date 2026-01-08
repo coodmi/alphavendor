@@ -74,6 +74,14 @@ class CartController extends Controller
             Session::put('cart', $cart);
         }
 
+        // Return JSON for AJAX requests
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Cart updated!'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Cart updated!');
     }
 
@@ -84,6 +92,14 @@ class CartController extends Controller
         if (isset($cart[$productId])) {
             unset($cart[$productId]);
             Session::put('cart', $cart);
+        }
+
+        // Return JSON for AJAX requests
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product removed from cart!'
+            ]);
         }
 
         return redirect()->back()->with('success', 'Product removed from cart!');

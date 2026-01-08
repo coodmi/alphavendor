@@ -103,6 +103,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
         Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
 
+        // Order management
+        Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
+        Route::get('/orders/{order}', [AdminController::class, 'showOrder'])->name('orders.show');
+        Route::patch('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.update-status');
+
         // Retail Page CMS
         Route::get('/retail-page', [AdminRetailPageController::class, 'index'])->name('retail-page');
         Route::post('/retail-page', [AdminRetailPageController::class, 'update'])->name('retail-page.update');

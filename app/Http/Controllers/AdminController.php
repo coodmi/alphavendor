@@ -9,6 +9,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\RetailPageContent;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -124,5 +126,40 @@ class AdminController extends Controller
     {
         $user->delete();
         return redirect()->route('admin.users')->with('success', 'User deleted successfully!');
+    }
+
+    /**
+     * Show all orders
+     */
+    public function orders()
+    {
+        $orders = Order::with(['user', 'vendor', 'items.product'])
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.orders.index', compact('orders'));
+    }
+
+    /**
+     * Show order details
+     */
+    public function showOrder(Order $order)
+    {
+        $order->load(['user', 'vendor', 'items.product']);
+        return view('admin.orders.show', compact('order'));
+    }
+
+    /**
+     * Update order status
+     */
+    public function updateOrderStatus(Request $request, Order $order)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+        ]);
+
+        $order->update($validated);
+
+        return redirect()->back()->with('success', 'Order status updated successfully!');
     }
 }

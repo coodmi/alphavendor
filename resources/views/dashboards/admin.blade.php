@@ -26,6 +26,10 @@
             <i class="fas fa-users"></i>
             <span>Users</span>
         </a>
+        <a href="{{ route('admin.orders') }}" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+        </a>
     </div>
 
     <div class="menu-section">

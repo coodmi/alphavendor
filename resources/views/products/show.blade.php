@@ -3,443 +3,58 @@
 @section('title', $product->name)
 
 @section('content')
-<style>
-    .product-detail-section {
-        padding: 40px 0;
-        background: #f8f9fa;
-    }
-
-    .breadcrumb-nav {
-        padding: 15px 0;
-        margin-bottom: 30px;
-        background: white;
-    }
-
-    .breadcrumb-nav ul {
-        display: flex;
-        list-style: none;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .breadcrumb-nav li {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #7f8c8d;
-    }
-
-    .breadcrumb-nav li:after {
-        content: "/";
-        margin-left: 10px;
-    }
-
-    .breadcrumb-nav li:last-child:after {
-        display: none;
-    }
-
-    .breadcrumb-nav a {
-        color: var(--primary-color);
-        text-decoration: none;
-    }
-
-    .breadcrumb-nav a:hover {
-        text-decoration: underline;
-    }
-
-    .product-detail-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        margin-bottom: 40px;
-    }
-
-    .product-gallery {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .main-image {
-        width: 100%;
-        aspect-ratio: 1;
-        border-radius: 15px;
-        overflow: hidden;
-        border: 2px solid #e0e0e0;
-    }
-
-    .main-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s;
-    }
-
-    .main-image:hover img {
-        transform: scale(1.05);
-    }
-
-    .product-details {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .product-badge {
-        display: inline-block;
-        padding: 6px 15px;
-        background: var(--primary-color);
-        color: white;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        width: fit-content;
-    }
-
-    .product-badge.new {
-        background: #27ae60;
-    }
-
-    .product-badge.sale {
-        background: #e74c3c;
-    }
-
-    .product-badge.hot {
-        background: #e67e22;
-    }
-
-    .product-title {
-        font-size: 32px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin: 0;
-        line-height: 1.3;
-    }
-
-    .product-meta {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 15px 0;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .product-rating {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .product-rating .stars {
-        color: #f39c12;
-        font-size: 16px;
-    }
-
-    .product-rating .rating-text {
-        color: #7f8c8d;
-        font-size: 14px;
-    }
-
-    .product-vendor {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #7f8c8d;
-        font-size: 14px;
-    }
-
-    .product-vendor i {
-        color: var(--primary-color);
-    }
-
-    .product-price-section {
-        padding: 20px 0;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .price-row {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .current-price {
-        font-size: 36px;
-        font-weight: 700;
-        color: var(--primary-color);
-    }
-
-    .old-price {
-        font-size: 24px;
-        color: #95a5a6;
-        text-decoration: line-through;
-    }
-
-    .discount-badge {
-        padding: 6px 12px;
-        background: #e74c3c;
-        color: white;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .stock-status {
-        margin-top: 10px;
-        font-size: 14px;
-    }
-
-    .in-stock {
-        color: #27ae60;
-        font-weight: 600;
-    }
-
-    .out-of-stock {
-        color: #e74c3c;
-        font-weight: 600;
-    }
-
-    .product-description {
-        padding: 20px 0;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .product-description h3 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 15px;
-    }
-
-    .product-description p {
-        color: #7f8c8d;
-        line-height: 1.8;
-    }
-
-    .product-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        padding: 20px 0;
-    }
-
-    .quantity-selector {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .quantity-selector label {
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .quantity-controls {
-        display: flex;
-        align-items: center;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .quantity-controls button {
-        width: 40px;
-        height: 40px;
-        background: #f8f9fa;
-        border: none;
-        cursor: pointer;
-        font-size: 18px;
-        transition: all 0.3s;
-    }
-
-    .quantity-controls button:hover {
-        background: var(--primary-color);
-        color: white;
-    }
-
-    .quantity-controls input {
-        width: 60px;
-        height: 40px;
-        text-align: center;
-        border: none;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 15px;
-    }
-
-    .btn-add-to-cart {
-        flex: 1;
-        padding: 15px 30px;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .btn-add-to-cart:hover {
-        background: var(--secondary-color);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
-    }
-
-    .btn-wishlist {
-        width: 50px;
-        height: 50px;
-        background: white;
-        border: 2px solid var(--primary-color);
-        color: var(--primary-color);
-        border-radius: 8px;
-        font-size: 20px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .btn-wishlist:hover {
-        background: var(--primary-color);
-        color: white;
-    }
-
-    .product-info-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        padding: 20px 0;
-    }
-
-    .info-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px;
-        background: #f8f9fa;
-        border-radius: 8px;
-    }
-
-    .info-item i {
-        color: var(--primary-color);
-        font-size: 20px;
-    }
-
-    .info-item .info-text {
-        flex: 1;
-    }
-
-    .info-item .info-label {
-        font-size: 12px;
-        color: #7f8c8d;
-    }
-
-    .info-item .info-value {
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .related-products-section {
-        padding: 40px 0;
-    }
-
-    .section-title {
-        font-size: 28px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 30px;
-        text-align: center;
-    }
-
-    .related-products-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 25px;
-    }
-
-    @media (max-width: 1200px) {
-        .related-products-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .product-detail-container {
-            grid-template-columns: 1fr;
-        }
-
-        .related-products-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .product-title {
-            font-size: 24px;
-        }
-
-        .current-price {
-            font-size: 28px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .related-products-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-        }
-    }
-</style>
-
-<section class="product-detail-section">
-    <div class="container">
+<section class="py-10 bg-gray-50">
+    <div class="container mx-auto px-4">
         <!-- Breadcrumb -->
-        <nav class="breadcrumb-nav">
-            <ul>
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('shop') }}">Shop</a></li>
-                <li><a href="{{ route('shop', ['categories' => [$product->category_id]]) }}">{{ $product->category->name ?? 'Products' }}</a></li>
-                <li>{{ $product->name }}</li>
+        <nav class="bg-white py-4 mb-8 rounded-lg">
+            <ul class="flex items-center gap-2 text-sm">
+                <li class="flex items-center gap-2 text-gray-500">
+                    <a href="{{ route('home') }}" class="text-orange-500 hover:underline">Home</a>
+                    <span>/</span>
+                </li>
+                <li class="flex items-center gap-2 text-gray-500">
+                    <a href="{{ route('shop') }}" class="text-orange-500 hover:underline">Shop</a>
+                    <span>/</span>
+                </li>
+                <li class="flex items-center gap-2 text-gray-500">
+                    <a href="{{ route('shop', ['categories' => [$product->category_id]]) }}" class="text-orange-500 hover:underline">{{ $product->category->name ?? 'Products' }}</a>
+                    <span>/</span>
+                </li>
+                <li class="text-gray-700">{{ $product->name }}</li>
             </ul>
         </nav>
 
         <!-- Product Detail -->
-        <div class="product-detail-container">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white p-10 rounded-2xl shadow-md mb-10">
             <!-- Product Gallery -->
-            <div class="product-gallery">
-                <div class="main-image">
+            <div class="flex flex-col gap-5">
+                <div class="w-full aspect-square rounded-2xl overflow-hidden border-2 border-gray-200 group">
                     @if($product->image)
-                        <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" id="mainImage">
+                        <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" id="mainImage" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                     @else
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" alt="{{ $product->name }}" id="mainImage">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" alt="{{ $product->name }}" id="mainImage" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                     @endif
                 </div>
             </div>
 
             <!-- Product Details -->
-            <div class="product-details">
+            <div class="flex flex-col gap-5">
                 @if($product->badge)
-                    <span class="product-badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
+                    <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase w-fit
+                        {{ strtolower($product->badge) === 'new' ? 'bg-green-500' : '' }}
+                        {{ strtolower($product->badge) === 'sale' ? 'bg-red-500' : '' }}
+                        {{ strtolower($product->badge) === 'hot' ? 'bg-orange-500' : '' }}
+                        {{ !in_array(strtolower($product->badge), ['new', 'sale', 'hot']) ? 'bg-orange-500' : '' }}
+                        text-white">
+                        {{ $product->badge }}
+                    </span>
                 @endif
 
-                <h1 class="product-title">{{ $product->name }}</h1>
+                <h1 class="text-3xl lg:text-4xl font-bold text-gray-800 leading-tight">{{ $product->name }}</h1>
 
-                <div class="product-meta">
-                    <div class="product-rating">
-                        <div class="stars">
+                <div class="flex items-center gap-5 py-4 border-b border-gray-200">
+                    <div class="flex items-center gap-2">
+                        <div class="flex text-yellow-400 text-base">
                             @for($i = 0; $i < 5; $i++)
                                 @if($i < floor($product->rating))
                                     <i class="fas fa-star"></i>
@@ -450,106 +65,113 @@
                                 @endif
                             @endfor
                         </div>
-                        <span class="rating-text">{{ number_format($product->rating, 1) }} ({{ $product->reviews_count }} reviews)</span>
+                        <span class="text-gray-500 text-sm">{{ number_format($product->rating, 1) }} ({{ $product->reviews_count }} reviews)</span>
                     </div>
-                    <div class="product-vendor">
-                        <i class="fas fa-store"></i>
-                        <span>Sold by: <strong>{{ $product->vendor->name ?? 'AlphaVendor' }}</strong></span>
+                    <div class="flex items-center gap-2 text-gray-500 text-sm">
+                        <i class="fas fa-store text-orange-500"></i>
+                        <span>Sold by: <strong class="text-gray-700">{{ $product->vendor->name ?? 'AlphaVendor' }}</strong></span>
                     </div>
                 </div>
 
-                <div class="product-price-section">
-                    <div class="price-row">
-                        <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                <div class="py-5 border-b border-gray-200">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">Unit Price</div>
+                            <span class="text-2xl font-bold text-gray-700" id="unitPrice">${{ number_format($product->price, 2) }}</span>
+                        </div>
                         @if($product->old_price && $product->old_price > $product->price)
-                            <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
-                            <span class="discount-badge">-{{ $product->discount_percentage }}% OFF</span>
+                            <span class="text-xl text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                            <span class="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-semibold">-{{ $product->discount_percentage }}% OFF</span>
                         @endif
                     </div>
-                    <div class="stock-status">
+                    <div class="mb-3">
+                        <div class="text-sm text-gray-500 mb-1">Total Price</div>
+                        <span class="text-4xl font-bold text-orange-500" id="totalPrice">${{ number_format($product->price, 2) }}</span>
+                    </div>
+                    <div class="mt-2.5 text-sm">
                         @if($product->stock > 0)
-                            <span class="in-stock"><i class="fas fa-check-circle"></i> In Stock ({{ $product->stock }} available)</span>
+                            <span class="text-green-600 font-semibold"><i class="fas fa-check-circle"></i> In Stock ({{ $product->stock }} available)</span>
                         @else
-                            <span class="out-of-stock"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                            <span class="text-red-600 font-semibold"><i class="fas fa-times-circle"></i> Out of Stock</span>
                         @endif
                     </div>
                 </div>
 
                 @if($product->description)
-                <div class="product-description">
-                    <h3>Product Description</h3>
-                    <p>{{ $product->description }}</p>
+                <div class="py-5 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Product Description</h3>
+                    <p class="text-gray-600 leading-relaxed">{{ $product->description }}</p>
                 </div>
                 @endif
 
                 @if($product->stock > 0)
-                <div class="product-actions">
+                <div class="flex flex-col gap-4 py-5">
                     <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
                         @csrf
-                        <div class="quantity-selector">
-                            <label>Quantity:</label>
-                            <div class="quantity-controls">
-                                <button type="button" onclick="decreaseQuantity()">
+                        <div class="flex items-center gap-2.5 mb-4">
+                            <label class="font-semibold text-gray-800">Quantity:</label>
+                            <div class="flex items-center border-2 border-gray-200 rounded-lg overflow-hidden">
+                                <button type="button" onclick="decreaseQuantity()" class="w-10 h-10 bg-gray-50 hover:bg-orange-500 hover:text-white transition-all duration-300 text-lg">
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" readonly>
-                                <button type="button" onclick="increaseQuantity({{ $product->stock }})">
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" readonly class="w-16 h-10 text-center border-none font-semibold text-base">
+                                <button type="button" onclick="increaseQuantity({{ $product->stock }})" class="w-10 h-10 bg-gray-50 hover:bg-orange-500 hover:text-white transition-all duration-300 text-lg">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="action-buttons">
-                            <button type="submit" class="btn-add-to-cart">
+                        <div class="flex gap-4">
+                            <button type="submit" class="flex-1 px-8 py-4 bg-orange-500 text-white rounded-lg text-base font-semibold hover:bg-orange-600 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
                                 <i class="fas fa-shopping-cart"></i>
                                 Add to Cart
                             </button>
-                            <button type="button" class="btn-wishlist" title="Add to Wishlist">
+                            <button type="button" class="w-12 h-12 bg-white border-2 border-orange-500 text-orange-500 rounded-lg text-xl hover:bg-orange-500 hover:text-white transition-all duration-300" title="Add to Wishlist">
                                 <i class="far fa-heart"></i>
                             </button>
                         </div>
                     </form>
                 </div>
                 @else
-                <div class="product-actions">
-                    <button class="btn-add-to-cart" style="background: #95a5a6; cursor: not-allowed;" disabled>
+                <div class="py-5">
+                    <button class="w-full px-8 py-4 bg-gray-400 text-white rounded-lg text-base font-semibold cursor-not-allowed flex items-center justify-center gap-2.5" disabled>
                         <i class="fas fa-ban"></i>
                         Out of Stock
                     </button>
                 </div>
                 @endif
 
-                <div class="product-info-grid">
-                    <div class="info-item">
-                        <i class="fas fa-tag"></i>
-                        <div class="info-text">
-                            <div class="info-label">Category</div>
-                            <div class="info-value">{{ $product->category->name ?? 'N/A' }}</div>
+                <div class="grid grid-cols-2 gap-4 py-5">
+                    <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-tag text-orange-500 text-xl"></i>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500">Category</div>
+                            <div class="font-semibold text-gray-800">{{ $product->category->name ?? 'N/A' }}</div>
                         </div>
                     </div>
                     @if($product->brand)
-                    <div class="info-item">
-                        <i class="fas fa-copyright"></i>
-                        <div class="info-text">
-                            <div class="info-label">Brand</div>
-                            <div class="info-value">{{ $product->brand->name }}</div>
+                    <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-copyright text-orange-500 text-xl"></i>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500">Brand</div>
+                            <div class="font-semibold text-gray-800">{{ $product->brand->name }}</div>
                         </div>
                     </div>
                     @endif
                     @if($product->sku)
-                    <div class="info-item">
-                        <i class="fas fa-barcode"></i>
-                        <div class="info-text">
-                            <div class="info-label">SKU</div>
-                            <div class="info-value">{{ $product->sku }}</div>
+                    <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-barcode text-orange-500 text-xl"></i>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500">SKU</div>
+                            <div class="font-semibold text-gray-800">{{ $product->sku }}</div>
                         </div>
                     </div>
                     @endif
-                    <div class="info-item">
-                        <i class="fas fa-truck"></i>
-                        <div class="info-text">
-                            <div class="info-label">Shipping</div>
-                            <div class="info-value">Free Delivery</div>
+                    <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-truck text-orange-500 text-xl"></i>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500">Shipping</div>
+                            <div class="font-semibold text-gray-800">Free Delivery</div>
                         </div>
                     </div>
                 </div>
@@ -558,29 +180,35 @@
 
         <!-- Related Products -->
         @if($relatedProducts->count() > 0)
-        <div class="related-products-section">
-            <h2 class="section-title">You May Also Like</h2>
-            <div class="related-products-grid">
+        <div class="py-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">You May Also Like</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($relatedProducts as $relatedProduct)
-                <div class="product-card">
-                    <a href="{{ route('product.show', $relatedProduct->id) }}" style="text-decoration: none; color: inherit;">
-                        <div class="product-image" style="position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 1;">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
+                    <a href="{{ route('product.show', $relatedProduct->id) }}" class="block">
+                        <div class="relative aspect-square overflow-hidden">
                             @if($relatedProduct->image)
-                                <img src="{{ str_starts_with($relatedProduct->image, 'http') ? $relatedProduct->image : asset('storage/' . $relatedProduct->image) }}" alt="{{ $relatedProduct->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="{{ str_starts_with($relatedProduct->image, 'http') ? $relatedProduct->image : asset('storage/' . $relatedProduct->image) }}" alt="{{ $relatedProduct->name }}" class="w-full h-full object-cover">
                             @else
-                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop" alt="{{ $relatedProduct->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop" alt="{{ $relatedProduct->name }}" class="w-full h-full object-cover">
                             @endif
                             @if($relatedProduct->badge)
-                            <span class="badge {{ strtolower($relatedProduct->badge) }}" style="position: absolute; top: 10px; left: 10px; padding: 5px 12px; background: var(--primary-color); color: white; border-radius: 15px; font-size: 11px; font-weight: 600;">{{ $relatedProduct->badge }}</span>
+                            <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-white text-xs font-semibold
+                                {{ strtolower($relatedProduct->badge) === 'new' ? 'bg-green-500' : '' }}
+                                {{ strtolower($relatedProduct->badge) === 'sale' ? 'bg-red-500' : '' }}
+                                {{ strtolower($relatedProduct->badge) === 'hot' ? 'bg-orange-500' : '' }}
+                                {{ !in_array(strtolower($relatedProduct->badge), ['new', 'sale', 'hot']) ? 'bg-orange-500' : '' }}">
+                                {{ $relatedProduct->badge }}
+                            </span>
                             @endif
                         </div>
-                        <div class="product-info" style="padding: 15px 0;">
-                            <div class="product-category" style="color: #7f8c8d; font-size: 12px; margin-bottom: 5px;">{{ $relatedProduct->category->name ?? 'Uncategorized' }}</div>
-                            <h4 style="margin: 0 0 10px 0; font-size: 16px; color: #2c3e50; font-weight: 600;">{{ $relatedProduct->name }}</h4>
-                            <div class="price" style="display: flex; align-items: center; gap: 10px;">
-                                <span class="current-price" style="font-size: 20px; font-weight: 700; color: var(--primary-color);">${{ number_format($relatedProduct->price, 2) }}</span>
+                        <div class="p-4">
+                            <div class="text-gray-500 text-xs mb-1">{{ $relatedProduct->category->name ?? 'Uncategorized' }}</div>
+                            <h4 class="text-base font-semibold text-gray-800 mb-2.5 line-clamp-2">{{ $relatedProduct->name }}</h4>
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-xl font-bold text-orange-500">${{ number_format($relatedProduct->price, 2) }}</span>
                                 @if($relatedProduct->old_price)
-                                    <span class="old-price" style="font-size: 14px; color: #95a5a6; text-decoration: line-through;">${{ number_format($relatedProduct->old_price, 2) }}</span>
+                                    <span class="text-sm text-gray-400 line-through">${{ number_format($relatedProduct->old_price, 2) }}</span>
                                 @endif
                             </div>
                         </div>
@@ -594,11 +222,20 @@
 </section>
 
 <script>
+    const unitPrice = {{ $product->price }};
+    
+    function updateTotalPrice() {
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const total = unitPrice * quantity;
+        document.getElementById('totalPrice').textContent = '$' + total.toFixed(2);
+    }
+
     function increaseQuantity(max) {
         const input = document.getElementById('quantity');
         const currentValue = parseInt(input.value);
         if (currentValue < max) {
             input.value = currentValue + 1;
+            updateTotalPrice();
         }
     }
 
@@ -607,8 +244,57 @@
         const currentValue = parseInt(input.value);
         if (currentValue > 1) {
             input.value = currentValue - 1;
+            updateTotalPrice();
         }
     }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-5 right-5 z-50 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out ${
+            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        } text-white font-semibold flex items-center gap-3`;
+        toast.style.animation = 'slideInRight 0.3s ease-out';
+        
+        toast.innerHTML = `
+            <i class="fas fa-check-circle text-xl"></i>
+            <span>${message}</span>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Fade out after 2.7 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease-in';
+            setTimeout(() => toast.remove(), 300);
+        }, 2700);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 
     // Add to cart with quantity
     document.getElementById('addToCartForm').addEventListener('submit', function(e) {
@@ -616,27 +302,52 @@
 
         const form = this;
         const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+
+        // Disable button and show loading
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
 
         fetch(form.action, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Response data:', data);
+            
             if (data.success) {
-                // Show success message
-                alert('Product added to cart successfully!');
-                // Update cart count if you have a cart counter in header
-                window.location.reload();
+                // Show success toast
+                showToast('Product added to cart successfully!');
+                
+                // Redirect to cart page after 3 seconds
+                setTimeout(() => {
+                    window.location.href = '{{ route("cart.index") }}';
+                }, 3000);
+            } else {
+                throw new Error(data.message || 'Failed to add product');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            // Still submit normally if AJAX fails
-            form.submit();
+            // Re-enable button
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            showToast('Failed to add product to cart. Please try again.', 'error');
         });
     });
 </script>
