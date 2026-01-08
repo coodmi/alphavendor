@@ -15,7 +15,7 @@
                 <span class="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-semibold mb-3 border border-white/30">B2B Solutions</span>
                 <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Wholesale Marketplace</h1>
                 <p class="text-lg text-white/90 mb-6 max-w-2xl">Connect with verified suppliers and manufacturers. Buy in bulk with competitive wholesale prices for your business.</p>
-                
+
                 <!-- Stats -->
                 <div class="flex flex-wrap gap-4 mb-6">
                     <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20">
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Buttons -->
                 <div class="flex flex-wrap gap-4">
                     <button class="bg-white text-orange-500 px-6 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors flex items-center gap-2">
@@ -51,7 +51,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Feature Cards -->
             <div class="flex-1 relative">
                 <div class="grid grid-cols-1 gap-4 max-w-md mx-auto">
