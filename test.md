@@ -17,3 +17,6 @@ I want to when place order this data must be saved in database with user id, pro
 
 
 when clicked retail page card then it should redirect to product details page where user can see product details  like description, price, add to cart button ,increase and decrease quantity buttons and other relevant information.
+
+
+When clicked wholesale page card then product detais page must be start the initial quantity based on wholesale minimum order quantity.
