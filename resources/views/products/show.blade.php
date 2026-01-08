@@ -114,7 +114,7 @@
                                 <button type="button" onclick="decreaseQuantity()" class="w-10 h-10 bg-gray-50 hover:bg-orange-500 hover:text-white transition-all duration-300 text-lg">
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" readonly class="w-16 h-10 text-center border-none font-semibold text-base">
+                                <input type="number" name="quantity" id="quantity" value="{{ request('quantity', $product->minimum_order ?? 1) }}" min="{{ $product->minimum_order ?? 1 }}" max="{{ $product->stock }}" readonly class="w-16 h-10 text-center border-none font-semibold text-base">
                                 <button type="button" onclick="increaseQuantity({{ $product->stock }})" class="w-10 h-10 bg-gray-50 hover:bg-orange-500 hover:text-white transition-all duration-300 text-lg">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -242,7 +242,8 @@
     function decreaseQuantity() {
         const input = document.getElementById('quantity');
         const currentValue = parseInt(input.value);
-        if (currentValue > 1) {
+        const minValue = parseInt(input.min) || 1;
+        if (currentValue > minValue) {
             input.value = currentValue - 1;
             updateTotalPrice();
         }

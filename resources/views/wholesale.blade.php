@@ -260,7 +260,7 @@
                 <!-- Products Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @forelse($products as $product)
-                    <a href="{{ route('product.show', $product->id) }}" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group block">
+                    <a href="{{ route('product.show', $product->id) }}?quantity={{ $product->minimum_order ?? 1 }}" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group block">
                         <div class="relative overflow-hidden aspect-square">
                             @if($product->image)
                                 @if(filter_var($product->image, FILTER_VALIDATE_URL))
