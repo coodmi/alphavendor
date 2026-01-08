@@ -20,10 +20,14 @@ class ExportController extends Controller
             ->whereIn('vendor_id', $exporterIds)
             ->where('status', 'active');
 
-        // Apply category filter
+        // Apply category filter - include products from child categories
         if ($request->filled('categories')) {
             $categoryIds = explode(',', $request->categories);
-            $query->whereIn('category_id', $categoryIds);
+            // Get all child category IDs for selected parent categories
+            $childCategoryIds = Category::whereIn('parent_category_id', $categoryIds)->pluck('id')->toArray();
+            // Merge parent and child category IDs
+            $allCategoryIds = array_merge($categoryIds, $childCategoryIds);
+            $query->whereIn('category_id', $allCategoryIds);
         }
 
         // Apply MOQ filter
@@ -101,15 +105,31 @@ class ExportController extends Controller
         // Paginate products
         $products = $query->paginate(16);
 
-        // Get categories with product counts for exporters
-        $categories = Category::whereIn('vendor_id', $exporterIds)
-            ->where('is_active', true)
-            ->withCount(['products' => function ($q) use ($exporterIds) {
-                $q->whereIn('vendor_id', $exporterIds)->where('status', 'active');
+        // Get only parent categories (admin categories) with product counts including child products from exporters
+        $categories = Category::where('is_active', true)
+            ->whereNull('vendor_id') // Only admin categories
+            ->with(['children' => function($q) use ($exporterIds) {
+                $q->whereIn('vendor_id', $exporterIds);
             }])
-            ->orderBy('name')
             ->get()
-            ->filter(fn($cat) => $cat->products_count > 0)
+            ->map(function($category) use ($exporterIds) {
+                // Count products from parent and all children (exporter products only)
+                $productCount = $category->products()
+                    ->whereIn('vendor_id', $exporterIds)
+                    ->where('status', 'active')
+                    ->count();
+                foreach($category->children as $child) {
+                    $productCount += $child->products()
+                        ->whereIn('vendor_id', $exporterIds)
+                        ->where('status', 'active')
+                        ->count();
+                }
+                $category->products_count = $productCount;
+                return $category;
+            })
+            ->filter(function($category) {
+                return $category->products_count > 0;
+            })
             ->values();
 
         // Get unique supplier locations

@@ -15,9 +15,14 @@ class ShopController extends Controller
         $query = Product::with(['category', 'vendor', 'brand'])
             ->where('status', 'active');
 
-        // Category filter
+        // Category filter - include products from child categories
         if ($request->has('categories') && !empty($request->categories)) {
-            $query->whereIn('category_id', $request->categories);
+            $categoryIds = $request->categories;
+            // Get all child category IDs for selected parent categories
+            $childCategoryIds = Category::whereIn('parent_category_id', $categoryIds)->pluck('id')->toArray();
+            // Merge parent and child category IDs
+            $allCategoryIds = array_merge($categoryIds, $childCategoryIds);
+            $query->whereIn('category_id', $allCategoryIds);
         }
 
         // Price range filter
@@ -71,12 +76,23 @@ class ShopController extends Controller
         $perPage = $request->get('per_page', 16);
         $products = $query->paginate($perPage)->withQueryString();
 
-        // Get categories with product counts
+        // Get only parent categories (admin categories) with product counts including child products
         $categories = Category::where('is_active', true)
-            ->withCount(['products' => function($q) {
-                $q->where('status', 'active');
-            }])
-            ->get();
+            ->whereNull('vendor_id') // Only admin categories
+            ->with('children')
+            ->get()
+            ->map(function($category) {
+                // Count products from parent and all children
+                $productCount = $category->products()->where('status', 'active')->count();
+                foreach($category->children as $child) {
+                    $productCount += $child->products()->where('status', 'active')->count();
+                }
+                $category->products_count = $productCount;
+                return $category;
+            })
+            ->filter(function($category) {
+                return $category->products_count > 0;
+            });
 
         // Get brands with product counts
         $brands = Brand::where('is_active', true)

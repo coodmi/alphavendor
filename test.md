@@ -40,3 +40,5 @@ On the retailer,wholesaler and exporter page i want to when add product on dashb
 I want to this form must be contains parent categorY option field for vendors...add this field on the create and edit categorY form on vendor dashboard.
 
 I want to on frontend such that shop,retail,wholesale,export will be show onlY parent categorY and when user clicked on a specific parent categorY then here will be show all the products under that parent categorY including sub-categorY products.
+
+On the export page on the frontend filter not working....fix it...

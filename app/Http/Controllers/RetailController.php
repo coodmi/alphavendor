@@ -23,9 +23,14 @@ class RetailController extends Controller
                 $q->where('role', 'retailer');
             });
 
-        // Category filter
+        // Category filter - include products from child categories
         if ($request->has('categories') && !empty($request->categories)) {
-            $query->whereIn('category_id', $request->categories);
+            $categoryIds = $request->categories;
+            // Get all child category IDs for selected parent categories
+            $childCategoryIds = Category::whereIn('parent_category_id', $categoryIds)->pluck('id')->toArray();
+            // Merge parent and child category IDs
+            $allCategoryIds = array_merge($categoryIds, $childCategoryIds);
+            $query->whereIn('category_id', $allCategoryIds);
         }
 
         // Price range filter
@@ -79,21 +84,37 @@ class RetailController extends Controller
         $perPage = $request->get('per_page', 16);
         $products = $query->paginate($perPage)->withQueryString();
 
-        // Get categories with product counts (only for retailer products)
+        // Get only parent categories (admin categories) with product counts including child products from retailers
         $categories = Category::where('is_active', true)
-            ->whereHas('products', function($q) {
-                $q->where('status', 'active')
-                  ->whereHas('vendor', function($query) {
-                      $query->where('role', 'retailer');
-                  });
-            })
-            ->withCount(['products' => function($q) {
-                $q->where('status', 'active')
-                  ->whereHas('vendor', function($query) {
-                      $query->where('role', 'retailer');
-                  });
+            ->whereNull('vendor_id') // Only admin categories
+            ->with(['children' => function($q) {
+                $q->whereHas('vendor', function($query) {
+                    $query->where('role', 'retailer');
+                });
             }])
-            ->get();
+            ->get()
+            ->map(function($category) {
+                // Count products from parent and all children (retailer products only)
+                $productCount = $category->products()
+                    ->where('status', 'active')
+                    ->whereHas('vendor', function($query) {
+                        $query->where('role', 'retailer');
+                    })
+                    ->count();
+                foreach($category->children as $child) {
+                    $productCount += $child->products()
+                        ->where('status', 'active')
+                        ->whereHas('vendor', function($query) {
+                            $query->where('role', 'retailer');
+                        })
+                        ->count();
+                }
+                $category->products_count = $productCount;
+                return $category;
+            })
+            ->filter(function($category) {
+                return $category->products_count > 0;
+            });
 
         // Get brands with product counts (only for retailer products)
         $brands = Brand::whereHas('products', function($q) {
