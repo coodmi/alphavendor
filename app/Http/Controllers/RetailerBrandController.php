@@ -16,13 +16,13 @@ class RetailerBrandController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
-        
+
         // Get all admin brands for the dropdown
         $adminBrands = Brand::whereNull('vendor_id')
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
-        
+
         return view('retailer.brands.index', compact('brands', 'adminBrands'));
     }
 
