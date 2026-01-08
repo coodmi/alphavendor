@@ -296,6 +296,22 @@
     `;
     document.head.appendChild(style);
 
+    // Update cart badge
+    function updateCartBadge(count) {
+        const badge = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement.querySelector('span');
+        if (count > 0) {
+            if (badge) {
+                badge.textContent = count;
+            } else {
+                const cartLink = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement;
+                const newBadge = document.createElement('span');
+                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
+                newBadge.textContent = count;
+                cartLink.appendChild(newBadge);
+            }
+        }
+    }
+
     // Add to cart with quantity
     document.getElementById('addToCartForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -331,6 +347,9 @@
             console.log('Response data:', data);
 
             if (data.success) {
+                // Update cart badge
+                updateCartBadge(data.cartCount);
+
                 // Show success toast
                 showToast('Product added to cart successfully!');
 

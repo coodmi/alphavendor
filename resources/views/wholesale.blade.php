@@ -252,17 +252,17 @@
                                 <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                             @endif
                             <div class="product-actions">
-                                <button class="action-btn" title="Add to Wishlist">
+                                <button class="action-btn" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-heart"></i>
                                 </button>
-                                <button class="action-btn" title="Quick View">
+                                <button class="action-btn" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>
-                                <button class="action-btn" title="Compare">
+                                <button class="action-btn" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
-                            <button class="quick-add-btn">
+                            <button class="quick-add-btn" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this);">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
                             </button>
@@ -397,5 +397,116 @@ document.addEventListener('DOMContentLoaded', function() {
         rangeMax.value = max;
     });
 });
-</script>
-@endpush
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 10000;
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    const icon = type === 'success' ? '✓' : '✕';
+    toast.innerHTML = `<span style="font-size: 20px;">${icon}</span>${message}`;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Add CSS animations
+if (!document.getElementById('toast-animations')) {
+    const style = document.createElement('style');
+    style.id = 'toast-animations';
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Update cart badge
+function updateCartBadge(count) {
+    const badge = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement.querySelector('span');
+    if (count > 0) {
+        if (badge) {
+            badge.textContent = count;
+        } else {
+            const cartLink = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement;
+            const newBadge = document.createElement('span');
+            newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
+            newBadge.textContent = count;
+            cartLink.appendChild(newBadge);
+        }
+    }
+}
+
+// Quick Add to Cart function
+function quickAddToCart(productId, button) {
+    const originalContent = button.innerHTML;
+    
+    // Disable button and show loading
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+    
+    fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success state
+            button.innerHTML = '<i class="fas fa-check"></i> Added!';
+            button.style.background = '#27ae60';
+            
+            // Show toast notification
+            showToast('Product added to cart successfully!', 'success');
+            
+            // Update cart badge
+            updateCartBadge(data.cartCount);
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                button.disabled = false;
+                button.innerHTML = originalContent;
+                button.style.background = '';
+            }, 2000);
+        } else {
+            throw new Error(data.message || 'Failed to add product');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = originalContent;
+        showToast('Failed to add product to cart', 'error');
+    });
+}

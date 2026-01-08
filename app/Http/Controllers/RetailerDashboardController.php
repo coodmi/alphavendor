@@ -76,7 +76,7 @@ class RetailerDashboardController extends Controller
     public function orders()
     {
         $vendorId = Auth::id();
-        
+
         $orders = Order::where('vendor_id', $vendorId)
             ->with(['user', 'items.product'])
             ->latest()
@@ -91,7 +91,7 @@ class RetailerDashboardController extends Controller
     public function showOrder(Order $order)
     {
         $vendorId = Auth::id();
-        
+
         // Make sure retailer can only view their own orders
         if ($order->vendor_id !== $vendorId) {
             abort(403, 'Unauthorized action.');
@@ -108,7 +108,7 @@ class RetailerDashboardController extends Controller
     public function updateOrderStatus(Request $request, Order $order)
     {
         $vendorId = Auth::id();
-        
+
         // Make sure retailer can only update their own orders
         if ($order->vendor_id !== $vendorId) {
             abort(403, 'Unauthorized action.');
