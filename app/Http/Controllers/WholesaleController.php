@@ -55,9 +55,14 @@ class WholesaleController extends Controller
             $query->whereIn('category_id', $allCategoryIds);
         }
 
-        // Filter by brand if provided
+        // Filter by brand if provided - include products from child brands
         if ($request->has('brand') && $request->brand) {
-            $query->where('brand_id', $request->brand);
+            $brandId = $request->brand;
+            // Get all child brand IDs for selected parent brand
+            $childBrandIds = Brand::where('parent_brand_id', $brandId)->pluck('id')->toArray();
+            // Include parent and child brand IDs
+            $allBrandIds = array_merge([$brandId], $childBrandIds);
+            $query->whereIn('brand_id', $allBrandIds);
         }
 
         // Filter by price range if provided
@@ -117,15 +122,35 @@ class WholesaleController extends Controller
                 return $category->products_count > 0;
             });
 
-        // Get wholesale brands
-        $brands = Brand::whereHas('vendor', function($q) {
-                $q->where('role', 'wholesaler');
-            })
-            ->where('is_active', true)
-            ->has('products')
-            ->withCount('products')
+        // Get only parent brands (admin brands) - show all since parent-child system is new
+        $brands = Brand::where('is_active', true)
+            ->whereNull('vendor_id') // Only admin brands
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->map(function($brand) {
+                // Count products from parent and all children (wholesaler products only)
+                $productCount = $brand->products()
+                    ->where('status', 'active')
+                    ->whereHas('vendor', function($query) {
+                        $query->where('role', 'wholesaler');
+                    })
+                    ->count();
+                $children = Brand::where('parent_brand_id', $brand->id)
+                    ->whereHas('vendor', function($query) {
+                        $query->where('role', 'wholesaler');
+                    })
+                    ->get();
+                foreach($children as $child) {
+                    $productCount += $child->products()
+                        ->where('status', 'active')
+                        ->whereHas('vendor', function($query) {
+                            $query->where('role', 'wholesaler');
+                        })
+                        ->count();
+                }
+                $brand->products_count = $productCount;
+                return $brand;
+            });
 
         return view('wholesale', compact(
             'products',

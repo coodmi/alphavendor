@@ -33,9 +33,14 @@ class ShopController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        // Brand filter
+        // Brand filter - include products from child brands
         if ($request->has('brands') && !empty($request->brands)) {
-            $query->whereIn('brand_id', $request->brands);
+            $brandIds = $request->brands;
+            // Get all child brand IDs for selected parent brands
+            $childBrandIds = Brand::whereIn('parent_brand_id', $brandIds)->pluck('id')->toArray();
+            // Merge parent and child brand IDs
+            $allBrandIds = array_merge($brandIds, $childBrandIds);
+            $query->whereIn('brand_id', $allBrandIds);
         }
 
         // Rating filter
@@ -94,12 +99,21 @@ class ShopController extends Controller
                 return $category->products_count > 0;
             });
 
-        // Get brands with product counts
+        // Get only parent brands (admin brands) - show all since parent-child system is new
         $brands = Brand::where('is_active', true)
-            ->withCount(['products' => function($q) {
-                $q->where('status', 'active');
-            }])
-            ->get();
+            ->whereNull('vendor_id') // Only admin brands
+            ->orderBy('name')
+            ->get()
+            ->map(function($brand) {
+                // Count products from parent and all children
+                $productCount = $brand->products()->where('status', 'active')->count();
+                $children = Brand::where('parent_brand_id', $brand->id)->get();
+                foreach($children as $child) {
+                    $productCount += $child->products()->where('status', 'active')->count();
+                }
+                $brand->products_count = $productCount;
+                return $brand;
+            });
 
         return view('shop', compact('products', 'categories', 'brands'));
     }
