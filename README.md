@@ -72,3 +72,4 @@ And connected all the wholesaler related data so in the wholesaler frontend page
 
 
 At frontend homepage - I want to a banner section below the today's deal section on the homepage. This banner section should be manageable from the admin panel, allowing the admin to upload banner images, set links, and define display order. The banners should be responsive and look good on both desktop and mobile devices.
+# Final-Alphavendor
