@@ -9,6 +9,11 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\RetailPageContent;
+use App\Models\AboutPageContent;
+use App\Models\ContactPageContent;
+use App\Models\HomePageContent;
+use App\Models\WholesalePageContent;
+use App\Models\ImportPageContent;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Hash;
@@ -46,7 +51,22 @@ class AdminController extends Controller
         // Fetch retail page content
         $retailPageContent = RetailPageContent::getAllContent();
 
-        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors', 'brands', 'retailPageContent'));
+        // Fetch about page content
+        $aboutPageContent = AboutPageContent::getAllContent();
+
+        // Fetch contact page content
+        $contactPageContent = ContactPageContent::getAllContent();
+
+        // Fetch home page content
+        $homePageContent = HomePageContent::getAllContent();
+
+        // Fetch wholesale page content
+        $wholesalePageContent = WholesalePageContent::getAllContent();
+
+        // Fetch import page content
+        $importPageContent = ImportPageContent::getAllContent();
+
+        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors', 'brands', 'retailPageContent', 'aboutPageContent', 'contactPageContent', 'homePageContent', 'wholesalePageContent', 'importPageContent'));
     }
 
     /**

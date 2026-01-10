@@ -8,7 +8,7 @@ use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class ExportController extends Controller
+class ImportController extends Controller
 {
     public function index(Request $request)
     {
@@ -166,6 +166,6 @@ class ExportController extends Controller
             ]);
         }
 
-        return view('export', compact('products', 'categories', 'locations', 'moqRanges', 'certifications'));
+        return view('import', compact('products', 'categories', 'locations', 'moqRanges', 'certifications'));
     }
 }

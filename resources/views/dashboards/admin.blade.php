@@ -49,9 +49,29 @@
 
     <div class="menu-section">
         <div class="menu-section-title">Pages</div>
+        <a href="javascript:void(0)" onclick="showSection('home-page')" class="menu-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
         <a href="javascript:void(0)" onclick="showSection('retail-page')" class="menu-item">
             <i class="fas fa-store"></i>
             <span>Retail Page</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showSection('wholesale-page')" class="menu-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Wholesale</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showSection('import-page')" class="menu-item">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Import</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showSection('about-page')" class="menu-item">
+            <i class="fas fa-info-circle"></i>
+            <span>About</span>
+        </a>
+        <a href="javascript:void(0)" onclick="showSection('contact-page')" class="menu-item">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
         </a>
     </div>
 
@@ -312,6 +332,56 @@
         </div>
     </div>
 
+    <!-- Filter Section -->
+    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+            <div>
+                <label style="display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 6px;">Search Product</label>
+                <input type="text" id="productSearchInput" placeholder="Search by name or SKU..." 
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 6px;">Category</label>
+                <select id="productCategoryFilter" style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <option value="">All Categories</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label style="display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 6px;">Vendor</label>
+                <select id="productVendorFilter" style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <option value="">All Vendors</option>
+                    @foreach($vendors as $vendor)
+                        <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label style="display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 6px;">Status</label>
+                <select id="productStatusFilter" style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div>
+                <label style="display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 6px;">Featured</label>
+                <select id="productFeaturedFilter" style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <option value="">All Products</option>
+                    <option value="1">Featured Only</option>
+                    <option value="0">Non-Featured</option>
+                </select>
+            </div>
+            <div>
+                <button onclick="resetProductFilters()" style="width: 100%; padding: 10px 12px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse;">
@@ -329,7 +399,11 @@
                 </thead>
                 <tbody>
                     @forelse($products as $product)
-                    <tr style="border-bottom: 1px solid #dee2e6;">
+                    <tr style="border-bottom: 1px solid #dee2e6;" 
+                        data-category-id="{{ $product->category_id ?? '' }}"
+                        data-vendor-id="{{ $product->vendor_id ?? '' }}"
+                        data-status="{{ $product->status }}"
+                        data-featured="{{ $product->is_featured ? '1' : '0' }}">
                         <td style="padding: 12px;">
                             @if($product->image)
                                 <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
@@ -677,6 +751,434 @@
     </form>
 </div>
 
+<!-- About Page Section -->
+<div id="about-page-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">About Page Management</h2>
+                <p style="color: #7f8c8d;">Customize the about us page content</p>
+            </div>
+            <a href="{{ route('about') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-external-link-alt"></i> Preview Page
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.about-page.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Hero Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
+                Hero Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
+                    <input type="text" name="hero_title" value="{{ $aboutPageContent['hero_title'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
+                    <textarea name="hero_description" rows="3"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $aboutPageContent['hero_description'] ?? '' }}</textarea>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
+                    <div style="margin-bottom: 12px;" id="aboutImagePreviewContainer">
+                        @if(isset($aboutPageContent['hero_image']) && $aboutPageContent['hero_image'])
+                            @php
+                                $aboutImageUrl = str_starts_with($aboutPageContent['hero_image'], 'http') ? $aboutPageContent['hero_image'] : asset('storage/' . $aboutPageContent['hero_image']);
+                                $aboutImageUrl .= '?v=' . time();
+                            @endphp
+                            <img src="{{ $aboutImageUrl }}"
+                                alt="Current Hero Image"
+                                id="aboutImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+                        @else
+                            <img src=""
+                                alt="Image Preview"
+                                id="aboutImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                        @endif
+                    </div>
+                    <input type="file" name="hero_image" id="aboutHeroImageInput" accept="image/*"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission, Vision, Values Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-bullseye" style="margin-right: 10px; color: #667eea;"></i>
+                Mission, Vision & Values
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 25px;">
+                <!-- Mission -->
+                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                    <h4 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">Mission</h4>
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Title</label>
+                    <input type="text" name="mission_title" value="{{ $aboutPageContent['mission_title'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;" required>
+
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Description</label>
+                    <textarea name="mission_description" rows="3"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" required>{{ $aboutPageContent['mission_description'] ?? '' }}</textarea>
+                </div>
+
+                <!-- Vision -->
+                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                    <h4 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">Vision</h4>
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Title</label>
+                    <input type="text" name="vision_title" value="{{ $aboutPageContent['vision_title'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;" required>
+
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Description</label>
+                    <textarea name="vision_description" rows="3"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" required>{{ $aboutPageContent['vision_description'] ?? '' }}</textarea>
+                </div>
+
+                <!-- Values -->
+                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                    <h4 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">Values</h4>
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Title</label>
+                    <input type="text" name="values_title" value="{{ $aboutPageContent['values_title'] ?? '' }}"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px;" required>
+
+                    <label style="display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px;">Description</label>
+                    <textarea name="values_description" rows="3"
+                        style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" required>{{ $aboutPageContent['values_description'] ?? '' }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Contact Page Section -->
+<div id="contact-page-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Contact Page Management</h2>
+                <p style="color: #7f8c8d;">Manage contact information and details</p>
+            </div>
+            <a href="{{ route('contact') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-external-link-alt"></i> Preview Page
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.contact-page.update') }}" method="POST">
+        @csrf
+
+        <!-- Hero Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-heading" style="margin-right: 10px; color: #667eea;"></i>
+                Hero Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
+                    <input type="text" name="hero_title" value="{{ $contactPageContent['hero_title'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
+                    <textarea name="hero_description" rows="3"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $contactPageContent['hero_description'] ?? '' }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-address-book" style="margin-right: 10px; color: #667eea;"></i>
+                Contact Information
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Email</label>
+                    <input type="email" name="email" value="{{ $contactPageContent['email'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Phone</label>
+                    <input type="text" name="phone" value="{{ $contactPageContent['phone'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Address</label>
+                    <input type="text" name="address" value="{{ $contactPageContent['address'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Business Hours</label>
+                    <input type="text" name="business_hours" value="{{ $contactPageContent['business_hours'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Support Email</label>
+                    <input type="email" name="support_email" value="{{ $contactPageContent['support_email'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Sales Email</label>
+                    <input type="email" name="sales_email" value="{{ $contactPageContent['sales_email'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Home Page Section -->
+<div id="home-page-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Home Page Management</h2>
+                <p style="color: #7f8c8d;">Customize the home page hero section</p>
+            </div>
+            <a href="{{ route('home') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-external-link-alt"></i> Preview Page
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.home-page.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Hero Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
+                Hero Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
+                    <input type="text" name="hero_title" value="{{ $homePageContent['hero_title'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
+                    <textarea name="hero_description" rows="3"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $homePageContent['hero_description'] ?? '' }}</textarea>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
+                    <div style="margin-bottom: 12px;" id="homeImagePreviewContainer">
+                        @if(isset($homePageContent['hero_image']) && $homePageContent['hero_image'])
+                            @php
+                                $homeImageUrl = str_starts_with($homePageContent['hero_image'], 'http') ? $homePageContent['hero_image'] : asset('storage/' . $homePageContent['hero_image']);
+                                $homeImageUrl .= '?v=' . time();
+                            @endphp
+                            <img src="{{ $homeImageUrl }}"
+                                alt="Current Hero Image"
+                                id="homeImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+                        @else
+                            <img src=""
+                                alt="Image Preview"
+                                id="homeImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                        @endif
+                    </div>
+                    <input type="file" name="hero_image" id="homeHeroImageInput" accept="image/*"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Wholesale Page Section -->
+<div id="wholesale-page-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Wholesale Page Management</h2>
+                <p style="color: #7f8c8d;">Customize the wholesale page hero section</p>
+            </div>
+            <a href="{{ route('wholesale') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-external-link-alt"></i> Preview Page
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.wholesale-page.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Hero Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
+                Hero Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
+                    <input type="text" name="hero_title" value="{{ $wholesalePageContent['hero_title'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
+                    <textarea name="hero_description" rows="3"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $wholesalePageContent['hero_description'] ?? '' }}</textarea>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
+                    <div style="margin-bottom: 12px;" id="wholesaleImagePreviewContainer">
+                        @if(isset($wholesalePageContent['hero_image']) && $wholesalePageContent['hero_image'])
+                            @php
+                                $wholesaleImageUrl = str_starts_with($wholesalePageContent['hero_image'], 'http') ? $wholesalePageContent['hero_image'] : asset('storage/' . $wholesalePageContent['hero_image']);
+                                $wholesaleImageUrl .= '?v=' . time();
+                            @endphp
+                            <img src="{{ $wholesaleImageUrl }}"
+                                alt="Current Hero Image"
+                                id="wholesaleImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+                        @else
+                            <img src=""
+                                alt="Image Preview"
+                                id="wholesaleImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                        @endif
+                    </div>
+                    <input type="file" name="hero_image" id="wholesaleHeroImageInput" accept="image/*"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Import Page Section -->
+<div id="import-page-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Import Page Management</h2>
+                <p style="color: #7f8c8d;">Customize the import page hero section</p>
+            </div>
+            <a href="{{ route('import') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-external-link-alt"></i> Preview Page
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.import-page.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Hero Section -->
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
+                Hero Section
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
+                    <input type="text" name="hero_title" value="{{ $importPageContent['hero_title'] ?? '' }}"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
+                    <textarea name="hero_description" rows="3"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $importPageContent['hero_description'] ?? '' }}</textarea>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
+                    <div style="margin-bottom: 12px;" id="importImagePreviewContainer">
+                        @if(isset($importPageContent['hero_image']) && $importPageContent['hero_image'])
+                            @php
+                                $importImageUrl = str_starts_with($importPageContent['hero_image'], 'http') ? $importPageContent['hero_image'] : asset('storage/' . $importPageContent['hero_image']);
+                                $importImageUrl .= '?v=' . time();
+                            @endphp
+                            <img src="{{ $importImageUrl }}"
+                                alt="Current Hero Image"
+                                id="importImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+                        @else
+                            <img src=""
+                                alt="Image Preview"
+                                id="importImagePreview"
+                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                        @endif
+                    </div>
+                    <input type="file" name="hero_image" id="importHeroImageInput" accept="image/*"
+                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
 <!-- Product Modal -->
 <div id="productModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
     <div style="background: white; border-radius: 10px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto;">
@@ -988,30 +1490,105 @@ function showSection(section) {
         el.classList.remove('active');
     });
 
-    // Show selected section
-    if (section === 'dashboard') {
-        document.getElementById('dashboard-section').style.display = 'block';
-        document.querySelector('a[onclick="showSection(\'dashboard\')"]').classList.add('active');
-    } else if (section === 'customers') {
-        document.getElementById('customers-section').style.display = 'block';
-        event.target.closest('.menu-item').classList.add('active');
-    } else if (section === 'applications') {
-        document.getElementById('applications-section').style.display = 'block';
-        event.target.closest('.menu-item').classList.add('active');
-    } else if (section === 'products') {
-        document.getElementById('products-section').style.display = 'block';
-        event.target.closest('.menu-item').classList.add('active');
-    } else if (section === 'categories') {
-        document.getElementById('categories-section').style.display = 'block';
-        event.target.closest('.menu-item').classList.add('active');
-    } else if (section === 'brands') {
-        document.getElementById('brands-section').style.display = 'block';
-        event.target.closest('.menu-item').classList.add('active');
-    } else if (section === 'retail-page') {
-        document.getElementById('retail-page-section').style.display = 'block';
-        event.target.closest('.menu-item').classList.add('active');
+    // Show selected section and activate menu item
+    const sectionMap = {
+        'dashboard': 'dashboard-section',
+        'customers': 'customers-section',
+        'applications': 'applications-section',
+        'products': 'products-section',
+        'categories': 'categories-section',
+        'brands': 'brands-section',
+        'retail-page': 'retail-page-section',
+        'about-page': 'about-page-section',
+        'contact-page': 'contact-page-section',
+        'home-page': 'home-page-section',
+        'wholesale-page': 'wholesale-page-section',
+        'import-page': 'import-page-section'
+    };
+
+    const sectionId = sectionMap[section];
+    if (sectionId) {
+        const sectionElement = document.getElementById(sectionId);
+        if (sectionElement) {
+            sectionElement.style.display = 'block';
+        }
+        
+        // Find and activate the corresponding menu item
+        const menuItem = document.querySelector(`a[onclick="showSection('${section}')"]`);
+        if (menuItem) {
+            menuItem.classList.add('active');
+        }
     }
 }
+
+// Product Filter Functions
+function filterProducts() {
+    const searchInput = document.getElementById('productSearchInput').value.toLowerCase();
+    const categoryFilter = document.getElementById('productCategoryFilter').value;
+    const vendorFilter = document.getElementById('productVendorFilter').value;
+    const statusFilter = document.getElementById('productStatusFilter').value;
+    const featuredFilter = document.getElementById('productFeaturedFilter').value;
+    
+    const rows = document.querySelectorAll('#products-section tbody tr');
+    
+    rows.forEach(row => {
+        // Get row data
+        const productName = row.querySelector('td:nth-child(2) strong')?.textContent.toLowerCase() || '';
+        const productSku = row.querySelector('td:nth-child(2) small')?.textContent.toLowerCase() || '';
+        const categoryId = row.getAttribute('data-category-id') || '';
+        const vendorId = row.getAttribute('data-vendor-id') || '';
+        const status = row.getAttribute('data-status') || '';
+        const isFeatured = row.getAttribute('data-featured') || '';
+        
+        // Check all filters
+        const matchesSearch = searchInput === '' || productName.includes(searchInput) || productSku.includes(searchInput);
+        const matchesCategory = categoryFilter === '' || categoryId === categoryFilter;
+        const matchesVendor = vendorFilter === '' || vendorId === vendorFilter;
+        const matchesStatus = statusFilter === '' || status === statusFilter;
+        const matchesFeatured = featuredFilter === '' || isFeatured === featuredFilter;
+        
+        // Show/hide row
+        if (matchesSearch && matchesCategory && matchesVendor && matchesStatus && matchesFeatured) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function resetProductFilters() {
+    document.getElementById('productSearchInput').value = '';
+    document.getElementById('productCategoryFilter').value = '';
+    document.getElementById('productVendorFilter').value = '';
+    document.getElementById('productStatusFilter').value = '';
+    document.getElementById('productFeaturedFilter').value = '';
+    filterProducts();
+}
+
+// Attach event listeners for filters
+document.addEventListener('DOMContentLoaded', function() {
+    const productSearchInput = document.getElementById('productSearchInput');
+    const productCategoryFilter = document.getElementById('productCategoryFilter');
+    const productVendorFilter = document.getElementById('productVendorFilter');
+    const productStatusFilter = document.getElementById('productStatusFilter');
+    const productFeaturedFilter = document.getElementById('productFeaturedFilter');
+    
+    if (productSearchInput) {
+        productSearchInput.addEventListener('input', filterProducts);
+    }
+    if (productCategoryFilter) {
+        productCategoryFilter.addEventListener('change', filterProducts);
+    }
+    if (productVendorFilter) {
+        productVendorFilter.addEventListener('change', filterProducts);
+    }
+    if (productStatusFilter) {
+        productStatusFilter.addEventListener('change', filterProducts);
+    }
+    if (productFeaturedFilter) {
+        productFeaturedFilter.addEventListener('change', filterProducts);
+    }
+});
 
 // Product Modal Functions
 let isEditModeProduct = false;
@@ -1264,6 +1841,114 @@ document.getElementById('deleteModal')?.addEventListener('click', function(e) {
 document.getElementById('retailHeroImageInput')?.addEventListener('change', function(e) {
     const file = e.target.files[0];
     const preview = document.getElementById('retailImagePreview');
+
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            e.target.value = '';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// About Page Image Preview
+document.getElementById('aboutHeroImageInput')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('aboutImagePreview');
+
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            e.target.value = '';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Home Page Image Preview
+document.getElementById('homeHeroImageInput')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('homeImagePreview');
+
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            e.target.value = '';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Wholesale Page Image Preview
+document.getElementById('wholesaleHeroImageInput')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('wholesaleImagePreview');
+
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            e.target.value = '';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Import Page Image Preview
+document.getElementById('importHeroImageInput')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('importImagePreview');
 
     if (file) {
         if (!file.type.startsWith('image/')) {

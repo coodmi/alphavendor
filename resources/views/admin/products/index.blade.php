@@ -54,6 +54,122 @@
     </div>
 </div>
 
+<!-- Filter Section -->
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+    <div style="background: white; padding: 20px; border-radius: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: #667eea; font-size: 18px; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                <i class="fas fa-filter"></i> FILTER & SEARCH PRODUCTS
+            </h3>
+            <button type="button" onclick="toggleFilters()" id="toggleFilterBtn" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                <i class="fas fa-chevron-up" id="filterIcon"></i> <span id="filterText">Hide Filters</span>
+            </button>
+        </div>
+        <form method="GET" action="{{ route('admin.products') }}" id="filterForm">
+            <div id="filterContent" style="display: block;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+            <!-- Search -->
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-search"></i> Search
+                </label>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Product name or SKU..." 
+                    style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e0e0e0'">
+            </div>
+
+            <!-- Category Filter -->
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-tags"></i> Category
+                </label>
+                <select name="category" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="">All Categories</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Vendor Filter -->
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-user"></i> Vendor
+                </label>
+                <select name="vendor" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="">All Vendors</option>
+                    @foreach($vendors as $vendor)
+                        <option value="{{ $vendor->id }}" {{ request('vendor') == $vendor->id ? 'selected' : '' }}>
+                            {{ $vendor->name }} ({{ ucfirst($vendor->role) }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Brand Filter -->
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-copyright"></i> Brand
+                </label>
+                <select name="brand" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="">All Brands</option>
+                    @foreach($brands as $brand)
+                        <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>
+                            {{ $brand->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-toggle-on"></i> Status
+                </label>
+                <select name="status" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="">All Status</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    <option value="out_of_stock" {{ request('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+                </select>
+            </div>
+
+            <!-- Sort By -->
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #2c3e50; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-sort"></i> Sort By
+                </label>
+                <select name="sort_by" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="latest" {{ request('sort_by') == 'latest' ? 'selected' : '' }}>Latest First</option>
+                    <option value="oldest" {{ request('sort_by') == 'oldest' ? 'selected' : '' }}>Oldest First</option>
+                    <option value="name_asc" {{ request('sort_by') == 'name_asc' ? 'selected' : '' }}>Name (A-Z)</option>
+                    <option value="name_desc" {{ request('sort_by') == 'name_desc' ? 'selected' : '' }}>Name (Z-A)</option>
+                    <option value="price_asc" {{ request('sort_by') == 'price_asc' ? 'selected' : '' }}>Price (Low to High)</option>
+                    <option value="price_desc" {{ request('sort_by') == 'price_desc' ? 'selected' : '' }}>Price (High to Low)</option>
+                    <option value="stock_asc" {{ request('sort_by') == 'stock_asc' ? 'selected' : '' }}>Stock (Low to High)</option>
+                    <option value="stock_desc" {{ request('sort_by') == 'stock_desc' ? 'selected' : '' }}>Stock (High to Low)</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button type="submit" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-filter"></i> Apply Filters
+            </button>
+            <a href="{{ route('admin.products') }}" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-redo"></i> Reset
+            </a>
+            <div style="margin-left: auto; color: #7f8c8d; display: flex; align-items: center; font-size: 14px;">
+                <i class="fas fa-info-circle" style="margin-right: 6px;"></i>
+                <strong style="color: #667eea;">{{ $products->count() }}</strong>&nbsp;products found
+            </div>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+
 <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
     <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse;">
@@ -364,5 +480,41 @@ document.getElementById('productModal').addEventListener('click', function(e) {
 document.getElementById('deleteModal').addEventListener('click', function(e) {
     if (e.target === this) closeDeleteModal();
 });
+
+// Auto-submit filter form on select change
+document.querySelectorAll('#filterForm select').forEach(function(select) {
+    select.addEventListener('change', function() {
+        document.getElementById('filterForm').submit();
+    });
+});
+
+// Submit on search input (with debounce)
+let searchTimeout;
+const searchInput = document.querySelector('input[name="search"]');
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            document.getElementById('filterForm').submit();
+        }, 500);
+    });
+}
+
+// Toggle filters
+function toggleFilters() {
+    const filterContent = document.getElementById('filterContent');
+    const filterIcon = document.getElementById('filterIcon');
+    const filterText = document.getElementById('filterText');
+    
+    if (filterContent.style.display === 'none') {
+        filterContent.style.display = 'block';
+        filterIcon.className = 'fas fa-chevron-up';
+        filterText.textContent = 'Hide Filters';
+    } else {
+        filterContent.style.display = 'none';
+        filterIcon.className = 'fas fa-chevron-down';
+        filterText.textContent = 'Show Filters';
+    }
+}
 </script>
 @endsection

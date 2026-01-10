@@ -55,10 +55,10 @@
     <div class="container">
         <div class="shop-wrapper">
             <!-- Sidebar Filters -->
-            <aside class="shop-sidebar">
+            <aside class=\"shop-sidebar\">
                 <!-- Categories Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Import Categories</h3>
+                <div class=\"filter-box\">
+                    <h3 class=\"filter-title\">Import Categories</h3>
                     <ul class="filter-list">
                         @forelse($categories as $category)
                         <li>
@@ -137,8 +137,8 @@
                 </div>
 
                 <!-- Certifications Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Import Certifications</h3>
+                <div class=\"filter-box\">
+                    <h3 class=\"filter-title\">Import Certifications</h3>
                     @if($certifications && $certifications->count() > 0)
                         <ul class="filter-list">
                             @php
@@ -197,9 +197,9 @@
             <!-- Main Content -->
             <div class="shop-content">
                 <!-- Toolbar -->
-                <div class="shop-toolbar">
-                    <div class="toolbar-left">
-                        <p class="results-count">Showing {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} of {{ $products->total() }} import products</p>
+                <div class=\"shop-toolbar\">
+                    <div class=\"toolbar-left\">
+                        <p class=\"results-count\">Showing {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} of {{ $products->total() }} import products</p>
                     </div>
                     <div class="toolbar-right">
                         <div class="view-mode">

@@ -6,6 +6,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\RetailController;
 use App\Http\Controllers\WholesaleController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RetailerDashboardController;
@@ -29,6 +30,11 @@ use App\Http\Controllers\ExporterCategoryController;
 use App\Http\Controllers\ExporterProductController;
 use App\Http\Controllers\ExporterCertificationController;
 use App\Http\Controllers\Admin\RetailPageController as AdminRetailPageController;
+use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
+use App\Http\Controllers\Admin\ContactPageController as AdminContactPageController;
+use App\Http\Controllers\Admin\HomePageController as AdminHomePageController;
+use App\Http\Controllers\Admin\WholesalePageController as AdminWholesalePageController;
+use App\Http\Controllers\Admin\ImportPageController as AdminImportPageController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\CommissionController as AdminCommissionController;
 use App\Http\Controllers\CartController;
@@ -46,6 +52,7 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.s
 Route::get('/retail', [RetailController::class, 'index'])->name('retail');
 Route::get('/wholesale', [WholesaleController::class, 'index'])->name('wholesale');
 Route::get('/export', [ExportController::class, 'index'])->name('export');
+Route::get('/import', [ImportController::class, 'index'])->name('import');
 
 // Sellers routes
 Route::get('/sellers', [SellerController::class, 'index'])->name('sellers.index');
@@ -116,6 +123,26 @@ Route::middleware('auth')->group(function () {
         // Retail Page CMS
         Route::get('/retail-page', [AdminRetailPageController::class, 'index'])->name('retail-page');
         Route::post('/retail-page', [AdminRetailPageController::class, 'update'])->name('retail-page.update');
+
+        // Home Page CMS
+        Route::get('/home-page', [AdminHomePageController::class, 'index'])->name('home-page');
+        Route::post('/home-page', [AdminHomePageController::class, 'update'])->name('home-page.update');
+
+        // Wholesale Page CMS
+        Route::get('/wholesale-page', [AdminWholesalePageController::class, 'index'])->name('wholesale-page');
+        Route::post('/wholesale-page', [AdminWholesalePageController::class, 'update'])->name('wholesale-page.update');
+
+        // Import Page CMS
+        Route::get('/import-page', [AdminImportPageController::class, 'index'])->name('import-page');
+        Route::post('/import-page', [AdminImportPageController::class, 'update'])->name('import-page.update');
+
+        // About Page CMS
+        Route::get('/about-page', [AdminAboutPageController::class, 'index'])->name('about-page');
+        Route::post('/about-page', [AdminAboutPageController::class, 'update'])->name('about-page.update');
+
+        // Contact Page CMS
+        Route::get('/contact-page', [AdminContactPageController::class, 'index'])->name('contact-page');
+        Route::post('/contact-page', [AdminContactPageController::class, 'update'])->name('contact-page.update');
 
         // Banner management
         Route::get('/banners', [AdminBannerController::class, 'index'])->name('banners');

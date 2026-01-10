@@ -14,9 +14,64 @@ class ProductController extends Controller
     /**
      * Display a listing of products
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'vendor', 'brand'])->latest()->get();
+        $query = Product::with(['category', 'vendor', 'brand']);
+
+        // Apply filters
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->filled('vendor')) {
+            $query->where('vendor_id', $request->vendor);
+        }
+
+        if ($request->filled('brand')) {
+            $query->where('brand_id', $request->brand);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('sku', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Apply sorting
+        $sortBy = $request->get('sort_by', 'latest');
+        switch ($sortBy) {
+            case 'name_asc':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'stock_asc':
+                $query->orderBy('stock', 'asc');
+                break;
+            case 'stock_desc':
+                $query->orderBy('stock', 'desc');
+                break;
+            case 'oldest':
+                $query->oldest();
+                break;
+            default:
+                $query->latest();
+        }
+
+        $products = $query->get();
+        
         // Admin sees only global categories and brands (with null vendor_id)
         $categories = Category::whereNull('vendor_id')
             ->where('is_active', true)
@@ -124,8 +179,11 @@ class ProductController extends Controller
      */
     public function shop(Request $request)
     {
-        $query = Product::with(['category', 'vendor'])
-            ->where('status', 'active');
+        $query = Product::with(['category', 'vendor', 'brand'])
+            ->where('status', 'active')
+            ->whereHas('vendor', function($q) {
+                $q->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+            });
 
         // Category filter
         if ($request->has('categories') && !empty($request->categories)) {
@@ -183,17 +241,74 @@ class ProductController extends Controller
         $perPage = $request->get('per_page', 12);
         $products = $query->paginate($perPage)->withQueryString();
 
-        // Get categories with product counts
+        // Get only parent categories (admin categories) with product counts including child products from all vendor types
         $categories = Category::where('is_active', true)
-            ->withCount('products')
-            ->orderBy('sort_order')
-            ->get();
+            ->whereNull('vendor_id') // Only admin categories
+            ->with(['children' => function($q) {
+                $q->where('is_active', true)
+                  ->whereHas('vendor', function($query) {
+                      $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                  });
+            }])
+            ->get()
+            ->map(function($category) {
+                // Count products from parent and all children (all vendor types)
+                $productCount = $category->products()
+                    ->where('status', 'active')
+                    ->whereHas('vendor', function($query) {
+                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                    })
+                    ->count();
+                foreach($category->children as $child) {
+                    $productCount += $child->products()
+                        ->where('status', 'active')
+                        ->whereHas('vendor', function($query) {
+                            $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                        })
+                        ->count();
+                }
+                $category->products_count = $productCount;
+                return $category;
+            })
+            ->filter(function($category) {
+                return $category->products_count > 0;
+            })
+            ->values();
 
-        // Get available brands from Brand model
+        // Get only parent brands (admin brands) with product counts including child products from all vendor types
         $brands = Brand::where('is_active', true)
+            ->whereNull('vendor_id') // Only admin brands
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->map(function($brand) {
+                // Count products from parent and all children (all vendor types)
+                $productCount = $brand->products()
+                    ->where('status', 'active')
+                    ->whereHas('vendor', function($query) {
+                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                    })
+                    ->count();
+                $children = Brand::where('parent_brand_id', $brand->id)
+                    ->whereHas('vendor', function($query) {
+                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                    })
+                    ->get();
+                foreach($children as $child) {
+                    $productCount += $child->products()
+                        ->where('status', 'active')
+                        ->whereHas('vendor', function($query) {
+                            $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                        })
+                        ->count();
+                }
+                $brand->products_count = $productCount;
+                return $brand;
+            })
+            ->filter(function($brand) {
+                return $brand->products_count > 0;
+            })
+            ->values();
 
         // Get vendor types with counts
         $vendorTypes = User::selectRaw('role, COUNT(DISTINCT products.id) as products_count')
