@@ -42,6 +42,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\SmsController;
+use App\Http\Controllers\TicketController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -264,6 +268,54 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage'])->name('profile.upload-image');
     Route::delete('/profile/delete-image', [ProfileController::class, 'deleteImage'])->name('profile.delete-image');
+
+    // Notification routes
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
+        Route::get('/unread-count', [NotificationController::class, 'unreadCount'])->name('unread-count');
+        Route::post('/', [NotificationController::class, 'store'])->name('store');
+        Route::post('/{id}/read', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
+        Route::delete('/{id}', [NotificationController::class, 'destroy'])->name('destroy');
+        Route::delete('/read/all', [NotificationController::class, 'deleteAllRead'])->name('delete-all-read');
+    });
+
+    // Chat routes
+    Route::prefix('chat')->name('chat.')->group(function () {
+        Route::get('/conversations', [ChatController::class, 'index'])->name('conversations');
+        Route::post('/conversations', [ChatController::class, 'storeConversation'])->name('conversations.store');
+        Route::get('/conversations/{conversationId}/messages', [ChatController::class, 'getMessages'])->name('messages');
+        Route::post('/conversations/{conversationId}/messages', [ChatController::class, 'sendMessage'])->name('send-message');
+        Route::patch('/conversations/{conversationId}/status', [ChatController::class, 'updateStatus'])->name('update-status');
+        Route::get('/unread-count', [ChatController::class, 'unreadCount'])->name('unread-count');
+    });
+
+    // SMS & OTP routes
+    Route::prefix('sms')->name('sms.')->group(function () {
+        Route::get('/logs', [SmsController::class, 'logs'])->name('logs');
+        Route::post('/send', [SmsController::class, 'send'])->name('send');
+        Route::get('/otp/logs', [SmsController::class, 'otpLogs'])->name('otp.logs');
+        Route::post('/otp/generate', [SmsController::class, 'generateOtp'])->name('otp.generate');
+        Route::post('/otp/verify', [SmsController::class, 'verifyOtp'])->name('otp.verify');
+        Route::get('/templates', [SmsController::class, 'templates'])->name('templates');
+        Route::post('/templates', [SmsController::class, 'storeTemplate'])->name('templates.store');
+        Route::put('/templates/{id}', [SmsController::class, 'updateTemplate'])->name('templates.update');
+        Route::delete('/templates/{id}', [SmsController::class, 'deleteTemplate'])->name('templates.delete');
+        Route::get('/stats', [SmsController::class, 'stats'])->name('stats');
+    });
+
+    // Support Tickets routes
+    Route::prefix('tickets')->name('tickets.')->group(function () {
+        Route::get('/', [TicketController::class, 'index'])->name('index');
+        Route::post('/', [TicketController::class, 'store'])->name('store');
+        Route::get('/{id}', [TicketController::class, 'show'])->name('show');
+        Route::post('/{id}/messages', [TicketController::class, 'addMessage'])->name('add-message');
+        Route::patch('/{id}/status', [TicketController::class, 'updateStatus'])->name('update-status');
+        Route::patch('/{id}/assign', [TicketController::class, 'assign'])->name('assign');
+        Route::post('/{id}/rate', [TicketController::class, 'rate'])->name('rate');
+        Route::get('/categories/list', [TicketController::class, 'categories'])->name('categories');
+        Route::get('/stats/overview', [TicketController::class, 'stats'])->name('stats');
+    });
 
     // Order routes
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');

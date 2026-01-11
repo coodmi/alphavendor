@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'paperfly' => [
+        'base_url' => env('PAPERFLY_BASE_URL', 'https://api.paperfly.com.bd'),
+        'username' => env('PAPERFLY_USERNAME'),
+        'password' => env('PAPERFLY_PASSWORD'),
+        'key' => env('PAPERFLY_KEY'),
+        'merchant_code' => env('PAPERFLY_MERCHANT_CODE'),
+    ],
+
 ];

@@ -10,7 +10,15 @@ class Order extends Model
         'order_number', 'user_id', 'vendor_id', 'subtotal', 'commission_amount',
         'commission_rate', 'vendor_earning', 'total', 'status', 'payment_status',
         'payment_method', 'shipping_address', 'shipping_city', 'shipping_state',
-        'shipping_zip', 'shipping_country', 'phone', 'notes'
+        'shipping_zip', 'shipping_country', 'phone', 'notes',
+        'paperfly_tracking_number', 'paperfly_merchant_order_ref', 'delivery_status',
+        'tracking_history', 'picked_at', 'in_transit_at', 'delivered_at'
+    ];
+
+    protected $casts = [
+        'picked_at' => 'datetime',
+        'in_transit_at' => 'datetime',
+        'delivered_at' => 'datetime',
     ];
 
     public function user()

@@ -124,4 +124,28 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(\App\Models\Order::class, \App\Models\Product::class, 'vendor_id', 'id', 'id', 'id');
     }
+
+    /**
+     * Get notifications for this user
+     */
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class);
+    }
+
+    /**
+     * Get chat conversations for this user
+     */
+    public function chatConversations()
+    {
+        return $this->hasMany(\App\Models\ChatConversation::class);
+    }
+
+    /**
+     * Get chat messages sent by this user
+     */
+    public function chatMessages()
+    {
+        return $this->hasMany(\App\Models\ChatMessage::class);
+    }
 }

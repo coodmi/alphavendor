@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - AlphaVendor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -391,9 +392,26 @@
                     <h1>@yield('page-title', 'Dashboard')</h1>
                 </div>
                 <div class="header-right">
-                    <div class="notification-icon">
+                    <div class="notification-icon" id="notificationBell" onclick="toggleNotificationDropdown()" style="cursor: pointer; position: relative;">
                         <i class="far fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge" id="headerNotificationBadge" style="display: none;">0</span>
+                    </div>
+
+                    <!-- Notification Dropdown -->
+                    <div id="notificationDropdown" style="display: none; position: absolute; top: 60px; right: 80px; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); width: 350px; max-height: 400px; overflow-y: auto; z-index: 1000;">
+                        <div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                            <h4 style="margin: 0; color: #2c3e50; font-size: 16px;">Notifications</h4>
+                            <a href="#" onclick="event.preventDefault(); markAllHeaderNotificationsRead();" style="color: #667eea; font-size: 13px; text-decoration: none;">Mark all read</a>
+                        </div>
+                        <div id="headerNotificationList" style="max-height: 300px; overflow-y: auto;">
+                            <div style="padding: 30px 20px; text-align: center; color: #7f8c8d;">
+                                <i class="fas fa-bell-slash" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px;"></i>
+                                <p style="margin: 0; font-size: 14px;">No new notifications</p>
+                            </div>
+                        </div>
+                        <div style="padding: 12px 15px; border-top: 1px solid #eee; text-align: center;">
+                            <a href="#" onclick="event.preventDefault(); if(typeof showSection === 'function') showSection('notifications');" style="color: #667eea; font-size: 13px; text-decoration: none; font-weight: 600;">View All Notifications</a>
+                        </div>
                     </div>
 
                     <!-- Profile Menu -->
@@ -467,7 +485,137 @@
             if (!profileMenu.contains(event.target)) {
                 profileMenu.classList.remove('active');
             }
+            
+            // Close notification dropdown when clicking outside
+            const notificationBell = document.getElementById('notificationBell');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            if (notificationDropdown && !notificationBell.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                notificationDropdown.style.display = 'none';
+            }
         });
+
+        // Notification Bell Functions
+        let notificationDropdownOpen = false;
+        
+        function toggleNotificationDropdown() {
+            const dropdown = document.getElementById('notificationDropdown');
+            notificationDropdownOpen = !notificationDropdownOpen;
+            dropdown.style.display = notificationDropdownOpen ? 'block' : 'none';
+            
+            if (notificationDropdownOpen) {
+                loadHeaderNotifications();
+            }
+        }
+        
+        async function loadHeaderNotifications() {
+            try {
+                const response = await fetch('/notifications?status=unread');
+                const data = await response.json();
+                const notifications = data.data || [];
+                
+                const container = document.getElementById('headerNotificationList');
+                
+                if (notifications.length === 0) {
+                    container.innerHTML = `
+                        <div style="padding: 30px 20px; text-align: center; color: #7f8c8d;">
+                            <i class="fas fa-bell-slash" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px;"></i>
+                            <p style="margin: 0; font-size: 14px;">No new notifications</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = notifications.slice(0, 5).map(notif => {
+                        const typeIcons = {
+                            info: { icon: 'fa-info-circle', color: '#3b82f6' },
+                            success: { icon: 'fa-check-circle', color: '#10b981' },
+                            warning: { icon: 'fa-exclamation-triangle', color: '#f59e0b' },
+                            error: { icon: 'fa-times-circle', color: '#ef4444' }
+                        };
+                        const style = typeIcons[notif.type] || typeIcons.info;
+                        
+                        return `
+                            <div style="padding: 12px 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s;" onmouseenter="this.style.background='#f8f9fa'" onmouseleave="this.style.background='white'" onclick="markHeaderNotificationRead(${notif.id})">
+                                <div style="display: flex; gap: 10px;">
+                                    <i class="fas ${style.icon}" style="color: ${style.color}; font-size: 16px; margin-top: 2px;"></i>
+                                    <div style="flex: 1;">
+                                        <h5 style="margin: 0 0 3px 0; color: #2c3e50; font-size: 13px; font-weight: 600;">${notif.title}</h5>
+                                        <p style="margin: 0 0 3px 0; color: #7f8c8d; font-size: 12px; line-height: 1.4;">${notif.message.substring(0, 60)}${notif.message.length > 60 ? '...' : ''}</p>
+                                        <span style="color: #95a5a6; font-size: 11px;">${formatNotificationDate(notif.created_at)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+        
+        async function markHeaderNotificationRead(id) {
+            try {
+                await fetch(`/notifications/${id}/read`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                loadHeaderNotifications();
+                updateNotificationBadge();
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+            }
+        }
+        
+        async function markAllHeaderNotificationsRead() {
+            try {
+                await fetch('/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                loadHeaderNotifications();
+                updateNotificationBadge();
+                showToast('All notifications marked as read', 'success');
+            } catch (error) {
+                console.error('Error marking all notifications as read:', error);
+            }
+        }
+        
+        async function updateNotificationBadge() {
+            try {
+                const response = await fetch('/notifications/unread-count');
+                const data = await response.json();
+                const count = data.count || 0;
+                
+                const badge = document.getElementById('headerNotificationBadge');
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error updating notification badge:', error);
+            }
+        }
+        
+        function formatNotificationDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+            
+            return date.toLocaleDateString();
+        }
+        
+        // Update badge on page load and every 30 seconds
+        updateNotificationBadge();
+        setInterval(updateNotificationBadge, 30000);
 
         // Toast Notification System
         function showToast(message, type = 'success') {
