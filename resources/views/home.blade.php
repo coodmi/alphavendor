@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center mb-6 md:mb-8">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
                     <i class="fas fa-warehouse text-white text-xl"></i>
                 </div>
                 <div>
@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center mb-6 md:mb-8">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
                     <i class="fas fa-globe text-white text-xl"></i>
                 </div>
                 <div>
@@ -621,11 +621,11 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="vendors-section" style="background: #f8f9fa; padding: 60px 0;">
     <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
         <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-            <h2 style="font-size: 32px; font-weight: 700; color: #333; margin: 0;">Featured Vendors</h2>
+            <h2 style="font-size: 32px; font-weight: 700; color: #333; margin: 0;">Featured Sellers</h2>
             <a href="{{ route('sellers.index') }}" class="view-all" style="color: #FFA500; font-weight: 600; text-decoration: none; font-size: 16px; transition: color 0.3s;"
                onmouseover="this.style.color='#e69500'"
                onmouseout="this.style.color='#FFA500'">
-                View All Vendors
+                View All Sellers
                 <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
             </a>
         </div>
@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             @endphp
 
                             <div class="featured-vendor-card" style="min-width: calc(25% - 19px); margin-right: 25px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s; flex-shrink: 0;">
-                        <!-- Vendor Photo/Avatar -->
+                        <!-- Seller Photo/Avatar -->
                         <div style="position: relative; background: linear-gradient(135deg, {{ $roleColor }}15 0%, {{ $roleColor }}05 100%); padding: 30px 20px; text-align: center;">
                             <div style="width: 100px; height: 100px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; border: 4px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; background: {{ $roleColor }};">
                                 @if($vendor->profile_image)
@@ -690,13 +690,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             @endif
                         </div>
 
-                        <!-- Vendor Info -->
+                        <!-- Seller Info -->
                         <div style="padding: 20px;">
                             <h3 style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 4px; text-align: center;">
                                 {{ $vendorName }}
                             </h3>
                             <p style="text-align: center; color: #888; font-size: 12px; margin-bottom: 15px;">
-                                Trusted vendor with wide range of quality products
+                                Trusted seller with wide range of quality products
                             </p>
 
                             <!-- Stats Row -->
@@ -746,8 +746,8 @@ document.addEventListener('DOMContentLoaded', function() {
         @else
             <div style="background: white; padding: 60px 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                 <i class="fas fa-store-slash" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
-                <h3 style="font-size: 24px; color: #333; margin-bottom: 10px;">No Featured Vendors</h3>
-                <p style="color: #666; margin-bottom: 20px;">Check back soon for featured vendors</p>
+                <h3 style="font-size: 24px; color: #333; margin-bottom: 10px;">No Featured Sellers</h3>
+                <p style="color: #666; margin-bottom: 20px;">Check back soon for featured sellers</p>
             </div>
         @endif
     </div>
@@ -804,7 +804,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const pagination = document.querySelector('.vendor-slider-pagination');
     const cards = document.querySelectorAll('.featured-vendor-card');
 
-    if (!track || cards.length === 0) return;
+    if (!track || !prevBtn || !nextBtn || !pagination || cards.length === 0) {
+        console.log('Slider elements not found');
+        return;
+    }
 
     let currentIndex = 0;
     let cardsPerView = 4;
@@ -819,125 +822,193 @@ document.addEventListener('DOMContentLoaded', function() {
         else cardsPerView = 4;
     }
 
-    const totalSlides = Math.ceil(cards.length / cardsPerView);
+    // Get maximum scroll index
+    function getMaxIndex() {
+        return Math.max(0, cards.length - cardsPerView);
+    }
 
     // Create pagination dots
     function createPagination() {
+        if (!pagination) return;
         pagination.innerHTML = '';
-        for (let i = 0; i < totalSlides; i++) {
+        const maxIndex = getMaxIndex();
+        const totalDots = Math.min(maxIndex + 1, 10);
+        
+        for (let i = 0; i < totalDots; i++) {
             const dot = document.createElement('button');
             dot.className = 'vendor-slider-dot' + (i === 0 ? ' active' : '');
-            dot.addEventListener('click', () => goToSlide(i));
+            dot.style.cssText = 'width: 12px; height: 12px; border-radius: 50%; border: none; background: #ddd; cursor: pointer; transition: all 0.3s;';
+            dot.addEventListener('click', function() {
+                goToSlide(i);
+            });
             pagination.appendChild(dot);
         }
     }
 
     // Update slider position
     function updateSlider() {
+        if (!track || cards.length === 0) return;
+        
         const cardWidth = cards[0].offsetWidth;
         const gap = 25;
-        const offset = -(currentIndex * cardsPerView * (cardWidth + gap));
+        const offset = -(currentIndex * (cardWidth + gap));
         track.style.transform = `translateX(${offset}px)`;
 
         // Update pagination
-        document.querySelectorAll('.vendor-slider-dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
+        const dots = document.querySelectorAll('.vendor-slider-dot');
+        dots.forEach((dot, index) => {
+            if (index === currentIndex) {
+                dot.classList.add('active');
+                dot.style.background = '#FFA500';
+                dot.style.transform = 'scale(1.2)';
+            } else {
+                dot.classList.remove('active');
+                dot.style.background = '#ddd';
+                dot.style.transform = 'scale(1)';
+            }
         });
 
         // Update button states
-        prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
-        prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
-        nextBtn.style.opacity = currentIndex >= totalSlides - 1 ? '0.5' : '1';
-        nextBtn.style.cursor = currentIndex >= totalSlides - 1 ? 'not-allowed' : 'pointer';
+        const maxIndex = getMaxIndex();
+        
+        if (prevBtn) {
+            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+        }
+        
+        if (nextBtn) {
+            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
+            nextBtn.style.cursor = currentIndex >= maxIndex ? 'not-allowed' : 'pointer';
+        }
     }
 
     function goToSlide(index) {
-        currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
+        const maxIndex = getMaxIndex();
+        currentIndex = Math.max(0, Math.min(index, maxIndex));
         updateSlider();
         resetAutoplay();
     }
 
     function nextSlide() {
-        if (currentIndex < totalSlides - 1) {
+        const maxIndex = getMaxIndex();
+        if (currentIndex < maxIndex) {
             currentIndex++;
         } else {
-            currentIndex = 0; // Loop back to start
+            currentIndex = 0;
         }
         updateSlider();
     }
 
     function prevSlide() {
+        const maxIndex = getMaxIndex();
         if (currentIndex > 0) {
             currentIndex--;
-            updateSlider();
+        } else {
+            currentIndex = maxIndex;
         }
+        updateSlider();
     }
 
     // Autoplay functionality
     function startAutoplay() {
-        autoplayInterval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
+        stopAutoplay();
+        autoplayInterval = setInterval(nextSlide, 4000);
+    }
+
+    function stopAutoplay() {
+        if (autoplayInterval) {
+            clearInterval(autoplayInterval);
+        }
     }
 
     function resetAutoplay() {
-        clearInterval(autoplayInterval);
+        stopAutoplay();
         startAutoplay();
     }
 
     // Event listeners
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        resetAutoplay();
-    });
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Next clicked, current:', currentIndex);
+            nextSlide();
+            resetAutoplay();
+        });
+    }
 
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        resetAutoplay();
-    });
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Prev clicked, current:', currentIndex);
+            prevSlide();
+            resetAutoplay();
+        });
+    }
 
     // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') prevSlide();
-        if (e.key === 'ArrowRight') nextSlide();
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            resetAutoplay();
+        }
+        if (e.key === 'ArrowRight') {
+            nextSlide();
+            resetAutoplay();
+        }
     });
 
     // Touch/swipe support
     let touchStartX = 0;
     let touchEndX = 0;
 
-    track.addEventListener('touchstart', (e) => {
+    track.addEventListener('touchstart', function(e) {
         touchStartX = e.changedTouches[0].screenX;
     });
 
-    track.addEventListener('touchend', (e) => {
+    track.addEventListener('touchend', function(e) {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
     });
 
     function handleSwipe() {
-        if (touchEndX < touchStartX - 50) nextSlide(); // Swipe left
-        if (touchEndX > touchStartX + 50) prevSlide(); // Swipe right
-        resetAutoplay();
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+            resetAutoplay();
+        }
     }
 
     // Pause autoplay on hover
-    track.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+    track.addEventListener('mouseenter', stopAutoplay);
     track.addEventListener('mouseleave', startAutoplay);
 
     // Handle window resize
-    window.addEventListener('resize', () => {
-        updateCardsPerView();
-        currentIndex = 0;
-        createPagination();
-        updateSlider();
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            updateCardsPerView();
+            currentIndex = Math.min(currentIndex, getMaxIndex());
+            createPagination();
+            updateSlider();
+        }, 250);
     });
 
     // Initialize
+    console.log('Initializing slider with', cards.length, 'cards');
     updateCardsPerView();
     createPagination();
     updateSlider();
     startAutoplay();
 });
-</scriptatured-vendor-card {
+</script>
+
+<style>
+    .featured-vendor-card {
         transition: all 0.3s ease;
     }
     .featured-vendor-card:hover {

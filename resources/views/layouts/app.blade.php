@@ -24,7 +24,9 @@
             <div class="header-top">
                 <div class="logo">
                     {{-- <h1><span class="logo-icon">R</span></h1> --}}
-                    <img src="{{ asset('/airmarket.png') }}" alt="AlphaVendor Logo" style="height: 40px;">
+                    <a href="{{ route('home') }}" style="display: inline-block; line-height: 0;">
+                        <img src="{{ asset('/airmarket.png') }}" alt="AlphaVendor Logo" style="height: 40px; cursor: pointer;">
+                    </a>
                 </div>
                 <div class="search-bar">
                     <input type="text" placeholder="I am looking for...">

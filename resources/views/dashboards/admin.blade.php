@@ -1122,6 +1122,437 @@
     </div>
 </div>
 
+<!-- Attributes Section -->
+<div id="attributes-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Product Attributes</h2>
+                <p style="color: #7f8c8d;">Manage product attributes like colors, sizes, materials</p>
+            </div>
+            <button onclick="openAddAttributeModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-plus"></i> Add Attribute
+            </button>
+        </div>
+    </div>
+
+    <!-- Attribute Stats Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Total Attributes</div>
+                    <div style="font-size: 28px; font-weight: bold;">12</div>
+                </div>
+                <i class="fas fa-sliders-h" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Active Attributes</div>
+                    <div style="font-size: 28px; font-weight: bold;">10</div>
+                </div>
+                <i class="fas fa-check-circle" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Total Values</div>
+                    <div style="font-size: 28px; font-weight: bold;">85</div>
+                </div>
+                <i class="fas fa-list" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Used in Products</div>
+                    <div style="font-size: 28px; font-weight: bold;">245</div>
+                </div>
+                <i class="fas fa-box" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attributes List -->
+    <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h3 style="margin: 0; font-size: 18px;">Attributes List</h3>
+        </div>
+        
+        <!-- Search and Filter -->
+        <div style="padding: 20px; border-bottom: 1px solid #dee2e6; display: flex; gap: 15px; align-items: center;">
+            <div style="flex: 1;">
+                <input type="text" id="attributeSearchInput" onkeyup="filterAttributes()" placeholder="Search attributes..." 
+                    style="width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+            <select id="attributeTypeFilter" onchange="filterAttributes()" style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                <option value="">All Types</option>
+                <option value="select">Select</option>
+                <option value="color">Color</option>
+                <option value="button">Button</option>
+            </select>
+            <select id="attributeStatusFilter" onchange="filterAttributes()" style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table id="attributesTable" style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f8f9fa;">
+                    <tr>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Attribute Name</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Type</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Values Count</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Products Using</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Status</th>
+                        <th style="padding: 12px; text-align: center; color: #2c3e50;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-palette" style="color: #667eea; font-size: 18px;"></i>
+                                <strong>Color</strong>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #e3f2fd; color: #1976d2; border-radius: 12px; font-size: 12px;">Color</span>
+                        </td>
+                        <td style="padding: 12px;">15 values</td>
+                        <td style="padding: 12px;">89 products</td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 12px; font-size: 12px;">Active</span>
+                        </td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick="viewAttributeValues(1, 'Color')" style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-list"></i> Values
+                            </button>
+                            <button onclick="openEditAttributeModal(1)" style="padding: 6px 12px; background: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="confirmDeleteAttribute(1, 'Color')" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-ruler" style="color: #f093fb; font-size: 18px;"></i>
+                                <strong>Size</strong>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #f3e5f5; color: #7b1fa2; border-radius: 12px; font-size: 12px;">Button</span>
+                        </td>
+                        <td style="padding: 12px;">8 values</td>
+                        <td style="padding: 12px;">124 products</td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 12px; font-size: 12px;">Active</span>
+                        </td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick="viewAttributeValues(2, 'Size')" style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-list"></i> Values
+                            </button>
+                            <button onclick="openEditAttributeModal(2)" style="padding: 6px 12px; background: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="confirmDeleteAttribute(2, 'Size')" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-layer-group" style="color: #4facfe; font-size: 18px;"></i>
+                                <strong>Material</strong>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #e8f5e9; color: #388e3c; border-radius: 12px; font-size: 12px;">Select</span>
+                        </td>
+                        <td style="padding: 12px;">12 values</td>
+                        <td style="padding: 12px;">76 products</td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 12px; font-size: 12px;">Active</span>
+                        </td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick="viewAttributeValues(3, 'Material')" style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-list"></i> Values
+                            </button>
+                            <button onclick="openEditAttributeModal(3)" style="padding: 6px 12px; background: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="confirmDeleteAttribute(3, 'Material')" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Reviews & Ratings Section -->
+<div id="reviews-section" class="content-section" style="display: none;">
+    <div style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Reviews & Ratings</h2>
+                <p style="color: #7f8c8d;">Manage product reviews and customer feedback</p>
+            </div>
+            <button onclick="exportReviews()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-download"></i> Export Reviews
+            </button>
+        </div>
+    </div>
+
+    <!-- Reviews Stats -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Total Reviews</div>
+                    <div style="font-size: 28px; font-weight: bold;">1,234</div>
+                </div>
+                <i class="fas fa-comments" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Avg Rating</div>
+                    <div style="font-size: 28px; font-weight: bold;">4.5 <i class="fas fa-star" style="font-size: 18px;"></i></div>
+                </div>
+                <i class="fas fa-star-half-alt" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Pending</div>
+                    <div style="font-size: 28px; font-weight: bold;">28</div>
+                </div>
+                <i class="fas fa-clock" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Approved</div>
+                    <div style="font-size: 28px; font-weight: bold;">1,156</div>
+                </div>
+                <i class="fas fa-check-circle" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 20px; border-radius: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Reported</div>
+                    <div style="font-size: 28px; font-weight: bold;">15</div>
+                </div>
+                <i class="fas fa-exclamation-triangle" style="font-size: 36px; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Distribution -->
+    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 25px;">
+        <h3 style="color: #2c3e50; margin-bottom: 20px;">Rating Distribution</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; font-weight: 500;">5 Stars</span>
+                <div style="flex: 1; background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 65%; height: 100%; background: linear-gradient(90deg, #43e97b, #38f9d7);"></div>
+                </div>
+                <span style="width: 80px; text-align: right; font-weight: 500;">802 (65%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; font-weight: 500;">4 Stars</span>
+                <div style="flex: 1; background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 20%; height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe);"></div>
+                </div>
+                <span style="width: 80px; text-align: right; font-weight: 500;">247 (20%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; font-weight: 500;">3 Stars</span>
+                <div style="flex: 1; background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 10%; height: 100%; background: linear-gradient(90deg, #f093fb, #f5576c);"></div>
+                </div>
+                <span style="width: 80px; text-align: right; font-weight: 500;">123 (10%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; font-weight: 500;">2 Stars</span>
+                <div style="flex: 1; background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 3%; height: 100%; background: linear-gradient(90deg, #fa709a, #fee140);"></div>
+                </div>
+                <span style="width: 80px; text-align: right; font-weight: 500;">37 (3%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="width: 80px; font-weight: 500;">1 Star</span>
+                <div style="flex: 1; background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 2%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                </div>
+                <span style="width: 80px; text-align: right; font-weight: 500;">25 (2%)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews List -->
+    <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h3 style="margin: 0; font-size: 18px;">Recent Reviews</h3>
+        </div>
+        
+        <!-- Search and Filter -->
+        <div style="padding: 20px; border-bottom: 1px solid #dee2e6; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" id="reviewSearchInput" onkeyup="filterReviews()" placeholder="Search reviews..." 
+                    style="width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            </div>
+            <select id="reviewRatingFilter" onchange="filterReviews()" style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                <option value="">All Ratings</option>
+                <option value="5">5 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="2">2 Stars</option>
+                <option value="1">1 Star</option>
+            </select>
+            <select id="reviewStatusFilter" onchange="filterReviews()" style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="reported">Reported</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table id="reviewsTable" style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f8f9fa;">
+                    <tr>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Product</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Customer</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Rating</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Review</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Date</th>
+                        <th style="padding: 12px; text-align: left; color: #2c3e50;">Status</th>
+                        <th style="padding: 12px; text-align: center; color: #2c3e50;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
+                                <div>
+                                    <strong>Premium Laptop</strong><br>
+                                    <small style="color: #7f8c8d;">SKU: LP-001</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <div>
+                                <strong>John Doe</strong><br>
+                                <small style="color: #7f8c8d;">john@example.com</small>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <div style="display: flex; gap: 2px;">
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                            </div>
+                            <small style="color: #2c3e50; font-weight: 500;">5.0</small>
+                        </td>
+                        <td style="padding: 12px; max-width: 300px;">
+                            <div style="color: #2c3e50; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                Excellent product! Great quality and fast shipping. Highly recommend this to everyone.
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <small>Jan 10, 2026</small>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #fff3cd; color: #856404; border-radius: 12px; font-size: 12px;">Pending</span>
+                        </td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick="viewReview(1)" style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="approveReview(1)" style="padding: 6px 12px; background: #2ecc71; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="rejectReview(1)" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
+                                <div>
+                                    <strong>Designer Watch</strong><br>
+                                    <small style="color: #7f8c8d;">SKU: WA-002</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <div>
+                                <strong>Jane Smith</strong><br>
+                                <small style="color: #7f8c8d;">jane@example.com</small>
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <div style="display: flex; gap: 2px;">
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="fas fa-star" style="color: #f39c12;"></i>
+                                <i class="far fa-star" style="color: #f39c12;"></i>
+                            </div>
+                            <small style="color: #2c3e50; font-weight: 500;">4.0</small>
+                        </td>
+                        <td style="padding: 12px; max-width: 300px;">
+                            <div style="color: #2c3e50; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                Beautiful watch, looks exactly as in the pictures. Good value for money.
+                            </div>
+                        </td>
+                        <td style="padding: 12px;">
+                            <small>Jan 9, 2026</small>
+                        </td>
+                        <td style="padding: 12px;">
+                            <span style="padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 12px; font-size: 12px;">Approved</span>
+                        </td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick="viewReview(2)" style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="respondToReview(2)" style="padding: 6px 12px; background: #9b59b6; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                <i class="fas fa-reply"></i>
+                            </button>
+                            <button onclick="deleteReview(2)" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <!-- Coupons Section -->
 <div id="coupons-section" class="content-section" style="display: none;">
     <div style="margin-bottom: 30px;">
@@ -7844,6 +8275,8 @@ function showSection(section) {
         'products': 'products-section',
         'categories': 'categories-section',
         'brands': 'brands-section',
+        'attributes': 'attributes-section',
+        'reviews': 'reviews-section',
         'coupons': 'coupons-section',
         'flash-sales': 'flash-sales-section',
         'banners': 'banners-section',
@@ -8870,6 +9303,132 @@ document.getElementById('brandModal')?.addEventListener('click', function(e) {
 document.getElementById('deleteModal')?.addEventListener('click', function(e) {
     if (e.target === this) closeDeleteModal();
 });
+
+// Attribute Functions
+function filterAttributes() {
+    const searchInput = document.getElementById('attributeSearchInput');
+    const typeFilter = document.getElementById('attributeTypeFilter');
+    const statusFilter = document.getElementById('attributeStatusFilter');
+    const nameFilter = searchInput?.value.toLowerCase() || '';
+    const typeValue = typeFilter?.value || '';
+    const statusValue = statusFilter?.value || '';
+    const table = document.getElementById('attributesTable');
+    const rows = table?.getElementsByTagName('tr');
+
+    if (!rows) return;
+
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        const nameCell = row.getElementsByTagName('td')[0];
+        const typeCell = row.getElementsByTagName('td')[1];
+        const statusCell = row.getElementsByTagName('td')[4];
+
+        if (nameCell && typeCell && statusCell) {
+            const nameText = nameCell.textContent.toLowerCase();
+            const typeText = typeCell.textContent.toLowerCase();
+            const statusText = statusCell.textContent.toLowerCase();
+
+            const matchesName = nameText.includes(nameFilter);
+            const matchesType = !typeValue || typeText.includes(typeValue.toLowerCase());
+            const matchesStatus = !statusValue || statusText.includes(statusValue);
+
+            row.style.display = (matchesName && matchesType && matchesStatus) ? '' : 'none';
+        }
+    }
+}
+
+function openAddAttributeModal() {
+    showToast('Add Attribute modal would open here', 'info');
+}
+
+function openEditAttributeModal(id) {
+    showToast('Edit Attribute #' + id + ' modal would open here', 'info');
+}
+
+function viewAttributeValues(id, name) {
+    showToast('Viewing values for attribute: ' + name, 'info');
+}
+
+function confirmDeleteAttribute(id, name) {
+    if (confirm('Are you sure you want to delete the attribute "' + name + '"?')) {
+        showToast('Attribute "' + name + '" deleted successfully', 'success');
+    }
+}
+
+// Reviews Functions
+function filterReviews() {
+    const searchInput = document.getElementById('reviewSearchInput');
+    const ratingFilter = document.getElementById('reviewRatingFilter');
+    const statusFilter = document.getElementById('reviewStatusFilter');
+    const searchFilter = searchInput?.value.toLowerCase() || '';
+    const ratingValue = ratingFilter?.value || '';
+    const statusValue = statusFilter?.value || '';
+    const table = document.getElementById('reviewsTable');
+    const rows = table?.getElementsByTagName('tr');
+
+    if (!rows) return;
+
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        const productCell = row.getElementsByTagName('td')[0];
+        const customerCell = row.getElementsByTagName('td')[1];
+        const ratingCell = row.getElementsByTagName('td')[2];
+        const reviewCell = row.getElementsByTagName('td')[3];
+        const statusCell = row.getElementsByTagName('td')[5];
+
+        if (productCell && customerCell && ratingCell && reviewCell && statusCell) {
+            const productText = productCell.textContent.toLowerCase();
+            const customerText = customerCell.textContent.toLowerCase();
+            const reviewText = reviewCell.textContent.toLowerCase();
+            const ratingText = ratingCell.textContent;
+            const statusText = statusCell.textContent.toLowerCase();
+
+            const matchesSearch = productText.includes(searchFilter) || 
+                                 customerText.includes(searchFilter) || 
+                                 reviewText.includes(searchFilter);
+            const matchesRating = !ratingValue || ratingText.includes(ratingValue);
+            const matchesStatus = !statusValue || statusText.includes(statusValue);
+
+            row.style.display = (matchesSearch && matchesRating && matchesStatus) ? '' : 'none';
+        }
+    }
+}
+
+function viewReview(id) {
+    showToast('Viewing review #' + id, 'info');
+}
+
+function approveReview(id) {
+    if (confirm('Approve this review?')) {
+        showToast('Review #' + id + ' approved successfully', 'success');
+    }
+}
+
+function rejectReview(id) {
+    if (confirm('Reject this review?')) {
+        showToast('Review #' + id + ' rejected', 'warning');
+    }
+}
+
+function respondToReview(id) {
+    const response = prompt('Enter your response:');
+    if (response) {
+        showToast('Response added to review #' + id, 'success');
+    }
+}
+
+function deleteReview(id) {
+    if (confirm('Are you sure you want to delete this review?')) {
+        showToast('Review #' + id + ' deleted successfully', 'success');
+    }
+}
+
+function exportReviews() {
+    showToast('Exporting reviews...', 'info');
+    setTimeout(() => {
+        showToast('Reviews exported successfully', 'success');
+    }, 1500);
+}
 
 // Retail Page Image Preview
 document.getElementById('retailHeroImageInput')?.addEventListener('change', function(e) {

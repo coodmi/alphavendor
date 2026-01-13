@@ -373,7 +373,9 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <img src="{{ asset('airmarket.png') }}" alt="AlphaVendor Logo" class="logo-img">
+                <a href="{{ route('home') }}" style="display: inline-block; line-height: 0; text-decoration: none;">
+                    <img src="{{ asset('airmarket.png') }}" alt="AlphaVendor Logo" class="logo-img" style="cursor: pointer;">
+                </a>
                 <span class="role-badge">{{ ucfirst(Auth::user()->role) }}</span>
             </div>
             <nav class="sidebar-menu">
