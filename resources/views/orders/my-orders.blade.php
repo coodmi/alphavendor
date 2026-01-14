@@ -40,6 +40,21 @@
                                 @endif">
                                 {{ ucfirst($order->status) }}
                             </span>
+                            
+                            @if($order->payment_status === 'pending_verification')
+                                <span class="inline-block px-3 py-1 rounded text-sm font-semibold bg-orange-100 text-orange-800 ml-2">
+                                    <i class="fas fa-clock mr-1"></i> Payment Verifying
+                                </span>
+                            @elseif($order->payment_status === 'paid')
+                                <span class="inline-block px-3 py-1 rounded text-sm font-semibold bg-green-100 text-green-800 ml-2">
+                                    <i class="fas fa-check mr-1"></i> Paid
+                                </span>
+                            @elseif($order->payment_status === 'failed')
+                                <span class="inline-block px-3 py-1 rounded text-sm font-semibold bg-red-100 text-red-800 ml-2">
+                                    <i class="fas fa-times mr-1"></i> Payment Failed
+                                </span>
+                            @endif
+                            
                             <p class="text-lg font-bold text-gray-900 mt-2">${{ number_format($order->total, 2) }}</p>
                         </div>
                     </div>

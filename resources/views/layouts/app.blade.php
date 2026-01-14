@@ -195,6 +195,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 AlphaVendor. All rights reserved.</p>
+                <p>Design & Developed By <a href="https://alphainno.com" target="_blank" style="color: #FFA500; text-decoration: none;">Alphainno</a></p>
             </div>
         </div>
     </footer>

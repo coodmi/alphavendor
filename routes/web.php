@@ -46,6 +46,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\SmsController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\ManualPaymentController;
+use App\Http\Controllers\Admin\PaymentSettingsController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -159,6 +161,16 @@ Route::middleware('auth')->group(function () {
         Route::post('/commissions', [AdminCommissionController::class, 'store'])->name('commissions.store');
         Route::put('/commissions/{commission}', [AdminCommissionController::class, 'update'])->name('commissions.update');
         Route::delete('/commissions/{commission}', [AdminCommissionController::class, 'destroy'])->name('commissions.destroy');
+
+        // Manual Payment Verification
+        Route::get('/manual-payments', [ManualPaymentController::class, 'index'])->name('manual-payments.index');
+        Route::get('/manual-payments/{manualPayment}', [ManualPaymentController::class, 'show'])->name('manual-payments.show');
+        Route::post('/manual-payments/{manualPayment}/verify', [ManualPaymentController::class, 'verify'])->name('manual-payments.verify');
+        Route::post('/manual-payments/{manualPayment}/reject', [ManualPaymentController::class, 'reject'])->name('manual-payments.reject');
+
+        // Payment Settings
+        Route::get('/payment-settings', [PaymentSettingsController::class, 'index'])->name('payment-settings.index');
+        Route::post('/payment-settings', [PaymentSettingsController::class, 'update'])->name('payment-settings.update');
     });
 
     // Retailer routes

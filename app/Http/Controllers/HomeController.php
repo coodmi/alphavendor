@@ -25,13 +25,11 @@ class HomeController extends Controller
         // Fetch active promo banners ordered by sort_order
         $promoBanners = PromoBanner::active()->ordered()->get();
 
-        // Get Today's Deals - Featured products or products with discount
-        $todayDeals = Product::where('status', 'active')
-            ->where(function($query) {
-                $query->where('is_featured', true)
-                    ->orWhereColumn('old_price', '>', 'price');
-            })
-            ->orderBy('created_at', 'desc')
+        // Get Best Products - Top rated and featured products
+        $bestProducts = Product::where('status', 'active')
+            ->orderByDesc('is_featured')
+            ->orderByDesc('rating')
+            ->orderByDesc('reviews_count')
             ->take(8)
             ->get();
 
@@ -77,7 +75,7 @@ class HomeController extends Controller
             'categories',
             'banners',
             'promoBanners',
-            'todayDeals',
+            'bestProducts',
             'retailerProducts',
             'wholesalerProducts',
             'exporterProducts',

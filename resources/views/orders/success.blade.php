@@ -10,7 +10,24 @@
         </div>
 
         <h1 class="text-3xl font-bold mb-4">Order Placed Successfully!</h1>
-        <p class="text-gray-600 mb-8">Thank you for your order. We've received your order and will process it soon.</p>
+        <p class="text-gray-600 mb-4">Thank you for your order. We've received your order and will process it soon.</p>
+
+        @if(session('payment_pending_verification'))
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 text-left">
+                <div class="flex items-start gap-3">
+                    <div class="bg-yellow-100 p-2 rounded-full">
+                        <i class="fas fa-clock text-yellow-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-yellow-800">Payment Verification Pending</h3>
+                        <p class="text-sm text-yellow-700 mt-1">
+                            Your payment is being verified. We will confirm your payment within 24 hours.
+                            You will receive a notification once your payment is verified.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <div class="flex gap-4 justify-center">
             <a href="{{ route('orders.my') }}" class="bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-600">

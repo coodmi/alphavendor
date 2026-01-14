@@ -40,4 +40,9 @@ class Order extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function manualPayment()
+    {
+        return $this->hasOne(ManualPayment::class);
+    }
 }

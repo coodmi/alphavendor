@@ -46,6 +46,20 @@
             <i class="fas fa-shopping-cart"></i>
             <span>Orders</span>
         </a>
+        <a href="{{ route('admin.manual-payments.index') }}" class="menu-item">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Payment Verification</span>
+            @php
+                $pendingPaymentsCount = \App\Models\ManualPayment::pending()->count();
+            @endphp
+            @if($pendingPaymentsCount > 0)
+                <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $pendingPaymentsCount }}</span>
+            @endif
+        </a>
+        <a href="{{ route('admin.payment-settings.index') }}" class="menu-item">
+            <i class="fas fa-cog"></i>
+            <span>Payment Settings</span>
+        </a>
         <a href="javascript:void(0)" onclick="showSection('invoices')" class="menu-item">
             <i class="fas fa-file-invoice"></i>
             <span>Invoices</span>

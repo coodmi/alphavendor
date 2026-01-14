@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\VendorWallet;
 use App\Models\Transaction;
 use App\Models\CommissionSetting;
+use App\Models\ManualPayment;
 
 class OrderController extends Controller
 {
@@ -36,7 +37,10 @@ class OrderController extends Controller
             'shipping_country' => 'required|string',
             'phone' => 'required|string',
             'payment_method' => 'required|string',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            // Manual payment fields
+            'sender_number' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
+            'transaction_id' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
         ]);
 
         $cart = Session::get('cart', []);
@@ -140,12 +144,37 @@ class OrderController extends Controller
                     'status' => 'pending',
                     'description' => 'Order #' . $order->order_number
                 ]);
+
+                // If payment method is bKash, Nagad, or Rocket, create manual payment record
+                if (in_array($validated['payment_method'], ['bkash', 'nagad', 'rocket'])) {
+                    ManualPayment::create([
+                        'order_id' => $order->id,
+                        'user_id' => Auth::id(),
+                        'payment_method' => $validated['payment_method'],
+                        'sender_number' => $validated['sender_number'],
+                        'transaction_id' => $validated['transaction_id'],
+                        'amount' => $order->total,
+                        'status' => 'pending',
+                    ]);
+
+                    // Update order payment status to pending verification
+                    $order->update(['payment_status' => 'pending_verification']);
+                }
             }
+
+            // Check if any order has manual payment
+            $hasManualPayment = in_array($validated['payment_method'], ['bkash', 'nagad', 'rocket']);
 
             // Clear cart
             Session::forget('cart');
 
             DB::commit();
+
+            if ($hasManualPayment) {
+                return redirect()->route('orders.success')
+                    ->with('success', 'Order placed successfully!')
+                    ->with('payment_pending_verification', true);
+            }
 
             return redirect()->route('orders.success')->with('success', 'Order placed successfully!');
 
