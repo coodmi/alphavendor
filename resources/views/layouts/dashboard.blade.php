@@ -376,7 +376,13 @@
                 <a href="{{ route('home') }}" style="display: inline-block; line-height: 0; text-decoration: none;">
                     <img src="{{ asset('airmarket.png') }}" alt="AlphaVendor Logo" class="logo-img" style="cursor: pointer;">
                 </a>
-                <span class="role-badge">{{ ucfirst(Auth::user()->role) }}</span>
+                <span class="role-badge">
+                    @if(Auth::user()->role === 'exporter')
+                        IMPORTER
+                    @else
+                        {{ ucfirst(Auth::user()->role) }}
+                    @endif
+                </span>
             </div>
             <nav class="sidebar-menu">
                 @yield('sidebar-menu')

@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    // Default currency symbol (make dynamic as needed)
+    'currency_symbol' => env('CURRENCY_SYMBOL', '৳'),
+
 ];

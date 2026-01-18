@@ -353,6 +353,37 @@
                 </div>
             </div>
 
+            <div style="margin-top: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Attributes</label>
+                <div id="attributesContainer" style="border: 1px solid #ddd; border-radius: 6px; padding: 15px; background: #f8f9fa;">
+                    @if($attributes->count() > 0)
+                        @foreach($attributes as $attribute)
+                        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">{{ $attribute->name }}:</label>
+                            @if($attribute->type === 'select')
+                                <select name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="">Select {{ $attribute->name }}</option>
+                                    @if($attribute->options)
+                                        @foreach($attribute->options as $option)
+                                            <option value="{{ $option }}">{{ $option }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            @elseif($attribute->type === 'color')
+                                <input type="color" name="attributes[{{ $attribute->id }}]" style="width: 60px; height: 40px; border: 1px solid #ddd; border-radius: 4px;">
+                            @elseif($attribute->type === 'number')
+                                <input type="number" name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            @else
+                                <input type="text" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            @endif
+                        </div>
+                        @endforeach
+                    @else
+                        <p style="color: #7f8c8d; margin: 0; text-align: center;">No attributes configured yet. <a href="{{ route('admin.attributes.index') }}" style="color: #3498db;">Create attributes</a> to enhance your products.</p>
+                    @endif
+                </div>
+            </div>
+
             <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end;">
                 <button type="button" onclick="closeModal()" style="padding: 12px 24px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer;">
                     Cancel
@@ -419,6 +450,26 @@ function editProduct(product) {
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('imageRequiredLabel').textContent = '';
     document.getElementById('productImage').required = false;
+
+    // Clear all attribute inputs
+    const attributeInputs = document.querySelectorAll('#attributesContainer input, #attributesContainer select');
+    attributeInputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+
+    // Populate attributes
+    if (product.attributes && product.attributes.length > 0) {
+        product.attributes.forEach(attr => {
+            const input = document.querySelector(`[name="attributes[${attr.id}]"]`);
+            if (input) {
+                input.value = attr.pivot.value;
+            }
+        });
+    }
 
     if (product.image) {
         document.getElementById('imagePreview').style.display = 'block';

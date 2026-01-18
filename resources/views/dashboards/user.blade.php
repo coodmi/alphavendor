@@ -28,15 +28,7 @@
         </a>
     </div>
 
-    @if(!$pendingApplication)
-    <div class="menu-section">
-        <div class="menu-section-title">Become a Vendor</div>
-        <a href="{{ route('role.apply') }}" class="menu-item">
-            <i class="fas fa-rocket"></i>
-            <span>Apply for Role</span>
-        </a>
-    </div>
-    @endif
+
 
     <div class="menu-section">
         <div class="menu-section-title">Account</div>
@@ -106,27 +98,7 @@
     </div>
 
     <div class="dashboard-content">
-        @if(!$pendingApplication)
-            <div class="dashboard-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                <h2 style="color: white;">Become a Vendor!</h2>
-                <p>Want to sell on our platform? Apply for a vendor role:</p>
-                <div class="vendor-options">
-                    <div class="vendor-option">
-                        <h3>🏪 Retailer</h3>
-                        <p>Sell individual products directly to consumers</p>
-                    </div>
-                    <div class="vendor-option">
-                        <h3>📦 Wholesaler</h3>
-                        <p>Sell products in bulk to other businesses</p>
-                    </div>
-                    <div class="vendor-option">
-                        <h3>🌍 Exporter</h3>
-                        <p>Sell products internationally across borders</p>
-                    </div>
-                </div>
-                <a href="{{ route('role.apply') }}" class="btn btn-light" style="margin-top: 20px; background: white; color: #667eea;">Apply Now</a>
-            </div>
-        @endif
+
 
         <div class="dashboard-section">
             <h2>Quick Actions</h2>

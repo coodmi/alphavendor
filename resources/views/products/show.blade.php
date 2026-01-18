@@ -218,10 +218,117 @@
             </div>
         </div>
         @endif
+
+        <!-- Reviews Section -->
+        <div class="py-10">
+            <div class="bg-white rounded-2xl shadow-md p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800">Customer Reviews</h2>
+                    @auth
+                        <button onclick="toggleReviewForm()" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2">
+                            <i class="fas fa-star"></i>
+                            Write a Review
+                        </button>
+                    @else
+                        <a href="{{ route('login') }}" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to Review
+                        </a>
+                    @endauth
+                </div>
+
+                <!-- Review Form (Hidden by default) -->
+                <div id="reviewForm" class="hidden mb-8 p-6 bg-gray-50 rounded-xl">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Write Your Review</h3>
+                    <form id="submitReviewForm" action="{{ route('reviews.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Rating *</label>
+                                <div class="flex gap-1" id="ratingStars">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <button type="button" class="text-3xl text-gray-300 hover:text-yellow-400 transition-colors star-rating-btn" data-rating="{{ $i }}" title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">
+                                            <i class="far fa-star"></i>
+                                        </button>
+                                    @endfor
+                                </div>
+                                <input type="hidden" name="rating" id="ratingInput" required>
+                                <div id="ratingError" class="text-red-500 text-sm mt-1 hidden">Please select a rating</div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Review Title</label>
+                                <input type="text" name="title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Optional title for your review">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Your Review *</label>
+                            <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Share your experience with this product..." required></textarea>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <button type="submit" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Review
+                            </button>
+                            <button type="button" onclick="toggleReviewForm()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-300">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Reviews List -->
+                <div id="reviewsContainer">
+                    <!-- Reviews will be loaded here via AJAX -->
+                    @php
+                        $reviews = $product->approvedReviews()->with('user')->latest()->take(5)->get();
+                    @endphp
+                    @if($reviews->count() > 0)
+                        <div style="display: flex; flex-direction: column; gap: 24px;">
+                            @foreach($reviews as $review)
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+                                    <div style="display: flex; gap: 16px;">
+                                        <div style="width: 48px; height: 48px; background: #fed7aa; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                            <i class="fas fa-user" style="color: #ea580c;"></i>
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                                <h4 style="font-weight: 600; color: #1f2937;">{{ $review->user->name }}</h4>
+                                                <div style="display: flex; gap: 2px;">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <i class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star" style="color: #f59e0b;"></i>
+                                                    @endfor
+                                                </div>
+                                                <span style="font-size: 14px; color: #6b7280;">{{ $review->created_at->format('M d, Y') }}</span>
+                                            </div>
+                                            @if($review->title)
+                                                <h5 style="font-weight: 500; color: #374151; margin-bottom: 8px;">{{ $review->title }}</h5>
+                                            @endif
+                                            <p style="color: #4b5563; line-height: 1.6;">{{ $review->comment }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div style="text-align: center; padding: 48px 0;">
+                            <i class="fas fa-comments" style="font-size: 48px; color: #d1d5db; margin-bottom: 16px;"></i>
+                            <h3 style="font-size: 20px; font-weight: 600; color: #6b7280; margin-bottom: 8px;">No reviews yet</h3>
+                            <p style="color: #9ca3af;">Be the first to review this product!</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 <script>
+    console.log('Product show page JavaScript loaded');
+    
     const unitPrice = {{ $product->price }};
 
     function updateTotalPrice() {
@@ -312,6 +419,219 @@
             }
         }
     }
+
+    // Reviews Functions
+    let currentRating = 0;
+
+    function toggleReviewForm() {
+        const form = document.getElementById('reviewForm');
+        form.classList.toggle('hidden');
+        if (!form.classList.contains('hidden')) {
+            form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function setRating(rating) {
+        currentRating = rating;
+        document.getElementById('ratingInput').value = rating;
+        
+        // Hide error message
+        document.getElementById('ratingError').classList.add('hidden');
+        
+        const stars = document.querySelectorAll('.star-rating-btn');
+        stars.forEach((star, index) => {
+            const icon = star.querySelector('i');
+            if (index < rating) {
+                icon.className = 'fas fa-star text-yellow-400';
+                star.classList.add('selected');
+            } else {
+                icon.className = 'far fa-star text-gray-300';
+                star.classList.remove('selected');
+            }
+        });
+    }
+
+    function loadReviews() {
+        console.log('Loading reviews for product {{ $product->id }}...');
+        fetch(`/products/{{ $product->id }}/reviews`)
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Loaded reviews data:', data);
+                // Handle paginated response
+                const reviews = data.reviews.data || data.reviews || [];
+                console.log('Reviews to display:', reviews.length);
+                displayReviews(reviews);
+            })
+            .catch(error => {
+                console.error('Error loading reviews:', error);
+                showToast('Error loading reviews. Please refresh the page.', 'error');
+            });
+    }
+
+    function displayReviews(reviews) {
+        console.log('Displaying reviews:', reviews.length, 'reviews');
+        const container = document.getElementById('reviewsContainer');
+        console.log('Container element:', container);
+        
+        if (!container) {
+            console.error('reviewsContainer not found!');
+            return;
+        }
+        
+        if (reviews.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-12">
+                    <i class="fas fa-comments text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No reviews yet</h3>
+                    <p class="text-gray-500">Be the first to review this product!</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = `<div style="display: flex; flex-direction: column; gap: 24px;">`;
+        
+        reviews.forEach(review => {
+            const stars = generateStars(review.rating);
+            const date = new Date(review.created_at).toLocaleDateString();
+            
+            html += `
+                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+                    <div style="display: flex; gap: 16px;">
+                        <div style="width: 48px; height: 48px; background: #fed7aa; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-user" style="color: #ea580c;"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <h4 style="font-weight: 600; color: #1f2937;">${review.user.name}</h4>
+                                <div style="display: flex; gap: 2px;">
+                                    ${stars}
+                                </div>
+                                <span style="font-size: 14px; color: #6b7280;">${date}</span>
+                            </div>
+                            ${review.title ? `<h5 style="font-weight: 500; color: #374151; margin-bottom: 8px;">${review.title}</h5>` : ''}
+                            <p style="color: #4b5563; line-height: 1.6;">${review.comment}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+        console.log('Generated HTML length:', html.length);
+        container.innerHTML = html;
+        console.log('HTML set to container');
+    }
+
+    function generateStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            stars += `<i class="fa${i <= rating ? 's' : 'r'} fa-star text-yellow-400"></i>`;
+        }
+        return stars;
+    }
+
+    // Load reviews on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired, loading reviews...');
+        loadReviews();
+        
+        // Add event listeners for star rating
+        const starButtons = document.querySelectorAll('.star-rating-btn');
+        starButtons.forEach((button) => {
+            button.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                setRating(rating);
+            });
+        });
+    });
+
+    // Handle review form submission
+    document.getElementById('submitReviewForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const form = this;
+        const ratingInput = document.getElementById('ratingInput');
+        const commentInput = document.getElementById('submitReviewForm').querySelector('[name="comment"]');
+        
+        // Validate rating
+        if (!ratingInput.value || ratingInput.value < 1 || ratingInput.value > 5) {
+            document.getElementById('ratingError').classList.remove('hidden');
+            showToast('Please select a rating between 1 and 5 stars.', 'error');
+            return;
+        }
+        
+        // Validate comment
+        if (!commentInput.value || commentInput.value.trim().length < 10) {
+            showToast('Please write a review with at least 10 characters.', 'error');
+            return;
+        }
+        
+        const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        
+        // Disable button and show loading
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            // Log the form data being sent
+            console.log('Form data being sent:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+            
+            return response.json().catch(() => {
+                throw new Error('Invalid JSON response from server');
+            });
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                showToast('Review submitted successfully!', 'success');
+                form.reset();
+                setRating(0); // Reset stars
+                toggleReviewForm(); // Hide form
+                loadReviews(); // Reload reviews
+            } else {
+                // Handle validation errors
+                if (data.errors) {
+                    const errorMessages = Object.values(data.errors).flat().join('\n');
+                    showToast(errorMessages, 'error');
+                } else {
+                    showToast(data.message || 'Failed to submit review', 'error');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast(error.message || 'Failed to submit review. Please try again.', 'error');
+        })
+        .finally(() => {
+            // Re-enable button
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        });
+    });
 
     // Add to cart with quantity
     document.getElementById('addToCartForm').addEventListener('submit', function(e) {

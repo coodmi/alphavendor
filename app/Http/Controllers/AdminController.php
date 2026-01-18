@@ -21,6 +21,18 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     /**
+     * Show analytics and reports page
+     */
+    public function analytics()
+    {
+        $totalUsers = \App\Models\User::count();
+        $totalOrders = \App\Models\Order::count();
+        $totalSales = \App\Models\Order::where('status', 'delivered')->sum('total');
+        $activeVendors = \App\Models\User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])->where('status', 'active')->count();
+        $recentOrders = \App\Models\Order::with('user')->latest()->take(10)->get();
+        return view('admin.analytics', compact('totalUsers', 'totalOrders', 'totalSales', 'activeVendors', 'recentOrders'));
+    }
+    /**
      * Show admin dashboard
      */
     public function index()
@@ -31,6 +43,11 @@ class AdminController extends Controller
             'wholesalers' => User::where('role', 'wholesaler')->count(),
             'exporters' => User::where('role', 'exporter')->count(),
             'pending_applications' => RoleApplication::pending()->count(),
+            'total_products' => Product::count(),
+            'total_categories' => Category::count(),
+            'total_brands' => Brand::count(),
+            'total_sales' => Order::where('status', 'delivered')->sum('total'),
+            'total_orders' => Order::count(),
         ];
 
         $recentApplications = RoleApplication::with('user')
@@ -45,7 +62,12 @@ class AdminController extends Controller
         // Fetch categories and products for dashboard
         $categories = Category::withCount('products')->orderBy('sort_order')->get();
         $products = Product::with(['category', 'vendor'])->latest()->get();
-        $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])->get();
+        $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])->get();
+        $retailers = User::where('role', 'retailer')->orderBy('name')->get();
+        $wholesalers = User::where('role', 'wholesaler')->orderBy('name')->get();
+        $importers = User::where('role', 'importer')->orderBy('name')->get();
+        // Recent orders to display on admin dashboard (shows immediately after any user places an order)
+        $orders = Order::with(['user', 'vendor', 'items.product'])->latest()->paginate(20);
         $brands = Brand::withCount('products')->orderBy('sort_order')->get();
 
         // Fetch retail page content
@@ -66,7 +88,26 @@ class AdminController extends Controller
         // Fetch import page content
         $importPageContent = ImportPageContent::getAllContent();
 
-        return view('dashboards.admin', compact('stats', 'recentApplications', 'users', 'applications', 'categories', 'products', 'vendors', 'brands', 'retailPageContent', 'aboutPageContent', 'contactPageContent', 'homePageContent', 'wholesalePageContent', 'importPageContent'));
+        return view('dashboards.admin', compact(
+            'stats',
+            'recentApplications',
+            'users',
+            'applications',
+            'categories',
+            'products',
+            'vendors',
+            'orders',
+            'retailers',
+            'wholesalers',
+            'importers',
+            'brands',
+            'retailPageContent',
+            'aboutPageContent',
+            'contactPageContent',
+            'homePageContent',
+            'wholesalePageContent',
+            'importPageContent'
+        ));
     }
 
     /**
@@ -153,9 +194,20 @@ class AdminController extends Controller
      */
     public function orders()
     {
-        $orders = Order::with(['user', 'vendor', 'items.product'])
-            ->latest()
-            ->paginate(20);
+        $query = Order::with(['user', 'vendor', 'items.product'])->latest();
+
+        // Server-side filters (optional) — allow filtering by vendor role or specific vendor id
+        if (request()->filled('vendor_role')) {
+            $role = request('vendor_role');
+            $query->whereHas('vendor', function ($q) use ($role) {
+                $q->where('role', $role);
+            });
+        }
+        if (request()->filled('vendor_id')) {
+            $query->where('vendor_id', request('vendor_id'));
+        }
+
+        $orders = $query->paginate(20);
 
         return view('admin.orders.index', compact('orders'));
     }

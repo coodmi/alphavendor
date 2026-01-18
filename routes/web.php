@@ -48,6 +48,7 @@ use App\Http\Controllers\SmsController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ManualPaymentController;
 use App\Http\Controllers\Admin\PaymentSettingsController;
+use App\Http\Controllers\Admin\AttributeController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -81,13 +82,27 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
+// Public review routes (anyone can view reviews)
+Route::get('/products/{product}/reviews', [App\Http\Controllers\ReviewController::class, 'productReviews'])->name('product.reviews');
+
 // Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
+    // Review routes (only authenticated users can submit/manage reviews)
+    Route::post('/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::put('/reviews/{review}', [App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::get('/my-reviews', [App\Http\Controllers\ReviewController::class, 'userReviews'])->name('reviews.user');
+    Route::post('/reviews/{review}/helpful', [App\Http\Controllers\ReviewController::class, 'markHelpful'])->name('reviews.helpful');
+    Route::get('/products/{product}/can-review', [App\Http\Controllers\ReviewController::class, 'canReview'])->name('product.can-review');
+
     // Admin routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+    // Analytics & Reports
+    Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
 
         // User management
         Route::get('/users', [AdminController::class, 'users'])->name('users');
@@ -171,6 +186,20 @@ Route::middleware('auth')->group(function () {
         // Payment Settings
         Route::get('/payment-settings', [PaymentSettingsController::class, 'index'])->name('payment-settings.index');
         Route::post('/payment-settings', [PaymentSettingsController::class, 'update'])->name('payment-settings.update');
+
+        // Attribute management
+        Route::resource('attributes', AttributeController::class);
+
+        // Review management
+        Route::get('/reviews/stats', [App\Http\Controllers\Admin\ReviewController::class, 'stats'])->name('reviews.stats');
+        Route::post('/reviews/{review}/approve', [App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('reviews.approve');
+        Route::post('/reviews/{review}/reject', [App\Http\Controllers\Admin\ReviewController::class, 'reject'])->name('reviews.reject');
+        Route::post('/reviews/{review}/report', [App\Http\Controllers\Admin\ReviewController::class, 'report'])->name('reviews.report');
+        Route::post('/reviews/{review}/respond', [App\Http\Controllers\Admin\ReviewController::class, 'respond'])->name('reviews.respond');
+        Route::resource('reviews', App\Http\Controllers\Admin\ReviewController::class);
+
+        // Direct order creation
+        Route::post('/direct-order/{product}', [App\Http\Controllers\Admin\ReviewController::class, 'createDirectOrder'])->name('direct-order');
     });
 
     // Retailer routes
@@ -258,6 +287,39 @@ Route::middleware('auth')->group(function () {
         Route::delete('/categories/{category}', [ExporterCategoryController::class, 'destroy'])->name('categories.destroy');
 
         // Product management
+        Route::get('/products', [ExporterProductController::class, 'index'])->name('products');
+        Route::post('/products', [ExporterProductController::class, 'store'])->name('products.store');
+        Route::put('/products/{product}', [ExporterProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [ExporterProductController::class, 'destroy'])->name('products.destroy');
+    });
+
+    // Importer routes - mirror exporter functionality where applicable
+    Route::middleware('role:importer')->prefix('importer')->name('importer.')->group(function () {
+        // Dashboard (reuses exporter controller logic for shared metrics)
+        Route::get('/dashboard', [ExporterDashboardController::class, 'index'])->name('dashboard');
+
+        // Orders (importer-facing)
+        Route::get('/orders', [ExporterDashboardController::class, 'orders'])->name('orders');
+        Route::get('/orders/{order}', [ExporterDashboardController::class, 'showOrder'])->name('orders.show');
+
+        // Certifications (importer can view/manage where applicable)
+        Route::get('/certifications', [ExporterCertificationController::class, 'index'])->name('certifications');
+        Route::post('/certifications', [ExporterCertificationController::class, 'store'])->name('certifications.store');
+        Route::post('/certifications/bulk-update', [ExporterCertificationController::class, 'bulkUpdate'])->name('certifications.bulk-update');
+        Route::put('/certifications/{certification}', [ExporterCertificationController::class, 'update'])->name('certifications.update');
+        Route::delete('/certifications/{certification}', [ExporterCertificationController::class, 'destroy'])->name('certifications.destroy');
+
+        // Products / Brands / Categories (reuse exporter controllers for now)
+        Route::get('/brands', [ExporterBrandController::class, 'index'])->name('brands');
+        Route::post('/brands', [ExporterBrandController::class, 'store'])->name('brands.store');
+        Route::put('/brands/{brand}', [ExporterBrandController::class, 'update'])->name('brands.update');
+        Route::delete('/brands/{brand}', [ExporterBrandController::class, 'destroy'])->name('brands.destroy');
+
+        Route::get('/categories', [ExporterCategoryController::class, 'index'])->name('categories');
+        Route::post('/categories', [ExporterCategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [ExporterCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [ExporterCategoryController::class, 'destroy'])->name('categories.destroy');
+
         Route::get('/products', [ExporterProductController::class, 'index'])->name('products');
         Route::post('/products', [ExporterProductController::class, 'store'])->name('products.store');
         Route::put('/products/{product}', [ExporterProductController::class, 'update'])->name('products.update');

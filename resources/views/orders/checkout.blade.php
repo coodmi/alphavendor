@@ -23,40 +23,85 @@
                     <h2 class="text-xl font-bold mb-4">Shipping Information</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-2">
+                            <div>
+                                <label class="block text-gray-700 mb-2">First Name *</label>
+                                <input type="text" name="shipping_first_name" required class="w-full border rounded px-3 py-2">
+                                @error('shipping_first_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Last Name *</label>
+                                <input type="text" name="shipping_last_name" required class="w-full border rounded px-3 py-2">
+                                @error('shipping_last_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                            </div>
+                        </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700 mb-2">Street Address *</label>
                             <textarea name="shipping_address" required class="w-full border rounded px-3 py-2" rows="2"></textarea>
                             @error('shipping_address')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
-
+                        <div>
+                            <label class="block text-gray-700 mb-2">District *</label>
+                            <select name="shipping_district" id="shipping_district" required class="w-full border rounded px-3 py-2">
+                                <option value="">Select District</option>
+                                <option value="Dhaka">Dhaka</option>
+                                <option value="Chattogram">Chattogram</option>
+                                <option value="Khulna">Khulna</option>
+                                <option value="Rajshahi">Rajshahi</option>
+                                <option value="Barisal">Barisal</option>
+                                <option value="Sylhet">Sylhet</option>
+                                <option value="Rangpur">Rangpur</option>
+                                <option value="Mymensingh">Mymensingh</option>
+                            </select>
+                            @error('shipping_district')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        </div>
                         <div>
                             <label class="block text-gray-700 mb-2">City *</label>
-                            <input type="text" name="shipping_city" required class="w-full border rounded px-3 py-2">
+                            <select name="shipping_city" id="shipping_city" required class="w-full border rounded px-3 py-2">
+                                <option value="">Select City</option>
+                            </select>
                             @error('shipping_city')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
-
-                        <div>
-                            <label class="block text-gray-700 mb-2">State/Province</label>
-                            <input type="text" name="shipping_state" class="w-full border rounded px-3 py-2">
-                        </div>
-
                         <div>
                             <label class="block text-gray-700 mb-2">ZIP/Postal Code *</label>
                             <input type="text" name="shipping_zip" required class="w-full border rounded px-3 py-2">
                             @error('shipping_zip')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
-
-                        <div>
-                            <label class="block text-gray-700 mb-2">Country *</label>
-                            <input type="text" name="shipping_country" required class="w-full border rounded px-3 py-2">
-                            @error('shipping_country')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-                        </div>
-
                         <div class="md:col-span-2">
                             <label class="block text-gray-700 mb-2">Phone Number *</label>
                             <input type="tel" name="phone" required class="w-full border rounded px-3 py-2">
                             @error('phone')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
+                    @push('scripts')
+                    <script>
+                    // Bangladesh districts and cities
+                    const bdDistricts = {
+                        'Dhaka': ['Dhaka', 'Narayanganj', 'Savar', 'Keraniganj', 'Dhamrai'],
+                        'Chattogram': ['Chattogram', 'Cox’s Bazar', 'Rangamati', 'Bandarban', 'Khagrachari'],
+                        'Khulna': ['Khulna', 'Bagerhat', 'Satkhira', 'Jessore', 'Narail'],
+                        'Rajshahi': ['Rajshahi', 'Natore', 'Pabna', 'Bogra', 'Naogaon'],
+                        'Barisal': ['Barisal', 'Patuakhali', 'Bhola', 'Pirojpur', 'Jhalokathi'],
+                        'Sylhet': ['Sylhet', 'Moulvibazar', 'Habiganj', 'Sunamganj'],
+                        'Rangpur': ['Rangpur', 'Dinajpur', 'Thakurgaon', 'Kurigram', 'Lalmonirhat'],
+                        'Mymensingh': ['Mymensingh', 'Jamalpur', 'Netrokona', 'Sherpur'],
+                    };
+
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const districtSelect = document.getElementById('shipping_district');
+                        const citySelect = document.getElementById('shipping_city');
+                        districtSelect.addEventListener('change', function() {
+                            const cities = bdDistricts[this.value] || [];
+                            citySelect.innerHTML = '<option value="">Select City</option>';
+                            cities.forEach(function(city) {
+                                const opt = document.createElement('option');
+                                opt.value = city;
+                                opt.textContent = city;
+                                citySelect.appendChild(opt);
+                            });
+                        });
+                    });
+                    </script>
+                    @endpush
                     </div>
                 </div>
 

@@ -243,10 +243,10 @@
                                         </div>
                                         <div class="flex items-center gap-2 mb-2 md:mb-3">
                                             <span
-                                                class="text-lg md:text-xl font-bold text-yellow-600">${{ number_format($product->price, 2) }}</span>
+                                                class="text-lg md:text-xl font-bold text-yellow-600">{{ currency_symbol() }}{{ number_format($product->price, 2) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
-                                                    class="text-xs md:text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                                    class="text-xs md:text-sm text-gray-400 line-through">{{ currency_symbol() }}{{ number_format($product->old_price, 2) }}</span>
                                             @endif
                                         </div>
                                         <span

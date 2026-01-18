@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Brand;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +17,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'vendor', 'brand']);
+        $query = Product::with(['category', 'vendor', 'brand', 'attributes']);
 
         // Apply filters
         if ($request->filled('category')) {
@@ -80,8 +81,9 @@ class ProductController extends Controller
             ->where('is_active', true)
             ->get();
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin'])->get();
+        $attributes = Attribute::orderBy('sort_order')->orderBy('name')->get();
 
-        return view('admin.products.index', compact('products', 'categories', 'brands', 'vendors'));
+        return view('admin.products.index', compact('products', 'categories', 'brands', 'vendors', 'attributes'));
     }
 
     /**
@@ -104,6 +106,8 @@ class ProductController extends Controller
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50',
             'brand' => 'nullable|string|max:100',
+            'attributes' => 'nullable|array',
+            'attributes.*' => 'exists:attributes,id',
         ]);
 
         if ($request->hasFile('image')) {
@@ -114,7 +118,18 @@ class ProductController extends Controller
         $validated['rating'] = 0;
         $validated['reviews_count'] = 0;
 
-        Product::create($validated);
+        $product = Product::create($validated);
+
+        // Handle attributes
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                if (!empty($value)) {
+                    $attributesData[$attributeId] = ['value' => $value];
+                }
+            }
+            $product->attributes()->sync($attributesData);
+        }
 
         return redirect()->route('admin.products')
             ->with('success', 'Product created successfully!');
@@ -140,6 +155,8 @@ class ProductController extends Controller
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50',
             'brand' => 'nullable|string|max:100',
+            'attributes' => 'nullable|array',
+            'attributes.*' => 'exists:attributes,id',
         ]);
 
         if ($request->hasFile('image')) {
@@ -153,6 +170,19 @@ class ProductController extends Controller
         $validated['is_featured'] = $request->has('is_featured');
 
         $product->update($validated);
+
+        // Handle attributes
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                if (!empty($value)) {
+                    $attributesData[$attributeId] = ['value' => $value];
+                }
+            }
+            $product->attributes()->sync($attributesData);
+        } else {
+            $product->attributes()->detach();
+        }
 
         return redirect()->route('admin.products')
             ->with('success', 'Product updated successfully!');

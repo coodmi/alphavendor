@@ -17,31 +17,152 @@
             </div>
         @endif
 
-        <form action="{{ route('register') }}" method="POST">
+        <form action="{{ route('register') }}" method="POST" id="registrationForm" style="margin-top: 24px;">
             @csrf
-
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
+            <div class="form-group" style="text-align:center;">
+                <label for="account_type" style="font-size: 18px; font-weight: 600; color: #444; margin-bottom: 10px; display:block;">Select Account Type</label>
+                <div class="custom-select-wrapper">
+                    <select id="account_type" name="account_type" class="custom-select" required>
+                        <option value="">-- Select Account Type --</option>
+                        <option value="user">User</option>
+                        <option value="retailer">Retailer</option>
+                        <option value="wholesaler">Wholesaler</option>
+                        <option value="importer">Importer</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+            <div id="user-fields" class="animated-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+            <div id="professional-fields" class="animated-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" id="company_name" name="company_name" value="{{ old('company_name') }}">
+                </div>
+                <div class="form-group">
+                    <label for="business_type">Business Type</label>
+                    <input type="text" id="business_type" name="business_type" value="{{ old('business_type') }}">
+                </div>
+                <div class="form-group">
+                    <label for="contact_person">Contact Person</label>
+                    <input type="text" id="contact_person" name="contact_person" value="{{ old('contact_person') }}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="pro_email" name="email" value="{{ old('email') }}">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" name="phone" value="{{ old('phone') }}">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" value="{{ old('address') }}">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="pro_password" name="password">
+                </div>
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input type="password" id="pro_password_confirmation" name="password_confirmation">
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="password_confirmation">Confirm Password</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" required>
-            </div>
-
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accountType = document.getElementById('account_type');
+            const userFields = document.getElementById('user-fields');
+            const proFields = document.getElementById('professional-fields');
+
+            // Helper to enable/disable all inputs in a container
+            function setFieldsEnabled(container, enabled) {
+                const inputs = container.querySelectorAll('input,select,textarea');
+                inputs.forEach(input => {
+                    input.disabled = !enabled;
+                    if (enabled) {
+                        input.setAttribute('required', 'required');
+                    } else {
+                        input.removeAttribute('required');
+                    }
+                });
+            }
+
+            function animateShow(el) {
+                el.style.opacity = 0;
+                el.style.display = '';
+                setTimeout(() => { el.style.opacity = 1; }, 10);
+            }
+            function animateHide(el) {
+                el.style.opacity = 0;
+                setTimeout(() => { el.style.display = 'none'; }, 200);
+            }
+            function toggleFields() {
+                if (accountType.value === 'user') {
+                    animateShow(userFields);
+                    animateHide(proFields);
+                    setFieldsEnabled(userFields, true);
+                    setFieldsEnabled(proFields, false);
+                } else if (accountType.value === 'retailer' || accountType.value === 'wholesaler' || accountType.value === 'importer') {
+                    animateHide(userFields);
+                    animateShow(proFields);
+                    setFieldsEnabled(userFields, false);
+                    setFieldsEnabled(proFields, true);
+                } else {
+                    animateHide(userFields);
+                    animateHide(proFields);
+                    setFieldsEnabled(userFields, false);
+                    setFieldsEnabled(proFields, false);
+                }
+            }
+            accountType.addEventListener('change', toggleFields);
+            toggleFields();
+        });
+        </script>
+
+
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accountType = document.getElementById('account_type');
+            const userFields = document.getElementById('user-fields');
+            const proFields = document.getElementById('professional-fields');
+
+            function toggleFields() {
+                if (accountType.value === 'user') {
+                    userFields.style.display = '';
+                    proFields.style.display = 'none';
+                } else if (accountType.value === 'retailer' || accountType.value === 'wholesaler' || accountType.value === 'importer') {
+                    userFields.style.display = 'none';
+                    proFields.style.display = '';
+                } else {
+                    userFields.style.display = 'none';
+                    proFields.style.display = 'none';
+                }
+            }
+            accountType.addEventListener('change', toggleFields);
+            toggleFields();
+        });
+        </script>
 
         <p class="auth-link">
             Already have an account? <a href="{{ route('login') }}">Login here</a>
@@ -145,5 +266,33 @@
     margin: 0;
     padding-left: 20px;
 }
+/* Custom Select Styling */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 20px auto;
+}
+.custom-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #FFA500;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 16px;
+    color: #333;
+    appearance: none;
+    outline: none;
+    transition: border 0.2s;
+    box-shadow: 0 2px 8px rgba(255,165,0,0.05);
+}
+.custom-select:focus {
+    border-color: #FFB833;
+}
+
+/* Animated fields */
+.animated-fields {
+    transition: opacity 0.2s;
+}
+
 </style>
 @endsection

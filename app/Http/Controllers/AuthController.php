@@ -99,6 +99,7 @@ class AuthController extends Controller
             'retailer' => redirect()->route('retailer.dashboard'),
             'wholesaler' => redirect()->route('wholesaler.dashboard'),
             'exporter' => redirect()->route('exporter.dashboard'),
+            'importer' => redirect()->route('importer.dashboard'),
             default => redirect()->route('user.dashboard'),
         };
     }

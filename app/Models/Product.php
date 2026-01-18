@@ -103,4 +103,49 @@ class Product extends Model
     {
         return $this->stock > 0 && $this->status === 'active';
     }
+
+    /**
+     * Get the product attributes
+     */
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'product_attributes')->withPivot('value');
+    }
+
+    /**
+     * Get the product attribute values
+     */
+    public function productAttributes()
+    {
+        return $this->hasMany(ProductAttribute::class);
+    }
+
+    /**
+     * Get the reviews for this product
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get approved reviews for this product
+     */
+    public function approvedReviews()
+    {
+        return $this->hasMany(Review::class)->approved();
+    }
+
+    /**
+     * Update product rating and reviews count
+     */
+    public function updateRatingStats()
+    {
+        $approvedReviews = $this->approvedReviews;
+
+        $this->rating = $approvedReviews->avg('rating') ?? 0;
+        $this->reviews_count = $approvedReviews->count();
+
+        $this->save();
+    }
 }
