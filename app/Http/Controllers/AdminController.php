@@ -137,6 +137,8 @@ class AdminController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|in:user,retailer,wholesaler,exporter,admin',
+            'dashboard_modules' => 'nullable|array',
+            'dashboard_modules.*' => 'in:orders,wishlist,profile,notifications,chat,wallet,coupons',
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -145,6 +147,7 @@ class AdminController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
+            'dashboard_modules' => $validated['dashboard_modules'] ?? null,
             'status' => $validated['status'],
         ]);
 
@@ -168,6 +171,8 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'role' => 'required|in:user,retailer,wholesaler,exporter,admin',
+            'dashboard_modules' => 'nullable|array',
+            'dashboard_modules.*' => 'in:orders,wishlist,profile,notifications,chat,wallet,coupons',
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -178,6 +183,38 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.users')->with('success', 'User updated successfully!');
+    }
+
+    /**
+     * Quick update for admin dashboard — change role and/or reset password for a user.
+     */
+    public function quickUpdateUser(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'role' => 'nullable|in:user,retailer,wholesaler,exporter,admin',
+            'password' => 'nullable|string|min:8|confirmed',
+            'dashboard_modules' => 'nullable|array',
+            'dashboard_modules.*' => 'in:orders,wishlist,profile,notifications,chat,wallet,coupons',
+        ]);
+
+        $user = User::findOrFail($validated['user_id']);
+
+        if (!empty($validated['role'])) {
+            $user->role = $validated['role'];
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        if (array_key_exists('dashboard_modules', $validated)) {
+            $user->dashboard_modules = $validated['dashboard_modules'] ?? null;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'User updated successfully.');
     }
 
     /**
