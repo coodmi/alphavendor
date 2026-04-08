@@ -36,11 +36,18 @@ return [
     ],
 
     'paperfly' => [
-        'base_url' => env('PAPERFLY_BASE_URL', 'https://api.paperfly.com.bd'),
-        'username' => env('PAPERFLY_USERNAME', 'dummy_user'),
-        'password' => env('PAPERFLY_PASSWORD', 'dummy_pass'),
-        'key' => env('PAPERFLY_KEY', 'dummy_key'),
+        'base_url'      => env('PAPERFLY_BASE_URL', 'https://api.paperfly.com.bd'),
+        'username'      => env('PAPERFLY_USERNAME', 'dummy_user'),
+        'password'      => env('PAPERFLY_PASSWORD', 'dummy_pass'),
+        'key'           => env('PAPERFLY_KEY', 'dummy_key'),
         'merchant_code' => env('PAPERFLY_MERCHANT_CODE', 'dummy_merchant'),
+    ],
+
+    'mimsms' => [
+        'apikey'        => env('MIMSMS_APIKEY', ''),
+        'username'      => env('MIMSMS_USERNAME', ''),
+        'sender_name'   => env('MIMSMS_SENDER_NAME', 'iSMS'),
+        'campaign_name' => env('MIMSMS_CAMPAIGN_NAME', ''),
     ],
 
 ];
