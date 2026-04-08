@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mx-auto px-4 py-12">
     <div class="mb-6">
-        <a href="{{ route('orders.my') }}" class="text-orange-500 hover:text-orange-600">
+        <a href="{{ route('orders.my-orders') }}" class="text-orange-500 hover:text-orange-600">
             <i class="fas fa-arrow-left mr-2"></i>Back to My Orders
         </a>
     </div>
@@ -73,6 +73,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
                             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Subtotal</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -95,6 +96,18 @@
                                 <td class="px-6 py-4">${{ number_format($item->price, 2) }}</td>
                                 <td class="px-6 py-4">{{ $item->quantity }}</td>
                                 <td class="px-6 py-4 text-right font-semibold">${{ number_format($item->subtotal, 2) }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    @if(in_array($order->status, ['delivered']) && !$item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
+                                        <a href="{{ route('customer.returns.create', ['order_item_id' => $item->id]) }}" 
+                                           class="inline-block px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm">
+                                            <i class="fas fa-undo mr-1"></i> Return/Refund
+                                        </a>
+                                    @elseif($item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
+                                        <span class="text-sm text-gray-500">Return Requested</span>
+                                    @else
+                                        <span class="text-sm text-gray-400">-</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

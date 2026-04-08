@@ -12,12 +12,12 @@ class ExportController extends Controller
 {
     public function index(Request $request)
     {
-        // Get all importers
-        $importerIds = User::where('role', 'importer')->pluck('id');
+        // Get all exporters
+        $exporterIds = User::where('role', 'exporter')->pluck('id');
 
-        // Base query for products from importers
+        // Base query for products from exporters
         $query = Product::with(['category', 'brand', 'vendor'])
-            ->whereIn('vendor_id', $importerIds)
+            ->whereIn('vendor_id', $exporterIds)
             ->where('status', 'active');
 
         // Apply category filter - include products from child categories
@@ -108,20 +108,20 @@ class ExportController extends Controller
         // Get only parent categories (admin categories) with product counts including child products from exporters
         $categories = Category::where('is_active', true)
             ->whereNull('vendor_id') // Only admin categories
-            ->with(['children' => function($q) use ($importerIds) {
+            ->with(['children' => function($q) use ($exporterIds) {
                 $q->where('is_active', true)
-                  ->whereIn('vendor_id', $importerIds);
+                  ->whereIn('vendor_id', $exporterIds);
             }])
             ->get()
-            ->map(function($category) use ($importerIds) {
+            ->map(function($category) use ($exporterIds) {
                 // Count products from parent and all children (exporter products only)
                 $productCount = $category->products()
-                    ->whereIn('vendor_id', $importerIds)
+                    ->whereIn('vendor_id', $exporterIds)
                     ->where('status', 'active')
                     ->count();
                 foreach($category->children as $child) {
                     $productCount += $child->products()
-                        ->whereIn('vendor_id', $importerIds)
+                        ->whereIn('vendor_id', $exporterIds)
                         ->where('status', 'active')
                         ->count();
                 }
@@ -134,7 +134,7 @@ class ExportController extends Controller
             ->values();
 
         // Get unique supplier locations
-        $locations = Product::whereIn('vendor_id', $importerIds)
+        $locations = Product::whereIn('vendor_id', $exporterIds)
             ->where('status', 'active')
             ->whereNotNull('supplier_location')
             ->distinct()
@@ -142,15 +142,15 @@ class ExportController extends Controller
 
         // Get MOQ ranges with counts
         $moqRanges = [
-            ['range' => '1-100', 'label' => '1 - 100 units', 'count' => Product::whereIn('vendor_id', $importerIds)->where('status', 'active')->whereBetween('minimum_order', [1, 100])->count()],
-            ['range' => '100-500', 'label' => '100 - 500 units', 'count' => Product::whereIn('vendor_id', $importerIds)->where('status', 'active')->whereBetween('minimum_order', [100, 500])->count()],
-            ['range' => '500-1000', 'label' => '500 - 1000 units', 'count' => Product::whereIn('vendor_id', $importerIds)->where('status', 'active')->whereBetween('minimum_order', [500, 1000])->count()],
-            ['range' => '1000-5000', 'label' => '1000 - 5000 units', 'count' => Product::whereIn('vendor_id', $importerIds)->where('status', 'active')->whereBetween('minimum_order', [1000, 5000])->count()],
-            ['range' => '5000+', 'label' => '5000+ units', 'count' => Product::whereIn('vendor_id', $importerIds)->where('status', 'active')->where('minimum_order', '>=', 5000)->count()],
+            ['range' => '1-100', 'label' => '1 - 100 units', 'count' => Product::whereIn('vendor_id', $exporterIds)->where('status', 'active')->whereBetween('minimum_order', [1, 100])->count()],
+            ['range' => '100-500', 'label' => '100 - 500 units', 'count' => Product::whereIn('vendor_id', $exporterIds)->where('status', 'active')->whereBetween('minimum_order', [100, 500])->count()],
+            ['range' => '500-1000', 'label' => '500 - 1000 units', 'count' => Product::whereIn('vendor_id', $exporterIds)->where('status', 'active')->whereBetween('minimum_order', [500, 1000])->count()],
+            ['range' => '1000-5000', 'label' => '1000 - 5000 units', 'count' => Product::whereIn('vendor_id', $exporterIds)->where('status', 'active')->whereBetween('minimum_order', [1000, 5000])->count()],
+            ['range' => '5000+', 'label' => '5000+ units', 'count' => Product::whereIn('vendor_id', $exporterIds)->where('status', 'active')->where('minimum_order', '>=', 5000)->count()],
         ];
 
         // Get active certifications from exporters
-        $certifications = \App\Models\Certification::whereIn('vendor_id', $importerIds)
+        $certifications = \App\Models\Certification::whereIn('vendor_id', $exporterIds)
             ->where('is_active', true)
             ->orderBy('name')
             ->get();

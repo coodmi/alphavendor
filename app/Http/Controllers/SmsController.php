@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SmsLog;
 use App\Models\OtpVerification;
 use App\Models\SmsTemplate;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -96,33 +97,18 @@ class SmsController extends Controller
             'user_id' => 'nullable|exists:users,id',
         ]);
 
-        $otpCode = OtpVerification::generateCode(6);
+        $smsService = app(SmsService::class);
+        $result = $smsService->sendOtp(
+            $validated['phone_number'],
+            $validated['purpose'],
+            $validated['user_id'] ?? auth()->id()
+        );
 
-        $otp = OtpVerification::create([
-            'user_id' => $validated['user_id'] ?? null,
-            'phone_number' => $validated['phone_number'],
-            'otp_code' => $otpCode,
-            'purpose' => $validated['purpose'],
-            'expires_at' => now()->addMinutes(10),
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
+        if ($result['success']) {
+            return response()->json($result);
+        }
 
-        // Send SMS with OTP
-        SmsLog::create([
-            'user_id' => $validated['user_id'] ?? null,
-            'phone_number' => $validated['phone_number'],
-            'message' => "Your OTP code is: {$otpCode}. Valid for 10 minutes.",
-            'type' => 'otp',
-            'status' => 'sent',
-            'sent_at' => now(),
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'OTP sent successfully',
-            'expires_in' => 600 // seconds
-        ]);
+        return response()->json($result, 500);
     }
 
     /**
@@ -136,40 +122,18 @@ class SmsController extends Controller
             'purpose' => 'required|string',
         ]);
 
-        $otp = OtpVerification::where('phone_number', $validated['phone_number'])
-            ->where('purpose', $validated['purpose'])
-            ->where('status', 'pending')
-            ->latest()
-            ->first();
+        $smsService = app(SmsService::class);
+        $result = $smsService->verifyOtp(
+            $validated['phone_number'],
+            $validated['otp_code'],
+            $validated['purpose']
+        );
 
-        if (!$otp) {
-            return response()->json([
-                'success' => false,
-                'message' => 'OTP not found or already used'
-            ], 404);
+        if ($result['success']) {
+            return response()->json($result);
         }
 
-        if (!$otp->canAttempt()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'OTP expired or maximum attempts reached'
-            ], 400);
-        }
-
-        $verified = $otp->verify($validated['otp_code']);
-
-        if ($verified) {
-            return response()->json([
-                'success' => true,
-                'message' => 'OTP verified successfully'
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid OTP code',
-            'attempts_remaining' => 3 - $otp->attempts
-        ], 400);
+        return response()->json($result, 400);
     }
 
     /**

@@ -4,64 +4,18 @@
 @section('page-title', 'Order Details')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Management</div>
-        <a href="{{ route('admin.users') }}" class="menu-item">
-            <i class="fas fa-users"></i>
-            <span>Users</span>
-        </a>
-        <a href="{{ route('admin.applications') }}" class="menu-item">
-            <i class="fas fa-file-alt"></i>
-            <span>Applications</span>
-        </a>
-        <a href="{{ route('admin.orders') }}" class="menu-item active">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Settings</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-6">
+    <div class="mb-6 flex items-center justify-between">
         <a href="{{ route('admin.orders') }}" class="text-blue-600 hover:text-blue-800">
             <i class="fas fa-arrow-left mr-2"></i>Back to Orders
+        </a>
+        <a href="{{ route('admin.orders.invoice', $order) }}" target="_blank"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition">
+            <i class="fas fa-file-invoice"></i> Print / Download Invoice
         </a>
     </div>
 

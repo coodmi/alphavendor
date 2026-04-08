@@ -4,41 +4,7 @@
 @section('page-title', 'Products')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item active">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
@@ -269,7 +235,8 @@
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Row 1: Product Name, SKU, Category, Brand (Always Visible) -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px;">
                 <div>
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Name *</label>
                     <input type="text" name="name" id="productName" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
@@ -291,31 +258,56 @@
                 </div>
 
                 <div>
-                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Vendor *</label>
-                    <select name="vendor_id" id="productVendor" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-                        <option value="">Select Vendor</option>
-                        @foreach($vendors as $vendor)
-                            <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Brand</label>
+                    <select name="brand_id" id="productBrand" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="">Select Brand (Optional)</option>
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
                     </select>
                 </div>
+            </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Price ($) *</label>
-                    <input type="number" name="price" id="productPrice" required step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+            <!-- See More Button -->
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button type="button" onclick="toggleMoreFields()" id="seeMoreBtn" style="padding: 10px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s;">
+                    <span id="seeMoreText">See More</span>
+                    <i class="fas fa-chevron-down" id="seeMoreIcon"></i>
+                </button>
+            </div>
+
+            <!-- Additional Fields (Hidden by default) -->
+            <div id="moreFields" style="display: none;">
+                <!-- Row 2: Vendor, Price, Old Price, Stock -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Vendor *</label>
+                        <select name="vendor_id" id="productVendor" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                            <option value="">Select Vendor</option>
+                            @foreach($vendors as $vendor)
+                                <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Price ($) *</label>
+                        <input type="number" name="price" id="productPrice" required step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Old Price ($)</label>
+                        <input type="number" name="old_price" id="productOldPrice" step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Stock Quantity *</label>
+                        <input type="number" name="stock" id="productStock" required min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    </div>
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Old Price ($)</label>
-                    <input type="number" name="old_price" id="productOldPrice" step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-                </div>
-
-                <div>
-                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Stock Quantity *</label>
-                    <input type="number" name="stock" id="productStock" required min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-                </div>
-
-                <div>
+                <!-- Row 3: Status (full width) -->
+                <div style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Status *</label>
                     <select name="status" id="productStatus" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
                         <option value="active">Active</option>
@@ -323,67 +315,116 @@
                         <option value="out_of_stock">Out of Stock</option>
                     </select>
                 </div>
-            </div>
 
-            <div style="margin-top: 20px;">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Description</label>
-                <textarea name="description" id="productDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Image <span id="imageRequiredLabel">*</span></label>
-                <input type="file" name="image" id="productImage" accept="image/*" onchange="previewImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
-                <div id="imagePreview" style="display: none; margin-top: 15px; position: relative;">
-                    <img id="previewImg" src="" alt="Preview" style="max-width: 100%; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #3498db;">
-                    <button type="button" onclick="cancelImage()" style="position: absolute; top: 10px; right: 10px; width: 35px; height: 35px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer;">
-                        <i class="fas fa-times"></i>
-                    </button>
+                <!-- Description -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Description</label>
+                    <textarea name="description" id="productDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
                 </div>
-            </div>
 
-            <div style="margin-top: 20px; display: flex; gap: 20px;">
-                <label style="display: flex; align-items: center; cursor: pointer;">
-                    <input type="checkbox" name="is_featured" id="productFeatured" value="1" style="margin-right: 8px; width: 18px; height: 18px;">
-                    <span style="color: #2c3e50;">Featured Product</span>
-                </label>
-
-                <div style="flex: 1;">
-                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Badge (Optional)</label>
-                    <input type="text" name="badge" id="productBadge" placeholder="e.g., New, Sale, Hot" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                <!-- Product Image -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Image <span id="imageRequiredLabel">*</span></label>
+                    <input type="file" name="image" id="productImage" accept="image/*" onchange="previewImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                    <div id="imagePreview" style="display: none; margin-top: 15px; position: relative;">
+                        <img id="previewImg" src="" alt="Preview" style="max-width: 100%; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #3498db;">
+                        <button type="button" onclick="cancelImage()" style="position: absolute; top: 10px; right: 10px; width: 35px; height: 35px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div style="margin-top: 20px;">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Attributes</label>
-                <div id="attributesContainer" style="border: 1px solid #ddd; border-radius: 6px; padding: 15px; background: #f8f9fa;">
-                    @if($attributes->count() > 0)
-                        @foreach($attributes as $attribute)
-                        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                            <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">{{ $attribute->name }}:</label>
-                            @if($attribute->type === 'select')
-                                <select name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                                    <option value="">Select {{ $attribute->name }}</option>
-                                    @if($attribute->options)
-                                        @foreach($attribute->options as $option)
-                                            <option value="{{ $option }}">{{ $option }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            @elseif($attribute->type === 'color')
-                                <input type="color" name="attributes[{{ $attribute->id }}]" style="width: 60px; height: 40px; border: 1px solid #ddd; border-radius: 4px;">
-                            @elseif($attribute->type === 'number')
-                                <input type="number" name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                            @else
-                                <input type="text" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                            @endif
-                        </div>
+                <!-- Featured, Free Shipping, Badge -->
+                <div style="margin-top: 20px; display: flex; gap: 20px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" name="is_featured" id="productFeatured" value="1" style="margin-right: 8px; width: 18px; height: 18px;">
+                        <span style="color: #2c3e50;">Featured Product</span>
+                    </label>
+
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" name="free_shipping" id="productFreeShipping" value="1" style="margin-right: 8px; width: 18px; height: 18px;">
+                        <span style="color: #2c3e50;"><i class="fas fa-shipping-fast"></i> Free Shipping</span>
+                    </label>
+
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Badge (Optional)</label>
+                        <input type="text" name="badge" id="productBadge" placeholder="e.g., New, Sale, Hot" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    </div>
+                </div>
+
+                <!-- Special Offer -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Special Offer</label>
+                    <select name="special_offer_id" id="productOffer" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="">No Offer</option>
+                        @foreach($offers as $offer)
+                            <option value="{{ $offer->id }}" data-color="{{ $offer->badge_color }}" data-text="{{ $offer->badge_text }}">
+                                {{ $offer->name }} @if($offer->badge_text) - {{ $offer->badge_text }} @endif
+                            </option>
                         @endforeach
-                    @else
-                        <p style="color: #7f8c8d; margin: 0; text-align: center;">No attributes configured yet. <a href="{{ route('admin.attributes.index') }}" style="color: #3498db;">Create attributes</a> to enhance your products.</p>
-                    @endif
+                    </select>
+                    <small style="color: #7f8c8d;">Assign this product to a special offer category</small>
+                </div>
+
+                <!-- Shipping Method -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">
+                        <i class="fas fa-shipping-fast" style="color: #3498db;"></i> Shipping Method
+                    </label>
+                    <select name="shipping_method_id" id="productShipping" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="">Select Shipping Method</option>
+                        @foreach($shippingMethods->groupBy('zone') as $zone => $methods)
+                            <optgroup label="{{ $zone }}">
+                                @foreach($methods as $method)
+                                    <option value="{{ $method->id }}">
+                                        {{ $method->name }} - ৳{{ number_format($method->cost, 2) }} 
+                                        ({{ $method->estimated_days_min }}-{{ $method->estimated_days_max }} days)
+                                        @if($method->free_shipping_threshold)
+                                            - Free over ৳{{ number_format($method->free_shipping_threshold, 2) }}
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                    <small style="color: #7f8c8d;">Select the shipping method for this product</small>
+                </div>
+
+                <!-- Product Attributes -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Attributes</label>
+                    <div id="attributesContainer" style="border: 1px solid #ddd; border-radius: 6px; padding: 15px; background: #f8f9fa;">
+                        @if($attributes->count() > 0)
+                            @foreach($attributes as $attribute)
+                            <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                                <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">{{ $attribute->name }}:</label>
+                                @if($attribute->type === 'select')
+                                    <select name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <option value="">Select {{ $attribute->name }}</option>
+                                        @if($attribute->options)
+                                            @foreach($attribute->options as $option)
+                                                <option value="{{ $option }}">{{ $option }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                @elseif($attribute->type === 'color')
+                                    <input type="color" name="attributes[{{ $attribute->id }}]" style="width: 60px; height: 40px; border: 1px solid #ddd; border-radius: 4px;">
+                                @elseif($attribute->type === 'number')
+                                    <input type="number" name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                @else
+                                    <input type="text" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                @endif
+                            </div>
+                            @endforeach
+                        @else
+                            <p style="color: #7f8c8d; margin: 0; text-align: center;">No attributes configured yet. <a href="{{ route('admin.attributes.index') }}" style="color: #3498db;">Create attributes</a> to enhance your products.</p>
+                        @endif
+                    </div>
                 </div>
             </div>
+            <!-- End of More Fields -->
 
+            <!-- Submit Buttons -->
             <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end;">
                 <button type="button" onclick="closeModal()" style="padding: 12px 24px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer;">
                     Cancel
@@ -420,6 +461,24 @@
 <script>
 let isEditMode = false;
 
+// Toggle More Fields
+function toggleMoreFields() {
+    const moreFields = document.getElementById('moreFields');
+    const seeMoreBtn = document.getElementById('seeMoreBtn');
+    const seeMoreText = document.getElementById('seeMoreText');
+    const seeMoreIcon = document.getElementById('seeMoreIcon');
+    
+    if (moreFields.style.display === 'none' || moreFields.style.display === '') {
+        moreFields.style.display = 'block';
+        seeMoreText.textContent = 'See Less';
+        seeMoreIcon.className = 'fas fa-chevron-up';
+    } else {
+        moreFields.style.display = 'none';
+        seeMoreText.textContent = 'See More';
+        seeMoreIcon.className = 'fas fa-chevron-down';
+    }
+}
+
 function openAddModal() {
     isEditMode = false;
     document.getElementById('modalTitle').textContent = 'Add Product';
@@ -430,6 +489,11 @@ function openAddModal() {
     document.getElementById('imageRequiredLabel').textContent = '*';
     document.getElementById('productImage').required = true;
     document.getElementById('productModal').style.display = 'flex';
+    
+    // Reset to collapsed state
+    document.getElementById('moreFields').style.display = 'none';
+    document.getElementById('seeMoreText').textContent = 'See More';
+    document.getElementById('seeMoreIcon').className = 'fas fa-chevron-down';
 }
 
 function editProduct(product) {
@@ -440,6 +504,12 @@ function editProduct(product) {
     document.getElementById('productName').value = product.name;
     document.getElementById('productSku').value = product.sku;
     document.getElementById('productCategory').value = product.category_id;
+    document.getElementById('productBrand').value = product.brand_id || '';
+    
+    // Auto-expand more fields when editing
+    document.getElementById('moreFields').style.display = 'block';
+    document.getElementById('seeMoreText').textContent = 'See Less';
+    document.getElementById('seeMoreIcon').className = 'fas fa-chevron-up';
     document.getElementById('productVendor').value = product.vendor_id;
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productOldPrice').value = product.old_price || '';

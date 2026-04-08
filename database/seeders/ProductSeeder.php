@@ -343,7 +343,7 @@ class ProductSeeder extends Seeder
             $productData['slug'] = Str::slug($productData['name']) . '-' . uniqid();
             $productData['rating'] = rand(35, 50) / 10;
             $productData['reviews_count'] = rand(10, 500);
-            $productData['image'] = 'products/placeholder.jpg';
+            $productData['image'] = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop';
 
             $products[] = $productData;
         }

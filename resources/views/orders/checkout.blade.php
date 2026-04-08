@@ -22,28 +22,55 @@
                 <div class="bg-white rounded-lg shadow p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4">Shipping Information</h2>
 
+                    @if($addresses->count() > 0)
+                        <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <label class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-map-marker-alt text-blue-600"></i> Select Saved Address
+                            </label>
+                            <select id="savedAddressSelect" class="w-full border rounded px-3 py-2 mb-3" style="background-color: white; color: #333;">
+                                <option value="">-- Select an address or enter new below --</option>
+                                @foreach($addresses as $address)
+                                    <option value="{{ $address->id }}" 
+                                            data-first-name="{{ $address->first_name }}"
+                                            data-last-name="{{ $address->last_name }}"
+                                            data-address="{{ $address->address }}"
+                                            data-city="{{ $address->city }}"
+                                            data-state="{{ $address->state }}"
+                                            data-district="{{ $address->district }}"
+                                            data-phone="{{ $address->phone }}"
+                                            {{ $address->is_default ? 'selected' : '' }}>
+                                        {{ $address->label ? $address->label . ' - ' : '' }}{{ $address->first_name }} {{ $address->last_name }} ({{ $address->district }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="text-sm text-gray-600">
+                                <i class="fas fa-info-circle"></i> Select a saved address to auto-fill the form below
+                            </p>
+                        </div>
+                    @endif
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-2">
                             <div>
                                 <label class="block text-gray-700 mb-2">First Name *</label>
-                                <input type="text" name="shipping_first_name" required class="w-full border rounded px-3 py-2">
+                                <input type="text" name="shipping_first_name" id="first_name" required class="w-full border rounded px-3 py-2">
                                 @error('shipping_first_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                             <div>
                                 <label class="block text-gray-700 mb-2">Last Name *</label>
-                                <input type="text" name="shipping_last_name" required class="w-full border rounded px-3 py-2">
+                                <input type="text" name="shipping_last_name" id="last_name" required class="w-full border rounded px-3 py-2">
                                 @error('shipping_last_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700 mb-2">Street Address *</label>
-                            <textarea name="shipping_address" required class="w-full border rounded px-3 py-2" rows="2"></textarea>
+                            <textarea name="shipping_address" id="address" required class="w-full border rounded px-3 py-2" rows="2"></textarea>
                             @error('shipping_address')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
                         <div>
-                            <label class="block text-gray-700 mb-2">District *</label>
-                            <select name="shipping_district" id="shipping_district" required class="w-full border rounded px-3 py-2">
-                                <option value="">Select District</option>
+                            <label class="block text-gray-700 mb-2">Division *</label>
+                            <select name="shipping_state" id="shipping_division" required class="w-full border rounded px-3 py-2" style="background-color: white; color: #333;">
+                                <option value="">Select Division</option>
                                 <option value="Dhaka">Dhaka</option>
                                 <option value="Chattogram">Chattogram</option>
                                 <option value="Khulna">Khulna</option>
@@ -53,51 +80,125 @@
                                 <option value="Rangpur">Rangpur</option>
                                 <option value="Mymensingh">Mymensingh</option>
                             </select>
-                            @error('shipping_district')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                            @error('shipping_state')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
                         <div>
-                            <label class="block text-gray-700 mb-2">City *</label>
-                            <select name="shipping_city" id="shipping_city" required class="w-full border rounded px-3 py-2">
-                                <option value="">Select City</option>
+                            <label class="block text-gray-700 mb-2">District *</label>
+                            <select name="shipping_district" id="shipping_district" required class="w-full border rounded px-3 py-2" style="background-color: white; color: #333;">
+                                <option value="">Select Division First</option>
                             </select>
-                            @error('shipping_city')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 mb-2">ZIP/Postal Code *</label>
-                            <input type="text" name="shipping_zip" required class="w-full border rounded px-3 py-2">
-                            @error('shipping_zip')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                            @error('shipping_district')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700 mb-2">Phone Number *</label>
-                            <input type="tel" name="phone" required class="w-full border rounded px-3 py-2">
+                            <input type="tel" name="phone" id="phone" required class="w-full border rounded px-3 py-2">
                             @error('phone')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
+                        <!-- Hidden fields for required data -->
+                        <input type="hidden" name="shipping_country" value="Bangladesh">
+                        <input type="hidden" name="shipping_city" id="shipping_city_hidden" value="">
+                        <input type="hidden" name="delivery_charge" value="0">
                     @push('scripts')
                     <script>
-                    // Bangladesh districts and cities
-                    const bdDistricts = {
-                        'Dhaka': ['Dhaka', 'Narayanganj', 'Savar', 'Keraniganj', 'Dhamrai'],
-                        'Chattogram': ['Chattogram', 'Cox’s Bazar', 'Rangamati', 'Bandarban', 'Khagrachari'],
-                        'Khulna': ['Khulna', 'Bagerhat', 'Satkhira', 'Jessore', 'Narail'],
-                        'Rajshahi': ['Rajshahi', 'Natore', 'Pabna', 'Bogra', 'Naogaon'],
-                        'Barisal': ['Barisal', 'Patuakhali', 'Bhola', 'Pirojpur', 'Jhalokathi'],
-                        'Sylhet': ['Sylhet', 'Moulvibazar', 'Habiganj', 'Sunamganj'],
-                        'Rangpur': ['Rangpur', 'Dinajpur', 'Thakurgaon', 'Kurigram', 'Lalmonirhat'],
-                        'Mymensingh': ['Mymensingh', 'Jamalpur', 'Netrokona', 'Sherpur'],
+                    // Bangladesh divisions and their districts
+                    const divisionDistricts = {
+                        'Dhaka': ['Dhaka', 'Faridpur', 'Gazipur', 'Gopalganj', 'Kishoreganj', 'Madaripur', 'Manikganj', 'Munshiganj', 'Narayanganj', 'Narsingdi', 'Rajbari', 'Shariatpur', 'Tangail'],
+                        'Chattogram': ['Bandarban', 'Brahmanbaria', 'Chandpur', 'Chattogram', 'Comilla', "Cox's Bazar", 'Feni', 'Khagrachari', 'Lakshmipur', 'Noakhali', 'Rangamati'],
+                        'Khulna': ['Bagerhat', 'Chuadanga', 'Jessore', 'Jhenaidah', 'Khulna', 'Kushtia', 'Magura', 'Meherpur', 'Narail', 'Satkhira'],
+                        'Rajshahi': ['Bogra', 'Chapainawabganj', 'Joypurhat', 'Naogaon', 'Natore', 'Pabna', 'Rajshahi', 'Sirajganj'],
+                        'Barisal': ['Barguna', 'Barisal', 'Bhola', 'Jhalokathi', 'Patuakhali', 'Pirojpur'],
+                        'Sylhet': ['Habiganj', 'Moulvibazar', 'Sunamganj', 'Sylhet'],
+                        'Rangpur': ['Dinajpur', 'Gaibandha', 'Kurigram', 'Lalmonirhat', 'Nilphamari', 'Panchagarh', 'Rangpur', 'Thakurgaon'],
+                        'Mymensingh': ['Jamalpur', 'Mymensingh', 'Netrokona', 'Sherpur']
                     };
 
                     document.addEventListener('DOMContentLoaded', function() {
+                        const divisionSelect = document.getElementById('shipping_division');
                         const districtSelect = document.getElementById('shipping_district');
-                        const citySelect = document.getElementById('shipping_city');
-                        districtSelect.addEventListener('change', function() {
-                            const cities = bdDistricts[this.value] || [];
-                            citySelect.innerHTML = '<option value="">Select City</option>';
-                            cities.forEach(function(city) {
-                                const opt = document.createElement('option');
-                                opt.value = city;
-                                opt.textContent = city;
-                                citySelect.appendChild(opt);
+                        const cityHidden = document.getElementById('shipping_city_hidden');
+                        const savedAddressSelect = document.getElementById('savedAddressSelect');
+
+                        // Handle saved address selection
+                        if (savedAddressSelect) {
+                            savedAddressSelect.addEventListener('change', function() {
+                                const selectedOption = this.options[this.selectedIndex];
+                                
+                                if (this.value) {
+                                    // Get data from selected option
+                                    const firstName = selectedOption.getAttribute('data-first-name');
+                                    const lastName = selectedOption.getAttribute('data-last-name');
+                                    const address = selectedOption.getAttribute('data-address');
+                                    const state = selectedOption.getAttribute('data-state');
+                                    const district = selectedOption.getAttribute('data-district');
+                                    const phone = selectedOption.getAttribute('data-phone');
+                                    
+                                    // Fill form fields
+                                    document.getElementById('first_name').value = firstName || '';
+                                    document.getElementById('last_name').value = lastName || '';
+                                    document.getElementById('address').value = address || '';
+                                    document.getElementById('phone').value = phone || '';
+                                    
+                                    // Set division
+                                    if (state) {
+                                        divisionSelect.value = state;
+                                        // Trigger change event to populate districts
+                                        divisionSelect.dispatchEvent(new Event('change'));
+                                        
+                                        // Wait a moment for districts to populate, then select the district
+                                        setTimeout(function() {
+                                            if (district) {
+                                                districtSelect.value = district;
+                                                // Trigger change to update hidden city field
+                                                districtSelect.dispatchEvent(new Event('change'));
+                                            }
+                                        }, 100);
+                                    }
+                                } else {
+                                    // Clear form if "Select an address" is chosen
+                                    document.getElementById('first_name').value = '';
+                                    document.getElementById('last_name').value = '';
+                                    document.getElementById('address').value = '';
+                                    document.getElementById('phone').value = '';
+                                    divisionSelect.value = '';
+                                    districtSelect.innerHTML = '<option value="">Select Division First</option>';
+                                    districtSelect.disabled = true;
+                                    cityHidden.value = '';
+                                }
                             });
+                            
+                            // Auto-fill if default address is selected on page load
+                            if (savedAddressSelect.value) {
+                                savedAddressSelect.dispatchEvent(new Event('change'));
+                            }
+                        }
+
+                        divisionSelect.addEventListener('change', function() {
+                            const selectedDivision = this.value;
+                            const districts = divisionDistricts[selectedDivision] || [];
+                            
+                            // Clear existing options
+                            districtSelect.innerHTML = '<option value="">Select District</option>';
+                            
+                            // Add districts for selected division
+                            districts.forEach(function(district) {
+                                const option = document.createElement('option');
+                                option.value = district;
+                                option.textContent = district;
+                                districtSelect.appendChild(option);
+                            });
+                            
+                            // Enable district select if division is selected
+                            if (selectedDivision) {
+                                districtSelect.disabled = false;
+                            } else {
+                                districtSelect.disabled = true;
+                                districtSelect.innerHTML = '<option value="">Select Division First</option>';
+                            }
+                        });
+
+                        // Update hidden city field when district changes
+                        districtSelect.addEventListener('change', function() {
+                            cityHidden.value = this.value;
                         });
                     });
                     </script>

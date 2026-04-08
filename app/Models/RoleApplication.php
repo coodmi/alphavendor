@@ -18,6 +18,7 @@ class RoleApplication extends Model
         'user_id',
         'requested_role',
         'reason',
+        'contact_person',
         'business_name',
         'business_registration_number',
         'tax_id',

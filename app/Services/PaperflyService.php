@@ -10,71 +10,93 @@ class PaperflyService
     protected $baseUrl;
     protected $username;
     protected $password;
-    protected $paperflyKey;
+    protected $apiKey;
     protected $merchantCode;
 
     public function __construct()
     {
         $this->baseUrl = config('services.paperfly.base_url', 'https://api.paperfly.com.bd');
-        $this->username = config('services.paperfly.username');
-        $this->password = config('services.paperfly.password');
-        $this->paperflyKey = config('services.paperfly.key');
-        $this->merchantCode = config('services.paperfly.merchant_code');
+        $this->username = config('services.paperfly.username', 'dummy_user');
+        $this->password = config('services.paperfly.password', 'dummy_pass');
+        $this->apiKey = config('services.paperfly.key', 'dummy_key');
+        $this->merchantCode = config('services.paperfly.merchant_code', 'dummy_merchant');
     }
 
     /**
-     * Create order in Paperfly system
+     * Create a new delivery order
      */
     public function createOrder($orderData)
     {
-        try {
-            $payload = [
-                'merchantCode' => $this->merchantCode,
-                'merOrderRef' => $orderData['order_number'],
-                'pickMerchantName' => $orderData['pick_merchant_name'] ?? '',
-                'pickMerchantAddress' => $orderData['pick_merchant_address'] ?? '',
-                'pickMerchantThana' => $orderData['pick_merchant_thana'] ?? '',
-                'pickMerchantDistrict' => $orderData['pick_merchant_district'] ?? '',
-                'pickupMerchantPhone' => $orderData['pickup_merchant_phone'] ?? '',
-                'productSizeWeight' => $orderData['product_size_weight'] ?? 'standard',
-                'productBrief' => $orderData['product_brief'] ?? 'Order Items',
-                'packagePrice' => $orderData['package_price'],
-                'deliveryOption' => $orderData['delivery_option'] ?? 'regular',
-                'custname' => $orderData['customer_name'],
-                'custaddress' => $orderData['customer_address'],
-                'customerThana' => $orderData['customer_thana'] ?? '',
-                'customerDistrict' => $orderData['customer_district'],
-                'custPhone' => $orderData['customer_phone'],
+        // Check if using dummy credentials
+        if ($this->username === 'dummy_user' || $this->apiKey === 'dummy_key') {
+            Log::info('Paperfly: Using dummy credentials - order not actually created', [
+                'order_number' => $orderData['order_number']
+            ]);
+            
+            return [
+                'success' => true,
+                'tracking_number' => 'MOCK_' . strtoupper(uniqid()),
+                'tracking_barcode' => 'MOCK_BARCODE_' . time(),
+                'message' => 'Mock order created (Paperfly not configured)',
+                'response_code' => 200,
+                'is_mock' => true
             ];
+        }
 
+        try {
             $response = Http::withBasicAuth($this->username, $this->password)
                 ->withHeaders([
-                    'Paperflykey' => $this->paperflyKey,
+                    'paperflykey' => $this->apiKey,
                     'Content-Type' => 'application/json',
                 ])
-                ->post($this->baseUrl . '/NewOrderUpload', $payload);
+                ->post($this->baseUrl . '/merchant/api/service/new_order_v2.php', [
+                    'merchantOrderReference' => $orderData['order_number'],
+                    'storeName' => $orderData['store_name'] ?? 'Ovi',
+                    'productBrief' => $orderData['product_brief'],
+                    'packagePrice' => (string) $orderData['package_price'],
+                    'max_weight' => (string) ($orderData['max_weight'] ?? '0.3'),
+                    'customerName' => $orderData['customer_name'],
+                    'customerAddress' => $orderData['customer_address'],
+                    'customerPhone' => $orderData['customer_phone'],
+                ]);
 
             if ($response->successful()) {
                 $data = $response->json();
+                
+                Log::info('Paperfly order created', [
+                    'order_reference' => $orderData['order_number'],
+                    'response' => $data
+                ]);
+
                 return [
                     'success' => true,
                     'tracking_number' => $data['success']['tracking_number'] ?? null,
+                    'tracking_barcode' => $data['success']['tracking_barcode'] ?? null,
                     'message' => $data['success']['message'] ?? 'Order created successfully',
-                    'data' => $data
+                    'response_code' => $data['response_code'] ?? 200,
                 ];
             }
 
+            Log::error('Paperfly order creation failed', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+
             return [
                 'success' => false,
-                'message' => $response->json()['message'] ?? 'Failed to create order',
-                'error' => $response->json()
+                'message' => 'Failed to create delivery order',
+                'error' => $response->body()
             ];
 
         } catch (\Exception $e) {
-            Log::error('Paperfly Order Creation Failed: ' . $e->getMessage());
+            Log::error('Paperfly order creation exception', [
+                'error' => $e->getMessage(),
+                'order_data' => $orderData
+            ]);
+
             return [
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Error: ' . $e->getMessage()
             ];
         }
     }
@@ -85,38 +107,89 @@ class PaperflyService
     public function trackOrder($referenceNumber)
     {
         try {
-            $payload = [
-                'ReferenceNumber' => $referenceNumber,
-                'merchantCode' => $this->merchantCode,
-            ];
-
             $response = Http::withBasicAuth($this->username, $this->password)
                 ->withHeaders([
-                    'Paperflykey' => $this->paperflyKey,
+                    'paperflykey' => $this->apiKey,
                     'Content-Type' => 'application/json',
                 ])
-                ->post($this->baseUrl . '/API-Order-Tracking', $payload);
+                ->post($this->baseUrl . '/API-Order-Tracking', [
+                    'ReferenceNumber' => $referenceNumber,
+                ]);
 
             if ($response->successful()) {
                 $data = $response->json();
+                
+                if (isset($data['success']['trackingStatus'][0])) {
+                    $status = $data['success']['trackingStatus'][0];
+                    
+                    return [
+                        'success' => true,
+                        'status' => $this->parseTrackingStatus($status),
+                        'raw_data' => $status
+                    ];
+                }
+            }
+
+            return [
+                'success' => false,
+                'message' => 'Unable to track order'
+            ];
+
+        } catch (\Exception $e) {
+            Log::error('Paperfly tracking failed', [
+                'error' => $e->getMessage(),
+                'reference' => $referenceNumber
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Exchange/Return order
+     */
+    public function exchangeOrder($orderData)
+    {
+        try {
+            $response = Http::withBasicAuth($this->username, $this->password)
+                ->withHeaders([
+                    'paperflykey' => $this->apiKey,
+                    'Content-Type' => 'application/json',
+                ])
+                ->post($this->baseUrl . '/merchant/api/service/new_order_v2.php', [
+                    'merchantOrderReference' => $orderData['order_number'],
+                    'storeName' => $orderData['store_name'] ?? 'Ovi',
+                    'productBrief' => $orderData['product_brief'],
+                    'packagePrice' => $orderData['package_price'],
+                    'max_weight' => $orderData['max_weight'] ?? '0.3',
+                    'customerName' => $orderData['customer_name'],
+                    'customerAddress' => $orderData['customer_address'],
+                    'customerPhone' => $orderData['customer_phone'],
+                    'orderType' => 'Exchange',
+                    'exchangeDescription' => $orderData['exchange_description'] ?? 'exchange product',
+                    'exchangePrice' => $orderData['exchange_price'] ?? '100',
+                    'exchangeWeight' => $orderData['exchange_weight'] ?? '1.5',
+                ]);
+
+            if ($response->successful()) {
                 return [
                     'success' => true,
-                    'tracking_status' => $data['success']['trackingStatus'] ?? [],
-                    'data' => $data
+                    'data' => $response->json()
                 ];
             }
 
             return [
                 'success' => false,
-                'message' => 'Failed to track order',
-                'error' => $response->json()
+                'message' => 'Failed to create exchange order'
             ];
 
         } catch (\Exception $e) {
-            Log::error('Paperfly Order Tracking Failed: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Error: ' . $e->getMessage()
             ];
         }
     }
@@ -127,81 +200,68 @@ class PaperflyService
     public function cancelOrder($orderId)
     {
         try {
-            $payload = [
-                'order_id' => $orderId,
-                'merchantCode' => $this->merchantCode,
-            ];
-
             $response = Http::withBasicAuth($this->username, $this->password)
                 ->withHeaders([
-                    'Paperflykey' => $this->paperflyKey,
+                    'paperflykey' => $this->apiKey,
                     'Content-Type' => 'application/json',
                 ])
-                ->post($this->baseUrl . '/api/v1/cancel-order', $payload);
+                ->post($this->baseUrl . '/api/v1/cancel-order', [
+                    'order_id' => $orderId,
+                ]);
 
             if ($response->successful()) {
-                $data = $response->json();
                 return [
                     'success' => true,
-                    'message' => $data['success']['message'] ?? 'Order cancelled successfully',
-                    'data' => $data
+                    'message' => 'Order cancelled successfully'
                 ];
             }
 
             return [
                 'success' => false,
-                'message' => 'Failed to cancel order',
-                'error' => $response->json()
+                'message' => 'Failed to cancel order'
             ];
 
         } catch (\Exception $e) {
-            Log::error('Paperfly Order Cancellation Failed: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Error: ' . $e->getMessage()
             ];
         }
     }
 
     /**
-     * Parse tracking status to readable format
+     * Parse tracking status into readable format
      */
-    public function parseTrackingStatus($trackingStatus)
+    private function parseTrackingStatus($status)
     {
-        $statuses = [];
-        
-        foreach ($trackingStatus as $status) {
-            $statuses[] = [
-                'status' => $status['Pick'] ?? $status['inTransit'] ?? $status['Delivered'] ?? 'Unknown',
-                'time' => $status['PickTime'] ?? $status['inTransitTime'] ?? $status['DeliveredTime'] ?? '',
-                'location' => $status['ReceivedAtPoint'] ?? '',
-            ];
+        $currentStatus = 'pending';
+        $statusTime = null;
+
+        if (!empty($status['Delivered'])) {
+            $currentStatus = 'delivered';
+            $statusTime = $status['DeliveredTime'];
+        } elseif (!empty($status['PickedForDelivery'])) {
+            $currentStatus = 'out_for_delivery';
+            $statusTime = $status['PickedForDeliveryTime'];
+        } elseif (!empty($status['inTransit'])) {
+            $currentStatus = 'in_transit';
+            $statusTime = $status['inTransitTime'];
+        } elseif (!empty($status['Pick'])) {
+            $currentStatus = 'picked';
+            $statusTime = $status['PickTime'];
+        } elseif (!empty($status['Returned'])) {
+            $currentStatus = 'returned';
+            $statusTime = $status['ReturnedTime'];
+        } elseif (!empty($status['Partial'])) {
+            $currentStatus = 'partial';
+            $statusTime = $status['PartialTime'];
         }
 
-        return $statuses;
-    }
-
-    /**
-     * Get delivery status
-     */
-    public function getDeliveryStatus($trackingStatus)
-    {
-        if (isset($trackingStatus['Delivered']) && !empty($trackingStatus['Delivered'])) {
-            return 'delivered';
-        }
-        
-        if (isset($trackingStatus['PickedForDelivery']) && !empty($trackingStatus['PickedForDelivery'])) {
-            return 'out_for_delivery';
-        }
-        
-        if (isset($trackingStatus['inTransit']) && !empty($trackingStatus['inTransit'])) {
-            return 'in_transit';
-        }
-        
-        if (isset($trackingStatus['Pick']) && !empty($trackingStatus['Pick'])) {
-            return 'picked';
-        }
-
-        return 'pending';
+        return [
+            'status' => $currentStatus,
+            'status_time' => $statusTime,
+            'invoice_number' => $status['invNum'] ?? null,
+            'received_amount' => $status['receivedAmount'] ?? null,
+        ];
     }
 }

@@ -3,62 +3,83 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\WholesalePageContent;
+use App\Models\WholesaleSlide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class WholesalePageController extends Controller
 {
-    /**
-     * Display the wholesale page management form
-     */
     public function index()
     {
-        $content = WholesalePageContent::getAllContent();
-        return view('admin.wholesale-page.index', compact('content'));
+        $slides = WholesaleSlide::ordered()->get();
+        return view('admin.wholesale-page.index', compact('slides'));
     }
 
-    /**
-     * Update the wholesale page content
-     */
-    public function update(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
-            'hero_title' => 'required|string|max:255',
-            'hero_description' => 'required|string|max:500',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'cta_text' => 'nullable|string|max:100',
+            'cta_link' => 'nullable|string|max:255',
+            'order' => 'nullable|integer|min:0',
         ]);
 
-        // Handle hero image upload
-        if ($request->hasFile('hero_image')) {
-            $oldImage = WholesalePageContent::where('key', 'hero_image')->first();
-            $oldImagePath = $oldImage ? $oldImage->value : null;
-
-            $imagePath = $request->file('hero_image')->store('wholesale-page', 'public');
-
-            WholesalePageContent::updateOrCreate(
-                ['key' => 'hero_image'],
-                ['value' => $imagePath, 'type' => 'image']
-            );
-
-            if ($oldImagePath && !str_starts_with($oldImagePath, 'http')) {
-                Storage::disk('public')->delete($oldImagePath);
-            }
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('wholesale-slides', 'public');
         }
 
-        // Update text content
-        $contentFields = ['hero_title', 'hero_description'];
+        WholesaleSlide::create($validated);
 
-        foreach ($contentFields as $field) {
-            if (isset($validated[$field])) {
-                WholesalePageContent::updateOrCreate(
-                    ['key' => $field],
-                    ['value' => $validated[$field], 'type' => 'text']
-                );
+        return redirect()->route('admin.wholesale-page')
+            ->with('success', 'Wholesale slide added successfully!');
+    }
+
+    public function update(Request $request, WholesaleSlide $slide)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'cta_text' => 'nullable|string|max:100',
+            'cta_link' => 'nullable|string|max:255',
+            'order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($slide->image && !str_starts_with($slide->image, 'http')) {
+                Storage::disk('public')->delete($slide->image);
             }
+            $validated['image'] = $request->file('image')->store('wholesale-slides', 'public');
         }
 
-        return redirect()->route('admin.dashboard')
-            ->with('success', 'Wholesale page content updated successfully!');
+        $slide->update($validated);
+
+        return redirect()->route('admin.wholesale-page')
+            ->with('success', 'Wholesale slide updated successfully!');
+    }
+
+    public function destroy(WholesaleSlide $slide)
+    {
+        if ($slide->image && !str_starts_with($slide->image, 'http')) {
+            Storage::disk('public')->delete($slide->image);
+        }
+
+        $slide->delete();
+
+        return redirect()->route('admin.wholesale-page')
+            ->with('success', 'Wholesale slide deleted successfully!');
+    }
+
+    public function toggleStatus(WholesaleSlide $slide)
+    {
+        $slide->update(['is_active' => !$slide->is_active]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $slide->is_active
+        ]);
     }
 }

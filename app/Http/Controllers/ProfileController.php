@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -14,7 +15,8 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        return view('profile.show', compact('user'));
+        $addresses = $user->addresses()->orderBy('is_default', 'desc')->get();
+        return view('profile.show', compact('user', 'addresses'));
     }
 
     /**
@@ -72,5 +74,30 @@ class ProfileController extends Controller
         $user->update(['profile_image' => null]);
 
         return redirect()->back()->with('success', 'Profile image removed successfully!');
+    }
+
+    /**
+     * Change password
+     */
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        // Check if current password is correct
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->with('error', 'Current password is incorrect!');
+        }
+
+        // Update password
+        $user->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return redirect()->back()->with('success', 'Password changed successfully!');
     }
 }

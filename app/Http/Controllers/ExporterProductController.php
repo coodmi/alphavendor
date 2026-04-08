@@ -34,8 +34,14 @@ class ExporterProductController extends Controller
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
+        
+        // Get active special offers
+        $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
+        
+        // Get active shipping methods
+        $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 
-        return view('exporter.products.index', compact('products', 'categories', 'brands', 'certifications'));
+        return view('exporter.products.index', compact('products', 'categories', 'brands', 'certifications', 'offers', 'shippingMethods'));
     }
 
     public function store(Request $request)

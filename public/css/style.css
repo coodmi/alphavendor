@@ -712,8 +712,28 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-top {
-        flex-direction: column;
-        gap: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .logo {
+        order: 1;
+        flex: 1;
+    }
+
+    .mobile-menu-toggle {
+        order: 2;
+    }
+
+    .search-bar {
+        order: 3;
+        width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .header-actions {
+        order: 4;
+        display: none;
     }
 
     .nav-wrapper {

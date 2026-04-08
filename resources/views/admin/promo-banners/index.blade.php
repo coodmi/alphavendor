@@ -4,49 +4,7 @@
 @section('page-title', 'Promo Banners')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-        <a href="{{ route('admin.banners') }}" class="menu-item">
-            <i class="fas fa-images"></i>
-            <span>Home Banners</span>
-        </a>
-        <a href="{{ route('admin.promo-banners') }}" class="menu-item active">
-            <i class="fas fa-bullhorn"></i>
-            <span>Promo Banners</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')

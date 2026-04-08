@@ -14,8 +14,9 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $banners = Banner::ordered()->get();
-        return view('admin.banners.index', compact('banners'));
+        $banners = Banner::with('specialOffer')->ordered()->get();
+        $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
+        return view('admin.banners.index', compact('banners', 'offers'));
     }
 
     /**
@@ -27,10 +28,11 @@ class BannerController extends Controller
             'title' => 'nullable|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'link' => 'nullable|string|max:255',
+            'special_offer_id' => 'nullable|exists:special_offers,id',
             'sort_order' => 'nullable|integer',
         ]);
 
-        $data = $request->only(['title', 'link', 'sort_order']);
+        $data = $request->only(['title', 'link', 'special_offer_id', 'sort_order']);
         $data['is_active'] = $request->has('is_active');
         $data['sort_order'] = $data['sort_order'] ?? 0;
 
@@ -52,10 +54,11 @@ class BannerController extends Controller
             'title' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'link' => 'nullable|string|max:255',
+            'special_offer_id' => 'nullable|exists:special_offers,id',
             'sort_order' => 'nullable|integer',
         ]);
 
-        $data = $request->only(['title', 'link', 'sort_order']);
+        $data = $request->only(['title', 'link', 'special_offer_id', 'sort_order']);
         $data['is_active'] = $request->has('is_active');
         $data['sort_order'] = $data['sort_order'] ?? 0;
 

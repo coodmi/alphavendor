@@ -1,0 +1,122 @@
+{
+    "books": {
+        "categoryTitle": "বই",
+        "categoryDescription": "পেপারব্যাক থেকে হার্ডব্যাক - সব ধরনের বই প্রিন্টিং সেবা",
+        "heroSlides": [
+            {
+                "title": "বই প্রিন্টিং",
+                "description": "আপনার গল্প বলুন আমাদের পেশাদার বই প্রিন্টিং সেবার মাধ্যমে। পেপারব্যাক, হার্ডব্যাক এবং আরও অনেক অপশন।",
+                "image": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&h=600&fit=crop"
+            },
+            {
+                "title": "সেল্ফ-পাবলিশিং",
+                "description": "নিজের বই নিজেই প্রকাশ করুন। সহজ প্রক্রিয়া, সাশ্রয়ী মূল্য এবং পেশাদার মান।",
+                "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=600&fit=crop"
+            }
+        ],
+        "headline": "পেশাদার বই প্রিন্টিং সেবা",
+        "shortDescription": "লেখক থেকে পাঠক - আপনার সৃজনশীলতাকে বাস্তবে রূপান্তরিত করুন। উচ্চ মানের কাগজ, প্রিমিয়াম বাইন্ডিং এবং দ্রুত ডেলিভারি।",
+        "gridTitle": "বইয়ের ধরন নির্বাচন করুন",
+        "gridSubtitle": "আপনার প্রয়োজন অনুযায়ী সেরা অপশন",
+        "products": [
+            {"title": "পেপারব্যাক বই", "url": "/books/paperback", "img": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=300&h=300&fit=crop", "price": "৩০০", "badge": "জনপ্রিয়"},
+            {"title": "হার্ডব্যাক বই", "url": "/books/hardback", "img": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=300&fit=crop", "price": "৮০০"},
+            {"title": "স্পেশাল ফিনিশ হার্ডব্যাক", "url": "/books/special-finish-hardback", "img": "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=300&fit=crop", "price": "১২০০"},
+            {"title": "কমিকস", "url": "/books/comics", "img": "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=300&h=300&fit=crop", "price": "২৫০"},
+            {"title": "সেল্ফ-পাবলিশড বই", "url": "/books/self-published", "img": "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=300&h=300&fit=crop", "price": "৫০০", "badge": "নতুন"},
+            {"title": "রেসিপি বই", "url": "/books/recipe-book", "img": "https://images.unsplash.com/photo-1495195134817-aeb325a55b65?w=300&h=300&fit=crop", "price": "৬০০"},
+            {"title": "কুকারি বই", "url": "/books/cookery-book", "img": "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=300&h=300&fit=crop", "price": "৬৫০"},
+            {"title": "পকেট সাইজ বই", "url": "/books/pocket-sized", "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop", "price": "২০০"},
+            {"title": "লুকবুক", "url": "/books/lookbook", "img": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=300&h=300&fit=crop", "price": "৯০০"},
+            {"title": "মাঙ্গা", "url": "/books/manga", "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop", "price": "৩৫০"}
+        ],
+        "offerTitle": "📚 বই প্রিন্টিং এ মেগা অফার 📚",
+        "offerText": "৫০+ বই অর্ডারে পাচ্ছেন ২৫% ছাড়!",
+        "offerDetails": "বাল্ক অর্ডারে বিশেষ ছাড়। লেখক এবং প্রকাশকদের জন্য বিশেষ প্যাকেজ।",
+        "productTypes": {
+            "paperback": {"productType": "paperback", "productTitle": "Paperback book", "view": "book"},
+            "hardback": {"productType": "hardback", "productTitle": "Hardback book", "view": "book"},
+            "special-finish-hardback": {"productType": "special-finish-hardback", "productTitle": "Special Finish Hardback", "view": "book"},
+            "comics": {"productType": "comics", "productTitle": "Comics", "view": "book"},
+            "self-published": {"productType": "self-published", "productTitle": "Self-published book", "view": "book"},
+            "recipe-book": {"productType": "recipe-book", "productTitle": "Recipe book", "view": "book"},
+            "cookery-book": {"productType": "cookery-book", "productTitle": "Cookery Book", "view": "book"},
+            "pocket-sized": {"productType": "pocket-sized", "productTitle": "Pocket-sized book", "view": "book"},
+            "lookbook": {"productType": "lookbook", "productTitle": "Lookbook", "view": "book"},
+            "manga": {"productType": "manga", "productTitle": "Manga", "view": "book"}
+        }
+    },
+    "business-cards": {
+        "categoryTitle": "বিজনেস কার্ড",
+        "categoryDescription": "পেশাদার বিজনেস কার্ড - আপনার ব্যবসার প্রথম ছাপ",
+        "heroSlides": [
+            {
+                "title": "বিজনেস কার্ড প্রিন্টিং",
+                "description": "আপনার ব্যবসার জন্য পেশাদার এবং আকর্ষণীয় বিজনেস কার্ড। বিভিন্ন সাইজ, ডিজাইন এবং ফিনিশিং অপশন।",
+                "image": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&h=600&fit=crop"
+            },
+            {
+                "title": "প্রিমিয়াম কার্ড",
+                "description": "বিশেষ কাগজ এবং ফিনিশিং সহ প্রিমিয়াম বিজনেস কার্ড। আপনার ব্র্যান্ডকে আলাদা করুন।",
+                "image": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&h=600&fit=crop"
+            }
+        ],
+        "headline": "পেশাদার বিজনেস কার্ড প্রিন্টিং",
+        "shortDescription": "ক্লাসিক থেকে প্রিমিয়াম - সব ধরনের বিজনেস কার্ড প্রিন্টিং সেবা। উচ্চ মানের কাগজ, আকর্ষণীয় ডিজাইন এবং দ্রুত ডেলিভারি।",
+        "gridTitle": "কার্ডের ধরন নির্বাচন করুন",
+        "gridSubtitle": "আপনার পছন্দের স্টাইল এবং ফিনিশিং",
+        "products": [
+            {"title": "ক্লাসিক বিজনেস কার্ড", "url": "/business-cards/classic", "img": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&h=300&fit=crop", "price": "২০০", "badge": "জনপ্রিয়"},
+            {"title": "স্কয়ার কার্ড", "url": "/business-cards/square", "img": "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=300&h=300&fit=crop", "price": "২৫০"},
+            {"title": "রাউন্ডেড কর্নার", "url": "/business-cards/rounded-corners", "img": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=300&h=300&fit=crop", "price": "২৮০"},
+            {"title": "ম্যাট কার্ড", "url": "/business-cards/matte", "img": "https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=300&h=300&fit=crop", "price": "৩০০"},
+            {"title": "গ্লসি কার্ড", "url": "/business-cards/glossy", "img": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop", "price": "৩২০"},
+            {"title": "প্রিমিয়াম কার্ড", "url": "/business-cards/premium", "img": "https://images.unsplash.com/photo-1563906267088-b029e7101114?w=300&h=300&fit=crop", "price": "৫০০", "badge": "নতুন"}
+        ],
+        "offerTitle": "💼 বিজনেস কার্ড অফার 💼",
+        "offerText": "৫০০+ কার্ড অর্ডারে পাচ্ছেন ৪০% ছাড়!",
+        "offerDetails": "বাল্ক অর্ডারে বিশেষ ছাড়। আপনার পুরো টিমের জন্য কার্ড প্রিন্ট করুন সাশ্রয়ী মূল্যে।",
+        "productTypes": {
+            "classic": {"productType": "classic", "productTitle": "Classic Business Cards", "view": "business-card"},
+            "square": {"productType": "square", "productTitle": "Square Business Cards", "view": "business-card"},
+            "rounded-corners": {"productType": "rounded-corners", "productTitle": "Rounded Corner Business Cards", "view": "business-card"},
+            "matte": {"productType": "matte", "productTitle": "Matte Business Cards", "view": "business-card"},
+            "glossy": {"productType": "glossy", "productTitle": "Glossy Business Cards", "view": "business-card"},
+            "premium": {"productType": "premium", "productTitle": "Premium Business Cards", "view": "business-card"}
+        }
+    },
+    "stickers": {
+        "categoryTitle": "স্টিকার",
+        "categoryDescription": "কাস্টম স্টিকার এবং লেবেল প্রিন্টিং",
+        "heroSlides": [
+            {
+                "title": "স্টিকার প্রিন্টিং",
+                "description": "ব্র্যান্ডিং, প্যাকেজিং এবং প্রচারের জন্য কাস্টম স্টিকার। ডাই-কাট, ভিনাইল, হলোগ্রাফিক এবং আরো অনেক অপশন।",
+                "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=600&fit=crop"
+            }
+        ],
+        "headline": "কাস্টম স্টিকার প্রিন্টিং",
+        "shortDescription": "ব্যবসায়িক লেবেল থেকে প্রচারমূলক স্টিকার - সব ধরনের স্টিকার প্রিন্টিং সেবা।",
+        "gridTitle": "স্টিকারের ধরন নির্বাচন করুন",
+        "gridSubtitle": "আপনার প্রয়োজন অনুযায়ী স্টাইল",
+        "products": [
+            {"title": "ডাই-কাট স্টিকার", "url": "/stickers/die-cut", "img": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300&h=300&fit=crop", "price": "৩৫০", "badge": "জনপ্রিয়"},
+            {"title": "কিস-কাট স্টিকার", "url": "/stickers/kiss-cut", "img": "https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=300&h=300&fit=crop", "price": "৩০০"},
+            {"title": "ভিনাইল স্টিকার", "url": "/stickers/vinyl", "img": "https://images.unsplash.com/photo-1583225214464-9296029427aa?w=300&h=300&fit=crop", "price": "৫০০"},
+            {"title": "ক্লিয়ার স্টিকার", "url": "/stickers/clear", "img": "https://images.unsplash.com/photo-1594007652996-c85c3b0c67b1?w=300&h=300&fit=crop", "price": "৫৫০"},
+            {"title": "হলোগ্রাফিক স্টিকার", "url": "/stickers/holographic", "img": "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=300&fit=crop", "price": "৬০০", "badge": "নতুন"},
+            {"title": "বাম্পার স্টিকার", "url": "/stickers/bumper", "img": "https://images.unsplash.com/photo-1614963366795-38f374e51cb6?w=300&h=300&fit=crop", "price": "৭৫০"}
+        ],
+        "offerTitle": "✨ স্টিকার প্রিন্টিং অফার ✨",
+        "offerText": "১০০০+ স্টিকার অর্ডারে ৪৫% ছাড়!",
+        "offerDetails": "বাল্ক অর্ডারে বিশেষ ছাড়।",
+        "productTypes": {
+            "die-cut": {"productType": "die-cut", "productTitle": "Die Cut Stickers", "view": "book"},
+            "kiss-cut": {"productType": "kiss-cut", "productTitle": "Kiss Cut Stickers", "view": "book"},
+            "vinyl": {"productType": "vinyl", "productTitle": "Vinyl Stickers", "view": "book"},
+            "clear": {"productType": "clear", "productTitle": "Clear Stickers", "view": "book"},
+            "holographic": {"productType": "holographic", "productTitle": "Holographic Stickers", "view": "book"},
+            "bumper": {"productType": "bumper", "productTitle": "Bumper Stickers", "view": "book"}
+        }
+    }
+}

@@ -8,9 +8,12 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number', 'user_id', 'vendor_id', 'subtotal', 'commission_amount',
-        'commission_rate', 'vendor_earning', 'total', 'status', 'payment_status',
+        'commission_rate', 'cod_commission_amount', 'cod_commission_rate', 
+        'vendor_earning', 'total', 'total_amount', 'delivery_charge', 'status', 'payment_status',
         'payment_method', 'shipping_address', 'shipping_city', 'shipping_state',
         'shipping_zip', 'shipping_country', 'phone', 'notes',
+        'customer_name', 'customer_phone', 'customer_email',
+        'paid_at',
         'paperfly_tracking_number', 'paperfly_merchant_order_ref', 'delivery_status',
         'tracking_history', 'picked_at', 'in_transit_at', 'delivered_at'
     ];
@@ -19,6 +22,7 @@ class Order extends Model
         'picked_at' => 'datetime',
         'in_transit_at' => 'datetime',
         'delivered_at' => 'datetime',
+        'paid_at' => 'datetime',
     ];
 
     public function user()
@@ -36,6 +40,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
@@ -44,5 +53,10 @@ class Order extends Model
     public function manualPayment()
     {
         return $this->hasOne(ManualPayment::class);
+    }
+
+    public function violations()
+    {
+        return $this->hasMany(SellerViolation::class);
     }
 }

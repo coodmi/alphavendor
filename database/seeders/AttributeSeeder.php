@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Attribute;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Attribute;
 
 class AttributeSeeder extends Seeder
 {
@@ -15,39 +14,60 @@ class AttributeSeeder extends Seeder
     {
         $attributes = [
             [
-                'name' => 'Color',
+                'name' => 'Size',
                 'type' => 'select',
-                'options' => ['Red', 'Blue', 'Green', 'Black', 'White'],
+                'options' => ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'],
                 'is_required' => false,
                 'is_filterable' => true,
                 'sort_order' => 1,
             ],
             [
-                'name' => 'Size',
-                'type' => 'select',
-                'options' => ['S', 'M', 'L', 'XL', 'XXL'],
+                'name' => 'Color',
+                'type' => 'color',
+                'options' => null,
                 'is_required' => false,
                 'is_filterable' => true,
                 'sort_order' => 2,
             ],
             [
                 'name' => 'Material',
-                'type' => 'text',
+                'type' => 'select',
+                'options' => ['Cotton', 'Polyester', 'Silk', 'Wool', 'Leather', 'Denim', 'Linen'],
                 'is_required' => false,
-                'is_filterable' => false,
+                'is_filterable' => true,
                 'sort_order' => 3,
             ],
             [
                 'name' => 'Weight',
                 'type' => 'number',
+                'options' => null,
                 'is_required' => false,
                 'is_filterable' => false,
                 'sort_order' => 4,
             ],
+            [
+                'name' => 'Brand',
+                'type' => 'text',
+                'options' => null,
+                'is_required' => false,
+                'is_filterable' => true,
+                'sort_order' => 5,
+            ],
+            [
+                'name' => 'Warranty',
+                'type' => 'select',
+                'options' => ['No Warranty', '6 Months', '1 Year', '2 Years', '3 Years', 'Lifetime'],
+                'is_required' => false,
+                'is_filterable' => false,
+                'sort_order' => 6,
+            ],
         ];
 
         foreach ($attributes as $attribute) {
-            Attribute::create($attribute);
+            Attribute::updateOrCreate(
+                ['slug' => \Illuminate\Support\Str::slug($attribute['name'])],
+                $attribute
+            );
         }
     }
 }

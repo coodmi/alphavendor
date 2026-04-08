@@ -87,4 +87,21 @@ class Setting extends Model
         // Clear cache
         Cache::forget('settings_group_payment');
     }
+
+    /**
+     * Get a setting value directly from the database (bypassing cache).
+     */
+    public static function getValue($key, $default = null)
+    {
+        $setting = static::where('key', $key)->first();
+        return $setting ? $setting->value : $default;
+    }
+
+    /**
+     * Set a setting value directly in the database (bypassing cache).
+     */
+    public static function setValue($key, $value)
+    {
+        return static::updateOrCreate(['key' => $key], ['value' => $value]);
+    }
 }

@@ -30,20 +30,12 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
-        <a href="javascript:void(0)" onclick="showSection('reviews')" class="menu-item">
-            <i class="fas fa-star"></i>
-            <span>Reviews & Ratings</span>
+        <a href="{{ route('admin.special-offers.index') }}" class="menu-item">
+            <i class="fas fa-tag"></i>
+            <span>Special Offers</span>
         </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Sales & Orders</div>
-        <a href="javascript:void(0)" onclick="showSection('orders')" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
-        <a href="{{ route('admin.manual-payments.index') }}" class="menu-item">
-            <i class="fas fa-mobile-alt"></i>
+        <a href="javascript:void(0)" onclick="showSection('payment-verification')" class="menu-item">
+            <i class="fas fa-money-check-alt"></i>
             <span>Payment Verification</span>
             @php
                 $pendingPaymentsCount = \App\Models\ManualPayment::pending()->count();
@@ -87,10 +79,41 @@
     </div>
 
     <div class="menu-section">
+        <div class="menu-section-title">User & Role Management</div>
+        <a href="{{ route('admin.users') }}" class="menu-item{{ request()->routeIs('admin.users*') ? ' active' : '' }}">
+            <i class="fas fa-users-cog"></i>
+            <span>All Users</span>
+        </a>
+        <a href="{{ route('admin.applications') }}" class="menu-item{{ request()->routeIs('admin.applications*') ? ' active' : '' }}">
+            <i class="fas fa-user-plus"></i>
+            <span>Role Applications</span>
+            @if($stats['pending_applications'] > 0)
+                <span class="badge">{{ $stats['pending_applications'] }}</span>
+            @endif
+        </a>
+        <a href="{{ route('admin.user-permissions') }}" class="menu-item{{ request()->routeIs('admin.user-permissions*') ? ' active' : '' }}">
+            <i class="fas fa-user-shield"></i>
+            <span>User Permissions</span>
+        </a>
+        <a href="{{ route('admin.role-settings') }}" class="menu-item{{ request()->routeIs('admin.role-settings*') ? ' active' : '' }}">
+            <i class="fas fa-user-tag"></i>
+            <span>Role Settings</span>
+        </a>
+        <a href="{{ route('admin.user-activity') }}" class="menu-item{{ request()->routeIs('admin.user-activity*') ? ' active' : '' }}">
+            <i class="fas fa-user-clock"></i>
+            <span>User Activity Logs</span>
+        </a>
+    </div>
+
+    <div class="menu-section">
         <div class="menu-section-title">Vendor Management</div>
         <a href="javascript:void(0)" onclick="showSection('vendors')" class="menu-item">
             <i class="fas fa-store"></i>
             <span>All Vendors</span>
+        </a>
+        <a href="{{ route('admin.vendor-badges.index') }}" class="menu-item">
+            <i class="fas fa-award"></i>
+            <span>Vendor Badges</span>
         </a>
         <a href="javascript:void(0)" onclick="showSection('applications')" class="menu-item">
             <i class="fas fa-file-alt"></i>
@@ -263,30 +286,6 @@
         <a href="javascript:void(0)" onclick="showSection('backup')" class="menu-item">
             <i class="fas fa-database"></i>
             <span>Backup & Restore</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">SEO & Analytics</div>
-        <a href="javascript:void(0)" onclick="showSection('seo-settings')" class="menu-item">
-            <i class="fas fa-search"></i>
-            <span>SEO Settings</span>
-        </a>
-        <a href="javascript:void(0)" onclick="showSection('meta-tags')" class="menu-item">
-            <i class="fas fa-code"></i>
-            <span>Meta Tags</span>
-        </a>
-        <a href="javascript:void(0)" onclick="showSection('sitemap')" class="menu-item">
-            <i class="fas fa-sitemap"></i>
-            <span>Sitemap</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
         </a>
     </div>
 @endsection
@@ -487,25 +486,6 @@ document.addEventListener('DOMContentLoaded', function() {
             @else
                 <p class="text-gray-500">No pending applications.</p>
             @endif
-        </div>
-    </div>
-</div>
-</div>
-
-<!-- Customers Section -->
-<div id="customers-section" class="content-section" style="display: none;">
-    <div style="margin-bottom: 30px;">
-        <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Customers Management</h2>
-        <p style="color: #7f8c8d;">Manage all platform users and customers</p>
-    </div>
-
-    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="color: #2c3e50;">All Users</h3>
-            <a href="{{ route('admin.users.create') }}" style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 5px; text-decoration: none;">
-                <i class="fas fa-plus"></i> Add New User
-            </a>
-        </div>
 
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse;">
@@ -4951,220 +4931,52 @@ document.addEventListener('DOMContentLoaded', function() {
     </form>
 </div>
 
-<!-- Home Page Section -->
+<!-- Home Page Section - Redirects to dedicated page -->
 <div id="home-page-section" class="content-section" style="display: none;">
-    <div style="margin-bottom: 30px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Home Page Management</h2>
-                <p style="color: #7f8c8d;">Customize the home page hero section</p>
-            </div>
-            <a href="{{ route('home') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
-                <i class="fas fa-external-link-alt"></i> Preview Page
-            </a>
-        </div>
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 40px; text-align: center;">
+        <i class="fas fa-images" style="font-size: 64px; color: #667eea; margin-bottom: 20px;"></i>
+        <h2 style="font-size: 24px; color: #2c3e50; margin-bottom: 12px;">Home Page Hero Slider Management</h2>
+        <p style="color: #7f8c8d; margin-bottom: 24px;">Manage your homepage hero slider with multiple slides, images, titles, and CTAs</p>
+        <a href="{{ route('admin.home-page') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <i class="fas fa-arrow-right"></i> Go to Hero Slider Management
+        </a>
     </div>
-
-    <form action="{{ route('admin.home-page.update') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-
-        <!-- Hero Section -->
-        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
-            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
-                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
-                Hero Section
-            </h3>
-
-            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
-                    <input type="text" name="hero_title" value="{{ $homePageContent['hero_title'] ?? '' }}"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
-                    <textarea name="hero_description" rows="3"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $homePageContent['hero_description'] ?? '' }}</textarea>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
-                    <div style="margin-bottom: 12px;" id="homeImagePreviewContainer">
-                        @if(isset($homePageContent['hero_image']) && $homePageContent['hero_image'])
-                            @php
-                                $homeImageUrl = str_starts_with($homePageContent['hero_image'], 'http') ? $homePageContent['hero_image'] : asset('storage/' . $homePageContent['hero_image']);
-                                $homeImageUrl .= '?v=' . time();
-                            @endphp
-                            <img src="{{ $homeImageUrl }}"
-                                alt="Current Hero Image"
-                                id="homeImagePreview"
-                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-                        @else
-                            <img src=""
-                                alt="Image Preview"
-                                id="homeImagePreview"
-                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
-                        @endif
-                    </div>
-                    <input type="file" name="hero_image" id="homeHeroImageInput" accept="image/*"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
-                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Save Button -->
-        <div style="display: flex; justify-content: flex-end;">
-            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                <i class="fas fa-save"></i> Save Changes
-            </button>
-        </div>
-    </form>
 </div>
 
-<!-- Wholesale Page Section -->
+<!-- Wholesale Page Section - Redirects to dedicated page -->
 <div id="wholesale-page-section" class="content-section" style="display: none;">
-    <div style="margin-bottom: 30px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Wholesale Page Management</h2>
-                <p style="color: #7f8c8d;">Customize the wholesale page hero section</p>
-            </div>
-            <a href="{{ route('wholesale') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
-                <i class="fas fa-external-link-alt"></i> Preview Page
-            </a>
-        </div>
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 40px; text-align: center;">
+        <i class="fas fa-images" style="font-size: 64px; color: #667eea; margin-bottom: 20px;"></i>
+        <h2 style="font-size: 24px; color: #2c3e50; margin-bottom: 12px;">Wholesale Page Hero Slider Management</h2>
+        <p style="color: #7f8c8d; margin-bottom: 24px;">Manage your wholesale page hero slider with multiple slides, images, titles, and CTAs</p>
+        <a href="{{ route('admin.wholesale-page') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <i class="fas fa-arrow-right"></i> Go to Hero Slider Management
+        </a>
     </div>
-
-    <form action="{{ route('admin.wholesale-page.update') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-
-        <!-- Hero Section -->
-        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
-            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
-                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
-                Hero Section
-            </h3>
-
-            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
-                    <input type="text" name="hero_title" value="{{ $wholesalePageContent['hero_title'] ?? '' }}"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
-                    <textarea name="hero_description" rows="3"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $wholesalePageContent['hero_description'] ?? '' }}</textarea>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
-                    <div style="margin-bottom: 12px;" id="wholesaleImagePreviewContainer">
-                        @if(isset($wholesalePageContent['hero_image']) && $wholesalePageContent['hero_image'])
-                            @php
-                                $wholesaleImageUrl = str_starts_with($wholesalePageContent['hero_image'], 'http') ? $wholesalePageContent['hero_image'] : asset('storage/' . $wholesalePageContent['hero_image']);
-                                $wholesaleImageUrl .= '?v=' . time();
-                            @endphp
-                            <img src="{{ $wholesaleImageUrl }}"
-                                alt="Current Hero Image"
-                                id="wholesaleImagePreview"
-                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-                        @else
-                            <img src=""
-                                alt="Image Preview"
-                                id="wholesaleImagePreview"
-                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
-                        @endif
-                    </div>
-                    <input type="file" name="hero_image" id="wholesaleHeroImageInput" accept="image/*"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
-                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Save Button -->
-        <div style="display: flex; justify-content: flex-end;">
-            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                <i class="fas fa-save"></i> Save Changes
-            </button>
-        </div>
-    </form>
 </div>
 
-<!-- Import Page Section -->
+<!-- Import Page Section - Redirects to dedicated page -->
 <div id="import-page-section" class="content-section" style="display: none;">
-    <div style="margin-bottom: 30px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Import Page Management</h2>
-                <p style="color: #7f8c8d;">Customize the import page hero section</p>
-            </div>
-            <a href="{{ route('import') }}" target="_blank" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px; text-decoration: none;">
-                <i class="fas fa-external-link-alt"></i> Preview Page
-            </a>
-        </div>
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 40px; text-align: center;">
+        <i class="fas fa-images" style="font-size: 64px; color: #667eea; margin-bottom: 20px;"></i>
+        <h2 style="font-size: 24px; color: #2c3e50; margin-bottom: 12px;">Import Page Hero Slider Management</h2>
+        <p style="color: #7f8c8d; margin-bottom: 24px;">Manage your import page hero slider with multiple slides, images, titles, and CTAs</p>
+        <a href="{{ route('admin.import-page') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <i class="fas fa-arrow-right"></i> Go to Hero Slider Management
+        </a>
     </div>
+</div>
 
-    <form action="{{ route('admin.import-page.update') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-
-        <!-- Hero Section -->
-        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
-            <h3 style="font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;">
-                <i class="fas fa-image" style="margin-right: 10px; color: #667eea;"></i>
-                Hero Section
-            </h3>
-
-            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Title</label>
-                    <input type="text" name="hero_title" value="{{ $importPageContent['hero_title'] ?? '' }}"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Description</label>
-                    <textarea name="hero_description" rows="3"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" required>{{ $importPageContent['hero_description'] ?? '' }}</textarea>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Hero Image</label>
-                    <div style="margin-bottom: 12px;" id="importImagePreviewContainer">
-                        @if(isset($importPageContent['hero_image']) && $importPageContent['hero_image'])
-                            @php
-                                $importImageUrl = str_starts_with($importPageContent['hero_image'], 'http') ? $importPageContent['hero_image'] : asset('storage/' . $importPageContent['hero_image']);
-                                $importImageUrl .= '?v=' . time();
-                            @endphp
-                            <img src="{{ $importImageUrl }}"
-                                alt="Current Hero Image"
-                                id="importImagePreview"
-                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-                        @else
-                            <img src=""
-                                alt="Image Preview"
-                                id="importImagePreview"
-                                style="width: 192px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
-                        @endif
-                    </div>
-                    <input type="file" name="hero_image" id="importHeroImageInput" accept="image/*"
-                        style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
-                    <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Upload a new image to replace the current one (max 2MB)</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Save Button -->
-        <div style="display: flex; justify-content: flex-end;">
-            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 32px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                <i class="fas fa-save"></i> Save Changes
-            </button>
-        </div>
-    </form>
+<!-- About Page Section - Redirects to dedicated page -->
+<div id="about-page-section" class="content-section" style="display: none;">
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 40px; text-align: center;">
+        <i class="fas fa-info-circle" style="font-size: 64px; color: #667eea; margin-bottom: 20px;"></i>
+        <h2 style="font-size: 24px; color: #2c3e50; margin-bottom: 12px;">About Page Content Management</h2>
+        <p style="color: #7f8c8d; margin-bottom: 24px;">Manage all content sections of your About page including hero, story, stats, values, mission, and vision</p>
+        <a href="{{ route('admin.about-page.index') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+            <i class="fas fa-arrow-right"></i> Go to About Page Management
+        </a>
+    </div>
 </div>
 
 <!-- Product Modal -->
@@ -8106,7 +7918,9 @@ function showSection(section) {
         'contact-page': 'contact-page-section',
         'home-page': 'home-page-section',
         'wholesale-page': 'wholesale-page-section',
-        'import-page': 'import-page-section'
+        'import-page': 'import-page-section',
+        'employees': 'employees-section',
+        'employee-permissions': 'employee-permissions-section'
     };
 
     const sectionId = sectionMap[section];
@@ -8114,14 +7928,8 @@ function showSection(section) {
         const sectionElement = document.getElementById(sectionId);
         if (sectionElement) {
             sectionElement.style.display = 'block';
-            
-            // Initialize section-specific data
-            if (section === 'reviews') {
-                loadReviewsStats();
-                loadReviews(1);
-            }
+            // Optionally, load data for these sections
         }
-        
         // Find and activate the corresponding menu item
         const menuItem = document.querySelector(`a[onclick="showSection('${section}')"]`);
         if (menuItem) {
@@ -8129,6 +7937,19 @@ function showSection(section) {
         }
     }
 }
+<!-- Employees Section -->
+<div id="employees-section" class="content-section" style="display:none;">
+    <h2>All Employees</h2>
+    <p>Employee management functionality goes here. (List, add, edit, delete employees.)</p>
+    <!-- TODO: Implement employee listing and management -->
+</div>
+
+<!-- Employee Permissions Section -->
+<div id="employee-permissions-section" class="content-section" style="display:none;">
+    <h2>Employee Permissions</h2>
+    <p>Employee permissions management functionality goes here. (Assign, edit, revoke permissions.)</p>
+    <!-- TODO: Implement employee permissions management -->
+</div>
 
 // Toast notification function
 function showToast(message, type = 'info') {

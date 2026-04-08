@@ -2,25 +2,40 @@
 
 @section('title', $product->name)
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/product-detail-mobile.css') }}">
+@endpush
+
 @section('content')
 <section class="py-10 bg-gray-50">
     <div class="container mx-auto px-4">
         <!-- Breadcrumb -->
-        <nav class="bg-white py-4 mb-8 rounded-lg">
-            <ul class="flex items-center gap-2 text-sm">
-                <li class="flex items-center gap-2 text-gray-500">
-                    <a href="{{ route('home') }}" class="text-orange-500 hover:underline">Home</a>
-                    <span>/</span>
+        <nav class="bg-gradient-to-r from-white to-gray-50 py-3.5 px-5 mb-6 rounded-xl shadow-sm border border-gray-100">
+            <ul class="flex items-center gap-1.5 text-sm flex-wrap">
+                <li class="flex items-center">
+                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-orange-500 transition-colors duration-200 flex items-center gap-1.5 font-medium px-2.5 py-1.5 rounded-lg hover:bg-orange-50">
+                        <i class="fas fa-home text-orange-500 text-base"></i>
+                        <span>Home</span>
+                    </a>
                 </li>
-                <li class="flex items-center gap-2 text-gray-500">
-                    <a href="{{ route('shop') }}" class="text-orange-500 hover:underline">Shop</a>
-                    <span>/</span>
+                <li class="flex items-center">
+                    <i class="fas fa-chevron-right text-gray-300 text-xs mx-1"></i>
                 </li>
-                <li class="flex items-center gap-2 text-gray-500">
-                    <a href="{{ route('shop', ['categories' => [$product->category_id]]) }}" class="text-orange-500 hover:underline">{{ $product->category->name ?? 'Products' }}</a>
-                    <span>/</span>
+                <li class="flex items-center">
+                    <a href="{{ route('shop') }}" class="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-2.5 py-1.5 rounded-lg hover:bg-orange-50">Shop</a>
                 </li>
-                <li class="text-gray-700">{{ $product->name }}</li>
+                <li class="flex items-center">
+                    <i class="fas fa-chevron-right text-gray-300 text-xs mx-1"></i>
+                </li>
+                <li class="flex items-center">
+                    <a href="{{ route('shop', ['categories' => [$product->category_id]]) }}" class="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-2.5 py-1.5 rounded-lg hover:bg-orange-50">{{ $product->category->name ?? 'Products' }}</a>
+                </li>
+                <li class="flex items-center">
+                    <i class="fas fa-chevron-right text-gray-300 text-xs mx-1"></i>
+                </li>
+                <li class="flex items-center">
+                    <span class="text-gray-900 font-semibold px-2.5 py-1.5 bg-orange-50 rounded-lg">{{ Str::limit($product->name, 40) }}</span>
+                </li>
             </ul>
         </nav>
 
@@ -77,16 +92,16 @@
                     <div class="flex items-center gap-4 mb-3">
                         <div>
                             <div class="text-sm text-gray-500 mb-1">Unit Price</div>
-                            <span class="text-2xl font-bold text-gray-700" id="unitPrice">${{ number_format($product->price, 2) }}</span>
+                            <span class="text-2xl font-bold text-gray-700" id="unitPrice">{{ currency($product->price) }}</span>
                         </div>
                         @if($product->old_price && $product->old_price > $product->price)
-                            <span class="text-xl text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                            <span class="text-xl text-gray-400 line-through">{{ currency($product->old_price) }}</span>
                             <span class="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-semibold">-{{ $product->discount_percentage }}% OFF</span>
                         @endif
                     </div>
                     <div class="mb-3">
                         <div class="text-sm text-gray-500 mb-1">Total Price</div>
-                        <span class="text-4xl font-bold text-orange-500" id="totalPrice">${{ number_format($product->price, 2) }}</span>
+                        <span class="text-4xl font-bold text-orange-500" id="totalPrice">{{ currency($product->price) }}</span>
                     </div>
                     <div class="mt-2.5 text-sm">
                         @if($product->stock > 0)
@@ -100,7 +115,7 @@
                 @if($product->description)
                 <div class="py-5 border-b border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Product Description</h3>
-                    <p class="text-gray-600 leading-relaxed">{{ $product->description }}</p>
+                    <p class="text-gray-600 leading-relaxed product-description">{{ $product->description }}</p>
                 </div>
                 @endif
 
@@ -121,16 +136,69 @@
                             </div>
                         </div>
 
+                        <!-- Coupon Code Section -->
+                        <div class="mb-4 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="fas fa-ticket-alt text-purple-600 text-lg"></i>
+                                <label class="font-semibold text-gray-800">Have a Coupon Code?</label>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="text" id="couponCode" name="coupon_code" placeholder="Enter coupon code" class="flex-1 px-4 py-2.5 border-2 border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase" style="text-transform: uppercase;">
+                                <button type="button" onclick="applyCoupon()" class="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all">
+                                    Apply
+                                </button>
+                            </div>
+                            <div id="couponMessage" class="mt-2 text-sm hidden"></div>
+                            <div id="couponDiscount" class="mt-3 hidden">
+                                <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-green-200">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-check-circle text-green-600"></i>
+                                        <span class="text-sm font-medium text-gray-700">Coupon Applied: <span id="appliedCouponCode" class="font-bold text-purple-600"></span></span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-sm font-bold text-green-600">-<span id="discountAmount">$0.00</span></span>
+                                        <button type="button" onclick="removeCoupon()" class="text-red-500 hover:text-red-700 text-sm">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="applied_coupon" id="appliedCoupon" value="">
+                        <input type="hidden" name="discount_amount" id="hiddenDiscountAmount" value="0">
+
                         <div class="flex gap-4">
                             <button type="submit" class="flex-1 px-8 py-4 bg-orange-500 text-white rounded-lg text-base font-semibold hover:bg-orange-600 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
                                 <i class="fas fa-shopping-cart"></i>
                                 Add to Cart
+                            </button>
+                            <button type="button" onclick="buyNow()" class="flex-1 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg text-base font-semibold hover:from-orange-700 hover:to-orange-800 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
+                                <i class="fas fa-bolt"></i>
+                                Buy Now
                             </button>
                             <button type="button" class="w-12 h-12 bg-white border-2 border-orange-500 text-orange-500 rounded-lg text-xl hover:bg-orange-500 hover:text-white transition-all duration-300" title="Add to Wishlist">
                                 <i class="far fa-heart"></i>
                             </button>
                         </div>
                     </form>
+
+                    @if(in_array($product->vendor->role ?? '', ['wholesaler', 'exporter']))
+                    <!-- Pay Advance Button for Wholesale and Import Products -->
+                    <div class="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i class="fas fa-hand-holding-usd text-blue-600 text-2xl"></i>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Pay Advance Option Available</h4>
+                                <p class="text-sm text-gray-600">Secure your order with an advance payment</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="openAdvancePaymentModal()" class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fas fa-money-check-alt"></i>
+                            Pay Advance
+                        </button>
+                    </div>
+                    @endif
                 </div>
                 @else
                 <div class="py-5">
@@ -284,7 +352,7 @@
                 <div id="reviewsContainer">
                     <!-- Reviews will be loaded here via AJAX -->
                     @php
-                        $reviews = $product->approvedReviews()->with('user')->latest()->take(5)->get();
+                        $reviews = $product->approvedReviews()->with('user')->latest()->take(10)->get();
                     @endphp
                     @if($reviews->count() > 0)
                         <div style="display: flex; flex-direction: column; gap: 24px;">
@@ -308,6 +376,57 @@
                                                 <h5 style="font-weight: 500; color: #374151; margin-bottom: 8px;">{{ $review->title }}</h5>
                                             @endif
                                             <p style="color: #4b5563; line-height: 1.6;">{{ $review->comment }}</p>
+
+                                            {{-- Vendor Reply --}}
+                                            @if($review->vendor_reply)
+                                            <div style="margin-top: 12px; padding: 12px 16px; background: #f0f9ff; border-left: 3px solid #3b82f6; border-radius: 6px;">
+                                                <p style="font-size: 13px; font-weight: 600; color: #1d4ed8; margin-bottom: 4px;"><i class="fas fa-store" style="margin-right: 6px;"></i>Seller Reply</p>
+                                                <p style="font-size: 14px; color: #374151;">{{ $review->vendor_reply }}</p>
+                                            </div>
+                                            @endif
+
+                                            {{-- Admin Response --}}
+                                            @if($review->admin_response)
+                                            <div style="margin-top: 10px; padding: 12px 16px; background: #f0fdf4; border-left: 3px solid #16a34a; border-radius: 6px;">
+                                                <p style="font-size: 13px; font-weight: 600; color: #15803d; margin-bottom: 4px;"><i class="fas fa-shield-alt" style="margin-right: 6px;"></i>AlphaVendor Support</p>
+                                                <p style="font-size: 14px; color: #374151;" id="admin-reply-text-{{ $review->id }}">{{ $review->admin_response }}</p>
+                                            </div>
+                                            @endif
+
+                                            {{-- Admin inline reply form --}}
+                                            @php $isAdmin = auth()->check() && auth()->user()->role === 'admin'; @endphp
+                                            @if($isAdmin)
+                                            <div style="margin-top: 12px;">
+                                                <button onclick="toggleAdminReply({{ $review->id }})"
+                                                    style="font-size: 13px; color: #16a34a; background: none; border: 1px solid #16a34a; border-radius: 6px; cursor: pointer; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px;">
+                                                    <i class="fas fa-reply"></i>
+                                                    {{ $review->admin_response ? 'Edit Reply' : 'Reply as Admin' }}
+                                                </button>
+                                                <div id="admin-reply-form-{{ $review->id }}" style="display:none; margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 14px;">
+                                                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                                                        <div style="width: 36px; height: 36px; background: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                                            <i class="fas fa-shield-alt" style="color: #fff; font-size: 13px;"></i>
+                                                        </div>
+                                                        <div style="flex: 1;">
+                                                            <p style="font-size: 12px; font-weight: 600; color: #15803d; margin-bottom: 6px;">AlphaVendor Support Reply</p>
+                                                            <textarea id="admin-reply-input-{{ $review->id }}" rows="3"
+                                                                style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; resize: none; outline: none; box-sizing: border-box;"
+                                                                placeholder="Write your official reply...">{{ $review->admin_response }}</textarea>
+                                                            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                                                <button onclick="submitAdminReply({{ $review->id }})"
+                                                                    style="padding: 8px 18px; background: #16a34a; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                                                                    <i class="fas fa-paper-plane"></i> Post Reply
+                                                                </button>
+                                                                <button type="button" onclick="document.getElementById('admin-reply-form-{{ $review->id }}').style.display='none'"
+                                                                    style="padding: 8px 14px; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;">
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -334,7 +453,7 @@
     function updateTotalPrice() {
         const quantity = parseInt(document.getElementById('quantity').value);
         const total = unitPrice * quantity;
-        document.getElementById('totalPrice').textContent = '$' + total.toFixed(2);
+        document.getElementById('totalPrice').textContent = '৳' + total.toFixed(2);
     }
 
     function increaseQuantity(max) {
@@ -423,6 +542,43 @@
     // Reviews Functions
     let currentRating = 0;
 
+    function toggleAdminReply(reviewId) {
+        const form = document.getElementById('admin-reply-form-' + reviewId);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function submitAdminReply(reviewId) {
+        const text = document.getElementById('admin-reply-input-' + reviewId).value.trim();
+        if (!text) return;
+
+        fetch(`/admin/reviews/${reviewId}/respond`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ admin_response: text })
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) {
+                // Update or insert the reply display
+                let replyBox = document.getElementById('admin-reply-text-' + reviewId);
+                if (replyBox) {
+                    replyBox.textContent = text;
+                } else {
+                    const form = document.getElementById('admin-reply-form-' + reviewId);
+                    const box = document.createElement('div');
+                    box.style.cssText = 'margin-top:10px;padding:12px 16px;background:#f0fdf4;border-left:3px solid #16a34a;border-radius:6px;';
+                    box.innerHTML = `<p style="font-size:13px;font-weight:600;color:#15803d;margin-bottom:4px;"><i class="fas fa-shield-alt" style="margin-right:6px;"></i>AlphaVendor Support</p><p style="font-size:14px;color:#374151;" id="admin-reply-text-${reviewId}">${text}</p>`;
+                    form.parentElement.insertBefore(box, form);
+                }
+                document.getElementById('admin-reply-form-' + reviewId).style.display = 'none';
+            }
+        });
+    }
+
     function toggleReviewForm() {
         const form = document.getElementById('reviewForm');
         form.classList.toggle('hidden');
@@ -452,81 +608,104 @@
     }
 
     function loadReviews() {
-        console.log('Loading reviews for product {{ $product->id }}...');
         fetch(`/products/{{ $product->id }}/reviews`)
-            .then(response => {
-                console.log('Response status:', response.status);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.status);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Loaded reviews data:', data);
-                // Handle paginated response
                 const reviews = data.reviews.data || data.reviews || [];
-                console.log('Reviews to display:', reviews.length);
                 displayReviews(reviews);
             })
-            .catch(error => {
-                console.error('Error loading reviews:', error);
-                showToast('Error loading reviews. Please refresh the page.', 'error');
-            });
+            .catch(() => {});
     }
 
+    const IS_ADMIN = {{ auth()->check() && auth()->user()->role === 'admin' ? 'true' : 'false' }};
+
     function displayReviews(reviews) {
-        console.log('Displaying reviews:', reviews.length, 'reviews');
         const container = document.getElementById('reviewsContainer');
-        console.log('Container element:', container);
-        
-        if (!container) {
-            console.error('reviewsContainer not found!');
-            return;
-        }
-        
+        if (!container) return;
+
         if (reviews.length === 0) {
             container.innerHTML = `
-                <div class="text-center py-12">
-                    <i class="fas fa-comments text-6xl text-gray-300 mb-4"></i>
-                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No reviews yet</h3>
-                    <p class="text-gray-500">Be the first to review this product!</p>
-                </div>
-            `;
+                <div style="text-align:center;padding:48px 0;">
+                    <i class="fas fa-comments" style="font-size:48px;color:#d1d5db;margin-bottom:16px;"></i>
+                    <h3 style="font-size:20px;font-weight:600;color:#6b7280;margin-bottom:8px;">No reviews yet</h3>
+                    <p style="color:#9ca3af;">Be the first to review this product!</p>
+                </div>`;
             return;
         }
 
-        let html = `<div style="display: flex; flex-direction: column; gap: 24px;">`;
-        
+        let html = `<div style="display:flex;flex-direction:column;gap:24px;">`;
+
         reviews.forEach(review => {
             const stars = generateStars(review.rating);
-            const date = new Date(review.created_at).toLocaleDateString();
-            
-            html += `
-                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
-                    <div style="display: flex; gap: 16px;">
-                        <div style="width: 48px; height: 48px; background: #fed7aa; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <i class="fas fa-user" style="color: #ea580c;"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                <h4 style="font-weight: 600; color: #1f2937;">${review.user.name}</h4>
-                                <div style="display: flex; gap: 2px;">
-                                    ${stars}
-                                </div>
-                                <span style="font-size: 14px; color: #6b7280;">${date}</span>
+            const date = new Date(review.created_at).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'});
+
+            const vendorReply = review.vendor_reply ? `
+                <div style="margin-top:12px;padding:12px 16px;background:#f0f9ff;border-left:3px solid #3b82f6;border-radius:6px;">
+                    <p style="font-size:13px;font-weight:600;color:#1d4ed8;margin-bottom:4px;"><i class="fas fa-store" style="margin-right:6px;"></i>Seller Reply</p>
+                    <p style="font-size:14px;color:#374151;">${review.vendor_reply}</p>
+                </div>` : '';
+
+            const adminReply = review.admin_response ? `
+                <div style="margin-top:10px;padding:12px 16px;background:#f0fdf4;border-left:3px solid #16a34a;border-radius:6px;" id="admin-reply-box-${review.id}">
+                    <p style="font-size:13px;font-weight:600;color:#15803d;margin-bottom:4px;"><i class="fas fa-shield-alt" style="margin-right:6px;"></i>AlphaVendor Support</p>
+                    <p style="font-size:14px;color:#374151;" id="admin-reply-text-${review.id}">${review.admin_response}</p>
+                </div>` : `<div id="admin-reply-box-${review.id}"></div>`;
+
+            const adminBtn = IS_ADMIN ? `
+                <div style="margin-top:10px;">
+                    <button onclick="toggleAdminReply(${review.id})"
+                        style="font-size:13px;color:#16a34a;background:none;border:1px solid #16a34a;border-radius:6px;cursor:pointer;padding:5px 12px;display:inline-flex;align-items:center;gap:6px;">
+                        <i class="fas fa-reply"></i> ${review.admin_response ? 'Edit Reply' : 'Reply as Admin'}
+                    </button>
+                    <div id="admin-reply-form-${review.id}" style="display:none;margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px;">
+                        <div style="display:flex;gap:10px;align-items:flex-start;">
+                            <div style="width:36px;height:36px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-shield-alt" style="color:#fff;font-size:13px;"></i>
                             </div>
-                            ${review.title ? `<h5 style="font-weight: 500; color: #374151; margin-bottom: 8px;">${review.title}</h5>` : ''}
-                            <p style="color: #4b5563; line-height: 1.6;">${review.comment}</p>
+                            <div style="flex:1;">
+                                <p style="font-size:12px;font-weight:600;color:#15803d;margin-bottom:6px;">AlphaVendor Support Reply</p>
+                                <textarea id="admin-reply-input-${review.id}" rows="3"
+                                    style="width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;resize:none;outline:none;box-sizing:border-box;"
+                                    placeholder="Write your official reply...">${review.admin_response || ''}</textarea>
+                                <div style="display:flex;gap:8px;margin-top:8px;">
+                                    <button onclick="submitAdminReply(${review.id})"
+                                        style="padding:8px 18px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">
+                                        <i class="fas fa-paper-plane"></i> Post Reply
+                                    </button>
+                                    <button type="button" onclick="document.getElementById('admin-reply-form-${review.id}').style.display='none'"
+                                        style="padding:8px 14px;background:#f3f4f6;color:#374151;border:none;border-radius:6px;font-size:13px;cursor:pointer;">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>` : '';
+
+            html += `
+                <div style="border-bottom:1px solid #e5e7eb;padding-bottom:24px;">
+                    <div style="display:flex;gap:16px;">
+                        <div style="width:48px;height:48px;background:#fed7aa;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="fas fa-user" style="color:#ea580c;"></i>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+                                <h4 style="font-weight:600;color:#1f2937;">${review.user.name}</h4>
+                                <div style="display:flex;gap:2px;">${stars}</div>
+                                <span style="font-size:14px;color:#6b7280;">${date}</span>
+                            </div>
+                            ${review.title ? `<h5 style="font-weight:500;color:#374151;margin-bottom:8px;">${review.title}</h5>` : ''}
+                            <p style="color:#4b5563;line-height:1.6;">${review.comment}</p>
+                            ${vendorReply}
+                            ${adminReply}
+                            ${adminBtn}
+                        </div>
+                    </div>
+                </div>`;
         });
-        
+
         html += `</div>`;
-        console.log('Generated HTML length:', html.length);
         container.innerHTML = html;
-        console.log('HTML set to container');
     }
 
     function generateStars(rating) {
@@ -690,5 +869,435 @@
             showToast('Failed to add product to cart. Please try again.', 'error');
         });
     });
+
+    // Buy Now function - Direct checkout
+    function buyNow() {
+        const form = document.getElementById('addToCartForm');
+        const formData = new FormData(form);
+        
+        // Show loading state
+        const buyNowBtn = event.target.closest('button');
+        const originalText = buyNowBtn.innerHTML;
+        buyNowBtn.disabled = true;
+        buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        fetch('{{ route("cart.buy-now") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect directly to checkout
+                window.location.href = '{{ route("orders.checkout") }}';
+            } else {
+                throw new Error(data.message || 'Failed to process');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            buyNowBtn.disabled = false;
+            buyNowBtn.innerHTML = originalText;
+            showToast('Failed to process. Please try again.', 'error');
+        });
+    }
+
+    // Coupon Functions
+    let appliedCouponData = null;
+
+    async function applyCoupon() {
+        const couponCode = document.getElementById('couponCode').value.trim().toUpperCase();
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const unitPrice = {{ $product->price }};
+        const subtotal = unitPrice * quantity;
+
+        if (!couponCode) {
+            showCouponMessage('Please enter a coupon code', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/validate-coupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    code: couponCode,
+                    subtotal: subtotal
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                appliedCouponData = data.coupon;
+                const discount = data.discount;
+
+                // Update UI
+                document.getElementById('appliedCouponCode').textContent = couponCode;
+                document.getElementById('discountAmount').textContent = '$' + discount.toFixed(2);
+                document.getElementById('appliedCoupon').value = couponCode;
+                document.getElementById('hiddenDiscountAmount').value = discount;
+                document.getElementById('couponDiscount').classList.remove('hidden');
+                document.getElementById('couponCode').disabled = true;
+
+                // Update total price
+                const newTotal = subtotal - discount;
+                document.getElementById('totalPrice').textContent = '$' + newTotal.toFixed(2);
+
+                showCouponMessage('Coupon applied successfully! You saved $' + discount.toFixed(2), 'success');
+            } else {
+                showCouponMessage(data.message || 'Invalid coupon code', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showCouponMessage('Failed to apply coupon. Please try again.', 'error');
+        }
+    }
+
+    function removeCoupon() {
+        appliedCouponData = null;
+        document.getElementById('couponCode').value = '';
+        document.getElementById('couponCode').disabled = false;
+        document.getElementById('appliedCoupon').value = '';
+        document.getElementById('hiddenDiscountAmount').value = '0';
+        document.getElementById('couponDiscount').classList.add('hidden');
+        document.getElementById('couponMessage').classList.add('hidden');
+
+        // Recalculate total
+        updateTotalPrice();
+    }
+
+    function showCouponMessage(message, type) {
+        const messageEl = document.getElementById('couponMessage');
+        messageEl.textContent = message;
+        messageEl.className = 'mt-2 text-sm ' + (type === 'success' ? 'text-green-600' : 'text-red-600');
+        messageEl.classList.remove('hidden');
+
+        if (type === 'error') {
+            setTimeout(() => {
+                messageEl.classList.add('hidden');
+            }, 5000);
+        }
+    }
+
+    // Update total price when quantity changes
+    const originalUpdateTotalPrice = updateTotalPrice;
+    updateTotalPrice = function() {
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const unitPrice = {{ $product->price }};
+        let total = unitPrice * quantity;
+
+        // Apply coupon discount if exists
+        const appliedCoupon = document.getElementById('appliedCoupon').value;
+        if (appliedCoupon && appliedCouponData) {
+            const discount = calculateDiscount(total, appliedCouponData);
+            document.getElementById('discountAmount').textContent = '$' + discount.toFixed(2);
+            document.getElementById('hiddenDiscountAmount').value = discount;
+            total -= discount;
+        }
+
+        document.getElementById('totalPrice').textContent = '$' + total.toFixed(2);
+    };
+
+    function calculateDiscount(subtotal, coupon) {
+        if (coupon.min_purchase && subtotal < coupon.min_purchase) {
+            return 0;
+        }
+
+        let discount = 0;
+        if (coupon.type === 'percentage') {
+            discount = (subtotal * coupon.value) / 100;
+            if (coupon.max_discount && discount > coupon.max_discount) {
+                discount = coupon.max_discount;
+            }
+        } else {
+            discount = Math.min(coupon.value, subtotal);
+        }
+
+        return discount;
+    }
 </script>
+
+<script>
+    // Read More/Less for Description on Mobile
+    if (window.innerWidth <= 768) {
+        const description = document.querySelector('.product-description');
+        if (description && description.scrollHeight > 150) {
+            const readMoreBtn = document.createElement('button');
+            readMoreBtn.className = 'text-orange-500 font-semibold text-sm mt-2 hover:text-orange-600';
+            readMoreBtn.textContent = 'Read More';
+            readMoreBtn.onclick = function() {
+                description.classList.toggle('expanded');
+                this.textContent = description.classList.contains('expanded') ? 'Read Less' : 'Read More';
+            };
+            description.parentElement.appendChild(readMoreBtn);
+        }
+    }
+</script>
+
+<!-- Advance Payment Modal -->
+<div id="advancePaymentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h3 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-money-check-alt text-blue-600"></i>
+                    Pay Advance
+                </h3>
+                <button onclick="closeAdvancePaymentModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <form id="advancePaymentForm" class="p-6">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            
+            <!-- Product Summary -->
+            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h4 class="font-semibold text-gray-800 mb-2">{{ $product->name }}</h4>
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Unit Price:</span>
+                    <span class="font-semibold">{{ currency($product->price) }}</span>
+                </div>
+                <div class="flex items-center justify-between text-sm mt-1">
+                    <span class="text-gray-600">Quantity:</span>
+                    <span class="font-semibold" id="modalQuantity">1</span>
+                </div>
+                <div class="flex items-center justify-between text-sm mt-1 pt-2 border-t border-gray-200">
+                    <span class="text-gray-600">Total Amount:</span>
+                    <span class="font-bold text-lg text-orange-500" id="modalTotalPrice">{{ currency($product->price) }}</span>
+                </div>
+            </div>
+
+            <!-- Advance Payment Options -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Select Advance Payment Amount</label>
+                <div class="space-y-3">
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
+                        <input type="radio" name="advance_percentage" value="25" class="w-5 h-5 text-blue-600" checked onchange="updateAdvanceAmount()">
+                        <span class="ml-3 flex-1">
+                            <span class="font-semibold text-gray-800">25% Advance</span>
+                            <span class="block text-sm text-gray-500" id="advance25">$0.00</span>
+                        </span>
+                    </label>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
+                        <input type="radio" name="advance_percentage" value="50" class="w-5 h-5 text-blue-600" onchange="updateAdvanceAmount()">
+                        <span class="ml-3 flex-1">
+                            <span class="font-semibold text-gray-800">50% Advance</span>
+                            <span class="block text-sm text-gray-500" id="advance50">$0.00</span>
+                        </span>
+                    </label>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
+                        <input type="radio" name="advance_percentage" value="75" class="w-5 h-5 text-blue-600" onchange="updateAdvanceAmount()">
+                        <span class="ml-3 flex-1">
+                            <span class="font-semibold text-gray-800">75% Advance</span>
+                            <span class="block text-sm text-gray-500" id="advance75">$0.00</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Payment Method</label>
+                <select name="payment_method" id="paymentMethodSelect" onchange="toggleTransactionField()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="bkash">bKash</option>
+                    <option value="nagad">Nagad</option>
+                    <option value="rocket">Rocket</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                </select>
+            </div>
+
+            <!-- Transaction ID (for bKash/Nagad/Rocket) -->
+            <div class="mb-6" id="transactionIdField">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Transaction ID</label>
+                <input type="text" name="transaction_id" id="transactionIdInput" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your transaction ID">
+                <p class="text-xs text-gray-500 mt-1">Send payment to the number provided and enter the transaction ID here.</p>
+            </div>
+
+            <!-- Bank Transfer Info -->
+            <!-- Bank Transfer - User Input Fields -->
+            <div class="mb-6" id="bankInfoField" style="display:none;">
+                <div class="rounded-xl border border-blue-200 overflow-hidden mb-3">
+                    <div class="bg-blue-600 px-4 py-3 flex items-center gap-2">
+                        <i class="fas fa-university text-white"></i>
+                        <span class="text-white font-semibold text-sm">Your Bank Transfer Info</span>
+                    </div>
+                    <div class="bg-blue-50 px-4 py-3 text-xs text-blue-700">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Please transfer <strong id="bankAmountDisplay">৳0.00</strong> and fill in your sender details below for verification.
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Your Bank Name</label>
+                        <input type="text" name="bank_name" id="bankNameInput"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g. Dutch-Bangla Bank">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Account Holder Name</label>
+                        <input type="text" name="bank_account_holder"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Name on your bank account">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Your Account Number</label>
+                        <input type="text" name="bank_account_number"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Your bank account number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Transaction / Reference ID</label>
+                        <input type="text" name="transaction_id" id="bankTxInput"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Transaction or reference number">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Number</label>
+                <input type="tel" name="contact_number" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your phone number">
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Additional Notes (Optional)</label>
+                <textarea name="notes" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Any special requirements or notes..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fas fa-check-circle"></i>
+                Confirm Advance Payment
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleTransactionField() {
+        const method = document.getElementById('paymentMethodSelect').value;
+        const txField = document.getElementById('transactionIdField');
+        const txInput = document.getElementById('transactionIdInput');
+        const bankField = document.getElementById('bankInfoField');
+        const bankInputs = bankField.querySelectorAll('input');
+
+        if (method === 'bank_transfer') {
+            txField.style.display = 'none';
+            txInput.removeAttribute('required');
+            bankField.style.display = 'block';
+            bankInputs.forEach(i => i.setAttribute('required', 'required'));
+            updateBankAmount();
+        } else {
+            txField.style.display = 'block';
+            txInput.setAttribute('required', 'required');
+            bankField.style.display = 'none';
+            bankInputs.forEach(i => i.removeAttribute('required'));
+        }
+    }
+
+    function updateBankAmount() {
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const totalPrice = unitPrice * quantity;
+        const pct = document.querySelector('input[name="advance_percentage"]:checked');
+        const amount = pct ? totalPrice * (parseInt(pct.value) / 100) : 0;
+        const el = document.getElementById('bankAmountDisplay');
+        if (el) el.textContent = '৳' + amount.toFixed(2);
+    }
+
+    function openAdvancePaymentModal() {
+        const modal = document.getElementById('advancePaymentModal');
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const totalPrice = unitPrice * quantity;
+        
+        // Update modal with current quantity and price
+        document.getElementById('modalQuantity').textContent = quantity;
+        document.getElementById('modalTotalPrice').textContent = '৳' + totalPrice.toFixed(2);
+        
+        // Calculate advance amounts
+        updateAdvanceAmount();
+        
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAdvancePaymentModal() {
+        const modal = document.getElementById('advancePaymentModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function updateAdvanceAmount() {
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const totalPrice = unitPrice * quantity;
+        
+        document.getElementById('advance25').textContent = '৳' + (totalPrice * 0.25).toFixed(2);
+        document.getElementById('advance50').textContent = '৳' + (totalPrice * 0.50).toFixed(2);
+        document.getElementById('advance75').textContent = '৳' + (totalPrice * 0.75).toFixed(2);
+        updateBankAmount();
+    }
+
+    // Handle advance payment form submission
+    document.getElementById('advancePaymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const quantity = parseInt(document.getElementById('quantity').value);
+        formData.append('quantity', quantity);
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalContent = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        
+        // Submit to API
+        fetch('{{ route("advance-payments.store") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeAdvancePaymentModal();
+                showToast(data.message, 'success');
+                this.reset();
+            } else {
+                throw new Error(data.message || 'Failed to process');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast(error.message || 'Failed to submit advance payment request', 'error');
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalContent;
+        });
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAdvancePaymentModal();
+        }
+    });
+</script>
+
 @endsection

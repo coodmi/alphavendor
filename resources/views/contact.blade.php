@@ -95,8 +95,8 @@
     </div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 animate-fadeInUp">Contact Us</h1>
-            <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 animate-fadeInUp delay-100 max-w-3xl mx-auto px-4">We'd love to hear from you. Get in touch with our team</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 animate-fadeInUp">{{ $content['hero_title'] ?? 'Contact Us' }}</h1>
+            <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 animate-fadeInUp delay-100 max-w-3xl mx-auto px-4">{{ $content['hero_subtitle'] ?? 'We\'d love to hear from you. Get in touch with our team' }}</p>
         </div>
     </div>
 </section>
@@ -109,29 +109,45 @@
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-map-marker-alt text-white text-xl sm:text-2xl"></i>
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">Visit Us</h3>
-                <p class="text-gray-600 text-sm sm:text-base">123 Business Street<br>New York, NY 10001<br>United States</p>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['address_title'] ?? 'Visit Us' }}</h3>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    {{ $content['address_line1'] ?? '123 Business Street' }}<br>
+                    @if(!empty($content['address_line2'])){{ $content['address_line2'] }}<br>@endif
+                    @if(!empty($content['address_line3'])){{ $content['address_line3'] }}@endif
+                </p>
             </div>
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-200">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-phone text-white text-xl sm:text-2xl"></i>
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">Call Us</h3>
-                <p class="text-gray-600 text-sm sm:text-base">+1 (555) 123-4567<br>+1 (555) 987-6543<br>Mon-Fri 9am-6pm EST</p>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['phone_title'] ?? 'Call Us' }}</h3>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    {{ $content['phone_primary'] ?? '+1 (555) 123-4567' }}<br>
+                    @if(!empty($content['phone_secondary'])){{ $content['phone_secondary'] }}<br>@endif
+                    @if(!empty($content['phone_hours'])){{ $content['phone_hours'] }}@endif
+                </p>
             </div>
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-300">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-envelope text-white text-xl sm:text-2xl"></i>
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">Email Us</h3>
-                <p class="text-gray-600 text-sm sm:text-base">info@alphavendor.com<br>support@alphavendor.com<br>sales@alphavendor.com</p>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['email_title'] ?? 'Email Us' }}</h3>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    {{ $content['email_info'] ?? 'info@alphavendor.com' }}<br>
+                    @if(!empty($content['email_support'])){{ $content['email_support'] }}<br>@endif
+                    @if(!empty($content['email_sales'])){{ $content['email_sales'] }}@endif
+                </p>
             </div>
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-400">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-clock text-white text-xl sm:text-2xl"></i>
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">Working Hours</h3>
-                <p class="text-gray-600 text-sm sm:text-base">Monday - Friday<br>9:00 AM - 6:00 PM<br>Saturday: 10 AM - 4 PM</p>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['hours_title'] ?? 'Working Hours' }}</h3>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    {{ $content['hours_weekdays'] ?? 'Monday - Friday' }}<br>
+                    {{ $content['hours_weekdays_time'] ?? '9:00 AM - 6:00 PM' }}<br>
+                    @if(!empty($content['hours_weekend'])){{ $content['hours_weekend'] }}@endif
+                </p>
             </div>
         </div>
     </div>
@@ -143,7 +159,7 @@
             <!-- Contact Form -->
             <div class="animate-fadeInLeft">
                 <div class="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-lg">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Send Us a Message</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['form_title'] ?? 'Send Us a Message' }}</h2>
                     <form action="#" method="POST" class="space-y-4 sm:space-y-6">
                         @csrf
                         <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
@@ -188,32 +204,42 @@
             <div class="animate-fadeInRight space-y-6 sm:space-y-8">
                 <!-- Map -->
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Our Location</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['map_title'] ?? 'Our Location' }}</h3>
                     <div class="w-full h-64 sm:h-80 bg-gray-200 rounded-xl overflow-hidden">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.11976373946234!3d40.69766374865766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="{{ $content['map_embed_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.11976373946234!3d40.69766374865766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s' }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
 
                 <!-- Social Media -->
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Follow Us</h3>
-                    <p class="text-gray-600 mb-6 text-sm sm:text-base">Stay connected with us on social media for updates, news, and special offers.</p>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['social_title'] ?? 'Follow Us' }}</h3>
+                    <p class="text-gray-600 mb-6 text-sm sm:text-base">{{ $content['social_description'] ?? 'Stay connected with us on social media for updates, news, and special offers.' }}</p>
                     <div class="flex flex-wrap gap-3 sm:gap-4">
-                        <a href="#" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        @if(!empty($content['social_facebook']))
+                        <a href="{{ $content['social_facebook'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-facebook-f text-lg sm:text-xl"></i>
                         </a>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        @endif
+                        @if(!empty($content['social_twitter']))
+                        <a href="{{ $content['social_twitter'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-twitter text-lg sm:text-xl"></i>
                         </a>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        @endif
+                        @if(!empty($content['social_instagram']))
+                        <a href="{{ $content['social_instagram'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-instagram text-lg sm:text-xl"></i>
                         </a>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        @endif
+                        @if(!empty($content['social_linkedin']))
+                        <a href="{{ $content['social_linkedin'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-linkedin-in text-lg sm:text-xl"></i>
                         </a>
-                        <a href="#" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        @endif
+                        @if(!empty($content['social_youtube']))
+                        <a href="{{ $content['social_youtube'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-youtube text-lg sm:text-xl"></i>
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -225,8 +251,8 @@
 <section class="py-12 sm:py-16 md:py-20 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 sm:mb-16 animate-fadeInUp">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">Frequently Asked Questions</h2>
-            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">Find quick answers to common questions</p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">{{ $content['faq_title'] ?? 'Frequently Asked Questions' }}</h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">{{ $content['faq_subtitle'] ?? 'Find quick answers to common questions' }}</p>
         </div>
         <div class="max-w-4xl mx-auto space-y-4 sm:space-y-6">
             <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-100">
@@ -253,15 +279,19 @@
 <section class="py-16 sm:py-20 bg-[#FFA500] text-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="max-w-3xl mx-auto animate-fadeInUp">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Still Have Questions?</h2>
-            <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 px-4">Our support team is here to help you. Reach out anytime!</p>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">{{ $content['cta_title'] ?? 'Still Have Questions?' }}</h2>
+            <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 px-4">{{ $content['cta_subtitle'] ?? 'Our support team is here to help you. Reach out anytime!' }}</p>
             <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
-                <a href="mailto:support@alphavendor.com" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                    <i class="fas fa-envelope mr-2"></i>Email Support
+                @if(!empty($content['cta_email_text']) && !empty($content['cta_email_link']))
+                <a href="mailto:{{ $content['cta_email_link'] }}" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-envelope mr-2"></i>{{ $content['cta_email_text'] }}
                 </a>
-                <a href="tel:+15551234567" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-phone mr-2"></i>Call Us Now
+                @endif
+                @if(!empty($content['cta_phone_text']) && !empty($content['cta_phone_link']))
+                <a href="tel:{{ $content['cta_phone_link'] }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-phone mr-2"></i>{{ $content['cta_phone_text'] }}
                 </a>
+                @endif
             </div>
         </div>
     </div>

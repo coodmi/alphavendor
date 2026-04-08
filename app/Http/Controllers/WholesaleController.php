@@ -13,6 +13,9 @@ class WholesaleController extends Controller
 {
     public function index(Request $request)
     {
+        // Get active wholesale slides
+        $wholesaleSlides = \App\Models\WholesaleSlide::active()->ordered()->get();
+
         // Get all wholesalers
         $wholesalers = User::where('role', 'wholesaler')
             ->where('status', 'active')
@@ -153,6 +156,7 @@ class WholesaleController extends Controller
             });
 
         return view('wholesale', compact(
+            'wholesaleSlides',
             'products',
             'supplierLocations',
             'minOrderRanges',

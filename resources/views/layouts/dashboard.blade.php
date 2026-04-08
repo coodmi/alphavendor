@@ -39,6 +39,59 @@
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -260px;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+
         .sidebar-header {
             padding: 20px;
             text-align: center;
@@ -365,10 +418,146 @@
                 display: none;
             }
         }
+
+        /* Dashboard Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-header h1 {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .content-header h1 {
+                font-size: 20px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+
+            .profile-info {
+                display: none;
+            }
+
+            .profile-dropdown-icon {
+                display: none;
+            }
+
+            .notification-icon {
+                font-size: 18px;
+            }
+
+            .header-right {
+                gap: 15px;
+            }
+
+            /* Make tables scrollable on mobile */
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            /* Form adjustments */
+            .form-row {
+                flex-direction: column;
+            }
+
+            .form-group {
+                width: 100% !important;
+            }
+
+            /* Button adjustments */
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-group .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-toggle {
+                top: 10px;
+                left: 10px;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            .content-header {
+                padding: 10px;
+            }
+
+            .content-header h1 {
+                font-size: 18px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .stat-label {
+                font-size: 12px;
+            }
+        }
     </style>
     @stack('styles')
 </head>
 <body>
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -385,7 +574,11 @@
                 </span>
             </div>
             <nav class="sidebar-menu">
-                @yield('sidebar-menu')
+                @if(Auth::user()->isAdmin())
+                    @include('dashboards.partials.admin-sidebar')
+                @else
+                    @yield('sidebar-menu')
+                @endif
             </nav>
         </aside>
 
@@ -418,7 +611,7 @@
                             </div>
                         </div>
                         <div style="padding: 12px 15px; border-top: 1px solid #eee; text-align: center;">
-                            <a href="#" onclick="event.preventDefault(); if(typeof showSection === 'function') showSection('notifications');" style="color: #667eea; font-size: 13px; text-decoration: none; font-weight: 600;">View All Notifications</a>
+                            <a href="{{ route('notifications.page') }}" style="color: #667eea; font-size: 13px; text-decoration: none; font-weight: 600;">View All Notifications</a>
                         </div>
                     </div>
 
@@ -450,10 +643,6 @@
                                     <i class="fas fa-user"></i>
                                     My Profile
                                 </a>
-                                <a href="#" class="dropdown-item">
-                                    <i class="fas fa-cog"></i>
-                                    Settings
-                                </a>
                                 <div class="dropdown-divider"></div>
                                 <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                                     @csrf
@@ -479,6 +668,36 @@
     <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; max-width: 400px;"></div>
 
     <script>
+        // Sidebar Scroll Position Management
+        const sidebar = document.getElementById('sidebar');
+        
+        // Restore scroll position on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedScrollPosition = sessionStorage.getItem('sidebarScrollPosition');
+            if (savedScrollPosition && sidebar) {
+                sidebar.scrollTop = parseInt(savedScrollPosition);
+            }
+        });
+        
+        // Save scroll position when clicking any menu item
+        if (sidebar) {
+            const menuItems = sidebar.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    sessionStorage.setItem('sidebarScrollPosition', sidebar.scrollTop);
+                });
+            });
+            
+            // Also save on scroll (debounced)
+            let scrollTimeout;
+            sidebar.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    sessionStorage.setItem('sidebarScrollPosition', sidebar.scrollTop);
+                }, 100);
+            });
+        }
+        
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
@@ -592,19 +811,34 @@
         
         async function updateNotificationBadge() {
             try {
-                const response = await fetch('/notifications/unread-count');
+                const response = await fetch('/notifications/unread-count', {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    credentials: 'same-origin'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notification count');
+                }
+                
                 const data = await response.json();
                 const count = data.count || 0;
                 
                 const badge = document.getElementById('headerNotificationBadge');
-                if (count > 0) {
-                    badge.textContent = count > 99 ? '99+' : count;
-                    badge.style.display = 'flex';
-                } else {
-                    badge.style.display = 'none';
+                if (badge) {
+                    if (count > 0) {
+                        badge.textContent = count > 99 ? '99+' : count;
+                        badge.style.display = 'flex';
+                    } else {
+                        badge.style.display = 'none';
+                    }
                 }
             } catch (error) {
                 console.error('Error updating notification badge:', error);
+                // Silently fail - don't show error to user
             }
         }
         
@@ -621,9 +855,18 @@
             return date.toLocaleDateString();
         }
         
-        // Update badge on page load and every 30 seconds
-        updateNotificationBadge();
+        // Update badge on page load and every 30 seconds (only if user is authenticated)
+        @auth
+        // Wait for page to fully load before making notification request
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(updateNotificationBadge, 500);
+            });
+        } else {
+            setTimeout(updateNotificationBadge, 500);
+        }
         setInterval(updateNotificationBadge, 30000);
+        @endauth
 
         // Toast Notification System
         function showToast(message, type = 'success') {
@@ -710,6 +953,106 @@
             }
         }
     </style>
+
+    <script>
+        // Global showSection function for sidebar navigation
+        function showSection(section) {
+            // For pages that use inline sections (like admin.blade.php)
+            const sectionMap = {
+                'vendor-payouts': 'vendor-payouts-section',
+                'vendor-reviews': 'vendor-reviews-section',
+                'commissions': 'commissions-section',
+                'home-page': 'home-page-section',
+                'offers': 'offers-section',
+                'wholesale-page': 'wholesale-page-section',
+                'import-page': 'import-page-section',
+                'about-page': 'about-page-section',
+                'contact-page': 'contact-page-section',
+                'transactions': 'transactions-section',
+                'payment-gateway': 'payment-gateway-section',
+                'offline-payment': 'offline-payment-section',
+                'delivery-tracking': 'delivery-tracking-section',
+                'warehouse': 'warehouse-section',
+                'live-chat': 'live-chat-section'
+            };
+
+            const sectionId = sectionMap[section];
+            
+            // Check if we're on a page with inline sections
+            if (sectionId && document.getElementById(sectionId)) {
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                // Remove active class from all menu items
+                document.querySelectorAll('.menu-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                // Show selected section
+                const sectionElement = document.getElementById(sectionId);
+                if (sectionElement) {
+                    sectionElement.style.display = 'block';
+                }
+
+                // Activate the corresponding menu item
+                const menuItem = document.querySelector(`a[onclick="showSection('${section}')"]`);
+                if (menuItem) {
+                    menuItem.classList.add('active');
+                }
+            } else {
+                // If section doesn't exist on current page, redirect to admin dashboard with hash
+                window.location.href = "{{ route('admin.dashboard') }}#" + section;
+            }
+        }
+
+        // On page load, check if there's a hash and show that section
+        window.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                setTimeout(() => showSection(hash), 100);
+            }
+        });
+    </script>
+
     @stack('scripts')
+
+    <script>
+        // Mobile Sidebar Toggle for Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    if (sidebar.classList.contains('active')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                });
+            }
+
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Sidebar stays open - removed auto-close on menu click
+        });
+    </script>
 </body>
 </html>

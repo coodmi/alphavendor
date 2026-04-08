@@ -4,43 +4,8 @@
 @section('page-title', 'Retail Page')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <a href="#" class="menu-item active" onclick="return false;" style="cursor: default;">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
-
 
 @section('content')
 <div style="margin-bottom: 30px;">

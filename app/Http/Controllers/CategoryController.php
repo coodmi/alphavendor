@@ -29,6 +29,9 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
@@ -54,6 +57,9 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',

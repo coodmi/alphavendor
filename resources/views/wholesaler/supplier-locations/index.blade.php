@@ -4,37 +4,7 @@
 @section('page-title', 'Supplier Locations')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('wholesaler.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('wholesaler.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('wholesaler.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('wholesaler.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-        <a href="{{ route('wholesaler.supplier-locations.index') }}" class="menu-item active">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Supplier Locations</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.wholesaler-sidebar')
 @endsection
 
 @section('content')

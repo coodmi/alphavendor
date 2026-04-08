@@ -13,9 +13,10 @@ class TicketCategory extends Model
         'name',
         'slug',
         'description',
+        'icon',
         'color',
-        'order',
         'is_active',
+        'sort_order',
     ];
 
     protected $casts = [
@@ -24,11 +25,6 @@ class TicketCategory extends Model
 
     public function tickets()
     {
-        return $this->hasMany(SupportTicket::class, 'category_id');
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true)->orderBy('order');
+        return $this->hasMany(Ticket::class, 'category_id');
     }
 }

@@ -19,14 +19,28 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 30px;">
                 <div style="display: flex; gap: 25px; align-items: center; flex: 1;">
                     <!-- Vendor Photo/Avatar -->
-                    <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 4px solid {{ $roleColor }}20; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; background: {{ $roleColor }}; flex-shrink: 0;">
-                        @if($seller->profile_image)
-                            <img src="{{ asset('storage/' . $seller->profile_image) }}"
-                                 alt="{{ $vendorName }}"
-                                 style="width: 100%; height: 100%; object-fit: cover;">
-                        @else
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, {{ $roleColor }} 0%, {{ $roleColor }}dd 100%); color: white; font-size: 40px; font-weight: 700;">
-                                {{ $firstLetter }}
+                    <div style="position: relative; flex-shrink: 0;">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 4px solid {{ $roleColor }}20; box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: {{ $roleColor }};">
+                            @if($seller->profile_image)
+                                <img src="{{ asset('storage/' . $seller->profile_image) }}"
+                                     alt="{{ $vendorName }}"
+                                     style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, {{ $roleColor }} 0%, {{ $roleColor }}dd 100%); color: white; font-size: 40px; font-weight: 700;">
+                                    {{ $firstLetter }}
+                                </div>
+                            @endif
+                        </div>
+                        
+                        @if($seller->vendorBadge && $seller->vendorBadge->is_active)
+                            <div style="position: absolute; top: -5px; right: -10px; width: 38px; height: 38px; background: {{ $seller->vendorBadge->bg_color }}; border: 3px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 10px rgba(0,0,0,0.25); z-index: 10;">
+                                @if($seller->vendorBadge->icon)
+                                    @if(str_starts_with($seller->vendorBadge->icon, 'fa'))
+                                        <i class="{{ $seller->vendorBadge->icon }}" style="color: {{ $seller->vendorBadge->color }}; font-size: 16px;"></i>
+                                    @else
+                                        <span style="color: {{ $seller->vendorBadge->color }}; font-size: 18px; line-height: 1;">{{ $seller->vendorBadge->icon }}</span>
+                                    @endif
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -35,12 +49,17 @@
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
                             <span style="background: {{ $roleColor }}; color: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; text-transform: uppercase;">
                                 <i class="fas {{ $roleIcon }}" style="margin-right: 6px;"></i>
-                                {{ ucfirst($seller->role) }}
+                                {{ $seller->role === 'exporter' ? 'Importer' : ucfirst($seller->role) }}
                             </span>
-                            @if($seller->role === 'exporter' && $seller->exporter_rating)
+                            
+                            @php
+                                $vendorRating = $seller->getVendorRating();
+                                $reviewCount = $seller->getVendorReviewCount();
+                            @endphp
+                            @if($vendorRating > 0)
                                 <span style="background: #FFD700; color: #333; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;">
                                     <i class="fas fa-star"></i>
-                                    {{ number_format($seller->exporter_rating, 1) }}
+                                    {{ number_format($vendorRating, 1) }} ({{ $reviewCount }} {{ $reviewCount == 1 ? 'review' : 'reviews' }})
                                 </span>
                             @endif
                         </div>

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/export.css') }}">
     <link rel="stylesheet" href="{{ asset('css/import.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sellers.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @stack('styles')
@@ -22,20 +23,39 @@
     <header class="header">
         <div class="container">
             <div class="header-top">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="logo">
                     {{-- <h1><span class="logo-icon">R</span></h1> --}}
                     <a href="{{ route('home') }}" style="display: inline-block; line-height: 0;">
-                        <img src="{{ asset('/airmarket.png') }}" alt="AlphaVendor Logo" style="height: 40px; cursor: pointer;">
+                        @if($siteSettings->site_logo)
+                            <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px; cursor: pointer;">
+                        @else
+                            <img src="{{ asset('/airmarket.png') }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px; cursor: pointer;">
+                        @endif
                     </a>
                 </div>
-                <div class="search-bar">
-                    <input type="text" placeholder="I am looking for...">
+                <form class="search-bar" action="{{ route('shop') }}" method="GET">
+                    <input type="text" name="search" placeholder="I am looking for..." value="{{ request('search') }}">
                     <button type="submit"><i class="fas fa-search"></i></button>
-                </div>
+                </form>
                 <div class="header-actions">
-                    <a href="#" class="action-link">
-                        <i class="far fa-heart"></i>
-                    </a>
+                    @auth
+                        <a href="{{ route('wishlist.index') }}" class="action-link" style="position: relative;">
+                            <i class="far fa-heart"></i>
+                            @php
+                                $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                            @endphp
+                            @if($wishlistCount > 0)
+                                <span style="position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">{{ $wishlistCount }}</span>
+                            @endif
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="action-link">
+                            <i class="far fa-heart"></i>
+                        </a>
+                    @endauth
                     <a href="{{ route('cart.index') }}" class="action-link" style="position: relative;">
                         <i class="fas fa-shopping-bag"></i>
                         @php
@@ -71,24 +91,19 @@
                                     <span>Dashboard</span>
                                 </a>
 
-                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                                    <i class="fas fa-user w-5"></i>
-                                    <span>My Profile</span>
-                                </a>
-
-                                <a href="{{ route('orders.my') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                <a href="{{ route('orders.my-orders') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                                     <i class="fas fa-shopping-bag w-5"></i>
                                     <span>My Orders</span>
                                 </a>
 
-                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                                    <i class="fas fa-heart w-5"></i>
-                                    <span>Wishlist</span>
+                                <a href="{{ route('customer.returns.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-undo w-5"></i>
+                                    <span>Returns & Refunds</span>
                                 </a>
 
-                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                                    <i class="fas fa-cog w-5"></i>
-                                    <span>Settings</span>
+                                <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                    <i class="fas fa-heart w-5"></i>
+                                    <span>Wishlist</span>
                                 </a>
 
                                 <div class="border-t border-gray-200 mt-2 pt-2">
@@ -116,6 +131,106 @@
         </div>
     </header>
 
+    <!-- Mobile Nav Strip (visible on mobile only) -->
+    <div class="mobile-nav-strip">
+        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+        <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a>
+        <a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">Retail</a>
+        <a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">Wholesale</a>
+        <a href="{{ route('import') }}" class="{{ request()->routeIs('import') ? 'active' : '' }}">Import</a>
+        <a href="{{ route('sellers.index') }}" class="{{ request()->routeIs('sellers.*') ? 'active' : '' }}">Sellers</a>
+    </div>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+    <!-- Mobile Navigation Menu -->
+    <nav class="mobile-nav-menu" id="mobileNavMenu">
+        <div class="mobile-nav-header">
+            @if($siteSettings->site_logo)
+                <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 32px;">
+            @else
+                <img src="{{ asset('/airmarket.png') }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 32px;">
+            @endif
+            <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="mobile-nav-items">
+            @auth
+                <li><a href="{{ route('wishlist.index') }}" style="border-bottom: 2px solid rgba(0,0,0,0.05);">
+                    <i class="fas fa-heart"></i> Wishlist
+                    @php
+                        $wishlistCount = \App\Models\Wishlist::where('user_id', Auth::id())->count();
+                    @endphp
+                    @if($wishlistCount > 0)
+                        <span style="margin-left: auto; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">{{ $wishlistCount }}</span>
+                    @endif
+                </a></li>
+            @endauth
+            <li><a href="{{ route('cart.index') }}" style="border-bottom: 2px solid rgba(0,0,0,0.05);">
+                <i class="fas fa-shopping-bag"></i> Shopping Cart
+                @php
+                    $cart = Session::get('cart', []);
+                    $cartCount = array_sum(array_column($cart, 'quantity'));
+                @endphp
+                @if($cartCount > 0)
+                    <span style="margin-left: auto; background: #FFA500; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">{{ $cartCount }}</span>
+                @endif
+            </a></li>
+            <li style="border-bottom: 2px solid rgba(0,0,0,0.05); margin-bottom: 12px;"></li>
+            <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                <i class="fas fa-home"></i> Home
+            </a></li>
+            <li><a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">
+                <i class="fas fa-shopping-cart"></i> Shop
+            </a></li>
+            <li><a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">
+                <i class="fas fa-store"></i> Retail
+            </a></li>
+            <li><a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">
+                <i class="fas fa-boxes"></i> Wholesale
+            </a></li>
+            <li><a href="{{ route('import') }}" class="{{ request()->routeIs('import') ? 'active' : '' }}">
+                <i class="fas fa-shipping-fast"></i> Import
+            </a></li>
+            <li><a href="{{ route('sellers.index') }}" class="{{ request()->routeIs('sellers.*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i> Sellers
+            </a></li>
+            <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">
+                <i class="fas fa-info-circle"></i> About Us
+            </a></li>
+            <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a></li>
+            @auth
+                <li style="border-top: 2px solid rgba(0,0,0,0.05); margin-top: 12px; padding-top: 12px;"></li>
+                <li><a href="{{ route('dashboard') }}">
+                    <i class="fas fa-dashboard"></i> Dashboard
+                </a></li>
+                <li><a href="{{ route('orders.my-orders') }}">
+                    <i class="fas fa-shopping-bag"></i> My Orders
+                </a></li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" style="width: 100%; text-align: left; background: none; border: none; padding: 16px 20px; color: #e74c3c; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 14px; font-size: 15px;">
+                            <i class="fas fa-sign-out-alt" style="font-size: 18px; width: 24px; text-align: center;"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            @else
+                <li style="border-top: 2px solid rgba(0,0,0,0.05); margin-top: 12px; padding-top: 12px;"></li>
+                <li><a href="{{ route('login') }}">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a></li>
+                <li><a href="{{ route('register') }}">
+                    <i class="fas fa-user-plus"></i> Register
+                </a></li>
+            @endauth
+        </ul>
+    </nav>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
@@ -127,7 +242,7 @@
 
                     <li><a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">Retail</a></li>
                     <li><a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">Wholesale</a></li>
-                    <li><a href="{{ route('export') }}" class="{{ request()->routeIs('export') ? 'active' : '' }}">Import</a></li>
+                    <li><a href="{{ route('import') }}" class="{{ request()->routeIs('import') ? 'active' : '' }}">Import</a></li>
                     <li><a href="{{ route('sellers.index') }}" class="{{ request()->routeIs('sellers.*') ? 'active' : '' }}">Sellers</a></li>
                     <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About Us</a></li>
                     <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact Us</a></li>
@@ -162,45 +277,537 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>About Us</h3>
-                    <p>AlphaVendor is your trusted multi-vendor marketplace for retail, wholesale, and export businesses.</p>
+                    <div class="footer-logo" style="margin-bottom: 15px;">
+                        @if($siteSettings->site_logo)
+                            <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px;">
+                        @else
+                            <img src="{{ asset('/airmarket.png') }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px;">
+                        @endif
+                    </div>
+                    <p>{{ $siteSettings->footer_text ?: ($siteSettings->site_name . ' is your trusted multi-vendor marketplace for retail, wholesale, and import businesses.') }}</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="{{ route('about') }}">About Us</a></li>
+                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                        <li><a href="{{ route('terms') }}">Terms & Conditions</a></li>
+                        <li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
+                    </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="{{ route('about') }}">About</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="{{ route('shop') }}">Shop</a></li>
+                        <li><a href="{{ route('retail') }}">Retail</a></li>
+                        <li><a href="{{ route('wholesale') }}">Wholesale</a></li>
+                        <li><a href="{{ route('import') }}">Import</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Customer Service</h3>
                     <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Track Order</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="javascript:void(0)" onclick="document.getElementById('chat-toggle').click()">Help Center</a></li>
+                        <li><a href="{{ route('orders.my-orders') }}">Track Order</a></li>
+                        <li><a href="{{ route('customer.returns.index') }}">Returns</a></li>
+                        <li><a href="{{ route('shipping-info') }}">Shipping Info</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Connect With Us</h3>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        @if($siteSettings->facebook_url)
+                            <a href="{{ $siteSettings->facebook_url }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+                        @endif
+                        @if($siteSettings->twitter_url)
+                            <a href="{{ $siteSettings->twitter_url }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+                        @endif
+                        @if($siteSettings->instagram_url)
+                            <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        @endif
+                        @if($siteSettings->linkedin_url)
+                            <a href="{{ $siteSettings->linkedin_url }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                        @endif
                     </div>
+                    
+                    <!-- Payment Methods -->
+                    @if($siteSettings->payment_logo_1 || $siteSettings->payment_logo_2 || $siteSettings->payment_logo_3)
+                        <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                            @if($siteSettings->payment_logo_1)
+                                <div style="background: white; padding: 5px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 45px; height: 28px;">
+                                    <img src="{{ asset('storage/' . $siteSettings->payment_logo_1) }}" alt="Payment Method 1" style="max-height: 22px; max-width: 50px; object-fit: contain;">
+                                </div>
+                            @endif
+                            @if($siteSettings->payment_logo_2)
+                                <div style="background: white; padding: 5px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 45px; height: 28px;">
+                                    <img src="{{ asset('storage/' . $siteSettings->payment_logo_2) }}" alt="Payment Method 2" style="max-height: 22px; max-width: 50px; object-fit: contain;">
+                                </div>
+                            @endif
+                            @if($siteSettings->payment_logo_3)
+                                <div style="background: white; padding: 5px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 45px; height: 28px;">
+                                    <img src="{{ asset('storage/' . $siteSettings->payment_logo_3) }}" alt="Payment Method 3" style="max-height: 22px; max-width: 50px; object-fit: contain;">
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 AlphaVendor. All rights reserved.</p>
-                <p>Design & Developed By <a href="https://alphainno.com" target="_blank" style="color: #FFA500; text-decoration: none;">Alphainno</a></p>
+                <p>{{ $siteSettings->footer_copyright ?: '© ' . date('Y') . ' ' . $siteSettings->site_name . '. All rights reserved.' }}</p>
+                <p>Design & Developed By <a href="https://alphainno.com" target="_blank" rel="noopener noreferrer" style="color: #FFA500; text-decoration: none;">Alphainno</a></p>
             </div>
         </div>
     </footer>
 
+    <!-- Chatbot Widget -->
+    <div id="chatbot-container">
+        <!-- Chat Button -->
+        <button id="chat-toggle" class="chat-toggle">
+            <i class="fas fa-comments"></i>
+            <span class="chat-badge">1</span>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chat-window" class="chat-window">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <i class="fas fa-robot"></i>
+                    <div>
+                        <h4>AlphaVendor Support</h4>
+                        <span class="chat-status">Online</span>
+                    </div>
+                </div>
+                <button id="chat-close" class="chat-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-body" id="chat-body">
+                <div class="chat-message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! 👋 Welcome to AlphaVendor. How can I help you today?</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+                
+                <div class="quick-replies">
+                    <button class="quick-reply-btn" data-message="Track my order">📦 Track Order</button>
+                    <button class="quick-reply-btn" data-message="Product inquiry">🛍️ Product Info</button>
+                    <button class="quick-reply-btn" data-message="Need help">❓ Help</button>
+                </div>
+            </div>
+            
+            <div class="chat-footer">
+                <input type="text" id="chat-input" placeholder="Type your message..." />
+                <button id="chat-send" class="chat-send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #chatbot-container {
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            z-index: 999999 !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .chat-toggle {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%) !important;
+            border: none !important;
+            color: white !important;
+            font-size: 24px !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4) !important;
+            transition: all 0.3s ease !important;
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 165, 0, 0.5);
+        }
+
+        .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-header-info i {
+            font-size: 32px;
+        }
+
+        .chat-header-info h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-status {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .chat-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .chat-close-btn:hover {
+            opacity: 1;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #FFA500;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .user-message .message-avatar {
+            background: #6c757d;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-content p {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 0 0 4px 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            line-height: 1.5;
+        }
+
+        .user-message .message-content p {
+            background: #FFA500;
+            color: white;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #6c757d;
+            padding-left: 4px;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-reply-btn {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-reply-btn:hover {
+            background: #FFA500;
+            color: white;
+            border-color: #FFA500;
+        }
+
+        .chat-footer {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 24px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #chat-input:focus {
+            border-color: #FFA500;
+        }
+
+        .chat-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #FFA500;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send-btn:hover {
+            background: #FF8C00;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            .chat-window {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 120px);
+                bottom: 80px;
+                right: 20px;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatToggle = document.getElementById('chat-toggle');
+            const chatWindow = document.getElementById('chat-window');
+            const chatClose = document.getElementById('chat-close');
+            const chatInput = document.getElementById('chat-input');
+            const chatSend = document.getElementById('chat-send');
+            const chatBody = document.getElementById('chat-body');
+            const chatBadge = document.querySelector('.chat-badge');
+            const quickReplyBtns = document.querySelectorAll('.quick-reply-btn');
+
+            // Toggle chat window
+            chatToggle.addEventListener('click', function() {
+                chatWindow.classList.toggle('active');
+                if (chatWindow.classList.contains('active')) {
+                    chatBadge.style.display = 'none';
+                    chatInput.focus();
+                }
+            });
+
+            // Close chat window
+            chatClose.addEventListener('click', function() {
+                chatWindow.classList.remove('active');
+            });
+
+            // Send message function
+            function sendMessage(message) {
+                if (!message.trim()) return;
+
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.className = 'chat-message user-message';
+                userMsg.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>${message}</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                `;
+                
+                // Remove quick replies if they exist
+                const quickReplies = chatBody.querySelector('.quick-replies');
+                if (quickReplies) quickReplies.remove();
+                
+                chatBody.appendChild(userMsg);
+                chatInput.value = '';
+
+                // Scroll to bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                // Simulate bot response
+                setTimeout(function() {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'chat-message bot-message';
+                    botMsg.innerHTML = `
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Thank you for your message! Our team will assist you shortly. For immediate assistance, please call us or email support@alphavendor.com</p>
+                            <span class="message-time">Just now</span>
+                        </div>
+                    `;
+                    chatBody.appendChild(botMsg);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            }
+
+            // Send button click
+            chatSend.addEventListener('click', function() {
+                sendMessage(chatInput.value);
+            });
+
+            // Enter key to send
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage(chatInput.value);
+                }
+            });
+
+            // Quick reply buttons
+            quickReplyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const message = this.getAttribute('data-message');
+                    sendMessage(message);
+                });
+            });
+        });
+    </script>
+
     <script src="{{ asset('js/app.js') }}"></script>
+    
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileNavMenu = document.getElementById('mobileNavMenu');
+            const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+            const mobileNavClose = document.getElementById('mobileNavClose');
+
+            function openMobileMenu() {
+                mobileNavMenu.classList.add('active');
+                mobileNavOverlay.style.display = 'block';
+                setTimeout(() => mobileNavOverlay.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileNavMenu.classList.remove('active');
+                mobileNavOverlay.classList.remove('active');
+                setTimeout(() => {
+                    mobileNavOverlay.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = '';
+            }
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', openMobileMenu);
+            }
+
+            if (mobileNavClose) {
+                mobileNavClose.addEventListener('click', closeMobileMenu);
+            }
+
+            if (mobileNavOverlay) {
+                mobileNavOverlay.addEventListener('click', closeMobileMenu);
+            }
+
+            // Close menu when clicking on a link
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-items a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+        });
+    </script>
+    
     @stack('scripts')
 </body>
 </html>

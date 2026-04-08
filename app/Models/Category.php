@@ -16,6 +16,9 @@ class Category extends Model
         'name',
         'slug',
         'description',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
         'image',
         'is_active',
         'sort_order',
@@ -97,5 +100,41 @@ class Category extends Model
         }
 
         return Product::whereIn('id', $productIds);
+    }
+
+    /**
+     * Get commission settings for this category
+     */
+    public function commissionSettings()
+    {
+        return $this->hasMany(CommissionSetting::class);
+    }
+
+    /**
+     * Get meta title (fallback to name if not set)
+     */
+    public function getMetaTitleAttribute($value)
+    {
+        return $value ?: $this->name;
+    }
+
+    /**
+     * Get meta description (fallback to description if not set)
+     */
+    public function getMetaDescriptionAttribute($value)
+    {
+        return $value ?: $this->description;
+    }
+
+    /**
+     * Get meta keywords as array
+     */
+    public function getMetaKeywordsArrayAttribute()
+    {
+        if (!$this->meta_keywords) {
+            return [];
+        }
+        
+        return array_map('trim', explode(',', $this->meta_keywords));
     }
 }

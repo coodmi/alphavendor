@@ -4,51 +4,7 @@
 @section('page-title', 'Add New User')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Management</div>
-        <a href="{{ route('admin.users') }}" class="menu-item active">
-            <i class="fas fa-users"></i>
-            <span>Users</span>
-        </a>
-        <a href="{{ route('admin.applications') }}" class="menu-item">
-            <i class="fas fa-file-alt"></i>
-            <span>Applications</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-    </div>
-
-    <div class="menu-section">        <div class="menu-section-title">Settings</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
@@ -88,10 +44,12 @@
             <div class="form-group">
                 <label for="role">Role <span class="required">*</span></label>
                 <select id="role" name="role" required>
+                    <option value="">-- Select Role --</option>
                     <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
                     <option value="retailer" {{ old('role') == 'retailer' ? 'selected' : '' }}>Retailer</option>
                     <option value="wholesaler" {{ old('role') == 'wholesaler' ? 'selected' : '' }}>Wholesaler</option>
-                    <option value="exporter" {{ old('role') == 'exporter' ? 'selected' : '' }}>Exporter</option>
+                    <option value="exporter" {{ old('role') == 'exporter' ? 'selected' : '' }}>Importer</option>
+                    <option value="employee" {{ old('role') == 'employee' ? 'selected' : '' }}>Employee</option>
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                 </select>
             </div>
@@ -213,4 +171,23 @@
     padding-left: 20px;
 }
 </style>
+
+<script>
+// Ensure no duplicate options in role dropdown
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('role');
+    if (roleSelect) {
+        const options = Array.from(roleSelect.options);
+        const seen = new Set();
+        
+        options.forEach(option => {
+            if (seen.has(option.value) && option.value !== '') {
+                option.remove();
+            } else {
+                seen.add(option.value);
+            }
+        });
+    }
+});
+</script>
 @endsection

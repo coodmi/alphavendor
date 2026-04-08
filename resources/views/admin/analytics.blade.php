@@ -6,11 +6,11 @@
 @section('sidebar-menu')
     <div class="menu-section">
         <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item{{ request()->routeIs('admin.dashboard') ? ' active' : '' }}">
+        <a href="{{ route('admin.dashboard') }}" class="menu-item">
             <i class="fas fa-chart-line"></i>
             <span>Dashboard</span>
         </a>
-        <a href="{{ route('admin.analytics') }}" class="menu-item{{ request()->routeIs('admin.analytics') ? ' active' : '' }}">
+        <a href="{{ route('admin.analytics') }}" class="menu-item active">
             <i class="fas fa-chart-pie"></i>
             <span>Analytics & Reports</span>
         </a>
@@ -30,161 +30,528 @@
             <i class="fas fa-copyright"></i>
             <span>Brands</span>
         </a>
-        <a href="#" class="menu-item" style="opacity:0.5;pointer-events:none;">
-            <i class="fas fa-star"></i>
-            <span>Reviews & Ratings</span>
+        <a href="{{ route('admin.special-offers.index') }}" class="menu-item">
+            <i class="fas fa-tag"></i>
+            <span>Special Offers</span>
         </a>
     </div>
 
     <div class="menu-section">
-        <div class="menu-section-title">Sales & Orders</div>
-        <a href="javascript:void(0)" onclick="showSection('orders')" class="menu-item">
+        <div class="menu-section-title">Orders & Sales</div>
+        <a href="{{ route('admin.orders') }}" class="menu-item">
             <i class="fas fa-shopping-cart"></i>
             <span>Orders</span>
         </a>
-        <a href="{{ route('admin.manual-payments.index') }}" class="menu-item">
-            <i class="fas fa-mobile-alt"></i>
-            <span>Payment Verification</span>
-            @php
-                $pendingPaymentsCount = \App\Models\ManualPayment::pending()->count();
-            @endphp
-            @if($pendingPaymentsCount > 0)
-                <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $pendingPaymentsCount }}</span>
-            @endif
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-section-title">User Management</div>
+        <a href="{{ route('admin.users') }}" class="menu-item">
+            <i class="fas fa-users-cog"></i>
+            <span>All Users</span>
         </a>
-        <a href="{{ route('admin.payment-settings.index') }}" class="menu-item">
-            <i class="fas fa-cog"></i>
-            <span>Payment Settings</span>
+        <a href="{{ route('admin.vendors') }}" class="menu-item">
+            <i class="fas fa-store"></i>
+            <span>Vendors</span>
         </a>
-        <a href="javascript:void(0)" onclick="showSection('invoices')" class="menu-item">
-            <i class="fas fa-file-invoice"></i>
-            <span>Invoices</span>
-        </a>
-        <a href="javascript:void(0)" onclick="showSection('shipments')" class="menu-item">
-            <i class="fas fa-truck"></i>
-            <span>Shipments</span>
-        </a>
-        <a href="javascript:void(0)" onclick="showSection('refunds')" class="menu-item">
-            <i class="fas fa-undo"></i>
-            <span>Refunds & Returns</span>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-section-title">Marketing</div>
+        <a href="{{ route('admin.coupons') }}" class="menu-item">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Coupons</span>
         </a>
     </div>
 @endsection
 
 @section('content')
-<div class="content-area" style="background: #f6f8fb; min-height: 100vh;">
-    <h2 class="text-3xl font-extrabold mb-8 text-gray-800">Website Analytics & Reports</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-blue-500 to-blue-300 text-white">
-            <div class="mr-4"><i class="fas fa-users fa-2x"></i></div>
-            <div>
-                <div class="text-lg font-semibold">Total Users</div>
-                <div class="text-3xl font-extrabold">{{ $totalUsers }}</div>
-            </div>
-        </div>
-        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-green-500 to-green-300 text-white">
-            <div class="mr-4"><i class="fas fa-shopping-cart fa-2x"></i></div>
-            <div>
-                <div class="text-lg font-semibold">Total Orders</div>
-                <div class="text-3xl font-extrabold">{{ $totalOrders }}</div>
-            </div>
-        </div>
-        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-pink-500 to-pink-300 text-white">
-            <div class="mr-4"><i class="fas fa-coins fa-2x"></i></div>
-            <div>
-                <div class="text-lg font-semibold">Total Sales</div>
-                <div class="text-3xl font-extrabold">৳{{ number_format($totalSales, 2) }}</div>
-            </div>
-        </div>
-        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-yellow-500 to-yellow-300 text-white">
-            <div class="mr-4"><i class="fas fa-user-tie fa-2x"></i></div>
-            <div>
-                <div class="text-lg font-semibold">Active Vendors</div>
-                <div class="text-3xl font-extrabold">{{ $activeVendors }}</div>
-            </div>
-        </div>
-    </div>
+<!-- Header -->
+<div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">Analytics & Reports</h1>
+    <p class="text-gray-600">Comprehensive business insights and performance metrics</p>
+</div>
 
-    <div class="bg-white rounded-xl shadow-lg p-8 mb-10">
-        <h3 class="font-bold text-xl mb-6 text-gray-700">Orders & Sales Overview</h3>
-        <canvas id="ordersChart" height="80"></canvas>
-    </div>
+        <!-- Today vs Yesterday Comparison -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Today vs Yesterday</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Retailer Orders -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Retailer Orders</h3>
+                        <i class="fas fa-store text-green-500 text-2xl"></i>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Today</p>
+                            <p class="text-3xl font-bold text-green-600">{{ $todayStats['retailer_orders_today'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['retailer_sales_today'], 2) }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['retailer_orders_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['retailer_sales_yesterday'], 2) }}</p>
+                        </div>
+                    </div>
+                    @php
+                        $change = $yesterdayStats['retailer_orders_yesterday'] > 0 
+                            ? (($todayStats['retailer_orders_today'] - $yesterdayStats['retailer_orders_yesterday']) / $yesterdayStats['retailer_orders_yesterday']) * 100 
+                            : 0;
+                    @endphp
+                    <div class="mt-4 flex items-center">
+                        @if($change > 0)
+                            <i class="fas fa-arrow-up text-green-500 mr-2"></i>
+                            <span class="text-sm text-green-600 font-semibold">+{{ number_format($change, 1) }}%</span>
+                        @elseif($change < 0)
+                            <i class="fas fa-arrow-down text-red-500 mr-2"></i>
+                            <span class="text-sm text-red-600 font-semibold">{{ number_format($change, 1) }}%</span>
+                        @else
+                            <span class="text-sm text-gray-500">No change</span>
+                        @endif
+                    </div>
+                </div>
 
-    <div class="bg-white rounded-xl shadow-lg p-8 mb-10">
-        <h3 class="font-bold text-xl mb-6 text-gray-700">Recent Orders</h3>
-        <div class="overflow-x-auto">
-        <table class="min-w-full text-sm">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="text-left py-2 px-4">Order ID</th>
-                    <th class="text-left py-2 px-4">User</th>
-                    <th class="text-left py-2 px-4">Amount</th>
-                    <th class="text-left py-2 px-4">Status</th>
-                    <th class="text-left py-2 px-4">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($recentOrders as $order)
-                <tr class="border-b hover:bg-gray-50">
-                    <td class="py-2 px-4 font-semibold text-blue-600">#{{ $order->id }}</td>
-                    <td class="py-2 px-4">{{ $order->user->name }}</td>
-                    <td class="py-2 px-4">৳{{ number_format($order->total, 2) }}</td>
-                    <td class="py-2 px-4">
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold {{ $order->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : ($order->status == 'delivered' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700') }}">
-                            {{ ucfirst($order->status) }}
-                        </span>
-                    </td>
-                    <td class="py-2 px-4">{{ $order->created_at->format('d M Y') }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                <!-- Wholesaler Orders -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Wholesaler Orders</h3>
+                        <i class="fas fa-warehouse text-blue-500 text-2xl"></i>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Today</p>
+                            <p class="text-3xl font-bold text-blue-600">{{ $todayStats['wholesaler_orders_today'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['wholesaler_sales_today'], 2) }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['wholesaler_orders_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['wholesaler_sales_yesterday'], 2) }}</p>
+                        </div>
+                    </div>
+                    @php
+                        $change = $yesterdayStats['wholesaler_orders_yesterday'] > 0 
+                            ? (($todayStats['wholesaler_orders_today'] - $yesterdayStats['wholesaler_orders_yesterday']) / $yesterdayStats['wholesaler_orders_yesterday']) * 100 
+                            : 0;
+                    @endphp
+                    <div class="mt-4 flex items-center">
+                        @if($change > 0)
+                            <i class="fas fa-arrow-up text-green-500 mr-2"></i>
+                            <span class="text-sm text-green-600 font-semibold">+{{ number_format($change, 1) }}%</span>
+                        @elseif($change < 0)
+                            <i class="fas fa-arrow-down text-red-500 mr-2"></i>
+                            <span class="text-sm text-red-600 font-semibold">{{ number_format($change, 1) }}%</span>
+                        @else
+                            <span class="text-sm text-gray-500">No change</span>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Importer Orders -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Importer Orders</h3>
+                        <i class="fas fa-globe text-purple-500 text-2xl"></i>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Today</p>
+                            <p class="text-3xl font-bold text-purple-600">{{ $todayStats['importer_orders_today'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['importer_sales_today'], 2) }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['importer_orders_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['importer_sales_yesterday'], 2) }}</p>
+                        </div>
+                    </div>
+                    @php
+                        $change = $yesterdayStats['importer_orders_yesterday'] > 0 
+                            ? (($todayStats['importer_orders_today'] - $yesterdayStats['importer_orders_yesterday']) / $yesterdayStats['importer_orders_yesterday']) * 100 
+                            : 0;
+                    @endphp
+                    <div class="mt-4 flex items-center">
+                        @if($change > 0)
+                            <i class="fas fa-arrow-up text-green-500 mr-2"></i>
+                            <span class="text-sm text-green-600 font-semibold">+{{ number_format($change, 1) }}%</span>
+                        @elseif($change < 0)
+                            <i class="fas fa-arrow-down text-red-500 mr-2"></i>
+                            <span class="text-sm text-red-600 font-semibold">{{ number_format($change, 1) }}%</span>
+                        @else
+                            <span class="text-sm text-gray-500">No change</span>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Returns & Refunds -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Returns & Refunds</h3>
+                        <i class="fas fa-undo text-orange-500 text-2xl"></i>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Today</p>
+                            <p class="text-3xl font-bold text-orange-600">{{ $todayStats['returns_today'] + $todayStats['refunds_today'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ $todayStats['returns_today'] }} returns, {{ $todayStats['refunds_today'] }} refunds</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['returns_yesterday'] + $yesterdayStats['refunds_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ $yesterdayStats['returns_yesterday'] }} returns, {{ $yesterdayStats['refunds_yesterday'] }} refunds</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancelled Orders -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Cancelled Orders</h3>
+                        <i class="fas fa-times-circle text-red-500 text-2xl"></i>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Today</p>
+                            <p class="text-3xl font-bold text-red-600">{{ $todayStats['cancelled_today'] }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['cancelled_yesterday'] }}</p>
+                        </div>
+                    </div>
+                    @php
+                        $change = $yesterdayStats['cancelled_yesterday'] > 0 
+                            ? (($todayStats['cancelled_today'] - $yesterdayStats['cancelled_yesterday']) / $yesterdayStats['cancelled_yesterday']) * 100 
+                            : 0;
+                    @endphp
+                    <div class="mt-4 flex items-center">
+                        @if($change > 0)
+                            <i class="fas fa-arrow-up text-red-500 mr-2"></i>
+                            <span class="text-sm text-red-600 font-semibold">+{{ number_format($change, 1) }}%</span>
+                        @elseif($change < 0)
+                            <i class="fas fa-arrow-down text-green-500 mr-2"></i>
+                            <span class="text-sm text-green-600 font-semibold">{{ number_format($change, 1) }}%</span>
+                        @else
+                            <span class="text-sm text-gray-500">No change</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Statistics -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Overall Performance</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Total Sales -->
+                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Total Sales</h3>
+                        <i class="fas fa-dollar-sign text-3xl opacity-50"></i>
+                    </div>
+                    <p class="text-4xl font-bold">{{ currency_symbol() }}{{ number_format($overallStats['total_sales'], 2) }}</p>
+                    <p class="text-sm opacity-75 mt-2">{{ $overallStats['total_delivered'] }} completed orders</p>
+                </div>
+
+                <!-- Total Orders -->
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Total Orders</h3>
+                        <i class="fas fa-shopping-cart text-3xl opacity-50"></i>
+                    </div>
+                    <p class="text-4xl font-bold">{{ number_format($overallStats['total_orders']) }}</p>
+                    <p class="text-sm opacity-75 mt-2">{{ $overallStats['total_pending'] }} pending</p>
+                </div>
+
+                <!-- Active Vendors -->
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Active Vendors</h3>
+                        <i class="fas fa-users text-3xl opacity-50"></i>
+                    </div>
+                    <p class="text-4xl font-bold">{{ $overallStats['total_retailers'] + $overallStats['total_wholesalers'] + $overallStats['total_importers'] }}</p>
+                    <p class="text-sm opacity-75 mt-2">{{ $overallStats['total_retailers'] }}R / {{ $overallStats['total_wholesalers'] }}W / {{ $overallStats['total_importers'] }}I</p>
+                </div>
+
+                <!-- Total Products -->
+                <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-semibold">Total Products</h3>
+                        <i class="fas fa-box text-3xl opacity-50"></i>
+                    </div>
+                    <p class="text-4xl font-bold">{{ number_format($overallStats['total_products']) }}</p>
+                    <p class="text-sm opacity-75 mt-2">{{ $overallStats['active_products'] }} active, {{ $overallStats['out_of_stock'] }} out of stock</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Sales Chart -->
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                <h3 class="text-base font-semibold text-gray-800 mb-3">Sales Trend (Last 7 Days)</h3>
+                <div style="height: 200px;">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Orders Chart -->
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                <h3 class="text-base font-semibold text-gray-800 mb-3">Orders Trend (Last 7 Days)</h3>
+                <div style="height: 200px;">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performers -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Top Vendors -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Top Performing Vendors</h3>
+                <div class="space-y-4">
+                    @forelse($topVendors as $index => $vendor)
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                                    {{ $index + 1 }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ $vendor->name }}</p>
+                                    <p class="text-sm text-gray-500">{{ ucfirst($vendor->role) }}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-green-600">{{ currency_symbol() }}{{ number_format($vendor->total_sales ?? 0, 2) }}</p>
+                                <p class="text-sm text-gray-500">{{ $vendor->total_orders }} orders</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-center py-8">No vendor data available</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Top Selling Products</h3>
+                <div class="space-y-4">
+                    @forelse($topProducts as $index => $product)
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-bold">
+                                    {{ $index + 1 }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ Str::limit($product->name, 30) }}</p>
+                                    <p class="text-sm text-gray-500">{{ $product->category->name ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-green-600">{{ currency_symbol() }}{{ number_format($product->total_revenue ?? 0, 2) }}</p>
+                                <p class="text-sm text-gray-500">{{ $product->total_sold }} sold</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-center py-8">No product data available</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Recent Orders</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Order ID</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Customer</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Vendor</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Amount</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($recentOrders as $order)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900">#{{ $order->id }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $order->user->name ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $order->vendor->name ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ currency_symbol() }}{{ number_format($order->total, 2) }}</td>
+                                <td class="px-4 py-3">
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full
+                                        @if($order->status == 'delivered' || $order->status == 'completed') bg-green-100 text-green-800
+                                        @elseif($order->status == 'pending') bg-yellow-100 text-yellow-800
+                                        @elseif($order->status == 'processing') bg-blue-100 text-blue-800
+                                        @elseif($order->status == 'cancelled') bg-red-100 text-red-800
+                                        @else bg-gray-100 text-gray-800
+                                        @endif">
+                                        {{ ucfirst($order->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500">{{ $order->created_at->format('M d, Y') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-4 py-8 text-center text-gray-500">No recent orders</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-@push('scripts')
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var ctx = document.getElementById('ordersChart').getContext('2d');
-    var ordersChart = new Chart(ctx, {
-        type: 'bar',
+    // Modern Chart Configuration
+    Chart.defaults.font.family = "'Inter', 'system-ui', '-apple-system', 'sans-serif'";
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = '#6B7280';
+
+    // Sales Chart
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    new Chart(salesCtx, {
+        type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Orders',
-                    data: [2, 3, 4, 5, 3, 2, 1, 0, 0, 0, 0, 0], // Example data, replace with real
-                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                    borderRadius: 8,
-                },
-                {
-                    label: 'Sales',
-                    data: [100, 200, 300, 400, 250, 100, 50, 0, 0, 0, 0, 0], // Example data, replace with real
-                    backgroundColor: 'rgba(236, 72, 153, 0.7)',
-                    borderRadius: 8,
-                }
-            ]
+            labels: @json($last7Days),
+            datasets: [{
+                label: 'Sales',
+                data: @json($salesData),
+                borderColor: 'rgb(34, 197, 94)',
+                backgroundColor: 'rgba(34, 197, 94, 0.08)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                pointBackgroundColor: 'rgb(34, 197, 94)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
+            }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: true,
+                    display: false
                 },
-                title: {
-                    display: false,
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: {
+                        size: 12,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return 'Sales: {{ currency_symbol() }}' + context.parsed.y.toLocaleString();
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        padding: 8,
+                        callback: function(value) {
+                            return '{{ currency_symbol() }}' + value.toLocaleString();
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        padding: 8
+                    }
                 }
             }
         }
     });
-});
+
+    // Orders Chart
+    const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+    new Chart(ordersCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($last7Days),
+            datasets: [{
+                label: 'Orders',
+                data: @json($ordersData),
+                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                borderColor: 'rgb(59, 130, 246)',
+                borderWidth: 0,
+                borderRadius: 6,
+                barThickness: 24
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: {
+                        size: 12,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return 'Orders: ' + context.parsed.y;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        padding: 8,
+                        stepSize: 1
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        padding: 8
+                    }
+                }
+            }
+        }
+    });
 </script>
-@endpush
 @endsection

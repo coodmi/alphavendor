@@ -1,0 +1,249 @@
+@extends('layouts.dashboard')
+
+@section('title', 'Commission History')
+@section('page-title', 'Commission History')
+
+@section('sidebar-menu')
+    @php
+        $userRole = auth()->user()->role;
+    @endphp
+    @if($userRole === 'retailer')
+        @include('dashboards.partials.retailer-sidebar')
+    @elseif($userRole === 'wholesaler')
+        @include('dashboards.partials.wholesaler-sidebar')
+    @elseif($userRole === 'exporter')
+        @include('dashboards.partials.exporter-sidebar')
+    @endif
+@endsection
+
+@section('content')
+<style>
+    .report-header {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .filters-bar {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .filter-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .filter-input {
+        padding: 10px 15px;
+        border: 2px solid #e8e8e8;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    
+    .btn-primary {
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-export {
+        padding: 10px 20px;
+        background: #2ecc71;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .report-table {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+</style>
+
+<!-- Header -->
+<div class="report-header">
+    <div>
+        <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 700; color: #2c3e50;">
+            <i class="fas fa-percentage"></i> Commission History
+        </h2>
+        <p style="margin: 0; color: #7f8c8d;">Track your commission earnings from orders</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{{ route('vendor.reports.index') }}" class="btn-primary" style="background: #6c757d;">
+            <i class="fas fa-arrow-left"></i> Back to Reports
+        </a>
+        <a href="{{ route('vendor.reports.export', 'commission') }}" class="btn-export">
+            <i class="fas fa-download"></i> Export CSV
+        </a>
+    </div>
+</div>
+
+<!-- Commission Statistics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Total Orders</div>
+        <div style="font-size: 32px; font-weight: 700; color: #667eea;">{{ $totalOrders }}</div>
+    </div>
+    <div class="stat-card">
+        <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Total Sales</div>
+        <div style="font-size: 32px; font-weight: 700; color: #2ecc71;">${{ number_format($totalSales, 2) }}</div>
+    </div>
+    <div class="stat-card">
+        <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Total Commission</div>
+        <div style="font-size: 32px; font-weight: 700; color: #e74c3c;">${{ number_format($totalCommission, 2) }}</div>
+    </div>
+    <div class="stat-card">
+        <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Your Earnings</div>
+        <div style="font-size: 32px; font-weight: 700; color: #f39c12;">${{ number_format($totalEarnings, 2) }}</div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+    <form method="GET" action="{{ route('vendor.reports.commission-history') }}">
+        <div class="filter-row">
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #2c3e50;">Date From</label>
+                <input type="date" name="date_from" value="{{ request('date_from') }}" class="filter-input">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #2c3e50;">Date To</label>
+                <input type="date" name="date_to" value="{{ request('date_to') }}" class="filter-input">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #2c3e50;">Status</label>
+                <select name="status" class="filter-input">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
+                    <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                </select>
+            </div>
+            <div style="align-self: flex-end;">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="report-table">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: #f8f9fa;">
+                <tr>
+                    <th style="padding: 15px 20px; text-align: left; font-size: 12px; font-weight: 700; color: #7f8c8d; text-transform: uppercase;">Order #</th>
+                    <th style="padding: 15px 20px; text-align: left; font-size: 12px; font-weight: 700; color: #7f8c8d; text-transform: uppercase;">Date</th>
+                    <th style="padding: 15px 20px; text-align: right; font-size: 12px; font-weight: 700; color: #7f8c8d; text-transform: uppercase;">Order Total</th>
+                    <th style="padding: 15px 20px; text-align: right; font-size: 12px; font-weight: 700; color: #7f8c8d; text-transform: uppercase;">Commission</th>
+                    <th style="padding: 15px 20px; text-align: right; font-size: 12px; font-weight: 700; color: #7f8c8d; text-transform: uppercase;">Your Earning</th>
+                    <th style="padding: 15px 20px; text-align: center; font-size: 12px; font-weight: 700; color: #7f8c8d; text-transform: uppercase;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($orders as $order)
+                    <tr style="border-bottom: 1px solid #f0f0f0;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                        <td style="padding: 15px 20px;">
+                            <a href="{{ route('orders.show', $order->id) }}" style="color: #667eea; font-weight: 600; text-decoration: none;">
+                                #{{ $order->order_number }}
+                            </a>
+                        </td>
+                        <td style="padding: 15px 20px;">
+                            <div style="color: #2c3e50;">{{ $order->created_at->format('M d, Y') }}</div>
+                            <div style="font-size: 12px; color: #7f8c8d;">{{ $order->created_at->format('h:i A') }}</div>
+                        </td>
+                        <td style="padding: 15px 20px; text-align: right;">
+                            <span style="font-size: 16px; font-weight: 600; color: #2c3e50;">${{ number_format($order->total, 2) }}</span>
+                        </td>
+                        <td style="padding: 15px 20px; text-align: right;">
+                            <span style="font-size: 16px; font-weight: 600; color: #e74c3c;">-${{ number_format($order->commission_amount ?? 0, 2) }}</span>
+                            @if($order->commission_rate)
+                                <div style="font-size: 11px; color: #7f8c8d;">({{ $order->commission_rate }}%)</div>
+                            @endif
+                        </td>
+                        <td style="padding: 15px 20px; text-align: right;">
+                            <span style="font-size: 18px; font-weight: 700; color: #2ecc71;">${{ number_format($order->vendor_earning ?? 0, 2) }}</span>
+                        </td>
+                        <td style="padding: 15px 20px; text-align: center;">
+                            @php
+                                $statusColors = [
+                                    'pending' => ['bg' => '#fff3cd', 'text' => '#856404'],
+                                    'processing' => ['bg' => '#cfe2ff', 'text' => '#084298'],
+                                    'shipped' => ['bg' => '#e7d6ff', 'text' => '#6f42c1'],
+                                    'delivered' => ['bg' => '#d1e7dd', 'text' => '#0f5132'],
+                                    'completed' => ['bg' => '#d1e7dd', 'text' => '#0f5132'],
+                                    'cancelled' => ['bg' => '#f8d7da', 'text' => '#842029'],
+                                ];
+                                $color = $statusColors[$order->status] ?? ['bg' => '#e2e3e5', 'text' => '#41464b'];
+                            @endphp
+                            <span style="padding: 6px 12px; background: {{ $color['bg'] }}; color: {{ $color['text'] }}; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;">
+                                {{ $order->status }}
+                            </span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" style="padding: 60px 20px; text-align: center;">
+                            <i class="fas fa-percentage" style="font-size: 64px; color: #ddd; margin-bottom: 15px;"></i>
+                            <p style="color: #7f8c8d; font-size: 18px; margin: 0;">No commission history found</p>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    
+    @if($orders->hasPages())
+        <div style="padding: 20px; border-top: 2px solid #f0f0f0;">
+            {{ $orders->links() }}
+        </div>
+    @endif
+</div>
+
+@endsection

@@ -30,6 +30,18 @@
 @endsection
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
+        <strong>Success!</strong> {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-error" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+        <strong>Error!</strong> {{ session('error') }}
+    </div>
+@endif
+
 <div class="form-container">
     <div class="form-box">
         <h2>Apply for Vendor Role</h2>
@@ -62,7 +74,10 @@
                             📦 Wholesaler - Sell products in bulk to businesses
                         </option>
                         <option value="exporter" {{ old('requested_role') == 'exporter' ? 'selected' : '' }}>
-                            🌍 Exporter - Sell products internationally
+                            🌍 Importer - Import products internationally
+                        </option>
+                        <option value="employee" {{ old('requested_role') == 'employee' ? 'selected' : '' }}>
+                            👨‍💼 Employee - Moderate website content and operations
                         </option>
                     </select>
                 </div>
@@ -151,11 +166,6 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label for="postal_code">Postal Code <span class="required">*</span></label>
-                        <input type="text" id="postal_code" name="postal_code" value="{{ old('postal_code') }}" required placeholder="12345">
-                    </div>
-
                     <div class="form-group">
                         <label for="country">Country <span class="required">*</span></label>
                         <input type="text" id="country" name="country" value="{{ old('country') }}" required placeholder="Country">

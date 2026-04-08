@@ -2,30 +2,54 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AboutPageContent extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'key',
-        'value',
-        'type',
+        'hero_title',
+        'hero_subtitle',
+        'hero_cta_primary_text',
+        'hero_cta_primary_link',
+        'hero_cta_secondary_text',
+        'hero_cta_secondary_link',
+        'story_title',
+        'story_paragraph_1',
+        'story_paragraph_2',
+        'story_paragraph_3',
+        'mission_title',
+        'mission_content',
+        'vision_title',
+        'vision_content',
+        'stats_vendors',
+        'stats_products',
+        'stats_customers',
+        'stats_countries',
+        'cta_title',
+        'cta_subtitle',
+        'cta_primary_text',
+        'cta_primary_link',
+        'cta_secondary_text',
+        'cta_secondary_link',
     ];
 
     /**
-     * Get content by key
+     * Get the about page content (singleton pattern)
      */
-    public static function getContent($key, $default = null)
+    public static function getContent()
     {
-        $content = self::where('key', $key)->first();
-        return $content ? $content->value : $default;
-    }
-
-    /**
-     * Get all content as key-value pairs
-     */
-    public static function getAllContent()
-    {
-        return self::all()->pluck('value', 'key')->toArray();
+        $content = self::first();
+        
+        if (!$content) {
+            $content = self::create([
+                'hero_title' => 'About AlphaVendor',
+                'hero_subtitle' => 'Your trusted partner in global commerce, connecting businesses worldwide',
+            ]);
+        }
+        
+        return $content;
     }
 }

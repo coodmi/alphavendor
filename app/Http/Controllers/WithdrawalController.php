@@ -93,13 +93,15 @@ class WithdrawalController extends Controller
     public function storePaymentMethod(Request $request)
     {
         $validated = $request->validate([
-            'type' => 'required|in:bank,paypal,stripe,other',
-            'account_name' => 'required_if:type,bank|string',
-            'account_number' => 'required_if:type,bank|string',
-            'bank_name' => 'nullable|string',
-            'routing_number' => 'nullable|string',
-            'swift_code' => 'nullable|string',
-            'paypal_email' => 'required_if:type,paypal|email',
+            'type' => 'required|in:bank,bkash,nagad',
+            'account_name' => 'required|string|max:255',
+            'account_number' => 'required_if:type,bank|nullable|string|max:255',
+            'bank_name' => 'required_if:type,bank|nullable|string|max:255',
+            'branch_name' => 'nullable|string|max:255',
+            'routing_number' => 'nullable|string|max:255',
+            'swift_code' => 'nullable|string|max:255',
+            'bkash_number' => 'required_if:type,bkash|nullable|string|max:20',
+            'nagad_number' => 'required_if:type,nagad|nullable|string|max:20',
             'additional_details' => 'nullable|string',
             'is_default' => 'boolean'
         ]);

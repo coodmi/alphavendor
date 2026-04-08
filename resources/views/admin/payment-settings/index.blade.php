@@ -2,6 +2,10 @@
 
 @section('title', 'Payment Settings')
 
+@section('sidebar-menu')
+    @include('dashboards.partials.admin-sidebar')
+@endsection
+
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <!-- Header -->

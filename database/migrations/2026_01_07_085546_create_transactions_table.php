@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('vendor_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('order_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('transaction_number')->unique();
+            $table->string('transaction_number', 191)->unique();
             $table->enum('type', ['sale', 'withdrawal', 'refund', 'commission']);
             $table->decimal('amount', 10, 2);
             $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');

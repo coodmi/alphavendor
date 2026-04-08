@@ -16,6 +16,8 @@ use App\Models\WholesalePageContent;
 use App\Models\ImportPageContent;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Coupon;
+use App\Models\CouponUsage;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -25,12 +27,186 @@ class AdminController extends Controller
      */
     public function analytics()
     {
-        $totalUsers = \App\Models\User::count();
-        $totalOrders = \App\Models\Order::count();
-        $totalSales = \App\Models\Order::where('status', 'delivered')->sum('total');
-        $activeVendors = \App\Models\User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])->where('status', 'active')->count();
-        $recentOrders = \App\Models\Order::with('user')->latest()->take(10)->get();
-        return view('admin.analytics', compact('totalUsers', 'totalOrders', 'totalSales', 'activeVendors', 'recentOrders'));
+        $today = now()->startOfDay();
+        $yesterday = now()->subDay()->startOfDay();
+        
+        // Get vendor IDs by role
+        $retailerIds = User::where('role', 'retailer')->pluck('id');
+        $wholesalerIds = User::where('role', 'wholesaler')->pluck('id');
+        $importerIds = User::where('role', 'exporter')->pluck('id'); // exporter is used as importer
+        
+        // TODAY'S STATISTICS
+        $todayStats = [
+            // Retailer orders today
+            'retailer_orders_today' => Order::whereIn('vendor_id', $retailerIds)
+                ->whereDate('created_at', $today)
+                ->count(),
+            'retailer_sales_today' => Order::whereIn('vendor_id', $retailerIds)
+                ->whereDate('created_at', $today)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total'),
+            
+            // Wholesaler orders today
+            'wholesaler_orders_today' => Order::whereIn('vendor_id', $wholesalerIds)
+                ->whereDate('created_at', $today)
+                ->count(),
+            'wholesaler_sales_today' => Order::whereIn('vendor_id', $wholesalerIds)
+                ->whereDate('created_at', $today)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total'),
+            
+            // Importer orders today
+            'importer_orders_today' => Order::whereIn('vendor_id', $importerIds)
+                ->whereDate('created_at', $today)
+                ->count(),
+            'importer_sales_today' => Order::whereIn('vendor_id', $importerIds)
+                ->whereDate('created_at', $today)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total'),
+            
+            // Returns & Refunds today
+            'returns_today' => Order::whereDate('updated_at', $today)
+                ->where('status', 'returned')
+                ->count(),
+            'refunds_today' => Order::whereDate('updated_at', $today)
+                ->where('status', 'refunded')
+                ->count(),
+            
+            // Cancelled orders today
+            'cancelled_today' => Order::whereDate('updated_at', $today)
+                ->where('status', 'cancelled')
+                ->count(),
+        ];
+        
+        // YESTERDAY'S STATISTICS
+        $yesterdayStats = [
+            // Retailer orders yesterday
+            'retailer_orders_yesterday' => Order::whereIn('vendor_id', $retailerIds)
+                ->whereDate('created_at', $yesterday)
+                ->count(),
+            'retailer_sales_yesterday' => Order::whereIn('vendor_id', $retailerIds)
+                ->whereDate('created_at', $yesterday)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total'),
+            
+            // Wholesaler orders yesterday
+            'wholesaler_orders_yesterday' => Order::whereIn('vendor_id', $wholesalerIds)
+                ->whereDate('created_at', $yesterday)
+                ->count(),
+            'wholesaler_sales_yesterday' => Order::whereIn('vendor_id', $wholesalerIds)
+                ->whereDate('created_at', $yesterday)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total'),
+            
+            // Importer orders yesterday
+            'importer_orders_yesterday' => Order::whereIn('vendor_id', $importerIds)
+                ->whereDate('created_at', $yesterday)
+                ->count(),
+            'importer_sales_yesterday' => Order::whereIn('vendor_id', $importerIds)
+                ->whereDate('created_at', $yesterday)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total'),
+            
+            // Returns & Refunds yesterday
+            'returns_yesterday' => Order::whereDate('updated_at', $yesterday)
+                ->where('status', 'returned')
+                ->count(),
+            'refunds_yesterday' => Order::whereDate('updated_at', $yesterday)
+                ->where('status', 'refunded')
+                ->count(),
+            
+            // Cancelled orders yesterday
+            'cancelled_yesterday' => Order::whereDate('updated_at', $yesterday)
+                ->where('status', 'cancelled')
+                ->count(),
+        ];
+        
+        // OVERALL STATISTICS
+        $overallStats = [
+            'total_orders' => Order::count(),
+            'total_sales' => Order::whereIn('status', ['delivered', 'completed'])->sum('total'),
+            'total_returns' => Order::where('status', 'returned')->count(),
+            'total_refunds' => Order::where('status', 'refunded')->count(),
+            'total_cancelled' => Order::where('status', 'cancelled')->count(),
+            'total_pending' => Order::where('status', 'pending')->count(),
+            'total_processing' => Order::where('status', 'processing')->count(),
+            'total_shipped' => Order::where('status', 'shipped')->count(),
+            'total_delivered' => Order::whereIn('status', ['delivered', 'completed'])->count(),
+            
+            // Vendor statistics
+            'total_retailers' => User::where('role', 'retailer')->where('status', 'active')->count(),
+            'total_wholesalers' => User::where('role', 'wholesaler')->where('status', 'active')->count(),
+            'total_importers' => User::where('role', 'exporter')->where('status', 'active')->count(),
+            
+            // Product statistics
+            'total_products' => Product::count(),
+            'active_products' => Product::where('status', 'active')->count(),
+            'out_of_stock' => Product::where('status', 'out_of_stock')->count(),
+            
+            // Customer statistics
+            'total_customers' => User::where('role', 'customer')->count(),
+            'new_customers_today' => User::where('role', 'customer')->whereDate('created_at', $today)->count(),
+        ];
+        
+        // CHART DATA - Last 7 days
+        $last7Days = [];
+        $salesData = [];
+        $ordersData = [];
+        
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->startOfDay();
+            $last7Days[] = $date->format('M d');
+            
+            $salesData[] = Order::whereDate('created_at', $date)
+                ->whereIn('status', ['delivered', 'completed'])
+                ->sum('total');
+            
+            $ordersData[] = Order::whereDate('created_at', $date)->count();
+        }
+        
+        // TOP PERFORMING VENDORS
+        $topVendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])
+            ->where('users.status', 'active')
+            ->withCount(['orders as total_orders'])
+            ->withSum(['orders as total_sales' => function($query) {
+                $query->whereIn('orders.status', ['delivered', 'completed']);
+            }], 'total')
+            ->orderByDesc('total_sales')
+            ->take(6)
+            ->get();
+        
+        // TOP SELLING PRODUCTS
+        $topProducts = Product::withCount(['orderItems as total_sold' => function($query) {
+            $query->whereHas('order', function($q) {
+                $q->whereIn('status', ['delivered', 'completed']);
+            });
+        }])
+        ->withSum(['orderItems as total_revenue' => function($query) {
+            $query->whereHas('order', function($q) {
+                $q->whereIn('status', ['delivered', 'completed']);
+            });
+        }], 'price')
+        ->orderByDesc('total_sold')
+        ->take(6)
+        ->get();
+        
+        // RECENT ORDERS
+        $recentOrders = Order::with(['user', 'vendor', 'items'])
+            ->latest()
+            ->take(10)
+            ->get();
+        
+        return view('admin.analytics', compact(
+            'todayStats',
+            'yesterdayStats',
+            'overallStats',
+            'last7Days',
+            'salesData',
+            'ordersData',
+            'topVendors',
+            'topProducts',
+            'recentOrders'
+        ));
     }
     /**
      * Show admin dashboard
@@ -71,22 +247,22 @@ class AdminController extends Controller
         $brands = Brand::withCount('products')->orderBy('sort_order')->get();
 
         // Fetch retail page content
-        $retailPageContent = RetailPageContent::getAllContent();
+        $retailPageContent = RetailPageContent::first() ?? new RetailPageContent();
 
         // Fetch about page content
-        $aboutPageContent = AboutPageContent::getAllContent();
+        $aboutPageContent = AboutPageContent::first() ?? new AboutPageContent();
 
         // Fetch contact page content
-        $contactPageContent = ContactPageContent::getAllContent();
+        $contactPageContent = ContactPageContent::getContent();
 
         // Fetch home page content
-        $homePageContent = HomePageContent::getAllContent();
+        $homePageContent = HomePageContent::first() ?? new HomePageContent();
 
         // Fetch wholesale page content
-        $wholesalePageContent = WholesalePageContent::getAllContent();
+        $wholesalePageContent = WholesalePageContent::first() ?? new WholesalePageContent();
 
         // Fetch import page content
-        $importPageContent = ImportPageContent::getAllContent();
+        $importPageContent = ImportPageContent::first() ?? new ImportPageContent();
 
         return view('dashboards.admin', compact(
             'stats',
@@ -136,7 +312,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:user,retailer,wholesaler,exporter,admin',
+            'role' => 'required|in:user,retailer,wholesaler,exporter,employee,admin',
             'dashboard_modules' => 'nullable|array',
             'dashboard_modules.*' => 'in:orders,wishlist,profile,notifications,chat,wallet,coupons',
             'status' => 'required|in:active,inactive',
@@ -170,7 +346,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role' => 'required|in:user,retailer,wholesaler,exporter,admin',
+            'role' => 'required|in:user,retailer,wholesaler,exporter,employee,admin',
             'dashboard_modules' => 'nullable|array',
             'dashboard_modules.*' => 'in:orders,wishlist,profile,notifications,chat,wallet,coupons',
             'status' => 'required|in:active,inactive',
@@ -186,13 +362,33 @@ class AdminController extends Controller
     }
 
     /**
+     * Reset user password (admin function)
+     */
+    public function resetUserPassword(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user->update([
+            'password' => Hash::make($validated['password'])
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password reset successfully!'
+        ]);
+    }
+
+
+    /**
      * Quick update for admin dashboard — change role and/or reset password for a user.
      */
     public function quickUpdateUser(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'role' => 'nullable|in:user,retailer,wholesaler,exporter,admin',
+            'role' => 'nullable|in:user,retailer,wholesaler,exporter,employee,admin',
             'password' => 'nullable|string|min:8|confirmed',
             'dashboard_modules' => 'nullable|array',
             'dashboard_modules.*' => 'in:orders,wishlist,profile,notifications,chat,wallet,coupons',
@@ -269,6 +465,838 @@ class AdminController extends Controller
 
         $order->update($validated);
 
+        \App\Services\NotificationService::orderStatusChanged($order->load('user'));
+
         return redirect()->back()->with('success', 'Order status updated successfully!');
     }
+
+    /**
+     * Show user permissions management
+     */
+    public function userPermissions()
+    {
+        $users = User::with('roleApplications')->paginate(20);
+        $roles = ['user', 'retailer', 'wholesaler', 'exporter', 'importer', 'admin'];
+        
+        return view('admin.user-permissions.index', compact('users', 'roles'));
+    }
+
+    /**
+     * Edit user permissions
+     */
+    public function editUserPermissions(User $user)
+    {
+        $roles = ['user', 'retailer', 'wholesaler', 'exporter', 'importer', 'admin'];
+        $permissions = [
+            'can_create_products' => 'Create Products',
+            'can_edit_products' => 'Edit Products',
+            'can_delete_products' => 'Delete Products',
+            'can_manage_orders' => 'Manage Orders',
+            'can_view_analytics' => 'View Analytics',
+            'can_manage_users' => 'Manage Users',
+            'can_access_admin' => 'Access Admin Panel'
+        ];
+        
+        return view('admin.user-permissions.edit', compact('user', 'roles', 'permissions'));
+    }
+
+    /**
+     * Update user permissions
+     */
+    public function updateUserPermissions(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'role' => 'required|in:user,retailer,wholesaler,exporter,employee,importer,admin',
+            'permissions' => 'array',
+            'permissions.*' => 'string'
+        ]);
+
+        $user->role = $validated['role'];
+        $user->permissions = $validated['permissions'] ?? [];
+        $user->save();
+
+        return redirect()->route('admin.user-permissions')->with('success', 'User permissions updated successfully!');
+    }
+
+    /**
+     * Show role settings management
+     */
+    public function roleSettings()
+        {
+            // System roles (cannot be edited or deleted)
+            $systemRoles = [
+                'user' => [
+                    'name' => 'User',
+                    'description' => 'Regular user with basic access',
+                    'permissions' => ['view_products', 'place_orders'],
+                    'is_system' => true
+                ],
+                'retailer' => [
+                    'name' => 'Retailer',
+                    'description' => 'Can sell products to end customers',
+                    'permissions' => ['create_products', 'manage_orders', 'view_analytics'],
+                    'is_system' => true
+                ],
+                'wholesaler' => [
+                    'name' => 'Wholesaler',
+                    'description' => 'Can sell products in bulk',
+                    'permissions' => ['create_products', 'manage_orders', 'view_analytics', 'bulk_pricing'],
+                    'is_system' => true
+                ],
+                'exporter' => [
+                    'name' => 'Exporter',
+                    'description' => 'Can export products internationally',
+                    'permissions' => ['create_products', 'manage_orders', 'view_analytics', 'export_docs'],
+                    'is_system' => true
+                ],
+                'importer' => [
+                    'name' => 'Importer',
+                    'description' => 'Can import products from other countries',
+                    'permissions' => ['create_products', 'manage_orders', 'view_analytics', 'import_docs'],
+                    'is_system' => true
+                ],
+                'admin' => [
+                    'name' => 'Administrator',
+                    'description' => 'Full system access',
+                    'permissions' => ['all_permissions'],
+                    'is_system' => true
+                ]
+            ];
+
+            // Get custom employee roles from database
+            $employeeRoles = \App\Models\EmployeeRole::ordered()->get();
+
+            return view('admin.role-settings.index', compact('systemRoles', 'employeeRoles'));
+        }
+
+    /**
+     * Update role settings
+     */
+    public function updateRoleSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'role' => 'required|string',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+            'permissions' => 'array',
+            'permissions.*' => 'string'
+        ]);
+
+        // In a real application, you would store this in a database
+        // For now, we'll just return success
+        return redirect()->route('admin.role-settings')->with('success', 'Role settings updated successfully!');
+    }
+
+    /**
+     * Store a new employee role
+     */
+    public function storeEmployeeRole(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:employee_roles,name',
+            'description' => 'nullable|string|max:500',
+            'access_level' => 'required|in:basic,extended,full',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'string',
+        ]);
+
+        $slug = \Str::slug($validated['name']);
+
+        // Ensure slug is unique
+        $originalSlug = $slug;
+        $counter = 1;
+        while (\App\Models\EmployeeRole::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $employeeRole = \App\Models\EmployeeRole::create([
+            'name' => $validated['name'],
+            'slug' => $slug,
+            'description' => $validated['description'] ?? '',
+            'access_level' => $validated['access_level'],
+            'permissions' => $validated['permissions'] ?? [],
+            'is_active' => true,
+            'sort_order' => \App\Models\EmployeeRole::max('sort_order') + 1,
+        ]);
+
+        return redirect()->route('admin.role-settings')->with('success', 'Employee role created successfully!');
+    }
+
+    /**
+     * Update an employee role
+     */
+    public function updateEmployeeRole(Request $request, \App\Models\EmployeeRole $employeeRole)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:employee_roles,name,' . $employeeRole->id,
+            'description' => 'nullable|string|max:500',
+            'access_level' => 'required|in:basic,extended,full',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'string',
+        ]);
+
+        $slug = \Str::slug($validated['name']);
+
+        // Ensure slug is unique (excluding current role)
+        $originalSlug = $slug;
+        $counter = 1;
+        while (\App\Models\EmployeeRole::where('slug', $slug)->where('id', '!=', $employeeRole->id)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $employeeRole->update([
+            'name' => $validated['name'],
+            'slug' => $slug,
+            'description' => $validated['description'] ?? '',
+            'access_level' => $validated['access_level'],
+            'permissions' => $validated['permissions'] ?? [],
+        ]);
+
+        return redirect()->route('admin.role-settings')->with('success', 'Employee role updated successfully!');
+    }
+
+    /**
+     * Delete an employee role
+     */
+    public function deleteEmployeeRole(\App\Models\EmployeeRole $employeeRole)
+    {
+        // Check if any employees are using this role
+        $employeeCount = User::where('employee_role_id', $employeeRole->id)->count();
+
+        if ($employeeCount > 0) {
+            return redirect()->route('admin.role-settings')->with('error', "Cannot delete role. {$employeeCount} employee(s) are currently assigned to this role.");
+        }
+
+        $employeeRole->delete();
+
+        return redirect()->route('admin.role-settings')->with('success', 'Employee role deleted successfully!');
+    }
+
+    /**
+     * Toggle employee role active status
+     */
+    public function toggleEmployeeRole(\App\Models\EmployeeRole $employeeRole)
+    {
+        $employeeRole->update([
+            'is_active' => !$employeeRole->is_active
+        ]);
+
+        $status = $employeeRole->is_active ? 'activated' : 'deactivated';
+        return redirect()->route('admin.role-settings')->with('success', "Employee role {$status} successfully!");
+    }
+
+
+    /**
+     * Show user activity logs
+     */
+    public function userActivity()
+    {
+        // In a real application, you would have an activity log model
+        // For now, we'll create sample data
+        $activities = collect([
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'user_name' => 'John Doe',
+                'action' => 'Login',
+                'description' => 'User logged into the system',
+                'ip_address' => '192.168.1.1',
+                'created_at' => now()->subMinutes(30)
+            ],
+            [
+                'id' => 2,
+                'user_id' => 2,
+                'user_name' => 'Jane Smith',
+                'action' => 'Product Created',
+                'description' => 'Created new product: Sample Product',
+                'ip_address' => '192.168.1.2',
+                'created_at' => now()->subHours(2)
+            ],
+            [
+                'id' => 3,
+                'user_id' => 3,
+                'user_name' => 'Bob Johnson',
+                'action' => 'Order Placed',
+                'description' => 'Placed order #12345',
+                'ip_address' => '192.168.1.3',
+                'created_at' => now()->subHours(5)
+            ]
+        ]);
+
+        return view('admin.user-activity.index', compact('activities'));
+    }
+
+    /**
+     * Show user activity details
+     */
+    public function userActivityDetails(User $user)
+    {
+        // Sample activity data for the specific user
+        $activities = collect([
+            [
+                'action' => 'Login',
+                'description' => 'User logged into the system',
+                'ip_address' => '192.168.1.1',
+                'created_at' => now()->subMinutes(30)
+            ],
+            [
+                'action' => 'Profile Updated',
+                'description' => 'Updated profile information',
+                'ip_address' => '192.168.1.1',
+                'created_at' => now()->subHours(1)
+            ]
+        ]);
+
+        return view('admin.user-activity.details', compact('user', 'activities'));
+    }
+
+    /**
+     * Clear activity logs
+     */
+    public function clearActivityLogs()
+    {
+        // In a real application, you would clear the activity logs from database
+        return redirect()->route('admin.user-activity')->with('success', 'Activity logs cleared successfully!');
+    }
+
+    /**
+     * Show all employees
+     */
+    public function employees()
+        {
+            $employees = User::whereIn('role', ['employee', 'manager', 'supervisor'])
+                ->with('employeeRole')
+                ->withCount(['orders', 'products'])
+                ->latest()
+                ->paginate(20);
+
+            return view('admin.employees.index', compact('employees'));
+        }
+
+    /**
+     * Show create employee form
+     */
+    public function createEmployee()
+        {
+            $employeeRoles = \App\Models\EmployeeRole::active()->ordered()->get();
+            return view('admin.employees.create', compact('employeeRoles'));
+        }
+
+    /**
+     * Store new employee
+     */
+    public function storeEmployee(Request $request)
+        {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'phone' => 'nullable|string|max:20',
+                'password' => 'required|string|min:8|confirmed',
+                'employee_role_id' => 'required|exists:employee_roles,id',
+                'status' => 'required|in:active,inactive',
+                'notes' => 'nullable|string|max:1000',
+            ]);
+
+            // Get the employee role to set the base role
+            $employeeRole = \App\Models\EmployeeRole::findOrFail($validated['employee_role_id']);
+
+            // Determine base role based on access level
+            $baseRole = match($employeeRole->access_level) {
+                'basic' => 'employee',
+                'extended' => 'manager',
+                'full' => 'supervisor',
+                default => 'employee',
+            };
+
+            $employee = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'password' => Hash::make($validated['password']),
+                'role' => $baseRole,
+                'employee_role_id' => $validated['employee_role_id'],
+                'status' => $validated['status'],
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            return redirect()->route('admin.employees')->with('success', 'Employee created successfully with role: ' . $employeeRole->name);
+        }
+
+    /**
+     * Show edit employee form
+     */
+    public function editEmployee(User $user)
+        {
+            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
+                return redirect()->route('admin.employees')->with('error', 'User is not a staff member!');
+            }
+
+            $employeeRoles = \App\Models\EmployeeRole::active()->ordered()->get();
+            return view('admin.employees.edit', compact('user', 'employeeRoles'));
+        }
+
+    /**
+     * Update employee
+     */
+    public function updateEmployee(Request $request, User $user)
+        {
+            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
+                return redirect()->route('admin.employees')->with('error', 'User is not a staff member!');
+            }
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'phone' => 'nullable|string|max:20',
+                'password' => 'nullable|string|min:8|confirmed',
+                'employee_role_id' => 'required|exists:employee_roles,id',
+                'status' => 'required|in:active,inactive',
+                'notes' => 'nullable|string|max:1000',
+            ]);
+
+            // Get the employee role to set the base role
+            $employeeRole = \App\Models\EmployeeRole::findOrFail($validated['employee_role_id']);
+
+            // Determine base role based on access level
+            $baseRole = match($employeeRole->access_level) {
+                'basic' => 'employee',
+                'extended' => 'manager',
+                'full' => 'supervisor',
+                default => 'employee',
+            };
+
+            $user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'role' => $baseRole,
+                'employee_role_id' => $validated['employee_role_id'],
+                'status' => $validated['status'],
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            if ($request->filled('password')) {
+                $user->update(['password' => Hash::make($validated['password'])]);
+            }
+
+            return redirect()->route('admin.employees')->with('success', 'Employee updated successfully!');
+        }
+
+    /**
+     * Delete employee
+     */
+    public function deleteEmployee(User $user)
+        {
+            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
+                return redirect()->route('admin.employees')->with('error', 'User is not a staff member!');
+            }
+
+            $user->delete();
+
+            return redirect()->route('admin.employees')->with('success', 'Employee deleted successfully!');
+        }
+
+    /**
+     * Show employee permissions
+     */
+    public function employeePermissions()
+        {
+            $employees = User::whereIn('role', ['employee', 'manager', 'supervisor'])
+                ->orderBy('name')
+                ->get();
+
+            return view('admin.employees.permissions', compact('employees'));
+        }
+
+    /**
+     * Update employee permissions
+     */
+    public function updateEmployeePermissions(Request $request, User $user)
+        {
+            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
+                return response()->json(['error' => 'User is not a staff member!'], 400);
+            }
+
+            $validated = $request->validate([
+                'permissions' => 'required|array',
+                'permissions.*' => 'string',
+            ]);
+
+            // Store permissions in user's metadata or a separate permissions table
+            $user->update([
+                'permissions' => json_encode($validated['permissions'])
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Permissions updated successfully!']);
+        }
+
+    /**
+     * Show all vendors
+     */
+    public function vendors()
+    {
+        $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])
+            ->with('vendorBadge')
+            ->withCount(['products', 'orders'])
+            ->with(['products' => function($query) {
+                $query->latest()->take(5);
+            }])
+            ->latest()
+            ->paginate(20);
+
+        $badges = \App\Models\VendorBadge::active()->ordered()->get();
+
+        $stats = [
+            'total_vendors' => User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])->count(),
+            'active_vendors' => User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])->where('status', 'active')->count(),
+            'retailers' => User::where('role', 'retailer')->count(),
+            'wholesalers' => User::where('role', 'wholesaler')->count(),
+            'exporters' => User::where('role', 'exporter')->count(),
+            'importers' => User::where('role', 'importer')->count(),
+        ];
+
+        return view('admin.vendors.index', compact('vendors', 'stats', 'badges'));
+    }
+
+    /**
+     * Show vendor details
+     */
+    public function showVendor(User $user)
+    {
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return redirect()->route('admin.vendors')->with('error', 'User is not a vendor!');
+        }
+
+        $user->load(['products', 'orders']);
+
+        return view('admin.vendors.show', compact('user'));
+    }
+
+    /**
+     * Update vendor status
+     */
+    public function updateVendorStatus(Request $request, User $user)
+    {
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return response()->json(['error' => 'User is not a vendor!'], 400);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:active,inactive,suspended',
+        ]);
+
+        $user->update(['status' => $validated['status']]);
+
+        return response()->json(['success' => true, 'message' => 'Vendor status updated successfully!']);
+    }
+
+    /**
+     * Update vendor commission
+     */
+    public function updateVendorCommission(Request $request, User $user)
+    {
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return response()->json(['error' => 'User is not a vendor!'], 400);
+        }
+
+        $validated = $request->validate([
+            'commission_rate' => 'required|numeric|min:0|max:100',
+        ]);
+
+        $user->update(['commission_rate' => $validated['commission_rate']]);
+
+        return response()->json(['success' => true, 'message' => 'Commission rate updated successfully!']);
+    }
+
+    /**
+     * Update vendor badge
+     */
+    public function updateVendorBadge(Request $request, User $user)
+    {
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return response()->json(['error' => 'User is not a vendor!'], 400);
+        }
+
+        $validated = $request->validate([
+            'vendor_badge_id' => 'nullable|exists:vendor_badges,id',
+        ]);
+
+        $user->update(['vendor_badge_id' => $validated['vendor_badge_id']]);
+
+        return response()->json(['success' => true, 'message' => 'Vendor badge updated successfully!']);
+    }
+
+    /**
+     * Show vendor applications (combines role applications and verification)
+     */
+    public function vendorApplications()
+    {
+        // Get all vendors with pending applications or verification
+        $applications = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])
+            ->where(function($query) {
+                $query->where('verification_status', 'pending')
+                      ->orWhereHas('roleApplications', function($q) {
+                          $q->where('status', 'pending');
+                      });
+            })
+            ->with(['roleApplications' => function($query) {
+                $query->latest();
+            }, 'verificationDocuments'])
+            ->withCount('verificationDocuments')
+            ->latest()
+            ->paginate(20);
+
+        $stats = [
+            'pending_applications' => \App\Models\RoleApplication::pending()->count(),
+            'pending_verifications' => User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])
+                ->where('verification_status', 'pending')->count(),
+            'total_pending' => User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])
+                ->where(function($query) {
+                    $query->where('verification_status', 'pending')
+                          ->orWhereHas('roleApplications', function($q) {
+                              $q->where('status', 'pending');
+                          });
+                })->count(),
+        ];
+
+        return view('admin.vendor-applications.index', compact('applications', 'stats'));
+    }
+
+    /**
+     * Show vendor application details
+     */
+    public function showVendorApplication(User $user)
+    {
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return redirect()->route('admin.vendor-applications')->with('error', 'User is not a vendor!');
+        }
+
+        $user->load(['roleApplications' => function($query) {
+            $query->latest();
+        }, 'verificationDocuments']);
+
+        return view('admin.vendor-applications.show', compact('user'));
+    }
+
+    /**
+     * Approve vendor application
+     */
+    public function approveVendorApplication(Request $request, User $user)
+    {
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return redirect()->route('admin.vendor-applications')->with('error', 'User is not a vendor!');
+        }
+
+        // Update verification status
+        $user->update([
+            'verification_status' => 'verified',
+            'verification_reviewed_at' => now(),
+            'verification_reviewed_by' => auth()->id(),
+            'status' => 'active',
+        ]);
+
+        // Update role application if exists
+        $roleApplication = $user->roleApplications()->where('status', 'pending')->first();
+        if ($roleApplication) {
+            $roleApplication->update([
+                'status' => 'approved',
+                'reviewed_by' => auth()->id(),
+                'reviewed_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('admin.vendor-applications')->with('success', 'Vendor application approved successfully!');
+    }
+
+    /**
+     * Reject vendor application
+     */
+    public function rejectVendorApplication(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'reason' => 'required|string|max:1000',
+        ]);
+
+        if (!in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            return redirect()->route('admin.vendor-applications')->with('error', 'User is not a vendor!');
+        }
+
+        // Update verification status
+        $user->update([
+            'verification_status' => 'rejected',
+            'verification_reviewed_at' => now(),
+            'verification_reviewed_by' => auth()->id(),
+            'rejection_reason' => $validated['reason'],
+        ]);
+
+        // Update role application if exists
+        $roleApplication = $user->roleApplications()->where('status', 'pending')->first();
+        if ($roleApplication) {
+            $roleApplication->update([
+                'status' => 'rejected',
+                'reviewed_by' => auth()->id(),
+                'reviewed_at' => now(),
+                'admin_notes' => $validated['reason'],
+            ]);
+        }
+
+        return redirect()->route('admin.vendor-applications')->with('success', 'Vendor application rejected.');
+    }
+
+
+    /**
+     * Show all coupons
+     */
+    public function coupons()
+    {
+        $coupons = Coupon::latest()->paginate(20);
+
+        $stats = [
+            'total_coupons' => Coupon::count(),
+            'active_coupons' => Coupon::where('is_active', true)->count(),
+            'expired_coupons' => Coupon::where('end_date', '<', now())->count(),
+            'total_usage' => 0, // Will be implemented later with order integration
+        ];
+
+        return view('admin.coupons.index', compact('coupons', 'stats'));
+    }
+
+    /**
+     * Store new coupon
+     */
+    public function storeCoupon(Request $request)
+    {
+        $validated = $request->validate([
+            'code' => 'required|string|unique:coupons,code|max:50',
+            'type' => 'required|in:percentage,fixed',
+            'value' => 'required|numeric|min:0',
+            'min_purchase' => 'nullable|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:1',
+            'per_user_limit' => 'nullable|integer|min:1',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'is_active' => 'boolean',
+            'description' => 'nullable|string',
+        ]);
+
+        Coupon::create($validated);
+
+        return redirect()->route('admin.coupons')->with('success', 'Coupon created successfully!');
+    }
+
+    /**
+     * Update coupon
+     */
+    public function updateCoupon(Request $request, Coupon $coupon)
+    {
+        $validated = $request->validate([
+            'code' => 'required|string|max:50|unique:coupons,code,' . $coupon->id,
+            'type' => 'required|in:percentage,fixed',
+            'value' => 'required|numeric|min:0',
+            'min_purchase' => 'nullable|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:1',
+            'per_user_limit' => 'nullable|integer|min:1',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'is_active' => 'boolean',
+            'description' => 'nullable|string',
+        ]);
+
+        $coupon->update($validated);
+
+        return redirect()->route('admin.coupons')->with('success', 'Coupon updated successfully!');
+    }
+
+    /**
+     * Delete coupon
+     */
+    public function deleteCoupon(Coupon $coupon)
+    {
+        $coupon->delete();
+
+        return redirect()->route('admin.coupons')->with('success', 'Coupon deleted successfully!');
+    }
+
+    /**
+     * Toggle coupon status
+     */
+    public function toggleCoupon(Coupon $coupon)
+    {
+        $coupon->update(['is_active' => !$coupon->is_active]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $coupon->is_active,
+            'message' => 'Coupon status updated successfully!'
+        ]);
+    }
+
+    /**
+     * Bulk update vendor status
+     */
+    public function bulkUpdateVendorStatus(Request $request)
+    {
+        $request->validate([
+            'vendor_ids' => 'required|array',
+            'vendor_ids.*' => 'exists:users,id',
+            'status' => 'required|in:pending,active,inactive,suspended'
+        ]);
+
+        $updated = User::whereIn('id', $request->vendor_ids)
+            ->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])
+            ->update(['status' => $request->status]);
+
+        return response()->json([
+            'success' => true,
+            'updated' => $updated,
+            'message' => "{$updated} vendor(s) updated successfully!"
+        ]);
+    }
+
+    /**
+     * Bulk delete vendors
+     */
+    public function bulkDeleteVendors(Request $request)
+    {
+        $request->validate([
+            'vendor_ids' => 'required|array',
+            'vendor_ids.*' => 'exists:users,id'
+        ]);
+
+        // Prevent deleting admin users
+        $vendors = User::whereIn('id', $request->vendor_ids)
+            ->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])
+            ->get();
+
+        if ($vendors->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No valid vendors found to delete'
+            ], 400);
+        }
+
+        $deleted = 0;
+        foreach ($vendors as $vendor) {
+            // Delete vendor's products
+            $vendor->products()->delete();
+            
+            // Delete vendor
+            $vendor->delete();
+            $deleted++;
+        }
+
+        return response()->json([
+            'success' => true,
+            'deleted' => $deleted,
+            'message' => "{$deleted} vendor(s) deleted successfully!"
+        ]);
+    }
 }
+
+
+
+

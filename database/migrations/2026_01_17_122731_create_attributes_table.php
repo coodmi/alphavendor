@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug', 191)->unique();
             $table->enum('type', ['text', 'select', 'color', 'number'])->default('text');
             $table->json('options')->nullable(); // For select type options
             $table->boolean('is_required')->default(false);

@@ -4,68 +4,59 @@
 @section('page-title', 'Importer Dashboard')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('importer.dashboard') }}" class="menu-item active">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('importer.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('importer.orders') }}" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
-        <a href="{{ route('importer.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('importer.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-        <a href="{{ route('importer.certifications') }}" class="menu-item">
-            <i class="fas fa-certificate"></i>
-            <span>Certifications</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Orders & Shipping</div>
-        <a href="{{ route('vendor.orders') }}" class="menu-item">
-            <i class="fas fa-shipping-fast"></i>
-            <span>International Orders</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-plane"></i>
-            <span>Shipping Management</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Earnings</div>
-        <a href="{{ route('wallet.index') }}" class="menu-item">
-            <i class="fas fa-wallet"></i>
-            <span>Wallet</span>
-        </a>
-        <a href="{{ route('withdrawals.index') }}" class="menu-item">
-            <i class="fas fa-money-bill-wave"></i>
-            <span>Withdrawals</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.importer-sidebar')
 @endsection
 
 @section('content')
+<!-- Verification Alert Banner -->
+@if(auth()->user()->needsVerification())
+    @if(auth()->user()->verification_status === 'unverified')
+    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">⚠️</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Account Verification Required</h3>
+                <p style="margin: 0 0 12px 0; opacity: 0.95;">Your account is not verified. Please upload the required documents to start selling products.</p>
+                <a href="{{ route('verification.index') }}" style="background: white; color: #d97706; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    <i class="fas fa-upload"></i> Upload Documents Now
+                </a>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @elseif(auth()->user()->verification_status === 'pending')
+    <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">⏳</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Verification Under Review</h3>
+                <p style="margin: 0; opacity: 0.95;">Your documents have been submitted and are currently being reviewed by our team. You will be notified once your account is verified.</p>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @elseif(auth()->user()->verification_status === 'rejected')
+    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">❌</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Verification Rejected</h3>
+                <p style="margin: 0 0 8px 0; opacity: 0.95;">Your verification was rejected. Please review the feedback and resubmit your documents.</p>
+                @if(auth()->user()->rejection_reason)
+                <p style="margin: 0 0 12px 0; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px;">
+                    <strong>Reason:</strong> {{ auth()->user()->rejection_reason }}
+                </p>
+                @endif
+                <a href="{{ route('verification.index') }}" style="background: white; color: #dc2626; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    <i class="fas fa-redo"></i> Resubmit Documents
+                </a>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @endif
+@endif
+
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">
     <div>
         <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
@@ -201,7 +192,7 @@
                 </div>
             </div>
 
-            <!-- Exporter Rating Section -->
+            <!-- Importer Rating Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <h3 class="text-lg font-semibold text-gray-700 mb-3">
@@ -233,7 +224,7 @@
 
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <h3 class="text-lg font-semibold text-gray-700 mb-3">
-                        <i class="fas fa-chart-line text-green-500"></i> Export Statistics
+                        <i class="fas fa-chart-line text-green-500"></i> Import Statistics
                     </h3>
                     <div class="space-y-2">
                         <div class="flex justify-between">
@@ -264,7 +255,7 @@
 
         <div class="dashboard-section">
             <h2>Recent Activity</h2>
-            <p>No recent activity yet. Start by adding your first export product!</p>
+            <p>No recent activity yet. Start by adding your first import product!</p>
         </div>
     </div>
 </div>
@@ -274,7 +265,7 @@
     <div class="bg-white rounded-xl w-full max-w-2xl shadow-2xl">
         <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-indigo-600 to-purple-600">
             <h3 class="text-xl font-bold text-white">
-                <i class="fas fa-certificate"></i> Manage Export Certifications
+                <i class="fas fa-certificate"></i> Manage Import Certifications
             </h3>
             <button onclick="closeCertificationsModal()" class="text-white hover:text-gray-200 transition-colors duration-150">
                 <i class="fas fa-times text-2xl"></i>
@@ -286,7 +277,7 @@
 
             <!-- Certifications Selection -->
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Export Certifications</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Import Certifications</label>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <label class="flex items-center cursor-pointer p-4 border-2 border-gray-300 rounded-lg hover:border-indigo-500 transition-all duration-150 {{ in_array('iso_certified', Auth::user()->certifications ?? []) ? 'border-indigo-500 bg-indigo-50' : '' }}">
                         <input type="checkbox" name="certifications[]" value="iso_certified"
@@ -320,16 +311,16 @@
                             {{ in_array('export_license', Auth::user()->certifications ?? []) ? 'checked' : '' }}
                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                         <span class="ml-3 text-gray-700 font-medium">
-                            <i class="fas fa-certificate text-indigo-600"></i> Export License
+                            <i class="fas fa-certificate text-indigo-600"></i> Import License
                         </span>
                     </label>
                 </div>
             </div>
 
-            <!-- Exporter Rating -->
+            <!-- Importer Rating -->
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    <i class="fas fa-star text-yellow-500"></i> Exporter Rating
+                    <i class="fas fa-star text-yellow-500"></i> Importer Rating
                 </label>
                 <div class="flex items-center gap-4">
                     <input type="number" name="exporter_rating" id="exporterRatingInput"

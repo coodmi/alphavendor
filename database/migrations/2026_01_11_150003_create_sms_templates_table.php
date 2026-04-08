@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sms_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug', 191)->unique();
             $table->enum('type', ['otp', 'notification', 'marketing', 'transactional']);
             $table->text('template');
             $table->json('variables')->nullable(); // Available placeholders

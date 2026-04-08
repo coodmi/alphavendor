@@ -36,8 +36,14 @@ class WholesalerProductController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
+        
+        // Get active special offers
+        $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
+        
+        // Get active shipping methods
+        $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 
-        return view('wholesaler.products.index', compact('products', 'categories', 'brands', 'supplierLocations'));
+        return view('wholesaler.products.index', compact('products', 'categories', 'brands', 'supplierLocations', 'offers', 'shippingMethods'));
     }
 
     public function store(Request $request)

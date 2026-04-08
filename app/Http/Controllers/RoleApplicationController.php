@@ -44,7 +44,7 @@ class RoleApplicationController extends Controller
         }
 
         $validated = $request->validate([
-            'requested_role' => 'required|in:retailer,wholesaler,exporter',
+            'requested_role' => 'required|in:retailer,wholesaler,exporter,employee',
             'reason' => 'required|string|min:20|max:1000',
 
             // Business Information
@@ -63,7 +63,6 @@ class RoleApplicationController extends Controller
             'business_address' => 'required|string|max:1000',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
-            'postal_code' => 'required|string|max:20',
             'country' => 'required|string|max:255',
 
             // Business Details
@@ -87,7 +86,6 @@ class RoleApplicationController extends Controller
             'business_address' => $validated['business_address'],
             'city' => $validated['city'],
             'state' => $validated['state'],
-            'postal_code' => $validated['postal_code'],
             'country' => $validated['country'],
             'business_description' => $validated['business_description'],
             'product_categories' => $validated['product_categories'] ?? null,

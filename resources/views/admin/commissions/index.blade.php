@@ -1,156 +1,185 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Commission Settings')
-@section('page-title', 'Commission Settings')
+
+@section('sidebar-menu')
+    @include('dashboards.partials.admin-sidebar')
+@endsection
 
 @section('content')
-<div class="space-y-6">
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Commission Settings</h1>
+        <p class="text-gray-600 mt-2">Manage category-based and COD commission rates</p>
+    </div>
+
     @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
             {{ session('success') }}
         </div>
     @endif
 
     @if(session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             {{ session('error') }}
         </div>
     @endif
 
-    <!-- Add New Commission Setting -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Add New Commission Rate</h2>
-        <form action="{{ route('admin.commissions.store') }}" method="POST" class="space-y-4">
+    <!-- COD Commission Settings -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">COD Commission Settings</h2>
+        <p class="text-gray-600 mb-4">Set commission rate for Cash on Delivery orders</p>
+        
+        <form action="{{ route('admin.commissions.cod.update') }}" method="POST" class="max-w-md">
             @csrf
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Type *</label>
-                    <select name="type" id="commission_type" required
-                            class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-orange-500"
-                            onchange="toggleCommissionFields()">
-                        <option value="global">Global</option>
-                        <option value="category">Category</option>
-                        <option value="product">Product</option>
-                    </select>
-                </div>
-
-                <div id="category_field" style="display: none;">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <select name="category_id" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="">Select Category</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div id="product_field" style="display: none;">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Product</label>
-                    <select name="product_id" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="">Select Product</option>
-                        @foreach($products as $product)
-                            <option value="{{ $product->id }}">{{ $product->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Commission Rate (%) *</label>
-                    <input type="number" name="commission_rate" required min="0" max="100" step="0.01"
-                           class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-orange-500">
-                </div>
-
-                <div class="flex items-end">
-                    <button type="submit" class="w-full bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
-                        <i class="fas fa-plus mr-2"></i>Add Commission
-                    </button>
-                </div>
+            @method('PUT')
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2">COD Commission Rate (%)</label>
+                <input type="number" 
+                       name="commission_rate" 
+                       step="0.01" 
+                       min="0" 
+                       max="100"
+                       value="{{ $codCommission->commission_rate ?? 0 }}"
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                       required>
+                <p class="text-sm text-gray-500 mt-1">Applied to: (Order Amount - Delivery Charge) × Rate</p>
             </div>
+            
+            <div class="mb-4">
+                <label class="flex items-center">
+                    <input type="checkbox" 
+                           name="is_active" 
+                           value="1"
+                           {{ ($codCommission && $codCommission->is_active) ? 'checked' : '' }}
+                           class="mr-2">
+                    <span class="text-gray-700">Enable COD Commission</span>
+                </label>
+            </div>
+            
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                Update COD Commission
+            </button>
         </form>
     </div>
 
-    <!-- Current Commission Settings -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="p-6 border-b">
-            <h2 class="text-xl font-bold">Current Commission Rates</h2>
-            <p class="text-sm text-gray-600 mt-1">Priority: Product-specific > Category-specific > Global</p>
-        </div>
 
+    <!-- Category-Based Commission Settings -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Category-Based Commission Rates</h2>
+        <p class="text-gray-600 mb-6">Set different commission rates for each seller type per category</p>
+        
+        <!-- Add/Update Commission Form -->
+        <div class="mb-8 p-4 bg-gray-50 rounded-lg">
+            <h3 class="font-semibold mb-4">Add/Update Commission Rates</h3>
+            <form action="{{ route('admin.commissions.store') }}" method="POST">
+                @csrf
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Category</label>
+                        <select name="category_id" class="w-full px-4 py-2 border rounded-lg" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Retail Seller (%)</label>
+                        <input type="number" 
+                               name="retailer_rate" 
+                               step="0.01" 
+                               min="0" 
+                               max="100"
+                               class="w-full px-4 py-2 border rounded-lg"
+                               placeholder="8.00"
+                               required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Wholesale Seller (%)</label>
+                        <input type="number" 
+                               name="wholesaler_rate" 
+                               step="0.01" 
+                               min="0" 
+                               max="100"
+                               class="w-full px-4 py-2 border rounded-lg"
+                               placeholder="5.00"
+                               required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Importer (%)</label>
+                        <input type="number" 
+                               name="importer_rate" 
+                               step="0.01" 
+                               min="0" 
+                               max="100"
+                               class="w-full px-4 py-2 border rounded-lg"
+                               placeholder="6.00"
+                               required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                    Save Commission Rates
+                </button>
+            </form>
+        </div>
+        
+        <!-- Existing Commission Rates Table -->
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-50">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied To</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Commission Rate</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Retail Seller</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wholesale Seller</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Importer</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @forelse($commissions as $commission)
+                    @forelse($commissions as $categoryId => $categoryCommissions)
+                        @php
+                            $category = $categories->firstWhere('id', $categoryId);
+                            $retailer = $categoryCommissions->firstWhere('seller_type', 'retailer');
+                            $wholesaler = $categoryCommissions->firstWhere('seller_type', 'wholesaler');
+                            $importer = $categoryCommissions->firstWhere('seller_type', 'importer');
+                        @endphp
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-block px-2 py-1 rounded text-xs font-semibold
-                                    @if($commission->type === 'global') bg-blue-100 text-blue-800
-                                    @elseif($commission->type === 'category') bg-purple-100 text-purple-800
-                                    @else bg-green-100 text-green-800
-                                    @endif">
-                                    {{ ucfirst($commission->type) }}
-                                </span>
+                                <div class="font-medium text-gray-900">{{ $category->name ?? 'N/A' }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                @if($commission->type === 'global')
-                                    <span class="text-gray-700">All Products</span>
-                                @elseif($commission->type === 'category' && $commission->category)
-                                    <span class="text-gray-700">{{ $commission->category->name }}</span>
-                                @elseif($commission->type === 'product' && $commission->product)
-                                    <span class="text-gray-700">{{ $commission->product->name }}</span>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-gray-900">{{ $retailer->commission_rate ?? 'N/A' }}%</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-gray-900">{{ $wholesaler->commission_rate ?? 'N/A' }}%</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-gray-900">{{ $importer->commission_rate ?? 'N/A' }}%</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($retailer && $retailer->is_active)
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                                 @else
-                                    <span class="text-red-500">Not Found</span>
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <form action="{{ route('admin.commissions.update', $commission->id) }}" method="POST" class="flex items-center gap-2">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="number" name="commission_rate" value="{{ $commission->commission_rate }}"
-                                           min="0" max="100" step="0.01"
-                                           class="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
-                                           onchange="this.form.submit()">
-                                    <span class="text-gray-600">%</span>
-                                    <input type="hidden" name="is_active" value="{{ $commission->is_active ? 1 : 0 }}">
-                                </form>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <form action="{{ route('admin.commissions.update', $commission->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="commission_rate" value="{{ $commission->commission_rate }}">
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" name="is_active" value="1"
-                                               {{ $commission->is_active ? 'checked' : '' }}
-                                               onchange="this.form.submit()"
-                                               class="sr-only peer">
-                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
-                                    </label>
-                                </form>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <form action="{{ route('admin.commissions.destroy', $commission->id) }}" method="POST"
-                                      onsubmit="return confirm('Are you sure you want to delete this commission setting?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button onclick="editCategory({{ $categoryId }}, '{{ $category->name ?? '' }}', {{ $retailer->commission_rate ?? 0 }}, {{ $wholesaler->commission_rate ?? 0 }}, {{ $importer->commission_rate ?? 0 }})" 
+                                        class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                No commission settings found. Add one above.
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                No commission rates configured yet. Add your first commission rate above.
                             </td>
                         </tr>
                     @endforelse
@@ -158,47 +187,18 @@
             </table>
         </div>
     </div>
-
-    <!-- Commission Calculator -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Commission Calculator</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Sale Amount ($)</label>
-                <input type="number" id="calc_amount" min="0" step="0.01" value="100"
-                       class="w-full border border-gray-300 rounded px-3 py-2"
-                       oninput="calculateCommission()">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Commission Rate (%)</label>
-                <input type="number" id="calc_rate" min="0" max="100" step="0.01" value="10"
-                       class="w-full border border-gray-300 rounded px-3 py-2"
-                       oninput="calculateCommission()">
-            </div>
-            <div class="bg-orange-50 p-4 rounded">
-                <p class="text-sm text-gray-600">Platform Commission</p>
-                <p class="text-2xl font-bold text-orange-500" id="calc_commission">$10.00</p>
-                <p class="text-sm text-gray-600 mt-2">Vendor Receives: <span class="font-semibold" id="calc_vendor">$90.00</span></p>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
-function toggleCommissionFields() {
-    const type = document.getElementById('commission_type').value;
-    document.getElementById('category_field').style.display = type === 'category' ? 'block' : 'none';
-    document.getElementById('product_field').style.display = type === 'product' ? 'block' : 'none';
-}
-
-function calculateCommission() {
-    const amount = parseFloat(document.getElementById('calc_amount').value) || 0;
-    const rate = parseFloat(document.getElementById('calc_rate').value) || 0;
-    const commission = (amount * rate) / 100;
-    const vendor = amount - commission;
-
-    document.getElementById('calc_commission').textContent = '$' + commission.toFixed(2);
-    document.getElementById('calc_vendor').textContent = '$' + vendor.toFixed(2);
+function editCategory(categoryId, categoryName, retailerRate, wholesalerRate, importerRate) {
+    // Pre-fill the form with existing values
+    document.querySelector('select[name="category_id"]').value = categoryId;
+    document.querySelector('input[name="retailer_rate"]').value = retailerRate;
+    document.querySelector('input[name="wholesaler_rate"]').value = wholesalerRate;
+    document.querySelector('input[name="importer_rate"]').value = importerRate;
+    
+    // Scroll to form
+    document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
 }
 </script>
 @endsection

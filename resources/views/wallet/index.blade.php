@@ -3,6 +3,21 @@
 @section('title', 'My Wallet')
 @section('page-title', 'My Wallet')
 
+@section('sidebar-menu')
+    @php
+        $userRole = auth()->user()->role;
+    @endphp
+    @if($userRole === 'retailer')
+        @include('dashboards.partials.retailer-sidebar')
+    @elseif($userRole === 'wholesaler')
+        @include('dashboards.partials.wholesaler-sidebar')
+    @elseif($userRole === 'exporter')
+        @include('dashboards.partials.exporter-sidebar')
+    @elseif($userRole === 'importer')
+        @include('dashboards.partials.importer-sidebar')
+    @endif
+@endsection
+
 @section('content')
 <div class="space-y-6">
     <!-- Wallet Balance Cards -->

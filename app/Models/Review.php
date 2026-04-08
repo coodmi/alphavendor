@@ -22,6 +22,8 @@ class Review extends Model
         'reported_count',
         'admin_response',
         'admin_responded_at',
+        'vendor_reply',
+        'vendor_replied_at',
     ];
 
     protected $casts = [
@@ -30,6 +32,7 @@ class Review extends Model
         'helpful_votes' => 'integer',
         'reported_count' => 'integer',
         'admin_responded_at' => 'datetime',
+        'vendor_replied_at' => 'datetime',
     ];
 
     /**

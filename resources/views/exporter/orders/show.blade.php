@@ -4,40 +4,19 @@
 @section('page-title', 'Order Details')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('exporter.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('exporter.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('exporter.orders') }}" class="menu-item active">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
-        <a href="{{ route('exporter.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('exporter.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-        <a href="{{ route('exporter.certifications') }}" class="menu-item">
-            <i class="fas fa-certificate"></i>
-            <span>Certifications</span>
-        </a>
-    </div>
+    @include('dashboards.partials.exporter-sidebar')
 @endsection
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-6">
+    <div class="mb-6 flex items-center justify-between">
         <a href="{{ route('exporter.orders') }}" class="text-blue-600 hover:text-blue-800">
             <i class="fas fa-arrow-left mr-2"></i>Back to Orders
+        </a>
+        @php $invoiceRoute = auth()->user()->role === 'importer' ? 'importer.orders.invoice' : 'exporter.orders.invoice'; @endphp
+        <a href="{{ route($invoiceRoute, $order) }}" target="_blank"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition">
+            <i class="fas fa-file-invoice"></i> Print / Download Invoice
         </a>
     </div>
 

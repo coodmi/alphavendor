@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('vendor_badges', function (Blueprint $table) {
+            $table->id();
+            $table->string('name'); // e.g., "Verified Seller", "Top Rated", "Premium"
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('icon')->nullable(); // Font Awesome icon class
+            $table->string('color')->default('#3B82F6'); // Badge color
+            $table->string('bg_color')->default('#EFF6FF'); // Background color
+            $table->boolean('is_active')->default(true);
+            $table->integer('sort_order')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('vendor_badges');
+    }
+};

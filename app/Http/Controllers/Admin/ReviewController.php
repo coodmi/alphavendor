@@ -110,6 +110,28 @@ class ReviewController extends Controller
     }
 
     /**
+     * Update review content (admin only).
+     */
+    public function update(Request $request, Review $review): JsonResponse
+    {
+        $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'title'   => 'nullable|string|max:255',
+            'comment' => 'required|string|min:5|max:2000',
+        ]);
+
+        $review->update([
+            'rating'  => $request->rating,
+            'title'   => $request->title,
+            'comment' => $request->comment,
+        ]);
+
+        $review->product->updateRatingStats();
+
+        return response()->json(['success' => true, 'message' => 'Review updated successfully']);
+    }
+
+    /**
      * Add admin response to review.
      */
     public function respond(Request $request, Review $review): JsonResponse

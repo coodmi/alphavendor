@@ -23,51 +23,6 @@ class Brand extends Model
     ];
 
     /**
-     * Set the brand name and auto-generate slug
-     */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
-    }
-
-    /**
-     * Get the parent brand
-     */
-    public function parent()
-    {
-        return $this->belongsTo(Brand::class, 'parent_brand_id');
-    }
-
-    /**
-     * Get the child brands
-     */
-    public function children()
-    {
-        return $this->hasMany(Brand::class, 'parent_brand_id');
-    }
-
-    /**
-     * Check if this is an admin brand
-     */
-    public function isAdminBrand()
-    {
-        return is_null($this->vendor_id);
-    }
-
-    /**
-     * Get all products including from child brands
-     */
-    public function getAllProducts()
-    {
-        $products = $this->products;
-        foreach ($this->children as $child) {
-            $products = $products->merge($child->products);
-        }
-        return $products;
-    }
-
-    /**
      * Get products for this brand
      */
     public function products()

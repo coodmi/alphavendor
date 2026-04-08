@@ -14,6 +14,8 @@ class Product extends Model
         'category_id',
         'vendor_id',
         'brand_id',
+        'special_offer_id',
+        'shipping_method_id',
         'name',
         'slug',
         'description',
@@ -33,6 +35,8 @@ class Product extends Model
         'brand',
         'certifications',
         'exporter_rating',
+        'free_shipping',
+        'offer_id',
     ];
 
     protected $casts = [
@@ -40,6 +44,7 @@ class Product extends Model
         'old_price' => 'decimal:2',
         'rating' => 'decimal:2',
         'is_featured' => 'boolean',
+        'free_shipping' => 'boolean',
         'certifications' => 'array',
         'exporter_rating' => 'decimal:2',
     ];
@@ -75,6 +80,22 @@ class Product extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Get the special offer
+     */
+    public function specialOffer()
+    {
+        return $this->belongsTo(SpecialOffer::class);
+    }
+
+    /**
+     * Get the shipping method
+     */
+    public function shippingMethod()
+    {
+        return $this->belongsTo(ShippingMethod::class);
     }
 
     /**
@@ -147,5 +168,29 @@ class Product extends Model
         $this->reviews_count = $approvedReviews->count();
 
         $this->save();
+    }
+
+    /**
+     * Get the offer for this product
+     */
+    public function offer()
+    {
+        return $this->belongsTo(Offer::class);
+    }
+
+    /**
+     * Get the order items for this product
+     */
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Get the wishlist items for this product
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
     }
 }

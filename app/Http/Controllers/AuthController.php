@@ -32,7 +32,24 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            
+            $user = Auth::user();
+            
+            // Add success message
+            $request->session()->flash('success', 'Welcome back! You have successfully logged in.');
+            
+            // Redirect to role-specific dashboard
+            $dashboardRoute = match($user->role) {
+                'admin' => 'admin.dashboard',
+                'employee' => 'employee.dashboard',
+                'retailer' => 'retailer.dashboard',
+                'wholesaler' => 'wholesaler.dashboard',
+                'exporter' => 'exporter.dashboard',
+                'importer' => 'importer.dashboard',
+                default => 'user.dashboard',
+            };
+            
+            return redirect()->route($dashboardRoute);
         }
 
         return back()->withErrors([
@@ -96,6 +113,7 @@ class AuthController extends Controller
 
         return match($user->role) {
             'admin' => redirect()->route('admin.dashboard'),
+            'employee' => redirect()->route('employee.dashboard'),
             'retailer' => redirect()->route('retailer.dashboard'),
             'wholesaler' => redirect()->route('wholesaler.dashboard'),
             'exporter' => redirect()->route('exporter.dashboard'),

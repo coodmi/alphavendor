@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ticket_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug', 191)->unique();
             $table->text('description')->nullable();
             $table->string('color', 7)->default('#3b82f6'); // Hex color code
             $table->integer('order')->default(0);

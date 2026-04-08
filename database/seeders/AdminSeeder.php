@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'Admin User',
                 'email' => 'admin@alphavendor.com',
+                'mobile_number' => '01700000001',
                 'password' => $hashedPassword,
                 'role' => 'admin',
                 'status' => 'active',
@@ -28,6 +29,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'John Retailer',
                 'email' => 'retailer@example.com',
+                'mobile_number' => '01700000002',
                 'password' => $hashedPassword,
                 'role' => 'retailer',
                 'status' => 'active',
@@ -37,6 +39,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'Jane Wholesaler',
                 'email' => 'wholesaler@example.com',
+                'mobile_number' => '01700000003',
                 'password' => $hashedPassword,
                 'role' => 'wholesaler',
                 'status' => 'active',
@@ -44,8 +47,9 @@ class AdminSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Mike Exporter',
-                'email' => 'exporter@example.com',
+                'name' => 'Mike Importer',
+                'email' => 'importer@example.com',
+                'mobile_number' => '01700000004',
                 'password' => $hashedPassword,
                 'role' => 'exporter',
                 'status' => 'active',
@@ -55,6 +59,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'Regular User',
                 'email' => 'user@example.com',
+                'mobile_number' => '01700000005',
                 'password' => $hashedPassword,
                 'role' => 'user',
                 'status' => 'active',

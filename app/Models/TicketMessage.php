@@ -13,37 +13,18 @@ class TicketMessage extends Model
         'ticket_id',
         'user_id',
         'message',
-        'attachments',
         'is_internal',
-        'is_staff',
-        'read_at',
+        'attachments',
     ];
 
     protected $casts = [
         'attachments' => 'array',
         'is_internal' => 'boolean',
-        'is_staff' => 'boolean',
-        'read_at' => 'datetime',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::created(function ($message) {
-            $ticket = $message->ticket;
-            $ticket->increment('response_count');
-            $ticket->update(['last_activity_at' => now()]);
-            
-            if ($message->is_staff && !$ticket->first_response_at) {
-                $ticket->update(['first_response_at' => now()]);
-            }
-        });
-    }
 
     public function ticket()
     {
-        return $this->belongsTo(SupportTicket::class, 'ticket_id');
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
     public function user()
@@ -51,15 +32,8 @@ class TicketMessage extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function isRead()
+    public function getIsAdminReplyAttribute()
     {
-        return !is_null($this->read_at);
-    }
-
-    public function markAsRead()
-    {
-        if (!$this->isRead()) {
-            $this->update(['read_at' => now()]);
-        }
+        return $this->user && in_array($this->user->role, ['admin', 'employee']);
     }
 }

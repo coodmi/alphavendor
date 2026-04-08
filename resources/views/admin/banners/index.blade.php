@@ -1,48 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Banner Management')
-@section('page-title', 'Banners')
+@section('title', 'Special Offer Management')
+@section('page-title', 'Special Offer')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-        <a href="{{ route('admin.banners') }}" class="menu-item active">
-            <i class="fas fa-images"></i>
-            <span>Home Banners</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
@@ -157,8 +119,22 @@
             </div>
 
             <div class="mb-5">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Link URL</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-tag text-purple-600 mr-1"></i>Special Offer (Optional)
+                </label>
+                <select name="special_offer_id" id="bannerSpecialOffer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                    <option value="">No Special Offer</option>
+                    @foreach($offers as $offer)
+                        <option value="{{ $offer->id }}">{{ $offer->name }}</option>
+                    @endforeach
+                </select>
+                <p class="text-xs text-gray-400 mt-1">If selected, banner will link to this special offer page</p>
+            </div>
+
+            <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Custom Link URL (Optional)</label>
                 <input type="text" name="link" id="bannerLink" placeholder="e.g., /shop or https://example.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                <p class="text-xs text-gray-400 mt-1">Leave empty if using Special Offer above</p>
             </div>
 
             <div class="mb-5">

@@ -4,41 +4,7 @@
 @section('page-title', 'Categories')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item active">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
@@ -139,6 +105,40 @@
                 <textarea name="description" id="categoryDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
             </div>
 
+            <!-- SEO Section -->
+            <div style="margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                <h4 style="margin: 0 0 15px 0; color: #2c3e50; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-search"></i> SEO Settings
+                </h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">
+                        Meta Title
+                        <small style="color: #7f8c8d; font-weight: normal;">(Leave empty to use category name)</small>
+                    </label>
+                    <input type="text" name="meta_title" id="categoryMetaTitle" maxlength="255" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" placeholder="e.g., Buy Electronics Online - Best Deals">
+                    <small style="color: #7f8c8d; font-size: 12px;">Recommended: 50-60 characters</small>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">
+                        Meta Description
+                        <small style="color: #7f8c8d; font-weight: normal;">(Leave empty to use category description)</small>
+                    </label>
+                    <textarea name="meta_description" id="categoryMetaDescription" rows="3" maxlength="500" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" placeholder="e.g., Shop the latest electronics with great discounts. Free shipping on orders over ৳1000."></textarea>
+                    <small style="color: #7f8c8d; font-size: 12px;">Recommended: 150-160 characters</small>
+                </div>
+
+                <div style="margin-bottom: 0;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">
+                        Meta Keywords
+                        <small style="color: #7f8c8d; font-weight: normal;">(Comma separated)</small>
+                    </label>
+                    <input type="text" name="meta_keywords" id="categoryMetaKeywords" maxlength="500" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;" placeholder="e.g., electronics, mobile phones, laptops, gadgets">
+                    <small style="color: #7f8c8d; font-size: 12px;">Example: electronics, mobile, laptop, gadgets</small>
+                </div>
+            </div>
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Category Image</label>
                 <input type="file" name="image" id="categoryImage" accept="image/*" onchange="previewImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
@@ -211,6 +211,9 @@ function editCategory(category) {
     document.getElementById('formMethod').value = 'PUT';
     document.getElementById('categoryName').value = category.name;
     document.getElementById('categoryDescription').value = category.description || '';
+    document.getElementById('categoryMetaTitle').value = category.meta_title || '';
+    document.getElementById('categoryMetaDescription').value = category.meta_description || '';
+    document.getElementById('categoryMetaKeywords').value = category.meta_keywords || '';
     document.getElementById('categoryStatus').checked = category.is_active;
     document.getElementById('categorySortOrder').value = category.sort_order;
 

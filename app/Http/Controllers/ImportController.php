@@ -12,8 +12,11 @@ class ImportController extends Controller
 {
     public function index(Request $request)
     {
-        // Get all importers
-        $importerIds = User::where('role', 'importer')->pluck('id');
+        // Get active import slides
+        $importSlides = \App\Models\ImportSlide::active()->ordered()->get();
+
+        // Get all importers (stored as 'exporter' role in database)
+        $importerIds = User::where('role', 'exporter')->pluck('id');
 
         // Base query for products from importers
         $query = Product::with(['category', 'brand', 'vendor'])
@@ -166,6 +169,6 @@ class ImportController extends Controller
             ]);
         }
 
-        return view('import', compact('products', 'categories', 'locations', 'moqRanges', 'certifications'));
+        return view('import', compact('importSlides', 'products', 'categories', 'locations', 'moqRanges', 'certifications'));
     }
 }

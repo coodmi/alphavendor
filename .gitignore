@@ -22,3 +22,9 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Cached config files (prevent hardcoded paths)
+/bootstrap/cache/config.php
+/bootstrap/cache/packages.php
+/bootstrap/cache/routes-v7.php
+/bootstrap/cache/services.php

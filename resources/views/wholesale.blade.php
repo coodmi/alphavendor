@@ -2,6 +2,10 @@
 
 @section('title', 'Wholesale - AlphaVendor Multi Vendor Marketplace')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/wholesale-mobile.css') }}">
+@endpush
+
 @section('content')
 
 <!-- Hero Banner -->
@@ -59,9 +63,26 @@
 <!-- Shop Section with Tailwind -->
 <section class="py-10">
     <div class="container mx-auto px-4">
+        <!-- Mobile Filter Toggle Button -->
+        <button class="mobile-filter-toggle-wholesale" id="mobileFilterToggleWholesale">
+            <i class="fas fa-filter"></i>
+            Filters & Categories
+        </button>
+
+        <!-- Filter Sidebar Overlay -->
+        <div class="filter-sidebar-overlay-wholesale" id="filterSidebarOverlayWholesale"></div>
+
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Filters -->
-            <aside class="lg:w-64 flex-shrink-0">
+            <aside class="lg:w-64 flex-shrink-0" id="wholesaleSidebar">
+                <!-- Mobile Filter Header -->
+                <div class="filter-sidebar-header-wholesale" style="display: none;">
+                    <h3>Filters</h3>
+                    <button class="filter-close-btn-wholesale" id="filterCloseBtnWholesale">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
                 <form method="GET" action="{{ route('wholesale') }}" id="filterForm">
                     <!-- Categories Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
@@ -265,9 +286,15 @@
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
-                            <button class="absolute bottom-0 left-0 right-0 bg-orange-500 text-white py-3 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="flex-1 bg-orange-500 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
+                            </button>
+                            <button class="flex-1 bg-orange-600 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                                <i class="fas fa-bolt"></i>
+                                Buy Now
                             </button>
                         </div>
                         <div class="p-4">
@@ -515,5 +542,111 @@ function quickAddToCart(productId, button) {
         button.innerHTML = originalContent;
         showToast('Failed to add product to cart', 'error');
     });
-}</script>
+}
+</script>
+
+<script>
+// Mobile Filter Toggle Functionality for Wholesale
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileFilterToggle = document.getElementById('mobileFilterToggleWholesale');
+    const wholesaleSidebar = document.getElementById('wholesaleSidebar');
+    const filterSidebarOverlay = document.getElementById('filterSidebarOverlayWholesale');
+    const filterCloseBtn = document.getElementById('filterCloseBtnWholesale');
+    const filterHeader = document.querySelector('.filter-sidebar-header-wholesale');
+
+    // Show filter header on mobile
+    function updateFilterHeader() {
+        if (window.innerWidth <= 1024 && filterHeader) {
+            filterHeader.style.display = 'flex';
+        } else if (filterHeader) {
+            filterHeader.style.display = 'none';
+        }
+    }
+
+    updateFilterHeader();
+    window.addEventListener('resize', updateFilterHeader);
+
+    function openFilters() {
+        if (wholesaleSidebar && filterSidebarOverlay) {
+            wholesaleSidebar.classList.add('active');
+            filterSidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeFilters() {
+        if (wholesaleSidebar && filterSidebarOverlay) {
+            wholesaleSidebar.classList.remove('active');
+            filterSidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (mobileFilterToggle) {
+        mobileFilterToggle.addEventListener('click', openFilters);
+    }
+
+    if (filterCloseBtn) {
+        filterCloseBtn.addEventListener('click', closeFilters);
+    }
+
+    if (filterSidebarOverlay) {
+        filterSidebarOverlay.addEventListener('click', closeFilters);
+    }
+
+    // Close filters when applying filter
+    const applyFilterBtn = document.querySelector('.bg-orange-500.text-white.py-2.rounded-lg');
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                setTimeout(closeFilters, 300);
+            }
+        });
+    }
+
+    // Close filters when clearing all
+    const clearFiltersBtn = document.querySelector('.bg-gray-100.text-gray-700.text-center.py-3');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                setTimeout(closeFilters, 300);
+            }
+        });
+    }
+});
+
+// Buy Now function
+function buyNow(productId, button) {
+    const originalContent = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+    fetch('/cart/buy-now', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ 
+            product_id: productId,
+            quantity: 1 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/checkout';
+        } else {
+            throw new Error(data.message || 'Failed to process');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = originalContent;
+        showToast('Failed to process order', 'error');
+    });
+}
+</script>
 @endpush

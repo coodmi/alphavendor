@@ -34,6 +34,15 @@
                                 <h3 class="font-semibold text-lg">{{ $item['name'] }}</h3>
                                 <p class="text-gray-600 text-sm">Vendor: {{ $item['vendor_name'] }}</p>
                                 <p class="text-orange-500 font-bold mt-2" data-unit-price="{{ $item['price'] }}">${{ number_format($item['price'], 2) }}</p>
+                                @if(isset($item['coupon_code']) && isset($item['discount_amount']))
+                                    <div class="mt-2 flex items-center gap-2">
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded">
+                                            <i class="fas fa-ticket-alt"></i>
+                                            <span class="font-semibold">{{ $item['coupon_code'] }}</span>
+                                        </span>
+                                        <span class="text-green-600 text-sm font-semibold">-${{ number_format($item['discount_amount'], 2) }}</span>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="flex items-center gap-4">

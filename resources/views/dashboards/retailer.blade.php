@@ -4,63 +4,92 @@
 @section('page-title', 'Retailer Dashboard')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">MAIN</div>
-        <a href="{{ route('retailer.dashboard') }}" class="menu-item active">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('retailer.orders') }}" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-            @if($pendingOrders > 0)
-                <span class="badge">{{ $pendingOrders }}</span>
-            @endif
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">PRODUCTS</div>
-        <a href="{{ route('retailer.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>All Products</span>
-        </a>
-        <a href="{{ route('retailer.products') }}" class="menu-item">
-            <i class="fas fa-plus-circle"></i>
-            <span>Add Product</span>
-        </a>
-        <a href="{{ route('retailer.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('retailer.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">EARNINGS</div>
-        <a href="{{ route('wallet.index') }}" class="menu-item">
-            <i class="fas fa-wallet"></i>
-            <span>Wallet</span>
-        </a>
-        <a href="{{ route('withdrawals.index') }}" class="menu-item">
-            <i class="fas fa-money-bill-wave"></i>
-            <span>Withdrawals</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">ACCOUNT</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.retailer-sidebar')
 @endsection
 
 @section('content')
+<!-- Account Approval Alert Banner -->
+@if(auth()->user()->status === 'pending')
+<div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-size: 48px;">⏳</div>
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Account Pending Approval</h3>
+            <p style="margin: 0; opacity: 0.95;">Your account is waiting for admin approval. You cannot add products until your account is approved. Please wait for admin to review your application.</p>
+        </div>
+    </div>
+</div>
+@elseif(auth()->user()->status === 'suspended')
+<div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-size: 48px;">🚫</div>
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Account Suspended</h3>
+            <p style="margin: 0; opacity: 0.95;">Your account has been suspended. Please contact admin for more information.</p>
+        </div>
+    </div>
+</div>
+@elseif(auth()->user()->status === 'inactive')
+<div style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-size: 48px;">⚠️</div>
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Account Inactive</h3>
+            <p style="margin: 0; opacity: 0.95;">Your account is currently inactive. Please contact admin to activate your account.</p>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- Verification Alert Banner -->
+@if(auth()->user()->needsVerification())
+    @if(auth()->user()->verification_status === 'unverified')
+    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">⚠️</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Account Verification Required</h3>
+                <p style="margin: 0 0 12px 0; opacity: 0.95;">Your account is not verified. Please upload the required documents to start selling products.</p>
+                <a href="{{ route('verification.index') }}" style="background: white; color: #d97706; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    <i class="fas fa-upload"></i> Upload Documents Now
+                </a>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @elseif(auth()->user()->verification_status === 'pending')
+    <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">⏳</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Verification Under Review</h3>
+                <p style="margin: 0; opacity: 0.95;">Your documents have been submitted and are currently being reviewed by our team. You will be notified once your account is verified.</p>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @elseif(auth()->user()->verification_status === 'rejected')
+    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">❌</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Verification Rejected</h3>
+                <p style="margin: 0 0 8px 0; opacity: 0.95;">Your verification was rejected. Please review the feedback and resubmit your documents.</p>
+                @if(auth()->user()->rejection_reason)
+                <p style="margin: 0 0 12px 0; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px;">
+                    <strong>Reason:</strong> {{ auth()->user()->rejection_reason }}
+                </p>
+                @endif
+                <a href="{{ route('verification.index') }}" style="background: white; color: #dc2626; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    <i class="fas fa-redo"></i> Resubmit Documents
+                </a>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @endif
+@endif
+
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">
     <div>
         <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>

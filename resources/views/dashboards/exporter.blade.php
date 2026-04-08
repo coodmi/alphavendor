@@ -1,75 +1,66 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Exporter Dashboard')
-@section('page-title', 'Exporter Dashboard')
+@section('title', 'Importer Dashboard')
+@section('page-title', 'Importer Dashboard')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('exporter.dashboard') }}" class="menu-item active">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('exporter.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('exporter.orders') }}" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
-        <a href="{{ route('exporter.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('exporter.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-        <a href="{{ route('exporter.certifications') }}" class="menu-item">
-            <i class="fas fa-certificate"></i>
-            <span>Certifications</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Orders & Shipping</div>
-        <a href="{{ route('vendor.orders') }}" class="menu-item">
-            <i class="fas fa-shipping-fast"></i>
-            <span>International Orders</span>
-        </a>
-        <a href="#" class="menu-item">
-            <i class="fas fa-plane"></i>
-            <span>Shipping Management</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Earnings</div>
-        <a href="{{ route('wallet.index') }}" class="menu-item">
-            <i class="fas fa-wallet"></i>
-            <span>Wallet</span>
-        </a>
-        <a href="{{ route('withdrawals.index') }}" class="menu-item">
-            <i class="fas fa-money-bill-wave"></i>
-            <span>Withdrawals</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Account</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.exporter-sidebar')
 @endsection
 
 @section('content')
+<!-- Verification Alert Banner -->
+@if(auth()->user()->needsVerification())
+    @if(auth()->user()->verification_status === 'unverified')
+    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">⚠️</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Account Verification Required</h3>
+                <p style="margin: 0 0 12px 0; opacity: 0.95;">Your account is not verified. Please upload the required documents to start selling products.</p>
+                <a href="{{ route('verification.index') }}" style="background: white; color: #d97706; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    <i class="fas fa-upload"></i> Upload Documents Now
+                </a>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @elseif(auth()->user()->verification_status === 'pending')
+    <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">⏳</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Verification Under Review</h3>
+                <p style="margin: 0; opacity: 0.95;">Your documents have been submitted and are currently being reviewed by our team. You will be notified once your account is verified.</p>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @elseif(auth()->user()->verification_status === 'rejected')
+    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 48px;">❌</div>
+            <div style="flex: 1;">
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Verification Rejected</h3>
+                <p style="margin: 0 0 8px 0; opacity: 0.95;">Your verification was rejected. Please review the feedback and resubmit your documents.</p>
+                @if(auth()->user()->rejection_reason)
+                <p style="margin: 0 0 12px 0; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 14px;">
+                    <strong>Reason:</strong> {{ auth()->user()->rejection_reason }}
+                </p>
+                @endif
+                <a href="{{ route('verification.index') }}" style="background: white; color: #dc2626; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    <i class="fas fa-redo"></i> Resubmit Documents
+                </a>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+        </div>
+    </div>
+    @endif
+@endif
+
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">
     <div>
         <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
-        <p style="color: #7f8c8d;">Manage your international export business.</p>
+        <p style="color: #7f8c8d;">Manage your international import business.</p>
     </div>
 
     <!-- Profile Card -->
@@ -97,7 +88,7 @@
             <div class="stat-icon">🌍</div>
             <div class="stat-info">
                 <h3>{{ $totalProducts }}</h3>
-                <p>Export Products</p>
+                <p>Import Products</p>
             </div>
         </div>
         <div class="stat-card">

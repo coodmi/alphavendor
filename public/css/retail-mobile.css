@@ -1,0 +1,529 @@
+/* Retail Page Mobile Responsive Styles */
+
+/* Mobile Responsive (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Hero Section Mobile */
+    .retail-hero {
+        padding: 3rem 0;
+    }
+
+    .retail-hero .hero-content {
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+
+    .retail-hero .hero-text {
+        order: 2;
+        text-align: center;
+    }
+
+    .retail-hero .hero-text h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+
+    .retail-hero .hero-text p {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .retail-hero .hero-stats {
+        flex-direction: column;
+        gap: 0.875rem;
+        margin-bottom: 2rem;
+    }
+
+    .retail-hero .stat-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        width: 100%;
+    }
+
+    .retail-hero .stat-item i {
+        font-size: 2rem;
+        width: 52px;
+        height: 52px;
+    }
+
+    .retail-hero .stat-item h3 {
+        font-size: 1.75rem;
+    }
+
+    .retail-hero .stat-item span {
+        font-size: 0.8125rem;
+    }
+
+    .retail-hero .btn-explore {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+
+    .retail-hero .hero-image {
+        order: 1;
+        max-width: 100%;
+    }
+
+    .retail-hero .hero-image::before {
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+        filter: blur(20px);
+    }
+
+    .retail-hero .hero-image img {
+        border-radius: 1.25rem;
+        max-height: 320px;
+        object-fit: cover;
+    }
+
+    /* Shop Section Mobile */
+    .shop-section {
+        padding: 2rem 0;
+    }
+
+    .shop-wrapper {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Mobile Filter Toggle Button */
+    .mobile-filter-toggle {
+        display: flex;
+        width: 100%;
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 1.25rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        margin-bottom: 1.25rem;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .mobile-filter-toggle:active {
+        transform: scale(0.98);
+    }
+
+    /* Filter Sidebar Mobile */
+    .shop-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        max-width: 320px;
+        height: 100%;
+        background: white;
+        z-index: 999;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+        padding: 1.25rem;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .shop-sidebar.active {
+        left: 0;
+    }
+
+    .filter-sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 998;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .filter-sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .filter-sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #FFA500;
+    }
+
+    .filter-sidebar-header h3 {
+        font-size: 1.25rem;
+        color: #2C3E50;
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .filter-close-btn {
+        background: rgba(255, 165, 0, 0.1);
+        border: none;
+        font-size: 1.5rem;
+        color: #2C3E50;
+        cursor: pointer;
+        padding: 0.375rem;
+        line-height: 1;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .filter-close-btn:hover {
+        background: rgba(255, 165, 0, 0.2);
+        transform: rotate(90deg);
+    }
+
+    /* Filter Boxes Mobile */
+    .filter-box {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0.75rem;
+    }
+
+    .filter-title {
+        font-size: 1rem;
+        margin-bottom: 0.875rem;
+    }
+
+    /* Shop Content Mobile */
+    .shop-content {
+        width: 100%;
+    }
+
+    /* Toolbar Mobile */
+    .shop-toolbar {
+        flex-direction: column;
+        gap: 0.875rem;
+        padding: 0.875rem 1rem;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+        width: 100%;
+    }
+
+    .toolbar-right {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .results-count {
+        font-size: 0.8125rem;
+        text-align: center;
+    }
+
+    .view-mode {
+        order: 1;
+        justify-content: center;
+    }
+
+    .view-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .sort-dropdown,
+    .per-page-dropdown {
+        order: 2;
+        width: 100%;
+    }
+
+    .sort-dropdown select,
+    .per-page-dropdown select {
+        width: 100%;
+        padding: 0.75rem 2rem 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    /* Active Filters Mobile */
+    .active-filters {
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .filter-tag {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    /* Products Grid Mobile */
+    .products-grid-view {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.875rem;
+    }
+
+    .product-card {
+        border-radius: 0.75rem;
+    }
+
+    .product-image {
+        height: 180px;
+    }
+
+    .product-info {
+        padding: 0.75rem;
+    }
+
+    .product-category {
+        font-size: 0.6875rem;
+        margin-bottom: 0.375rem;
+    }
+
+    .product-info h4 {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+
+    .vendor-name {
+        font-size: 0.75rem;
+        margin-bottom: 0.375rem;
+    }
+
+    .rating {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .rating span {
+        font-size: 0.6875rem;
+    }
+
+    .current-price {
+        font-size: 1rem;
+    }
+
+    .old-price {
+        font-size: 0.8125rem;
+    }
+
+    .discount {
+        font-size: 0.6875rem;
+        padding: 0.125rem 0.375rem;
+    }
+
+    /* Product Actions - Always Visible on Mobile */
+    .product-actions {
+        opacity: 1;
+        gap: 0.375rem;
+    }
+
+    .action-btn {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.875rem;
+    }
+
+    .quick-add-btn {
+        padding: 0.625rem;
+        font-size: 0.8125rem;
+        gap: 0.375rem;
+    }
+
+    /* Badge Mobile */
+    .badge {
+        top: 0.5rem;
+        left: 0.5rem;
+        padding: 0.25rem 0.625rem;
+        font-size: 0.6875rem;
+    }
+
+    /* Pagination Mobile */
+    .pagination-wrapper {
+        margin-top: 2rem;
+        padding-top: 1.25rem;
+    }
+
+    .pagination-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .pagination-info {
+        order: 2;
+        text-align: center;
+        font-size: 0.8125rem;
+    }
+
+    .pagination-list {
+        order: 1;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+
+    .pagination-link {
+        min-width: 2.25rem;
+        height: 2.25rem;
+        padding: 0 0.625rem;
+        font-size: 0.8125rem;
+    }
+
+    .pagination-link.prev-next {
+        padding: 0 0.75rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    /* Hero Section Extra Small */
+    .retail-hero .hero-text h1 {
+        font-size: 1.625rem;
+    }
+
+    .retail-hero .hero-text p {
+        font-size: 0.9375rem;
+    }
+
+    .retail-hero .stat-item {
+        padding: 0.875rem 1rem;
+    }
+
+    .retail-hero .stat-item i {
+        width: 48px;
+        height: 48px;
+        font-size: 1.75rem;
+    }
+
+    .retail-hero .stat-item h3 {
+        font-size: 1.5rem;
+    }
+
+    .retail-hero .stat-item span {
+        font-size: 0.75rem;
+    }
+
+    /* Filter Sidebar Extra Small */
+    .shop-sidebar {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    /* Products Grid - Keep 2 columns but smaller */
+    .products-grid-view {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.625rem;
+    }
+
+    .product-image {
+        height: 150px;
+    }
+
+    .product-info {
+        padding: 0.625rem;
+    }
+
+    .product-info h4 {
+        font-size: 0.8125rem;
+    }
+
+    .current-price {
+        font-size: 0.9375rem;
+    }
+
+    .old-price {
+        font-size: 0.75rem;
+    }
+
+    /* Toolbar Extra Small */
+    .shop-toolbar {
+        padding: 0.75rem;
+    }
+
+    .view-mode {
+        display: none;
+    }
+
+    /* Filter Box Extra Small */
+    .filter-box {
+        padding: 0.875rem;
+    }
+
+    .filter-title {
+        font-size: 0.9375rem;
+    }
+
+    /* Pagination Extra Small */
+    .pagination-link {
+        min-width: 2rem;
+        height: 2rem;
+        font-size: 0.75rem;
+    }
+
+    .pagination-link.dots {
+        min-width: 1.25rem;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .retail-hero .hero-content {
+        flex-direction: row;
+    }
+
+    .retail-hero .hero-text {
+        order: 1;
+        text-align: left;
+    }
+
+    .retail-hero .hero-image {
+        order: 2;
+        max-width: 50%;
+    }
+
+    .retail-hero .hero-stats {
+        flex-direction: row;
+    }
+
+    .products-grid-view {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .filter-checkbox,
+    .show-more-btn,
+    .btn-apply-filter,
+    .action-btn,
+    .quick-add-btn,
+    .mobile-filter-toggle {
+        min-height: 44px;
+    }
+
+    .product-actions {
+        opacity: 1;
+    }
+
+    .quick-add-btn {
+        transform: translateY(0);
+    }
+
+    button:active,
+    a:active {
+        transform: scale(0.98);
+        transition: transform 0.1s;
+    }
+}

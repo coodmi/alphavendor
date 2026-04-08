@@ -39,8 +39,17 @@ class NotificationController extends Controller
      */
     public function unreadCount()
     {
-        $count = Auth::user()->notifications()->unread()->count();
-        return response()->json(['count' => $count]);
+        try {
+            if (!Auth::check()) {
+                return response()->json(['count' => 0]);
+            }
+            
+            $count = Auth::user()->notifications()->unread()->count();
+            return response()->json(['count' => $count]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting unread notification count: ' . $e->getMessage());
+            return response()->json(['count' => 0]);
+        }
     }
 
     /**

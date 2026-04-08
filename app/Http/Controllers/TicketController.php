@@ -86,6 +86,9 @@ class TicketController extends Controller
             'is_staff' => Auth::user()->role === 'admin',
         ]);
 
+        // Notify admins about new ticket
+        \App\Services\NotificationService::ticketCreated($ticket);
+
         return response()->json([
             'success' => true,
             'ticket' => $ticket->load(['category', 'user'])
@@ -172,6 +175,9 @@ class TicketController extends Controller
                 'status' => 'in_progress'
             ]);
         }
+
+        // Send notification
+        \App\Services\NotificationService::ticketReplied($ticket, $user);
 
         return response()->json([
             'success' => true,

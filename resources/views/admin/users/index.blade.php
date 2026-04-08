@@ -4,55 +4,7 @@
 @section('page-title', 'Manage Users')
 
 @section('sidebar-menu')
-    <div class="menu-section">
-        <div class="menu-section-title">Main</div>
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </a>
-    </div>
-
-    <div class="menu-section">
-        <div class="menu-section-title">Management</div>
-        <a href="{{ route('admin.users') }}" class="menu-item active">
-            <i class="fas fa-users"></i>
-            <span>Users</span>
-        </a>
-        <a href="{{ route('admin.applications') }}" class="menu-item">
-            <i class="fas fa-file-alt"></i>
-            <span>Applications</span>
-        </a>
-        <a href="{{ route('admin.orders') }}" class="menu-item">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Orders</span>
-        </a>
-        <a href="{{ route('admin.products') }}" class="menu-item">
-            <i class="fas fa-box"></i>
-            <span>Products</span>
-        </a>
-        <a href="{{ route('admin.categories') }}" class="menu-item">
-            <i class="fas fa-tags"></i>
-            <span>Categories</span>
-        </a>
-        <a href="{{ route('admin.brands') }}" class="menu-item">
-            <i class="fas fa-copyright"></i>
-            <span>Brands</span>
-        </a>
-    </div>
-
-    <div class="menu-section">        <div class="menu-section-title">Pages</div>
-        <a href="{{ route('admin.retail-page') }}" class="menu-item">
-            <i class="fas fa-store"></i>
-            <span>Retail Page</span>
-        </a>
-    </div>
-
-    <div class="menu-section">        <div class="menu-section-title">Settings</div>
-        <a href="{{ route('profile.show') }}" class="menu-item">
-            <i class="fas fa-user-circle"></i>
-            <span>Profile</span>
-        </a>
-    </div>
+    @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
@@ -73,6 +25,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Mobile Number</th>
                         <th>Role</th>
                         <th>Status</th>
                         <th>Joined</th>
@@ -85,6 +38,7 @@
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
+                            <td>{{ $user->mobile_number ?? 'N/A' }}</td>
                             <td>
                                 <span class="badge badge-{{ $user->role }}">
                                     {{ ucfirst($user->role) }}
@@ -98,6 +52,7 @@
                             <td>{{ $user->created_at->format('M d, Y') }}</td>
                             <td class="actions">
                                 <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-info">Edit</a>
+                                <button onclick="showResetPasswordModal({{ $user->id }}, '{{ $user->name }}')" class="btn btn-sm btn-warning">Reset Password</button>
                                 @if($user->id !== Auth::id())
                                     <form action="{{ route('admin.users.delete', $user) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                         @csrf
@@ -299,3 +254,188 @@ th {
 }
 </style>
 @endsection
+
+
+<!-- Reset Password Modal -->
+<div id="resetPasswordModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Reset Password</h3>
+            <button class="close-btn" onclick="closeResetPasswordModal()">&times;</button>
+        </div>
+        <form id="resetPasswordForm" onsubmit="resetPassword(event)">
+            <div class="modal-body">
+                <p>Reset password for: <strong id="userName"></strong></p>
+                
+                <div class="form-group">
+                    <label for="new_password">New Password</label>
+                    <input type="password" id="new_password" name="password" required minlength="8" class="form-control">
+                    <small>Minimum 8 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8" class="form-control">
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeResetPasswordModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Reset Password</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+    font-size: 12px;
+}
+
+.btn-warning {
+    background: #FFA500;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #FFB833;
+}
+</style>
+
+<script>
+let currentUserId = null;
+
+function showResetPasswordModal(userId, userName) {
+    currentUserId = userId;
+    document.getElementById('userName').textContent = userName;
+    document.getElementById('resetPasswordModal').style.display = 'flex';
+    document.getElementById('resetPasswordForm').reset();
+}
+
+function closeResetPasswordModal() {
+    document.getElementById('resetPasswordModal').style.display = 'none';
+    currentUserId = null;
+}
+
+async function resetPassword(event) {
+    event.preventDefault();
+    
+    const password = document.getElementById('new_password').value;
+    const confirmation = document.getElementById('password_confirmation').value;
+    
+    if (password !== confirmation) {
+        alert('Passwords do not match!');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/admin/users/${currentUserId}/reset-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                password: password,
+                password_confirmation: confirmation
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('Password reset successfully!');
+            closeResetPasswordModal();
+        } else {
+            alert('Error: ' + (data.message || 'Failed to reset password'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while resetting the password');
+    }
+}
+
+// Close modal when clicking outside
+document.getElementById('resetPasswordModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeResetPasswordModal();
+    }
+});
+</script>

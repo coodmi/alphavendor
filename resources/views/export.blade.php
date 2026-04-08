@@ -2,6 +2,10 @@
 
 @section('title', 'Import - AlphaVendor Multi Vendor Marketplace')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/import-mobile.css') }}">
+@endpush
+
 @section('content')
 <!-- Hero Banner -->
 <section class="import-hero">
@@ -53,9 +57,26 @@
 <!-- Shop Section -->
 <section class="shop-section">
     <div class="container">
+        <!-- Mobile Filter Toggle Button -->
+        <button class="mobile-filter-toggle-import" id="mobileFilterToggleImport">
+            <i class="fas fa-filter"></i>
+            Filters & Categories
+        </button>
+
+        <!-- Filter Sidebar Overlay -->
+        <div class="filter-sidebar-overlay-import" id="filterSidebarOverlayImport"></div>
+
         <div class="shop-wrapper">
             <!-- Sidebar Filters -->
-            <aside class="shop-sidebar">
+            <aside class="shop-sidebar" id="importSidebar">
+                <!-- Mobile Filter Header -->
+                <div class="filter-sidebar-header-import" style="display: none;">
+                    <h3>Filters</h3>
+                    <button class="filter-close-btn-import" id="filterCloseBtnImport">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
                 <!-- Categories Filter -->
                 <div class="filter-box">
                     <h3 class="filter-title">Import Categories</h3>
@@ -262,9 +283,15 @@
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
-                            <button class="absolute bottom-0 left-0 right-0 bg-orange-500 text-white py-3 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="flex-1 bg-orange-500 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
+                            </button>
+                            <button class="flex-1 bg-orange-600 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                                <i class="fas fa-bolt"></i>
+                                Buy Now
                             </button>
                         </div>
                         <div class="p-4">
@@ -558,6 +585,183 @@ function applyFilters() {
 
     // Redirect with filters
     window.location.href = url.pathname + '?' + params.toString();
+}
+</script>
+
+<script>
+// Mobile Filter Toggle Functionality for Import/Export
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileFilterToggle = document.getElementById('mobileFilterToggleImport');
+    const importSidebar = document.getElementById('importSidebar');
+    const filterSidebarOverlay = document.getElementById('filterSidebarOverlayImport');
+    const filterCloseBtn = document.getElementById('filterCloseBtnImport');
+    const filterHeader = document.querySelector('.filter-sidebar-header-import');
+
+    // Show filter header on mobile
+    function updateFilterHeader() {
+        if (window.innerWidth <= 1024 && filterHeader) {
+            filterHeader.style.display = 'flex';
+        } else if (filterHeader) {
+            filterHeader.style.display = 'none';
+        }
+    }
+
+    updateFilterHeader();
+    window.addEventListener('resize', updateFilterHeader);
+
+    function openFilters() {
+        if (importSidebar && filterSidebarOverlay) {
+            importSidebar.classList.add('active');
+            filterSidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeFilters() {
+        if (importSidebar && filterSidebarOverlay) {
+            importSidebar.classList.remove('active');
+            filterSidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (mobileFilterToggle) {
+        mobileFilterToggle.addEventListener('click', openFilters);
+    }
+
+    if (filterCloseBtn) {
+        filterCloseBtn.addEventListener('click', closeFilters);
+    }
+
+    if (filterSidebarOverlay) {
+        filterSidebarOverlay.addEventListener('click', closeFilters);
+    }
+
+    // Close filters when applying filter
+    const applyFilterBtn = document.querySelector('.btn-apply-filter');
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                setTimeout(closeFilters, 300);
+            }
+        });
+    }
+
+    // Close filters when clearing all
+    const clearFiltersBtn = document.querySelector('.clear-filters');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 1024) {
+                setTimeout(closeFilters, 300);
+            }
+        });
+    }
+});
+
+// Quick Add to Cart function
+function quickAddToCart(productId, button) {
+    const originalContent = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+
+    fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            button.innerHTML = '<i class="fas fa-check"></i> Added!';
+            button.style.background = '#27ae60';
+            showToast('Product added to cart!', 'success');
+            updateCartBadge(data.cartCount);
+            setTimeout(() => {
+                button.disabled = false;
+                button.innerHTML = originalContent;
+                button.style.background = '';
+            }, 2000);
+        } else {
+            throw new Error(data.message || 'Failed to add product');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = originalContent;
+        showToast('Failed to add product to cart', 'error');
+    });
+}
+
+// Buy Now function
+function buyNow(productId, button) {
+    const originalContent = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+    fetch('/cart/buy-now', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ 
+            product_id: productId,
+            quantity: 1 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/checkout';
+        } else {
+            throw new Error(data.message || 'Failed to process');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = originalContent;
+        showToast('Failed to process order', 'error');
+    });
+}
+
+// Toast notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed; top: 20px; right: 20px;
+        background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+        color: white; padding: 15px 25px; border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 10000;
+        font-size: 16px; font-weight: 500;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// Update cart badge
+function updateCartBadge(count) {
+    const badge = document.querySelector('.action-link .fas.fa-shopping-bag')?.parentElement.querySelector('span');
+    if (count > 0) {
+        if (badge) {
+            badge.textContent = count;
+        } else {
+            const cartLink = document.querySelector('.action-link .fas.fa-shopping-bag')?.parentElement;
+            if (cartLink) {
+                const newBadge = document.createElement('span');
+                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
+                newBadge.textContent = count;
+                cartLink.appendChild(newBadge);
+            }
+        }
+    }
 }
 </script>
 @endpush

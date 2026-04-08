@@ -1,0 +1,56 @@
+/* Buy Now Button Styles for Retail Page */
+.product-card-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.buy-now-btn {
+    flex: 1;
+    background: linear-gradient(to right, #ea580c, #c2410c);
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.buy-now-btn:hover {
+    background: linear-gradient(to right, #c2410c, #9a3412);
+}
+
+.buy-now-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Shop Page Buy Now Button */
+.quick-add-btn {
+    flex: 1;
+    background: #FFA500;
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.quick-add-btn:hover {
+    background: #FF8C00;
+}
+
+.quick-add-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

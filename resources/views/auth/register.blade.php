@@ -38,16 +38,30 @@
                     <input type="text" id="name" name="name" value="{{ old('name') }}">
                 </div>
                 <div class="form-group">
+                    <label for="mobile_number">Mobile Number</label>
+                    <input type="text" id="mobile_number" name="mobile_number" value="{{ old('mobile_number') }}">
+                </div>
+                <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password">
+                    <div style="position: relative;">
+                        <input type="password" id="password" name="password" style="padding-right: 45px;">
+                        <button type="button" onclick="togglePasswordField('password', 'toggleIcon1')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 18px; padding: 5px 10px;">
+                            <i class="fas fa-eye" id="toggleIcon1"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation">
+                    <div style="position: relative;">
+                        <input type="password" id="password_confirmation" name="password_confirmation" style="padding-right: 45px;">
+                        <button type="button" onclick="togglePasswordField('password_confirmation', 'toggleIcon2')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 18px; padding: 5px 10px;">
+                            <i class="fas fa-eye" id="toggleIcon2"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -78,17 +92,42 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="pro_password" name="password">
+                    <div style="position: relative;">
+                        <input type="password" id="pro_password" name="password" style="padding-right: 45px;">
+                        <button type="button" onclick="togglePasswordField('pro_password', 'toggleIcon3')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 18px; padding: 5px 10px;">
+                            <i class="fas fa-eye" id="toggleIcon3"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" id="pro_password_confirmation" name="password_confirmation">
+                    <div style="position: relative;">
+                        <input type="password" id="pro_password_confirmation" name="password_confirmation" style="padding-right: 45px;">
+                        <button type="button" onclick="togglePasswordField('pro_password_confirmation', 'toggleIcon4')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 18px; padding: 5px 10px;">
+                            <i class="fas fa-eye" id="toggleIcon4"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
 
         <script>
+        function togglePasswordField(fieldId, iconId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleIcon = document.getElementById(iconId);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             const accountType = document.getElementById('account_type');
             const userFields = document.getElementById('user-fields');

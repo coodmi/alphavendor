@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class CommissionSetting extends Model
 {
     protected $fillable = [
-        'type', 'category_id', 'product_id', 'commission_rate', 'is_active'
+        'category_id',
+        'seller_type',
+        'commission_rate',
+        'is_active'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'commission_rate' => 'decimal:2'
     ];
 
     public function category()
@@ -19,38 +23,27 @@ class CommissionSetting extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function product()
+    /**
+     * Get commission rate for a specific category and seller type
+     */
+    public static function getCommissionRate($categoryId, $sellerType)
     {
-        return $this->belongsTo(Product::class);
+        $commission = self::where('category_id', $categoryId)
+            ->where('seller_type', $sellerType)
+            ->where('is_active', true)
+            ->first();
+
+        return $commission ? $commission->commission_rate : 10; // Default 10%
     }
 
-    public static function getCommissionRate($productId, $categoryId)
+    /**
+     * Get all commission rates for a category (all seller types)
+     */
+    public static function getCategoryCommissions($categoryId)
     {
-        // Check product-specific commission first
-        $productCommission = self::where('type', 'product')
-            ->where('product_id', $productId)
+        return self::where('category_id', $categoryId)
             ->where('is_active', true)
-            ->first();
-
-        if ($productCommission) {
-            return $productCommission->commission_rate;
-        }
-
-        // Check category-specific commission
-        $categoryCommission = self::where('type', 'category')
-            ->where('category_id', $categoryId)
-            ->where('is_active', true)
-            ->first();
-
-        if ($categoryCommission) {
-            return $categoryCommission->commission_rate;
-        }
-
-        // Fall back to global commission
-        $globalCommission = self::where('type', 'global')
-            ->where('is_active', true)
-            ->first();
-
-        return $globalCommission ? $globalCommission->commission_rate : 10; // Default 10%
+            ->get()
+            ->keyBy('seller_type');
     }
 }

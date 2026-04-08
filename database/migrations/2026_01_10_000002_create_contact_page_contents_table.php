@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('contact_page_contents', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
+            $table->string('key', 191)->unique();
             $table->text('value')->nullable();
             $table->string('type')->default('text'); // text, image, number
             $table->timestamps();

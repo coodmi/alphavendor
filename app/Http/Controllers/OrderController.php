@@ -24,169 +24,212 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
         }
 
-        return view('orders.checkout', compact('cart'));
+        // Get user's saved addresses
+        $addresses = auth()->check() ? auth()->user()->addresses()->orderBy('is_default', 'desc')->get() : collect();
+
+        return view('orders.checkout', compact('cart', 'addresses'));
     }
+    public function invoice(Order $order)
+        {
+            // Allow admin, or the vendor who owns the order, or the customer
+            $user = Auth::user();
+            $allowed = $user->role === 'admin'
+                || $order->user_id === $user->id
+                || $order->vendor_id === $user->id
+                || in_array($user->role, ['retailer', 'wholesaler', 'exporter', 'importer']);
+
+            if (!$allowed) {
+                abort(403);
+            }
+
+            $order->load(['items.product', 'user']);
+            $siteSettings = \App\Models\SiteSetting::getSettings();
+
+            return view('orders.invoice', compact('order', 'siteSettings'));
+        }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'shipping_address' => 'required|string',
-            'shipping_city' => 'required|string',
-            'shipping_state' => 'nullable|string',
-            'shipping_zip' => 'required|string',
-            'shipping_country' => 'required|string',
-            'phone' => 'required|string',
-            'payment_method' => 'required|string',
-            'notes' => 'nullable|string',
-            // Manual payment fields
-            'sender_number' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
-            'transaction_id' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
-        ]);
+        {
+            $validated = $request->validate([
+                'shipping_address' => 'required|string',
+                'shipping_city' => 'required|string',
+                'shipping_state' => 'nullable|string',
+                'shipping_country' => 'required|string',
+                'phone' => 'required|string',
+                'payment_method' => 'required|string',
+                'delivery_charge' => 'nullable|numeric|min:0',
+                'notes' => 'nullable|string',
+                // Manual payment fields
+                'sender_number' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
+                'transaction_id' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
+            ]);
 
-        $cart = Session::get('cart', []);
+            $cart = Session::get('cart', []);
 
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
-        }
-
-        DB::beginTransaction();
-
-        try {
-            // Group cart items by vendor
-            $ordersByVendor = [];
-
-            foreach ($cart as $item) {
-                $vendorId = $item['vendor_id'];
-
-                if (!isset($ordersByVendor[$vendorId])) {
-                    $ordersByVendor[$vendorId] = [];
-                }
-
-                $ordersByVendor[$vendorId][] = $item;
+            if (empty($cart)) {
+                return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
             }
 
-            // Create separate order for each vendor
-            foreach ($ordersByVendor as $vendorId => $items) {
-                $subtotal = 0;
-                $commissionTotal = 0;
+            $deliveryCharge = $validated['delivery_charge'] ?? 0;
+            $commissionService = new \App\Services\CommissionService();
 
-                // Calculate totals
-                foreach ($items as $item) {
-                    $itemTotal = $item['price'] * $item['quantity'];
-                    $subtotal += $itemTotal;
+            DB::beginTransaction();
 
-                    // Get commission rate
-                    $commissionRate = CommissionSetting::getCommissionRate($item['id'], $item['category_id']);
-                    $commissionAmount = ($itemTotal * $commissionRate) / 100;
-                    $commissionTotal += $commissionAmount;
+            try {
+                // Group cart items by vendor
+                $ordersByVendor = [];
+                $createdOrders = []; // Track created orders
+
+                foreach ($cart as $item) {
+                    $vendorId = $item['vendor_id'];
+
+                    if (!isset($ordersByVendor[$vendorId])) {
+                        $ordersByVendor[$vendorId] = [];
+                    }
+
+                    $ordersByVendor[$vendorId][] = $item;
                 }
 
-                $vendorEarning = $subtotal - $commissionTotal;
-                $commissionRate = $subtotal > 0 ? ($commissionTotal / $subtotal) * 100 : 0;
+                // Create separate order for each vendor
+                foreach ($ordersByVendor as $vendorId => $items) {
+                    // Calculate commission using the new service
+                    $commissionData = $commissionService->calculateOrderCommission(
+                        $items,
+                        $vendorId,
+                        $validated['payment_method'],
+                        $deliveryCharge
+                    );
 
-                // Create order
-                $order = Order::create([
-                    'order_number' => 'ORD-' . time() . '-' . rand(1000, 9999),
-                    'user_id' => Auth::id(),
-                    'vendor_id' => $vendorId,
-                    'subtotal' => $subtotal,
-                    'commission_amount' => $commissionTotal,
-                    'commission_rate' => $commissionRate,
-                    'vendor_earning' => $vendorEarning,
-                    'total' => $subtotal,
-                    'status' => 'pending',
-                    'payment_status' => 'unpaid',
-                    'payment_method' => $validated['payment_method'],
-                    'shipping_address' => $validated['shipping_address'],
-                    'shipping_city' => $validated['shipping_city'],
-                    'shipping_state' => $validated['shipping_state'] ?? '',
-                    'shipping_zip' => $validated['shipping_zip'],
-                    'shipping_country' => $validated['shipping_country'],
-                    'phone' => $validated['phone'],
-                    'notes' => $validated['notes'] ?? ''
-                ]);
+                    $subtotal = $commissionData['subtotal'];
+                    $categoryCommission = $commissionData['category_commission_amount'];
+                    $codCommission = $commissionData['cod_commission_amount'];
+                    $totalCommission = $commissionData['total_commission'];
+                    $vendorEarning = $commissionData['vendor_earning'];
+                    $total = $subtotal + $deliveryCharge;
 
-                // Create order items
-                foreach ($items as $item) {
-                    $itemTotal = $item['price'] * $item['quantity'];
-                    $commissionRate = CommissionSetting::getCommissionRate($item['id'], $item['category_id']);
-                    $commissionAmount = ($itemTotal * $commissionRate) / 100;
-                    $vendorEarning = $itemTotal - $commissionAmount;
-
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'product_id' => $item['id'],
-                        'product_name' => $item['name'],
-                        'quantity' => $item['quantity'],
-                        'price' => $item['price'],
-                        'commission_rate' => $commissionRate,
-                        'commission_amount' => $commissionAmount,
-                        'vendor_earning' => $vendorEarning,
-                        'subtotal' => $itemTotal
-                    ]);
-                }
-
-                // Update vendor wallet - add to pending balance
-                $wallet = VendorWallet::firstOrCreate(
-                    ['vendor_id' => $vendorId],
-                    ['balance' => 0, 'pending_balance' => 0, 'total_earned' => 0, 'total_withdrawn' => 0]
-                );
-
-                $wallet->increment('pending_balance', $vendorEarning);
-
-                // Create transaction record
-                Transaction::create([
-                    'vendor_id' => $vendorId,
-                    'order_id' => $order->id,
-                    'transaction_number' => 'TXN-' . time() . '-' . rand(1000, 9999),
-                    'type' => 'sale',
-                    'amount' => $vendorEarning,
-                    'status' => 'pending',
-                    'description' => 'Order #' . $order->order_number
-                ]);
-
-                // If payment method is bKash, Nagad, or Rocket, create manual payment record
-                if (in_array($validated['payment_method'], ['bkash', 'nagad', 'rocket'])) {
-                    ManualPayment::create([
-                        'order_id' => $order->id,
+                    // Create order
+                    $order = Order::create([
+                        'order_number' => 'ORD-' . time() . '-' . rand(1000, 9999),
                         'user_id' => Auth::id(),
-                        'payment_method' => $validated['payment_method'],
-                        'sender_number' => $validated['sender_number'],
-                        'transaction_id' => $validated['transaction_id'],
-                        'amount' => $order->total,
+                        'vendor_id' => $vendorId,
+                        'subtotal' => $subtotal,
+                        'commission_amount' => $categoryCommission,
+                        'commission_rate' => $commissionData['category_commission_rate'],
+                        'cod_commission_amount' => $codCommission,
+                        'cod_commission_rate' => $commissionData['cod_commission_rate'],
+                        'vendor_earning' => $vendorEarning,
+                        'total' => $total,
+                        'delivery_charge' => $deliveryCharge,
                         'status' => 'pending',
+                        'payment_status' => 'unpaid',
+                        'payment_method' => $validated['payment_method'],
+                        'shipping_address' => $validated['shipping_address'],
+                        'shipping_city' => $validated['shipping_city'],
+                        'shipping_state' => $validated['shipping_state'] ?? '',
+                        'shipping_country' => $validated['shipping_country'],
+                        'phone' => $validated['phone'],
+                        'notes' => $validated['notes'] ?? ''
                     ]);
 
-                    // Update order payment status to pending verification
-                    $order->update(['payment_status' => 'pending_verification']);
+                    // Create order items with commission details
+                    foreach ($commissionData['items'] as $item) {
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $item['id'],
+                            'product_name' => $item['name'],
+                            'quantity' => $item['quantity'],
+                            'price' => $item['price'],
+                            'commission_rate' => $item['category_commission_rate'],
+                            'commission_amount' => $item['category_commission_amount'],
+                            'cod_commission_amount' => $item['cod_commission_amount'],
+                            'vendor_earning' => $item['vendor_earning'],
+                            'subtotal' => $item['item_total']
+                        ]);
+                    }
+
+                    // Update vendor wallet - add to pending balance
+                    $wallet = VendorWallet::firstOrCreate(
+                        ['vendor_id' => $vendorId],
+                        ['balance' => 0, 'pending_balance' => 0, 'total_earned' => 0, 'total_withdrawn' => 0]
+                    );
+
+                    $wallet->increment('pending_balance', $vendorEarning);
+
+                    // Create transaction record
+                    Transaction::create([
+                        'vendor_id' => $vendorId,
+                        'order_id' => $order->id,
+                        'transaction_number' => 'TXN-' . time() . '-' . rand(1000, 9999),
+                        'type' => 'sale',
+                        'amount' => $vendorEarning,
+                        'status' => 'pending',
+                        'description' => 'Order #' . $order->order_number
+                    ]);
+
+                    // If payment method is bKash, Nagad, or Rocket, create manual payment record
+                    if (in_array($validated['payment_method'], ['bkash', 'nagad', 'rocket'])) {
+                        ManualPayment::create([
+                            'order_id' => $order->id,
+                            'user_id' => Auth::id(),
+                            'payment_method' => $validated['payment_method'],
+                            'sender_number' => $validated['sender_number'],
+                            'transaction_id' => $validated['transaction_id'],
+                            'amount' => $order->total,
+                            'status' => 'pending',
+                        ]);
+
+                        // Update order payment status to pending verification
+                        $order->update(['payment_status' => 'pending_verification']);
+                    }
+                    
+                    // Add order to created orders list
+                    $createdOrders[] = $order->id;
+
+                    // Send notifications
+                    \App\Services\NotificationService::orderPlaced($order->load('user'));
                 }
+
+                // Check if any order has manual payment
+                $hasManualPayment = in_array($validated['payment_method'], ['bkash', 'nagad', 'rocket']);
+
+                // Clear cart
+                Session::forget('cart');
+
+                DB::commit();
+
+                // Store order IDs in session for success page
+                Session::put('created_order_ids', $createdOrders);
+
+                if ($hasManualPayment) {
+                    return redirect()->route('orders.success')
+                        ->with('success', 'Order placed successfully!')
+                        ->with('payment_pending_verification', true);
+                }
+
+                return redirect()->route('orders.success')->with('success', 'Order placed successfully!');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Failed to place order. Please try again. ' . $e->getMessage());
             }
-
-            // Check if any order has manual payment
-            $hasManualPayment = in_array($validated['payment_method'], ['bkash', 'nagad', 'rocket']);
-
-            // Clear cart
-            Session::forget('cart');
-
-            DB::commit();
-
-            if ($hasManualPayment) {
-                return redirect()->route('orders.success')
-                    ->with('success', 'Order placed successfully!')
-                    ->with('payment_pending_verification', true);
-            }
-
-            return redirect()->route('orders.success')->with('success', 'Order placed successfully!');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Failed to place order. Please try again.');
         }
-    }
 
     public function success()
     {
-        return view('orders.success');
+        $orderIds = session('created_order_ids', []);
+        
+        if (empty($orderIds)) {
+            return redirect()->route('home')->with('error', 'No order information found.');
+        }
+        
+        $orders = Order::with(['items', 'vendor', 'user', 'manualPayment'])
+            ->whereIn('id', $orderIds)
+            ->get();
+        
+        // Clear the session data after retrieving
+        Session::forget('created_order_ids');
+        
+        return view('orders.success', compact('orders'));
     }
 
     public function myOrders()

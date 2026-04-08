@@ -82,8 +82,10 @@ class ProductController extends Controller
             ->get();
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin'])->get();
         $attributes = Attribute::orderBy('sort_order')->orderBy('name')->get();
+        $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
+        $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 
-        return view('admin.products.index', compact('products', 'categories', 'brands', 'vendors', 'attributes'));
+        return view('admin.products.index', compact('products', 'categories', 'brands', 'vendors', 'attributes', 'offers', 'shippingMethods'));
     }
 
     /**
@@ -91,6 +93,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if vendor is approved
+        $vendor = auth()->user();
+        if (in_array($vendor->role, ['retailer', 'wholesaler', 'exporter', 'importer'])) {
+            if ($vendor->status !== 'active') {
+                return redirect()->back()->with('error', 'Your account must be approved by admin before you can add products. Current status: ' . ucfirst($vendor->status));
+            }
+        }
+
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'vendor_id' => 'required|exists:users,id',
@@ -104,6 +114,8 @@ class ProductController extends Controller
             'sku' => 'nullable|string|unique:products',
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
+            'free_shipping' => 'boolean',
+            'special_offer_id' => 'nullable|exists:special_offers,id',
             'badge' => 'nullable|string|max:50',
             'brand' => 'nullable|string|max:100',
             'attributes' => 'nullable|array',
@@ -115,6 +127,7 @@ class ProductController extends Controller
         }
 
         $validated['is_featured'] = $request->has('is_featured');
+        $validated['free_shipping'] = $request->has('free_shipping');
         $validated['rating'] = 0;
         $validated['reviews_count'] = 0;
 
@@ -153,6 +166,8 @@ class ProductController extends Controller
             'sku' => 'nullable|string|unique:products,sku,' . $product->id,
             'status' => 'required|in:active,inactive,out_of_stock',
             'is_featured' => 'boolean',
+            'free_shipping' => 'boolean',
+            'special_offer_id' => 'nullable|exists:special_offers,id',
             'badge' => 'nullable|string|max:50',
             'brand' => 'nullable|string|max:100',
             'attributes' => 'nullable|array',
@@ -168,6 +183,7 @@ class ProductController extends Controller
         }
 
         $validated['is_featured'] = $request->has('is_featured');
+        $validated['free_shipping'] = $request->has('free_shipping');
 
         $product->update($validated);
 
@@ -215,9 +231,12 @@ class ProductController extends Controller
                 $q->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
             });
 
-        // Category filter
+        // Category filter - supports ?categories[]=id (sidebar) or ?category=slug (home page links)
         if ($request->has('categories') && !empty($request->categories)) {
             $query->whereIn('category_id', $request->categories);
+        } elseif ($request->filled('category')) {
+            $cat = \App\Models\Category::where('slug', $request->category)->first();
+            if ($cat) $query->where('category_id', $cat->id);
         }
 
         // Price range filter
@@ -228,9 +247,22 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        // Brand filter
+        // Brand filter - supports ?brands[]=id (sidebar) or ?brand=slug (home page links)
         if ($request->has('brands') && !empty($request->brands)) {
             $query->whereIn('brand_id', $request->brands);
+        } elseif ($request->filled('brand')) {
+            $brand = \App\Models\Brand::where('slug', $request->brand)->first();
+            if ($brand) $query->where('brand_id', $brand->id);
+        }
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%");
+            });
         }
 
         // Rating filter

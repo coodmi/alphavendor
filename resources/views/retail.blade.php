@@ -2,6 +2,12 @@
 
 @section('title', 'Retail - AlphaVendor Multi Vendor Marketplace')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/retail-mobile.css') }}">
+<link rel="stylesheet" href="{{ asset('css/shop-mobile.css') }}">
+<link rel="stylesheet" href="{{ asset('css/buy-now-button.css') }}">
+@endpush
+
 @section('content')
 <!-- Hero Banner -->
 <section class="retail-hero">
@@ -51,9 +57,26 @@
 <!-- Shop Section -->
 <section class="shop-section">
     <div class="container">
+        <!-- Mobile Filter Toggle Button -->
+        <button class="mobile-filter-toggle" id="mobileFilterToggle">
+            <i class="fas fa-filter"></i>
+            Filters & Categories
+        </button>
+
+        <!-- Filter Sidebar Overlay -->
+        <div class="filter-sidebar-overlay" id="filterSidebarOverlay"></div>
+
         <div class="shop-wrapper">
             <!-- Sidebar Filters -->
-            <aside class="shop-sidebar">
+            <aside class="shop-sidebar" id="shopSidebar">
+                <!-- Mobile Filter Header -->
+                <div class="filter-sidebar-header" style="display: none;">
+                    <h3>Filters</h3>
+                    <button class="filter-close-btn" id="filterCloseBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
                 <!-- Categories Filter -->
                 <div class="filter-box">
                     <h3 class="filter-title">Categories</h3>
@@ -264,9 +287,20 @@
                             <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                             @endif
                             <div class="product-actions">
-                                <button class="action-btn" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
-                                    <i class="far fa-heart"></i>
-                                </button>
+                                @auth
+                                    <button class="action-btn wishlist-btn" 
+                                            data-product-id="{{ $product->id }}"
+                                            title="Add to Wishlist" 
+                                            onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ $product->id }}, this);">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                @else
+                                    <button class="action-btn" 
+                                            title="Login to add to wishlist" 
+                                            onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('login') }}';">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                @endauth
                                 <button class="action-btn" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>
@@ -274,9 +308,15 @@
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
+                        </div>
+                        <div class="product-card-actions">
                             <button class="quick-add-btn" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
+                            </button>
+                            <button class="buy-now-btn" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);">
+                                <i class="fas fa-bolt"></i>
+                                Buy Now
                             </button>
                         </div>
                         <div class="product-info">
@@ -513,6 +553,224 @@ document.addEventListener('DOMContentLoaded', function() {
         rangeMax.value = max;
     });
 });
+
+// Wishlist functionality - Define in global scope
+window.toggleWishlist = function(productId, button) {
+    console.log('toggleWishlist called with productId:', productId);
+    
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    
+    if (!isAuthenticated) {
+        console.log('User not authenticated, redirecting to login');
+        window.location.href = '{{ route("login") }}';
+        return;
+    }
+
+    const icon = button.querySelector('i');
+    const originalClass = icon.className;
+    
+    console.log('Starting wishlist toggle...');
+    
+    // Show loading state
+    button.disabled = true;
+    icon.className = 'fas fa-spinner fa-spin';
+
+    fetch('/wishlist/toggle/' + productId, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        
+        if (data.success) {
+            // Update icon based on wishlist status
+            if (data.inWishlist) {
+                icon.className = 'fas fa-heart';
+                button.style.color = '#e74c3c';
+            } else {
+                icon.className = 'far fa-heart';
+                button.style.color = '';
+            }
+            
+            // Update wishlist count in header
+            updateWishlistCount(data.wishlistCount);
+            
+            // Show toast notification
+            showToast(data.message, 'success');
+        } else {
+            icon.className = originalClass;
+            showToast(data.message || 'Failed to update wishlist', 'error');
+        }
+        button.disabled = false;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        icon.className = originalClass;
+        button.disabled = false;
+        showToast('Failed to update wishlist', 'error');
+    });
+};
+
+window.updateWishlistCount = function(count) {
+    console.log('Updating wishlist count to:', count);
+    const headerWishlist = document.querySelector('.header-actions a[href*="wishlist"]');
+    if (headerWishlist) {
+        let badge = headerWishlist.querySelector('span');
+        if (count > 0) {
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
+                headerWishlist.appendChild(badge);
+            }
+            badge.textContent = count;
+        } else if (badge) {
+            badge.remove();
+        }
+    }
+};
+
+console.log('Wishlist functions loaded');
+
+// Check wishlist status on page load
+@if(auth()->check())
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Checking wishlist status for products...');
+    const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+    console.log('Found wishlist buttons:', wishlistButtons.length);
+    
+    wishlistButtons.forEach(button => {
+        const productId = button.dataset.productId;
+        if (productId) {
+            fetch('/wishlist/check/' + productId, {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.inWishlist) {
+                    const icon = button.querySelector('i');
+                    icon.className = 'fas fa-heart';
+                    button.style.color = '#e74c3c';
+                }
+            })
+            .catch(error => console.error('Error checking wishlist:', error));
+        }
+    });
+});
+@endif
 </script>
+
+<script>
+// Mobile Filter Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+    const shopSidebar = document.getElementById('shopSidebar');
+    const filterSidebarOverlay = document.getElementById('filterSidebarOverlay');
+    const filterCloseBtn = document.getElementById('filterCloseBtn');
+    const filterHeader = document.querySelector('.filter-sidebar-header');
+
+    // Show filter header on mobile
+    function updateFilterHeader() {
+        if (window.innerWidth <= 768 && filterHeader) {
+            filterHeader.style.display = 'flex';
+        } else if (filterHeader) {
+            filterHeader.style.display = 'none';
+        }
+    }
+
+    updateFilterHeader();
+    window.addEventListener('resize', updateFilterHeader);
+
+    function openFilters() {
+        if (shopSidebar && filterSidebarOverlay) {
+            shopSidebar.classList.add('active');
+            filterSidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeFilters() {
+        if (shopSidebar && filterSidebarOverlay) {
+            shopSidebar.classList.remove('active');
+            filterSidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (mobileFilterToggle) {
+        mobileFilterToggle.addEventListener('click', openFilters);
+    }
+
+    if (filterCloseBtn) {
+        filterCloseBtn.addEventListener('click', closeFilters);
+    }
+
+    if (filterSidebarOverlay) {
+        filterSidebarOverlay.addEventListener('click', closeFilters);
+    }
+
+    // Close filters when applying filter
+    const applyFilterBtn = document.querySelector('.btn-apply-filter');
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                setTimeout(closeFilters, 300);
+            }
+        });
+    }
+
+    // Close filters when clearing all
+    const clearFiltersBtn = document.querySelector('.btn-clear-filters');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                setTimeout(closeFilters, 300);
+            }
+        });
+    }
+});
+
+// Buy Now function
+function buyNow(productId, button) {
+    const originalContent = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+    fetch('/cart/buy-now', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ 
+            product_id: productId,
+            quantity: 1 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/checkout';
+        } else {
+            throw new Error(data.message || 'Failed to process');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = originalContent;
+        showToast('Failed to process order', 'error');
+    });
+}
+</script>
+
 <script src="{{ asset('js/shop.js') }}"></script>
 @endpush

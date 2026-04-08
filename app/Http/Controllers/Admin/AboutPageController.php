@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AboutPageContent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AboutPageController extends Controller
 {
@@ -19,61 +18,49 @@ class AboutPageController extends Controller
     }
 
     /**
-     * Update the about page content
+     * Update about page content
      */
     public function update(Request $request)
     {
         $validated = $request->validate([
             'hero_title' => 'required|string|max:255',
-            'hero_description' => 'required|string|max:500',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'hero_subtitle' => 'required|string|max:500',
+            'hero_cta_primary_text' => 'nullable|string|max:100',
+            'hero_cta_primary_link' => 'nullable|string|max:255',
+            'hero_cta_secondary_text' => 'nullable|string|max:100',
+            'hero_cta_secondary_link' => 'nullable|string|max:255',
+            
+            'story_title' => 'required|string|max:255',
+            'story_paragraph_1' => 'required|string',
+            'story_paragraph_2' => 'required|string',
+            'story_paragraph_3' => 'required|string',
+            
+            'stats_vendors' => 'required|string|max:50',
+            'stats_products' => 'required|string|max:50',
+            'stats_customers' => 'required|string|max:50',
+            'stats_countries' => 'required|string|max:50',
+            
             'mission_title' => 'required|string|max:255',
-            'mission_description' => 'required|string|max:1000',
+            'mission_content' => 'required|string',
             'vision_title' => 'required|string|max:255',
-            'vision_description' => 'required|string|max:1000',
-            'values_title' => 'required|string|max:255',
-            'values_description' => 'required|string|max:1000',
+            'vision_content' => 'required|string',
+            
+            'cta_title' => 'required|string|max:255',
+            'cta_subtitle' => 'required|string|max:500',
+            'cta_primary_text' => 'nullable|string|max:100',
+            'cta_primary_link' => 'nullable|string|max:255',
+            'cta_secondary_text' => 'nullable|string|max:100',
+            'cta_secondary_link' => 'nullable|string|max:255',
         ]);
 
-        // Handle hero image upload
-        if ($request->hasFile('hero_image')) {
-            // Get old image path BEFORE updating
-            $oldImage = AboutPageContent::where('key', 'hero_image')->first();
-            $oldImagePath = $oldImage ? $oldImage->value : null;
-
-            // Store new image first
-            $imagePath = $request->file('hero_image')->store('about-page', 'public');
-
-            // Update database with new image
+        foreach ($validated as $key => $value) {
             AboutPageContent::updateOrCreate(
-                ['key' => 'hero_image'],
-                ['value' => $imagePath, 'type' => 'image']
+                ['key' => $key],
+                ['value' => $value]
             );
-
-            // Delete old image AFTER successfully saving the new one
-            if ($oldImagePath && !str_starts_with($oldImagePath, 'http')) {
-                Storage::disk('public')->delete($oldImagePath);
-            }
         }
 
-        // Update text content
-        $contentFields = [
-            'hero_title', 'hero_description',
-            'mission_title', 'mission_description',
-            'vision_title', 'vision_description',
-            'values_title', 'values_description',
-        ];
-
-        foreach ($contentFields as $field) {
-            if (isset($validated[$field])) {
-                AboutPageContent::updateOrCreate(
-                    ['key' => $field],
-                    ['value' => $validated[$field], 'type' => 'text']
-                );
-            }
-        }
-
-        return redirect()->route('admin.dashboard')
+        return redirect()->route('admin.about-page')
             ->with('success', 'About page content updated successfully!');
     }
 }
