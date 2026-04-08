@@ -102,11 +102,20 @@ class OtpRegisterController extends Controller
             $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
             $message = str_replace('{otp}', $otp, $template);
 
+            // Format phone number to 880 format
+            $mobileNumber = $sessionData['mobile_number'];
+            $mobileNumber = preg_replace('/[^0-9]/', '', $mobileNumber);
+            if (str_starts_with($mobileNumber, '0')) {
+                $mobileNumber = '880' . substr($mobileNumber, 1);
+            } elseif (!str_starts_with($mobileNumber, '880')) {
+                $mobileNumber = '880' . $mobileNumber;
+            }
+
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post('https://api.mimsms.com/api/SmsSending/SMS', [
                 'ApiKey' => env('MIMSMS_APIKEY'),
-                'MobileNumber' => $sessionData['mobile_number'],
+                'MobileNumber' => $mobileNumber,
                 'SenderName' => env('MIMSMS_SENDER_NAME'),
                 'CampaignName' => env('MIMSMS_CAMPAIGN_NAME', ''),
                 'UserName' => env('MIMSMS_USERNAME'),
@@ -359,11 +368,18 @@ class OtpRegisterController extends Controller
             $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
             $message = str_replace('{otp}', $otp, $template);
 
+            $resendMobile = preg_replace('/[^0-9]/', '', $pending['mobile_number']);
+            if (str_starts_with($resendMobile, '0')) {
+                $resendMobile = '880' . substr($resendMobile, 1);
+            } elseif (!str_starts_with($resendMobile, '880')) {
+                $resendMobile = '880' . $resendMobile;
+            }
+
             $response = Http::timeout(30)->withHeaders([
                 'Content-Type' => 'application/json',
             ])->post('https://api.mimsms.com/api/SmsSending/SMS', [
                 'ApiKey' => env('MIMSMS_APIKEY'),
-                'MobileNumber' => $pending['mobile_number'],
+                'MobileNumber' => $resendMobile,
                 'SenderName' => env('MIMSMS_SENDER_NAME'),
                 'CampaignName' => env('MIMSMS_CAMPAIGN_NAME', ''),
                 'UserName' => env('MIMSMS_USERNAME'),
