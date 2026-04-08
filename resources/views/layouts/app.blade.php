@@ -32,7 +32,9 @@
                         @if($siteSettings->site_logo)
                             <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px; cursor: pointer;">
                         @else
-                            <img src="{{ asset('/airmarket.png') }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px; cursor: pointer;">
+                            <span style="font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: -0.5px;">
+                                Alpha<span style="color: #f97316;">Vendor</span>
+                            </span>
                         @endif
                     </a>
                 </div>
