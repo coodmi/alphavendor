@@ -12,6 +12,97 @@ use Illuminate\Support\Facades\Storage;
 class ChatController extends Controller
 {
     /**
+     * Widget: send message (works for guests using session, or logged-in users)
+     */
+    public function widgetSend(Request $request)
+    {
+        $request->validate(['message' => 'required|string|max:1000']);
+
+        $userId = Auth::id();
+        $sessionKey = 'chat_conversation_id';
+
+        // Find or create conversation
+        if ($userId) {
+            $conversation = ChatConversation::firstOrCreate(
+                ['user_id' => $userId, 'status' => 'open'],
+                ['subject' => 'Chat Support', 'last_message_at' => now()]
+            );
+        } else {
+            // Guest: use session-based conversation
+            $convId = session($sessionKey);
+            $conversation = $convId ? ChatConversation::find($convId) : null;
+            if (!$conversation) {
+                $conversation = ChatConversation::create([
+                    'user_id'         => null,
+                    'subject'         => 'Guest Chat',
+                    'status'          => 'open',
+                    'last_message_at' => now(),
+                ]);
+                session([$sessionKey => $conversation->id]);
+            }
+        }
+
+        // Check for FAQ auto-reply
+        $autoReply = null;
+        $faqs = \App\Models\ChatFaq::active()->get();
+        foreach ($faqs as $faq) {
+            if (stripos($request->message, $faq->question) !== false ||
+                similar_text(strtolower($request->message), strtolower($faq->question), $pct) && $pct > 60) {
+                $autoReply = $faq->answer;
+                break;
+            }
+        }
+
+        ChatMessage::create([
+            'conversation_id' => $conversation->id,
+            'user_id'         => $userId,
+            'message'         => $request->message,
+            'is_admin'        => false,
+        ]);
+
+        $conversation->update(['last_message_at' => now()]);
+
+        $response = ['success' => true, 'auto_reply' => null];
+
+        if ($autoReply) {
+            $botMsg = ChatMessage::create([
+                'conversation_id' => $conversation->id,
+                'user_id'         => null,
+                'message'         => $autoReply,
+                'is_admin'        => true,
+            ]);
+            $response['auto_reply'] = $autoReply;
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Widget: get messages for current session/user
+     */
+    public function widgetMessages(Request $request)
+    {
+        $userId = Auth::id();
+        $convId = $userId
+            ? optional(ChatConversation::where('user_id', $userId)->where('status', 'open')->latest()->first())->id
+            : session('chat_conversation_id');
+
+        if (!$convId) return response()->json(['messages' => []]);
+
+        $messages = ChatMessage::where('conversation_id', $convId)
+            ->orderBy('created_at', 'asc')
+            ->get(['id', 'message', 'is_admin', 'created_at']);
+
+        // Mark admin messages as read
+        ChatMessage::where('conversation_id', $convId)
+            ->where('is_admin', true)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        return response()->json(['messages' => $messages]);
+    }
+
+    /**
      * Get all conversations for authenticated user.
      */
     public function index()

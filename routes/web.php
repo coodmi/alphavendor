@@ -67,6 +67,11 @@ Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy
 Route::get('/special-offers', [HomeController::class, 'allOffers'])->name('special-offers.index');
 Route::get('/special-offers/{slug}', [\App\Http\Controllers\Admin\SpecialOfferController::class, 'show'])->name('special-offers.show');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
+Route::get('/chat/faqs', function() {
+    return response()->json(\App\Models\ChatFaq::active()->get(['id','question','answer']));
+})->name('chat.faqs.public');
+Route::post('/chat/widget/send', [\App\Http\Controllers\ChatController::class, 'widgetSend'])->name('chat.widget.send');
+Route::get('/chat/widget/messages', [\App\Http\Controllers\ChatController::class, 'widgetMessages'])->name('chat.widget.messages');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/retail', [RetailController::class, 'index'])->name('retail');
 Route::get('/wholesale', [WholesaleController::class, 'index'])->name('wholesale');
@@ -329,6 +334,11 @@ Route::middleware('auth')->group(function () {
         // Chatbot Management
         Route::get('/chatbot', [\App\Http\Controllers\Admin\ChatbotController::class, 'index'])->name('chatbot.index');
         Route::post('/chatbot', [\App\Http\Controllers\Admin\ChatbotController::class, 'update'])->name('chatbot.update');
+        Route::post('/chatbot/faqs', [\App\Http\Controllers\Admin\ChatbotController::class, 'storeFaq'])->name('chatbot.faqs.store');
+        Route::put('/chatbot/faqs/{faq}', [\App\Http\Controllers\Admin\ChatbotController::class, 'updateFaq'])->name('chatbot.faqs.update');
+        Route::delete('/chatbot/faqs/{faq}', [\App\Http\Controllers\Admin\ChatbotController::class, 'destroyFaq'])->name('chatbot.faqs.destroy');
+        Route::get('/chatbot/conversations/{conversation}', [\App\Http\Controllers\Admin\ChatbotController::class, 'conversation'])->name('chatbot.conversation');
+        Route::post('/chatbot/conversations/{conversation}/reply', [\App\Http\Controllers\Admin\ChatbotController::class, 'reply'])->name('chatbot.reply');
 
         // Offers Management
         Route::get('/offers', [\App\Http\Controllers\Admin\OfferController::class, 'index'])->name('offers.index');
