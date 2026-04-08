@@ -85,11 +85,11 @@ class PasswordResetController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post('https://api.mimsms.com/api/SmsSending/SMS', [
-                'ApiKey' => env('MIMSMS_APIKEY'),
+                'ApiKey' => config('services.mimsms.apikey'),
                 'MobileNumber' => $mobileNumber,
-                'SenderName' => env('MIMSMS_SENDER_NAME'),
-                'CampaignName' => env('MIMSMS_CAMPAIGN_NAME', ''),
-                'UserName' => env('MIMSMS_USERNAME'),
+                'SenderName' => config('services.mimsms.sender_name'),
+                'CampaignName' => config('services.mimsms.campaign_name', ''),
+                'UserName' => config('services.mimsms.username'),
                 'TransactionType' => 'T',
                 'MessageId' => '',
                 'Message' => $message,
@@ -304,11 +304,11 @@ class PasswordResetController extends Controller
             $response = Http::timeout(30)->withHeaders([
                 'Content-Type' => 'application/json',
             ])->post('https://api.mimsms.com/api/SmsSending/SMS', [
-                'ApiKey' => env('MIMSMS_APIKEY'),
+                'ApiKey' => config('services.mimsms.apikey'),
                 'MobileNumber' => $formattedMobile,
-                'SenderName' => env('MIMSMS_SENDER_NAME'),
-                'CampaignName' => env('MIMSMS_CAMPAIGN_NAME', ''),
-                'UserName' => env('MIMSMS_USERNAME'),
+                'SenderName' => config('services.mimsms.sender_name'),
+                'CampaignName' => config('services.mimsms.campaign_name', ''),
+                'UserName' => config('services.mimsms.username'),
                 'TransactionType' => 'T',
                 'MessageId' => '',
                 'Message' => $message,
