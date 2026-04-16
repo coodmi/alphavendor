@@ -41,7 +41,10 @@ class ExporterProductController extends Controller
         // Get active shipping methods
         $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 
-        return view('exporter.products.index', compact('products', 'categories', 'brands', 'certifications', 'offers', 'shippingMethods'));
+        // Get global attributes
+        $attributes = \App\Models\Attribute::orderBy('sort_order')->orderBy('name')->get();
+
+        return view('exporter.products.index', compact('products', 'categories', 'brands', 'certifications', 'offers', 'shippingMethods', 'attributes'));
     }
 
     public function store(Request $request)
@@ -104,6 +107,15 @@ class ExporterProductController extends Controller
         $validated['minimum_order'] = $validated['minimum_order'] ?? 1;
 
         $product = Product::create($validated);
+
+        // Sync attributes
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                $attributesData[$attributeId] = ['value' => $value];
+            }
+            $product->attributes()->sync($attributesData);
+        }
 
         return response()->json([
             'success' => true,
@@ -187,6 +199,17 @@ class ExporterProductController extends Controller
         $validated['minimum_order'] = $validated['minimum_order'] ?? 1;
 
         $product->update($validated);
+
+        // Sync attributes
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                $attributesData[$attributeId] = ['value' => $value];
+            }
+            $product->attributes()->sync($attributesData);
+        } else {
+            $product->attributes()->detach();
+        }
 
         return response()->json([
             'success' => true,

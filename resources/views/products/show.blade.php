@@ -119,6 +119,30 @@
                 </div>
                 @endif
 
+                @php $productAttributes = $product->attributes()->withPivot('value')->get(); @endphp
+                @if($productAttributes->count() > 0)
+                <div class="py-5 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Specifications</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @foreach($productAttributes as $attr)
+                        <div class="flex items-start gap-3 bg-gray-50 rounded-lg px-4 py-3">
+                            <span class="text-sm font-semibold text-gray-500 min-w-[100px]">{{ $attr->name }}</span>
+                            <span class="text-sm text-gray-800 font-medium">
+                                @if($attr->type === 'color')
+                                    <span class="inline-flex items-center gap-2">
+                                        <span style="width:16px;height:16px;border-radius:50%;background:{{ $attr->pivot->value }};display:inline-block;border:1px solid #e5e7eb;"></span>
+                                        {{ $attr->pivot->value }}
+                                    </span>
+                                @else
+                                    {{ $attr->pivot->value ?? '—' }}
+                                @endif
+                            </span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 @if($product->stock > 0)
                 <div class="flex flex-col gap-4 py-5">
                     <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">

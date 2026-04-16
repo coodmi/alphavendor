@@ -228,6 +228,36 @@
                 </label>
             </div>
 
+            @if(isset($attributes) && $attributes->count() > 0)
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Product Attributes</label>
+                <div class="space-y-3 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                    @foreach($attributes as $attr)
+                    <div class="flex items-center gap-3">
+                        <label class="text-sm font-medium text-gray-600 w-28 flex-shrink-0">
+                            {{ $attr->name }}
+                            @if($attr->is_required)<span class="text-red-500">*</span>@endif
+                        </label>
+                        @if($attr->type === 'select' && $attr->options)
+                            <select name="attributes[{{ $attr->id }}]" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
+                                <option value="">— Select —</option>
+                                @foreach($attr->options as $opt)
+                                    <option value="{{ $opt }}">{{ $opt }}</option>
+                                @endforeach
+                            </select>
+                        @elseif($attr->type === 'color')
+                            <input type="color" name="attributes[{{ $attr->id }}]" class="h-9 w-20 border border-gray-300 rounded-lg cursor-pointer attr-field" data-attr-id="{{ $attr->id }}">
+                        @elseif($attr->type === 'number')
+                            <input type="number" name="attributes[{{ $attr->id }}]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
+                        @else
+                            <input type="text" name="attributes[{{ $attr->id }}]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             <div class="flex gap-3 justify-end pt-4 border-t border-gray-200">
                 <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-150">
                     Cancel
@@ -311,6 +341,13 @@ function editProduct(product) {
     document.getElementById('productStatus').value = product.status;
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productFeatured').checked = product.is_featured;
+
+    // Populate attribute values
+    document.querySelectorAll('.attr-field').forEach(field => {
+        const attrId = field.dataset.attrId;
+        const attrData = product.attributes ? product.attributes.find(a => a.id == attrId) : null;
+        field.value = attrData ? (attrData.pivot ? attrData.pivot.value : '') : '';
+    });
 
     // Show current image if exists
     if (product.image) {

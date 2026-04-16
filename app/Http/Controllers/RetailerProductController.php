@@ -35,7 +35,10 @@ class RetailerProductController extends Controller
         // Get active shipping methods
         $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 
-        return view('retailer.products.index', compact('products', 'categories', 'brands', 'offers', 'shippingMethods'));
+        // Get global attributes
+        $attributes = \App\Models\Attribute::orderBy('sort_order')->orderBy('name')->get();
+
+        return view('retailer.products.index', compact('products', 'categories', 'brands', 'offers', 'shippingMethods', 'attributes'));
     }
 
     public function store(Request $request)
@@ -92,6 +95,15 @@ class RetailerProductController extends Controller
         $validated['is_featured'] = $request->has('is_featured');
 
         $product = Product::create($validated);
+
+        // Sync attributes
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                $attributesData[$attributeId] = ['value' => $value];
+            }
+            $product->attributes()->sync($attributesData);
+        }
 
         return response()->json([
             'success' => true,
@@ -169,6 +181,17 @@ class RetailerProductController extends Controller
         $validated['is_featured'] = $request->has('is_featured');
 
         $product->update($validated);
+
+        // Sync attributes
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                $attributesData[$attributeId] = ['value' => $value];
+            }
+            $product->attributes()->sync($attributesData);
+        } else {
+            $product->attributes()->detach();
+        }
 
         return response()->json([
             'success' => true,
