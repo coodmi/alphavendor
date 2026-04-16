@@ -10149,7 +10149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'pending': { text: 'Pending Pickup', color: '#f97316' },
             'picked': { text: 'Picked Up', color: '#3b82f6' },
             'in_transit': { text: 'In Transit', color: '#8b5cf6' },
-            'out_for_delivery': { text: 'Out for Delivery', color: '#eab308' },
+            'out_for_delivery': { text: 'Out for Delivery', color: '#0d5c63' },
             'delivered': { text: 'Delivered', color: '#10b981' }
         };
         const statusInfo = statusMap[data.status] || { text: 'Unknown', color: '#6b7280' };
