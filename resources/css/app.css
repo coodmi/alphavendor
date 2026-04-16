@@ -9,7 +9,22 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 
-    /* Override yellow palette with brand teal */
+    /* Override yellow palette with brand teal (#0d5c63) */
+    --color-yellow-50:  #e6f4f5;
+    --color-yellow-100: #c0e2e5;
+    --color-yellow-200: #8fc8cc;
+    --color-yellow-300: #5aadb3;
+    --color-yellow-400: #2e9099;
+    --color-yellow-500: #0d7a82;
+    --color-yellow-600: #0d5c63;
+    --color-yellow-700: #0a4a50;
+    --color-yellow-800: #07383d;
+    --color-yellow-900: #04262a;
+    --color-yellow-950: #021518;
+}
+
+/* Force override yellow CSS variables at runtime */
+:root {
     --color-yellow-50:  #e6f4f5;
     --color-yellow-100: #c0e2e5;
     --color-yellow-200: #8fc8cc;
