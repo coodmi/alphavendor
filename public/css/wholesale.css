@@ -132,7 +132,7 @@
 .wholesale-hero .stat-item i {
     font-size: 42px;
     color: #FFFFFF;
-    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    background: linear-gradient(135deg, #0d5c63, #0a4a50);
     width: 64px;
     height: 64px;
     display: flex;
@@ -170,7 +170,7 @@
 }
 
 .wholesale-hero .btn-primary {
-    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%);
     color: #FFFFFF;
     border: none;
     padding: 18px 48px;
@@ -302,7 +302,7 @@
 
 .btn-primary {
     background: var(--white);
-    color: #FFA500;
+    color: #0d5c63;
     border: none;
     padding: 12px 26px;
     border-radius: 50px;
@@ -340,7 +340,7 @@
 
 .btn-secondary:hover {
     background: var(--white);
-    color: #FFA500;
+    color: #0d5c63;
     transform: translateY(-2px);
 }
 
@@ -396,7 +396,7 @@
 }
 
 .card-2 i {
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .card-3 {
@@ -408,7 +408,7 @@
 }
 
 .card-3 i {
-    color: #FFB833;
+    color: #0d7a82;
 }
 
 .image-card h4 {
@@ -467,14 +467,14 @@
 .feature-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    border-color: #FFA500;
+    border-color: #0d5c63;
 }
 
 .feature-icon {
     width: 100px;
     height: 100px;
     margin: 0 auto 30px;
-    background: linear-gradient(135deg, #FFA500, #FFB833);
+    background: linear-gradient(135deg, #0d5c63, #0d7a82);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -518,7 +518,7 @@
 }
 
 .category-card:hover {
-    border-color: #FFA500;
+    border-color: #0d5c63;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transform: translateY(-5px);
 }
@@ -533,7 +533,7 @@
     align-items: center;
     justify-content: center;
     font-size: 48px;
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .category-card h3 {
@@ -550,7 +550,7 @@
 }
 
 .btn-category {
-    background: #FFA500;
+    background: #0d5c63;
     color: var(--white);
     border: none;
     padding: 12px 30px;
@@ -565,7 +565,7 @@
 }
 
 .btn-category:hover {
-    background: #FFB833;
+    background: #0d7a82;
     transform: translateX(5px);
 }
 
@@ -618,7 +618,7 @@
     align-items: center;
     justify-content: center;
     font-size: 50px;
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .supplier-card h3 {
@@ -650,7 +650,7 @@
 }
 
 .supplier-stats i {
-    color: #FFA500;
+    color: #0d5c63;
     margin-right: 3px;
 }
 
@@ -664,7 +664,7 @@
 
 .tag {
     background: #FFF3E0;
-    color: #FFA500;
+    color: #0d5c63;
     padding: 5px 12px;
     border-radius: 15px;
     font-size: 12px;
@@ -673,7 +673,7 @@
 
 .btn-contact {
     width: 100%;
-    background: #FFA500;
+    background: #0d5c63;
     color: var(--white);
     border: none;
     padding: 12px 20px;
@@ -685,7 +685,7 @@
 }
 
 .btn-contact:hover {
-    background: #FFB833;
+    background: #0d7a82;
 }
 
 /* Pricing Section */
@@ -718,7 +718,7 @@
 }
 
 .pricing-card.featured {
-    border-color: #FFA500;
+    border-color: #0d5c63;
     box-shadow: 0 10px 40px rgba(255, 165, 0, 0.2);
 }
 
@@ -727,7 +727,7 @@
     top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #FFA500, #FFB833);
+    background: linear-gradient(135deg, #0d5c63, #0d7a82);
     color: var(--white);
     padding: 6px 20px;
     border-radius: 20px;
@@ -796,7 +796,7 @@
 
 .btn-plan {
     width: 100%;
-    background: #FFA500;
+    background: #0d5c63;
     color: var(--white);
     border: none;
     padding: 14px 20px;
@@ -808,11 +808,11 @@
 }
 
 .btn-plan:hover {
-    background: #FFB833;
+    background: #0d7a82;
 }
 
 .pricing-card.featured .btn-plan {
-    background: linear-gradient(135deg, #FFA500, #FFB833);
+    background: linear-gradient(135deg, #0d5c63, #0d7a82);
 }
 
 /* How It Works */
@@ -848,7 +848,7 @@
 .step-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    border-color: #FFA500;
+    border-color: #0d5c63;
 }
 
 .step-number {
@@ -858,7 +858,7 @@
     transform: translateX(-50%);
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #FFA500, #FFB833);
+    background: linear-gradient(135deg, #0d5c63, #0d7a82);
     color: var(--white);
     border-radius: 50%;
     display: flex;
@@ -878,7 +878,7 @@
     align-items: center;
     justify-content: center;
     font-size: 48px;
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .step-card h3 {
@@ -896,7 +896,7 @@
 
 .step-arrow {
     font-size: 24px;
-    color: #FFA500;
+    color: #0d5c63;
     flex-shrink: 0;
 }
 
@@ -928,7 +928,7 @@
 
 .quote-icon {
     font-size: 36px;
-    color: #FFA500;
+    color: #0d5c63;
     opacity: 0.2;
     margin-bottom: 15px;
 }
@@ -957,7 +957,7 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .author-info h4 {
@@ -979,14 +979,14 @@
 }
 
 .rating i {
-    color: #FFA500;
+    color: #0d5c63;
     font-size: 14px;
 }
 
 /* CTA Section */
 .cta-section {
     padding: 120px 0;
-    background: linear-gradient(135deg, #FFA500 0%, #FFB833 100%);
+    background: linear-gradient(135deg, #0d5c63 0%, #0d7a82 100%);
     position: relative;
     overflow: hidden;
 }
@@ -1030,7 +1030,7 @@
 
 .btn-cta-primary {
     background: var(--white);
-    color: #FFA500;
+    color: #0d5c63;
     border: none;
     padding: 18px 40px;
     border-radius: 50px;
@@ -1068,7 +1068,7 @@
 
 .btn-cta-secondary:hover {
     background: var(--white);
-    color: #FFA500;
+    color: #0d5c63;
     transform: translateY(-3px);
 }
 
@@ -1193,7 +1193,7 @@
 }
 
 .wholesale-hero ~ .shop-section .action-btn:hover {
-    background: #FFA500;
+    background: #0d5c63;
     color: #FFFFFF;
     transform: scale(1.1);
 }
@@ -1244,7 +1244,7 @@
 
 .wholesale-hero ~ .shop-section .product-vendor {
     font-size: 11px;
-    color: #FFA500;
+    color: #0d5c63;
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -1265,7 +1265,7 @@
 .wholesale-hero ~ .shop-section .product-rating .stars {
     display: flex;
     gap: 1px;
-    color: #FFA500;
+    color: #0d5c63;
     font-size: 12px;
 }
 
@@ -1292,7 +1292,7 @@
 .wholesale-hero ~ .shop-section .current-price {
     font-size: 18px;
     font-weight: 700;
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .wholesale-hero ~ .shop-section .original-price {
@@ -1334,9 +1334,9 @@
 }
 
 .wholesale-hero ~ .shop-section .btn-add-cart:hover {
-    background: #FFA500;
+    background: #0d5c63;
     color: #FFFFFF;
-    border-color: #FFA500;
+    border-color: #0d5c63;
 }
 
 /* Responsive Design */

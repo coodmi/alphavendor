@@ -612,7 +612,7 @@ html {
     /* Newsletter Mobile */
     .newsletter-section {
         padding: 45px 0;
-        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%);
         position: relative;
         overflow: hidden;
     }

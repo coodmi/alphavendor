@@ -132,7 +132,7 @@
 .import-hero .stat-item i {
     font-size: 42px;
     color: #FFFFFF;
-    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    background: linear-gradient(135deg, #0d5c63, #0a4a50);
     width: 64px;
     height: 64px;
     display: flex;
@@ -170,7 +170,7 @@
 }
 
 .import-hero .btn-primary {
-    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%);
     color: #FFFFFF;
     border: none;
     padding: 18px 48px;
@@ -389,7 +389,7 @@
 }
 
 .import-hero ~ .shop-section .action-btn:hover {
-    background: #FFA500;
+    background: #0d5c63;
     color: #FFFFFF;
     transform: scale(1.1);
 }
@@ -440,7 +440,7 @@
 
 .import-hero ~ .shop-section .product-vendor {
     font-size: 11px;
-    color: #FFA500;
+    color: #0d5c63;
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -461,7 +461,7 @@
 .import-hero ~ .shop-section .product-rating .stars {
     display: flex;
     gap: 1px;
-    color: #FFA500;
+    color: #0d5c63;
     font-size: 12px;
 }
 
@@ -512,7 +512,7 @@
 .import-hero ~ .shop-section .current-price {
     font-size: 18px;
     font-weight: 700;
-    color: #FFA500;
+    color: #0d5c63;
 }
 
 .import-hero ~ .shop-section .original-price {
@@ -554,26 +554,26 @@
 }
 
 .import-hero ~ .shop-section .btn-add-cart:hover {
-    background: #FFA500;
+    background: #0d5c63;
     color: #FFFFFF;
-    border-color: #FFA500;
+    border-color: #0d5c63;
 }
 
 /* Active filter tags for export */
 .import-hero ~ .shop-section .filter-tag {
     background: #FFF4E5;
     color: #C05A00;
-    border: 1px solid #FFB833;
+    border: 1px solid #0d7a82;
 }
 
 .import-hero ~ .shop-section .filter-tag:hover {
-    background: #FFA500;
+    background: #0d5c63;
     color: var(--white);
 }
 
 /* Pagination active for export */
 .import-hero ~ .shop-section .page-btn.active {
-    background: #FFA500;
+    background: #0d5c63;
     color: var(--white);
 }
 
