@@ -35,7 +35,7 @@
                                     @if($offer->badge_text)
                                         <div class="absolute top-4 right-4">
                                             <span class="px-4 py-2 rounded-full text-sm font-bold text-white shadow-lg"
-                                                style="background-color: {{ $offer->badge_color ?? '#FFA500' }}">
+                                                style="background-color: {{ $offer->badge_color ?? '#0d5c63' }}">
                                                 {{ $offer->badge_text }}
                                             </span>
                                         </div>

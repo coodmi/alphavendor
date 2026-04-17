@@ -116,7 +116,7 @@
         .sidebar-header .role-badge {
             display: inline-block;
             padding: 4px 12px;
-            background: #FFA500;
+            background: #0d5c63;
             border-radius: 12px;
             font-size: 10px;
             text-transform: uppercase;
@@ -157,13 +157,13 @@
         .menu-item:hover {
             background: rgba(255,165,0,0.15);
             color: #ffffff;
-            border-left-color: #FFA500;
+            border-left-color: #0d5c63;
         }
 
         .menu-item.active {
             background: rgba(255,165,0,0.2);
             color: #ffffff;
-            border-left-color: #FFA500;
+            border-left-color: #0d5c63;
         }
 
         .menu-item i {

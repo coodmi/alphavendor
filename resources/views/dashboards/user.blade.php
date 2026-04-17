@@ -133,7 +133,7 @@
 <!-- Quick Actions -->
 <div class="dashboard-section" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
     <h2 style="margin-bottom: 20px; color: #2c3e50; font-size: 20px;">
-        <i class="fas fa-bolt" style="color: #FFA500;"></i> Quick Actions
+        <i class="fas fa-bolt" style="color: #0d5c63;"></i> Quick Actions
     </h2>
     <div class="action-buttons">
         <a href="{{ route('shop') }}" class="btn btn-primary">
@@ -157,7 +157,7 @@
 <!-- Order Tracking Section -->
 <div class="dashboard-section" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
     <h2 style="margin-bottom: 20px; color: #2c3e50; font-size: 20px;">
-        <i class="fas fa-map-marker-alt" style="color: #FFA500;"></i> Track Your Order
+        <i class="fas fa-map-marker-alt" style="color: #0d5c63;"></i> Track Your Order
     </h2>
     
     <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
@@ -252,7 +252,7 @@
 <div class="dashboard-section" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="margin: 0; color: #2c3e50; font-size: 20px;">
-            <i class="fas fa-clock" style="color: #FFA500;"></i> Recent Orders
+            <i class="fas fa-clock" style="color: #0d5c63;"></i> Recent Orders
         </h2>
         @if($recentOrders->count() > 0)
             <a href="{{ route('orders.my-orders') }}" style="color: #667eea; text-decoration: none; font-size: 14px;">View All →</a>

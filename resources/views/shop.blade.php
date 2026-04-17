@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 const cartLink = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement;
                 const newBadge = document.createElement('span');
-                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
+                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #0d5c63; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
                 newBadge.textContent = count;
                 cartLink.appendChild(newBadge);
             }

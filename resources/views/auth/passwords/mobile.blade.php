@@ -96,7 +96,7 @@
 
 .form-group input[type="text"]:focus {
     outline: none;
-    border-color: #FFA500;
+    border-color: #0d5c63;
 }
 
 .btn {
@@ -111,7 +111,7 @@
 }
 
 .btn-primary {
-    background: #FFA500;
+    background: #0d5c63;
     color: white;
 }
 
@@ -126,7 +126,7 @@
 }
 
 .auth-link a {
-    color: #FFA500;
+    color: #0d5c63;
     text-decoration: none;
     font-weight: 500;
 }

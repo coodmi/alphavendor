@@ -54,7 +54,7 @@
                             <div class="flex items-start justify-between mb-3">
                                 <h3 class="text-xl font-bold text-gray-900">{{ $offer->name }}</h3>
                                 @if($offer->badge_text)
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold" style="background-color: {{ $offer->badge_color ?? '#FFA500' }}; color: white;">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold" style="background-color: {{ $offer->badge_color ?? '#0d5c63' }}; color: white;">
                                         {{ $offer->badge_text }}
                                     </span>
                                 @endif
@@ -171,7 +171,7 @@
                     <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fas fa-palette text-orange-600 mr-2"></i>Badge Color
                     </label>
-                    <input type="color" name="badge_color" id="badge_color" value="#FFA500"
+                    <input type="color" name="badge_color" id="badge_color" value="#0d5c63"
                         class="w-full h-12 px-2 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all">
                 </div>
             </div>
@@ -240,7 +240,7 @@ function openCreateModal() {
     document.getElementById('methodId').value = 'POST';
     document.getElementById('offerForm').reset();
     document.getElementById('is_active').checked = true;
-    document.getElementById('badge_color').value = '#FFA500';
+    document.getElementById('badge_color').value = '#0d5c63';
     document.getElementById('offerModal').classList.remove('hidden');
 }
 
@@ -252,7 +252,7 @@ function openEditModal(offer) {
     document.getElementById('name').value = offer.name;
     document.getElementById('description').value = offer.description || '';
     document.getElementById('badge_text').value = offer.badge_text || '';
-    document.getElementById('badge_color').value = offer.badge_color || '#FFA500';
+    document.getElementById('badge_color').value = offer.badge_color || '#0d5c63';
     document.getElementById('start_date').value = offer.start_date || '';
     document.getElementById('end_date').value = offer.end_date || '';
     document.getElementById('sort_order').value = offer.sort_order;

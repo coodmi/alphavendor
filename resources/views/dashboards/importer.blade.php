@@ -469,7 +469,7 @@
     color: #2c3e50;
     margin: 0 0 15px 0;
     font-weight: 600;
-    border-bottom: 3px solid #FF8C00;
+    border-bottom: 3px solid #0a4a50;
     padding-bottom: 8px;
 }
 

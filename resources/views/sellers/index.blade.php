@@ -23,7 +23,7 @@
     }
     .spinner {
         border: 3px solid #f3f3f3;
-        border-top: 3px solid #FFA500;
+        border-top: 3px solid #0d5c63;
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -74,7 +74,7 @@
                 </div>
 
                 <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                    <h3 style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #FFA500;">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #0d5c63;">
                         <i class="fas fa-filter" style="margin-right: 8px;"></i>Filters
                     </h3>
 
@@ -82,21 +82,21 @@
                         <!-- Search Bar -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-search" style="margin-right: 6px; color: #FFA500;"></i>Search Seller
+                                <i class="fas fa-search" style="margin-right: 6px; color: #0d5c63;"></i>Search Seller
                             </label>
                             <input type="text"
                                    name="search"
                                    value="{{ request('search') }}"
                                    placeholder="Search by name..."
                                    style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: all 0.3s;"
-                                   onfocus="this.style.borderColor='#FFA500'"
+                                   onfocus="this.style.borderColor='#0d5c63'"
                                    onblur="this.style.borderColor='#ddd'">
                         </div>
 
                         <!-- Seller Type Filter -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-store" style="margin-right: 6px; color: #FFA500;"></i>Seller Type
+                                <i class="fas fa-store" style="margin-right: 6px; color: #0d5c63;"></i>Seller Type
                             </label>
                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                 <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border-radius: 6px; transition: background 0.3s;"
@@ -146,11 +146,11 @@
                         @if(isset($locations) && $locations->count() > 0)
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-map-marker-alt" style="margin-right: 6px; color: #FFA500;"></i>Location
+                                <i class="fas fa-map-marker-alt" style="margin-right: 6px; color: #0d5c63;"></i>Location
                             </label>
                             <select name="location"
                                     style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: all 0.3s; cursor: pointer;"
-                                    onfocus="this.style.borderColor='#FFA500'"
+                                    onfocus="this.style.borderColor='#0d5c63'"
                                     onblur="this.style.borderColor='#ddd'">
                                 <option value="">All Locations</option>
                                 @foreach($locations as $location)
@@ -165,7 +165,7 @@
                         <!-- Minimum Rating Filter -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-star" style="margin-right: 6px; color: #FFA500;"></i>Minimum Rating
+                                <i class="fas fa-star" style="margin-right: 6px; color: #0d5c63;"></i>Minimum Rating
                             </label>
                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                 <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border-radius: 6px; transition: background 0.3s;"
@@ -220,11 +220,11 @@
                         <!-- Minimum Products Filter -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-boxes" style="margin-right: 6px; color: #FFA500;"></i>Minimum Products
+                                <i class="fas fa-boxes" style="margin-right: 6px; color: #0d5c63;"></i>Minimum Products
                             </label>
                             <select name="min_products"
                                     style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: all 0.3s; cursor: pointer;"
-                                    onfocus="this.style.borderColor='#FFA500'"
+                                    onfocus="this.style.borderColor='#0d5c63'"
                                     onblur="this.style.borderColor='#ddd'">
                                 <option value="">Any Amount</option>
                                 <option value="10" {{ request('min_products') === '10' ? 'selected' : '' }}>10+ Products</option>
@@ -237,11 +237,11 @@
                         <!-- Sort By -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-sort" style="margin-right: 6px; color: #FFA500;"></i>Sort By
+                                <i class="fas fa-sort" style="margin-right: 6px; color: #0d5c63;"></i>Sort By
                             </label>
                             <select name="sort"
                                     style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: all 0.3s; cursor: pointer;"
-                                    onfocus="this.style.borderColor='#FFA500'"
+                                    onfocus="this.style.borderColor='#0d5c63'"
                                     onblur="this.style.borderColor='#ddd'">
                                 <option value="latest" {{ request('sort') === 'latest' || !request()->has('sort') ? 'selected' : '' }}>Latest First</option>
                                 <option value="name" {{ request('sort') === 'name' ? 'selected' : '' }}>Name (A-Z)</option>
@@ -254,9 +254,9 @@
                         <!-- Filter Buttons -->
                         <div style="display: flex; flex-direction: column; gap: 10px;">
                             <button type="submit"
-                                    style="width: 100%; padding: 12px; background: #FFA500; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px;"
+                                    style="width: 100%; padding: 12px; background: #0d5c63; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px;"
                                     onmouseover="this.style.background='#e69500'"
-                                    onmouseout="this.style.background='#FFA500'">
+                                    onmouseout="this.style.background='#0d5c63'">
                                 <i class="fas fa-search" style="margin-right: 8px;"></i>Apply Filters
                             </button>
                             <a href="{{ route('sellers.index') }}"
@@ -343,12 +343,12 @@
                                         $vendorRating = $seller->getVendorRating();
                                     @endphp
                                     @if($vendorRating > 0)
-                                        <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
+                                        <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #0d5c63 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
                                             <i class="fas fa-star"></i>
                                             <span>{{ number_format($vendorRating, 1) }}</span>
                                         </div>
                                     @else
-                                        <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
+                                        <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #0d5c63 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
                                             <i class="fas fa-star"></i>
                                             <span>5.0</span>
                                         </div>
@@ -391,7 +391,7 @@
                                     <!-- Visit Store Button -->
                                     <a href="{{ route('sellers.products', $seller->id) }}"
                                         class="visit-store-btn"
-                                        style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); color: white; text-align: center; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,165,0,0.3); letter-spacing: 0.3px;">
+                                        style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%); color: white; text-align: center; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,165,0,0.3); letter-spacing: 0.3px;">
                                         <i class="fas fa-store"></i>
                                         <span>Visit Store</span>
                                         <i class="fas fa-arrow-right" style="font-size: 13px;"></i>
@@ -413,7 +413,7 @@
                         <h3 style="font-size: 24px; color: #333; margin-bottom: 10px;">No Sellers Found</h3>
                         <p style="color: #666; margin-bottom: 20px;">Try adjusting your filters or search criteria</p>
                         <a href="{{ route('sellers.index') }}"
-                           style="display: inline-block; padding: 12px 24px; background: #FFA500; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                           style="display: inline-block; padding: 12px 24px; background: #0d5c63; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">
                             Clear All Filters
                         </a>
                     </div>
@@ -439,7 +439,7 @@
     }
     .spinner {
         border: 3px solid #f3f3f3;
-        border-top: 3px solid #FFA500;
+        border-top: 3px solid #0d5c63;
         border-radius: 50%;
         width: 40px;
         height: 40px;

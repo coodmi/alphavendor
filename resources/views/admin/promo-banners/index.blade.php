@@ -154,8 +154,8 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
                     <div class="flex items-center gap-2">
-                        <input type="color" name="background_color" id="bannerBgColor" value="#FFA500" class="w-12 h-10 rounded border border-gray-300 cursor-pointer">
-                        <input type="text" id="bannerBgColorText" value="#FFA500" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" onchange="document.getElementById('bannerBgColor').value = this.value">
+                        <input type="color" name="background_color" id="bannerBgColor" value="#0d5c63" class="w-12 h-10 rounded border border-gray-300 cursor-pointer">
+                        <input type="text" id="bannerBgColorText" value="#0d5c63" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" onchange="document.getElementById('bannerBgColor').value = this.value">
                     </div>
                 </div>
                 <div>
@@ -228,8 +228,8 @@ function openAddModal() {
     document.getElementById('formMethod').value = 'POST';
     document.getElementById('bannerForm').reset();
     document.getElementById('bannerStatus').checked = true;
-    document.getElementById('bannerBgColor').value = '#FFA500';
-    document.getElementById('bannerBgColorText').value = '#FFA500';
+    document.getElementById('bannerBgColor').value = '#0d5c63';
+    document.getElementById('bannerBgColorText').value = '#0d5c63';
     document.getElementById('bannerTextColor').value = '#FFFFFF';
     document.getElementById('bannerTextColorText').value = '#FFFFFF';
     document.getElementById('imagePreview').classList.add('hidden');
@@ -248,8 +248,8 @@ function editBanner(banner) {
     document.getElementById('bannerDescription').value = banner.description || '';
     document.getElementById('bannerButtonText').value = banner.button_text || '';
     document.getElementById('bannerButtonLink').value = banner.button_link || '';
-    document.getElementById('bannerBgColor').value = banner.background_color || '#FFA500';
-    document.getElementById('bannerBgColorText').value = banner.background_color || '#FFA500';
+    document.getElementById('bannerBgColor').value = banner.background_color || '#0d5c63';
+    document.getElementById('bannerBgColorText').value = banner.background_color || '#0d5c63';
     document.getElementById('bannerTextColor').value = banner.text_color || '#FFFFFF';
     document.getElementById('bannerTextColorText').value = banner.text_color || '#FFFFFF';
     document.getElementById('bannerSortOrder').value = banner.sort_order;

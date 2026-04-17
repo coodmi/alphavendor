@@ -265,7 +265,7 @@
 }
 
 .btn-primary {
-    background: #FFA500;
+    background: #0d5c63;
     color: white;
 }
 
@@ -280,7 +280,7 @@
 }
 
 .auth-link a {
-    color: #FFA500;
+    color: #0d5c63;
     text-decoration: none;
 }
 
@@ -314,7 +314,7 @@
 .custom-select {
     width: 100%;
     padding: 12px 16px;
-    border: 1.5px solid #FFA500;
+    border: 1.5px solid #0d5c63;
     border-radius: 6px;
     background: #fff;
     font-size: 16px;

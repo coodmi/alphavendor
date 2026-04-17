@@ -56,7 +56,7 @@
     .otp-icon {
         width: 80px;
         height: 80px;
-        background: linear-gradient(135deg, #FFA500, #FF8C00);
+        background: linear-gradient(135deg, #0d5c63, #0a4a50);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -112,7 +112,7 @@
     }
 
     .mobile-display i {
-        color: #FFA500;
+        color: #0d5c63;
         font-size: 1.2rem;
     }
 
@@ -142,7 +142,7 @@
     }
 
     .otp-input:focus {
-        border-color: #FFA500;
+        border-color: #0d5c63;
         box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
         transform: scale(1.05);
     }
@@ -167,7 +167,7 @@
 
     .verify-button {
         width: 100%;
-        background: linear-gradient(135deg, #FFA500, #FF8C00);
+        background: linear-gradient(135deg, #0d5c63, #0a4a50);
         color: white;
         border: none;
         border-radius: 12px;
@@ -230,7 +230,7 @@
     .resend-button {
         background: none;
         border: none;
-        color: #FFA500;
+        color: #0d5c63;
         font-weight: 600;
         cursor: pointer;
         text-decoration: underline;
@@ -239,7 +239,7 @@
     }
 
     .resend-button:hover:not(:disabled) {
-        color: #FF8C00;
+        color: #0a4a50;
     }
 
     .resend-button:disabled {
@@ -249,7 +249,7 @@
     }
 
     .countdown {
-        color: #FFA500;
+        color: #0d5c63;
         font-weight: 600;
     }
 
@@ -283,7 +283,7 @@
     }
 
     .back-link:hover {
-        color: #FFA500;
+        color: #0d5c63;
     }
 
     /* Responsive Design */

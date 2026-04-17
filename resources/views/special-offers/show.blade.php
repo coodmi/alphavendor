@@ -19,7 +19,7 @@
                         <p class="text-lg opacity-90 mb-4">{{ $offer->description }}</p>
                     @endif
                     @if($offer->badge_text)
-                        <span class="inline-block px-4 py-2 rounded-full text-sm font-bold" style="background-color: {{ $offer->badge_color ?? '#FFA500' }};">
+                        <span class="inline-block px-4 py-2 rounded-full text-sm font-bold" style="background-color: {{ $offer->badge_color ?? '#0d5c63' }};">
                             {{ $offer->badge_text }}
                         </span>
                     @endif
@@ -68,7 +68,7 @@
                                         </span>
                                     @endif
                                     @if($offer->badge_text)
-                                        <span class="px-3 py-1 rounded-full text-xs font-bold shadow-lg" style="background-color: {{ $offer->badge_color ?? '#FFA500' }}; color: white;">
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold shadow-lg" style="background-color: {{ $offer->badge_color ?? '#0d5c63' }}; color: white;">
                                             {{ $offer->badge_text }}
                                         </span>
                                     @endif

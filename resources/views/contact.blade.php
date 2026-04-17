@@ -87,11 +87,11 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative bg-[#FFA500] text-white py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-    <div class="absolute inset-0 bg-[#FF8C00] opacity-30"></div>
+<section class="relative bg-[#0d5c63] text-white py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
+    <div class="absolute inset-0 bg-[#0a4a50] opacity-30"></div>
     <div class="absolute inset-0">
         <div class="absolute top-10 left-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-white rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float"></div>
-        <div class="absolute bottom-10 right-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-[#FFB347] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-10 right-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-[#2e9099] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 2s;"></div>
     </div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center">
@@ -106,7 +106,7 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-16">
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-100">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-map-marker-alt text-white text-xl sm:text-2xl"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['address_title'] ?? 'Visit Us' }}</h3>
@@ -117,7 +117,7 @@
                 </p>
             </div>
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-200">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-phone text-white text-xl sm:text-2xl"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['phone_title'] ?? 'Call Us' }}</h3>
@@ -128,7 +128,7 @@
                 </p>
             </div>
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-300">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-envelope text-white text-xl sm:text-2xl"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['email_title'] ?? 'Email Us' }}</h3>
@@ -139,7 +139,7 @@
                 </p>
             </div>
             <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-400">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-clock text-white text-xl sm:text-2xl"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{{ $content['hours_title'] ?? 'Working Hours' }}</h3>
@@ -165,21 +165,21 @@
                         <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                                <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all text-sm sm:text-base" placeholder="John Doe">
+                                <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d5c63] focus:border-transparent transition-all text-sm sm:text-base" placeholder="John Doe">
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all text-sm sm:text-base" placeholder="john@example.com">
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d5c63] focus:border-transparent transition-all text-sm sm:text-base" placeholder="john@example.com">
                             </div>
                         </div>
                         <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
                                 <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all text-sm sm:text-base" placeholder="+1 (555) 123-4567">
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d5c63] focus:border-transparent transition-all text-sm sm:text-base" placeholder="+1 (555) 123-4567">
                             </div>
                             <div>
                                 <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
-                                <select id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all text-sm sm:text-base">
+                                <select id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d5c63] focus:border-transparent transition-all text-sm sm:text-base">
                                     <option value="">Select a subject</option>
                                     <option value="general">General Inquiry</option>
                                     <option value="support">Technical Support</option>
@@ -191,9 +191,9 @@
                         </div>
                         <div>
                             <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Message</label>
-                            <textarea id="message" name="message" rows="6" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all resize-none text-sm sm:text-base" placeholder="Tell us how we can help you..."></textarea>
+                            <textarea id="message" name="message" rows="6" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d5c63] focus:border-transparent transition-all resize-none text-sm sm:text-base" placeholder="Tell us how we can help you..."></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-[#FFA500] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <button type="submit" class="w-full bg-[#0d5c63] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-[#0a4a50] transition-all duration-300 transform hover:scale-105 shadow-lg">
                             <i class="fas fa-paper-plane mr-2"></i>Send Message
                         </button>
                     </form>
@@ -216,27 +216,27 @@
                     <p class="text-gray-600 mb-6 text-sm sm:text-base">{{ $content['social_description'] ?? 'Stay connected with us on social media for updates, news, and special offers.' }}</p>
                     <div class="flex flex-wrap gap-3 sm:gap-4">
                         @if(!empty($content['social_facebook']))
-                        <a href="{{ $content['social_facebook'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <a href="{{ $content['social_facebook'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#0d5c63] text-white rounded-full hover:bg-[#0a4a50] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-facebook-f text-lg sm:text-xl"></i>
                         </a>
                         @endif
                         @if(!empty($content['social_twitter']))
-                        <a href="{{ $content['social_twitter'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <a href="{{ $content['social_twitter'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#0d5c63] text-white rounded-full hover:bg-[#0a4a50] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-twitter text-lg sm:text-xl"></i>
                         </a>
                         @endif
                         @if(!empty($content['social_instagram']))
-                        <a href="{{ $content['social_instagram'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <a href="{{ $content['social_instagram'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#0d5c63] text-white rounded-full hover:bg-[#0a4a50] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-instagram text-lg sm:text-xl"></i>
                         </a>
                         @endif
                         @if(!empty($content['social_linkedin']))
-                        <a href="{{ $content['social_linkedin'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <a href="{{ $content['social_linkedin'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#0d5c63] text-white rounded-full hover:bg-[#0a4a50] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-linkedin-in text-lg sm:text-xl"></i>
                         </a>
                         @endif
                         @if(!empty($content['social_youtube']))
-                        <a href="{{ $content['social_youtube'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#FFA500] text-white rounded-full hover:bg-[#FF8C00] transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <a href="{{ $content['social_youtube'] }}" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#0d5c63] text-white rounded-full hover:bg-[#0a4a50] transition-all duration-300 transform hover:scale-110 shadow-lg">
                             <i class="fab fa-youtube text-lg sm:text-xl"></i>
                         </a>
                         @endif
@@ -276,19 +276,19 @@
 </section>
 
 <!-- Call to Action -->
-<section class="py-16 sm:py-20 bg-[#FFA500] text-white">
+<section class="py-16 sm:py-20 bg-[#0d5c63] text-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="max-w-3xl mx-auto animate-fadeInUp">
             <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">{{ $content['cta_title'] ?? 'Still Have Questions?' }}</h2>
             <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 px-4">{{ $content['cta_subtitle'] ?? 'Our support team is here to help you. Reach out anytime!' }}</p>
             <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
                 @if(!empty($content['cta_email_text']) && !empty($content['cta_email_link']))
-                <a href="mailto:{{ $content['cta_email_link'] }}" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <a href="mailto:{{ $content['cta_email_link'] }}" class="bg-white text-[#0d5c63] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
                     <i class="fas fa-envelope mr-2"></i>{{ $content['cta_email_text'] }}
                 </a>
                 @endif
                 @if(!empty($content['cta_phone_text']) && !empty($content['cta_phone_link']))
-                <a href="tel:{{ $content['cta_phone_link'] }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">
+                <a href="tel:{{ $content['cta_phone_link'] }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#0d5c63] transition-all duration-300 transform hover:scale-105">
                     <i class="fas fa-phone mr-2"></i>{{ $content['cta_phone_text'] }}
                 </a>
                 @endif

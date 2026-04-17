@@ -12,7 +12,7 @@
                 <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <!-- Header -->
                     <tr>
-                        <td style="background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); padding: 40px 30px; text-align: center;">
+                        <td style="background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%); padding: 40px 30px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px;">Reset Your Password</h1>
                         </td>
                     </tr>
@@ -31,7 +31,7 @@
                             <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ $resetLink }}" style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px;">
+                                        <a href="{{ $resetLink }}" style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px;">
                                             Reset Password
                                         </a>
                                     </td>
@@ -50,7 +50,7 @@
                                 <p style="margin: 0 0 10px; color: #999; font-size: 12px;">
                                     If you're having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:
                                 </p>
-                                <p style="margin: 0; color: #FFA500; font-size: 12px; word-break: break-all;">
+                                <p style="margin: 0; color: #0d5c63; font-size: 12px; word-break: break-all;">
                                     {{ $resetLink }}
                                 </p>
                             </div>

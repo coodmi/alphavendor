@@ -87,7 +87,7 @@
 
                 <a href="{{ route('sellers.index') }}"
                    style="padding: 12px 24px; background: white; color: #666; border: 2px solid #ddd; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;"
-                   onmouseover="this.style.borderColor='#FFA500'; this.style.color='#FFA500'"
+                   onmouseover="this.style.borderColor='#0d5c63'; this.style.color='#0d5c63'"
                    onmouseout="this.style.borderColor='#ddd'; this.style.color='#666'">
                     <i class="fas fa-arrow-left"></i>
                     Back to Sellers
@@ -99,7 +99,7 @@
             <!-- Left Sidebar - Filters -->
             <div class="filters-sidebar" style="height: fit-content;">
                 <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                    <h3 style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #FFA500;">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #0d5c63;">
                         <i class="fas fa-filter" style="margin-right: 8px;"></i>Filters
                     </h3>
 
@@ -107,7 +107,7 @@
                         <!-- Search -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-search" style="margin-right: 6px; color: #FFA500;"></i>Search Product
+                                <i class="fas fa-search" style="margin-right: 6px; color: #0d5c63;"></i>Search Product
                             </label>
                             <input type="text"
                                    name="search"
@@ -119,7 +119,7 @@
                         <!-- Category Filter -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-th-large" style="margin-right: 6px; color: #FFA500;"></i>Category
+                                <i class="fas fa-th-large" style="margin-right: 6px; color: #0d5c63;"></i>Category
                             </label>
                             <select name="category"
                                     style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
@@ -135,7 +135,7 @@
                         <!-- Price Range -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-dollar-sign" style="margin-right: 6px; color: #FFA500;"></i>Price Range
+                                <i class="fas fa-dollar-sign" style="margin-right: 6px; color: #0d5c63;"></i>Price Range
                             </label>
                             <div style="display: flex; gap: 10px; align-items: center;">
                                 <input type="number"
@@ -155,7 +155,7 @@
                         <!-- Sort By -->
                         <div style="margin-bottom: 25px;">
                             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px;">
-                                <i class="fas fa-sort" style="margin-right: 6px; color: #FFA500;"></i>Sort By
+                                <i class="fas fa-sort" style="margin-right: 6px; color: #0d5c63;"></i>Sort By
                             </label>
                             <select name="sort"
                                     style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
@@ -169,7 +169,7 @@
                         <!-- Filter Buttons -->
                         <div style="display: flex; flex-direction: column; gap: 10px;">
                             <button type="submit"
-                                    style="width: 100%; padding: 12px; background: #FFA500; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px;">
+                                    style="width: 100%; padding: 12px; background: #0d5c63; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px;">
                                 <i class="fas fa-search" style="margin-right: 8px;"></i>Apply Filters
                             </button>
                             <a href="{{ route('sellers.products', $seller->id) }}"
@@ -221,7 +221,7 @@
                                     </h4>
 
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                        <span style="font-size: 20px; font-weight: 700; color: #FFA500;">
+                                        <span style="font-size: 20px; font-weight: 700; color: #0d5c63;">
                                             ${{ number_format($price, 2) }}
                                         </span>
                                         @if($minOrder > 1)
@@ -232,9 +232,9 @@
                                     </div>
 
                                     <a href="{{ route('product.show', $product->id) }}"
-                                       style="display: block; width: 100%; padding: 10px; background: #FFA500; color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;"
+                                       style="display: block; width: 100%; padding: 10px; background: #0d5c63; color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;"
                                        onmouseover="this.style.background='#e69500'"
-                                       onmouseout="this.style.background='#FFA500'">
+                                       onmouseout="this.style.background='#0d5c63'">
                                         View Details
                                     </a>
                                 </div>
@@ -254,7 +254,7 @@
                         <h3 style="font-size: 24px; color: #333; margin-bottom: 10px;">No Products Found</h3>
                         <p style="color: #666; margin-bottom: 20px;">This seller hasn't listed any products yet or no products match your filters</p>
                         <a href="{{ route('sellers.products', $seller->id) }}"
-                           style="display: inline-block; padding: 12px 24px; background: #FFA500; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                           style="display: inline-block; padding: 12px 24px; background: #0d5c63; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">
                             Clear Filters
                         </a>
                     </div>

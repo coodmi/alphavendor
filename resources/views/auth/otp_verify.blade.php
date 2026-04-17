@@ -7,7 +7,7 @@
     /* Professional OTP Verification Styles */
     .otp-verification-container {
         min-height: calc(100vh - 200px);
-        background: linear-gradient(135deg, #FFA500 0%, #FFD700 50%, #FFC107 100%);
+        background: linear-gradient(135deg, #0d5c63 0%, #FFD700 50%, #FFC107 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -56,7 +56,7 @@
     .otp-icon {
         width: 80px;
         height: 80px;
-        background: linear-gradient(135deg, #FF8C00, #FFA500);
+        background: linear-gradient(135deg, #0a4a50, #0d5c63);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -114,7 +114,7 @@
     }
 
     .mobile-display i {
-        color: #FF8C00;
+        color: #0a4a50;
         font-size: 1.2rem;
     }
 
@@ -145,7 +145,7 @@
     }
 
     .otp-input:focus {
-        border-color: #FF8C00;
+        border-color: #0a4a50;
         box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
         transform: scale(1.05);
     }
@@ -171,7 +171,7 @@
 
     .verify-button {
         width: 100%;
-        background: linear-gradient(135deg, #FF8C00, #FFA500);
+        background: linear-gradient(135deg, #0a4a50, #0d5c63);
         color: white;
         border: none;
         border-radius: 12px;
@@ -236,7 +236,7 @@
     .resend-button {
         background: none;
         border: none;
-        color: #FF8C00;
+        color: #0a4a50;
         font-weight: 600;
         cursor: pointer;
         text-decoration: underline;
@@ -255,7 +255,7 @@
     }
 
     .countdown {
-        color: #FF8C00;
+        color: #0a4a50;
         font-weight: 600;
     }
 
@@ -291,7 +291,7 @@
     }
 
     .back-link:hover {
-        color: #FF8C00;
+        color: #0a4a50;
     }
 
     /* Responsive Design */

@@ -88,7 +88,7 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #FFA500;
+    border-color: #0d5c63;
 }
 
 .btn {
@@ -103,7 +103,7 @@
 }
 
 .btn-primary {
-    background: #FFA500;
+    background: #0d5c63;
     color: white;
 }
 

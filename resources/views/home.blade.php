@@ -584,7 +584,7 @@
                                                 <h3 class="text-white text-lg font-bold">{{ $offer->name }}</h3>
                                                 @if($offer->badge_text)
                                                     <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold text-white" 
-                                                        style="background-color: {{ $offer->badge_color ?? '#FFA500' }}">
+                                                        style="background-color: {{ $offer->badge_color ?? '#0d5c63' }}">
                                                         {{ $offer->badge_text }}
                                                     </span>
                                                 @endif
@@ -606,7 +606,7 @@
                         @foreach($promoBanners as $i => $promoBanner)
                         <div class="promo-slide absolute inset-0 transition-opacity duration-700 ease-in-out {{ $i === 0 ? 'opacity-100 relative' : 'opacity-0 pointer-events-none' }}"
                             data-index="{{ $i }}"
-                            style="background-color: {{ $promoBanner->background_color ?? '#FFA500' }}; padding: 50px 0;">
+                            style="background-color: {{ $promoBanner->background_color ?? '#0d5c63' }}; padding: 50px 0;">
                             <div class="container mx-auto px-4">
                                 <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
                                     <div class="w-full md:w-1/2 text-center md:text-left">
@@ -629,7 +629,7 @@
                                         @if($promoBanner->button_text && $promoBanner->button_link)
                                             <a href="{{ $promoBanner->button_link }}"
                                                 class="inline-flex items-center gap-2 px-8 py-3 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                                                style="background-color: #fff; color: {{ $promoBanner->background_color ?? '#FFA500' }};">
+                                                style="background-color: #fff; color: {{ $promoBanner->background_color ?? '#0d5c63' }};">
                                                 {{ $promoBanner->button_text }}
                                                 <i class="fas fa-arrow-right"></i>
                                             </a>
@@ -1008,7 +1008,7 @@
                         <h2 style="font-size: 42px; font-weight: 800; color: #1a1a1a; margin: 0 0 15px 0; letter-spacing: -0.5px;">Featured Sellers</h2>
                         <p style="font-size: 18px; color: #666; margin-bottom: 25px;">Discover trusted sellers offering quality products</p>
                         <a href="{{ route('sellers.index') }}" class="view-all-btn"
-                            style="display: inline-flex; align-items: center; gap: 8px; color: #FFA500; font-weight: 600; text-decoration: none; font-size: 16px; padding: 12px 28px; border: 2px solid #FFA500; border-radius: 30px; transition: all 0.3s;">
+                            style="display: inline-flex; align-items: center; gap: 8px; color: #0d5c63; font-weight: 600; text-decoration: none; font-size: 16px; padding: 12px 28px; border: 2px solid #0d5c63; border-radius: 30px; transition: all 0.3s;">
                             View All Sellers
                             <i class="fas fa-arrow-right" style="transition: transform 0.3s;"></i>
                         </a>
@@ -1083,12 +1083,12 @@
 
                                         <!-- Rating Badge -->
                                         @if($vendor->role === 'exporter' && $vendor->exporter_rating)
-                                            <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
+                                            <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #0d5c63 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
                                                 <i class="fas fa-star"></i>
                                                 <span>{{ number_format($vendor->exporter_rating, 1) }}</span>
                                             </div>
                                         @else
-                                            <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
+                                            <div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #FFD700 0%, #0d5c63 100%); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
                                                 <i class="fas fa-star"></i>
                                                 <span>5.0</span>
                                             </div>
@@ -1131,7 +1131,7 @@
                                         <!-- Visit Store Button -->
                                         <a href="{{ route('sellers.products', $vendor->id) }}"
                                             class="visit-store-btn"
-                                            style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); color: white; text-align: center; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,165,0,0.3); letter-spacing: 0.3px;">
+                                            style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%); color: white; text-align: center; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,165,0,0.3); letter-spacing: 0.3px;">
                                             <i class="fas fa-store"></i>
                                             <span>Visit Store</span>
                                             <i class="fas fa-arrow-right" style="font-size: 13px;"></i>
@@ -1170,7 +1170,7 @@
                 .vendor-card:hover {
                     transform: translateY(-8px);
                     box-shadow: 0 12px 40px rgba(0,0,0,0.15) !important;
-                    border-color: #FFA500 !important;
+                    border-color: #0d5c63 !important;
                 }
 
                 .visit-store-btn:hover {
@@ -1183,7 +1183,7 @@
                 }
 
                 .view-all-btn:hover {
-                    background: #FFA500;
+                    background: #0d5c63;
                     color: white;
                     transform: translateY(-2px);
                     box-shadow: 0 4px 15px rgba(255,165,0,0.3);
@@ -1346,7 +1346,7 @@ function updateCartBadge(count) {
             const cartLink = document.querySelector('.action-link .fas.fa-shopping-bag')?.parentElement;
             if (cartLink) {
                 const newBadge = document.createElement('span');
-                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
+                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #0d5c63; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
                 newBadge.textContent = count;
                 cartLink.appendChild(newBadge);
             }

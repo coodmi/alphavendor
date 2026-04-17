@@ -87,11 +87,11 @@
 
 @section('content')
 <!-- Hero Section -->
-    <section class="relative bg-[#FFA500] text-white py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-        <div class="absolute inset-0 bg-[#FF8C00] opacity-30"></div>
+    <section class="relative bg-[#0d5c63] text-white py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
+        <div class="absolute inset-0 bg-[#0a4a50] opacity-30"></div>
         <div class="absolute inset-0">
             <div class="absolute top-10 left-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-white rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float"></div>
-            <div class="absolute bottom-10 right-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-[#FFB347] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 2s;"></div>
+            <div class="absolute bottom-10 right-10 w-48 sm:w-64 md:w-72 h-48 sm:h-64 md:h-72 bg-[#2e9099] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 2s;"></div>
         </div>
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
@@ -99,10 +99,10 @@
                 <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 animate-fadeInUp delay-100 max-w-3xl mx-auto px-4">{{ $content['hero_subtitle'] ?? 'Your trusted partner in global commerce, connecting businesses worldwide' }}</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 animate-fadeInUp delay-200 px-4">
                     @if(!empty($content['hero_cta_primary_text']))
-                    <a href="{{ $content['hero_cta_primary_link'] ?? route('shop') }}" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">{{ $content['hero_cta_primary_text'] }}</a>
+                    <a href="{{ $content['hero_cta_primary_link'] ?? route('shop') }}" class="bg-white text-[#0d5c63] px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">{{ $content['hero_cta_primary_text'] }}</a>
                     @endif
                     @if(!empty($content['hero_cta_secondary_text']))
-                    <a href="{{ $content['hero_cta_secondary_link'] ?? '#contact' }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">{{ $content['hero_cta_secondary_text'] }}</a>
+                    <a href="{{ $content['hero_cta_secondary_link'] ?? '#contact' }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#0d5c63] transition-all duration-300 transform hover:scale-105">{{ $content['hero_cta_secondary_text'] }}</a>
                     @endif
                 </div>
             </div>
@@ -126,7 +126,7 @@
                     </p>
                 </div>
                 <div class="animate-fadeInRight mt-8 md:mt-0">
-                    <div class="bg-gradient-to-br from-[#FFA500] to-[#FFB347] p-8 rounded-2xl shadow-lg h-full flex items-center justify-center">
+                    <div class="bg-gradient-to-br from-[#0d5c63] to-[#2e9099] p-8 rounded-2xl shadow-lg h-full flex items-center justify-center">
                         <img src="{{ asset('About logo.png') }}" alt="Our Story" class="w-full h-auto rounded-xl">
                     </div>
                 </div>
@@ -135,7 +135,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-12 sm:py-16 bg-[#FFA500] text-white">
+    <section class="py-12 sm:py-16 bg-[#0d5c63] text-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">
                 <div class="animate-scaleIn delay-100">
@@ -163,7 +163,7 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
                 <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 animate-fadeInLeft">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-[#FFA500] rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-[#0d5c63] rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-bullseye text-white text-2xl sm:text-3xl"></i>
                     </div>
                     <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['mission_title'] ?? 'Our Mission' }}</h3>
@@ -172,7 +172,7 @@
                     </p>
                 </div>
                 <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 animate-fadeInRight">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-[#FFA500] rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-[#0d5c63] rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-eye text-white text-2xl sm:text-3xl"></i>
                     </div>
                     <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['vision_title'] ?? 'Our Vision' }}</h3>
@@ -185,19 +185,19 @@
     </section>
 
     <!-- Call to Action Section -->
-    <section id="contact" class="py-16 sm:py-20 bg-[#FFA500] text-white">
+    <section id="contact" class="py-16 sm:py-20 bg-[#0d5c63] text-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="max-w-3xl mx-auto animate-fadeInUp">
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">{{ $content['cta_title'] ?? 'Ready to Start Your Journey?' }}</h2>
                 <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 px-4">{{ $content['cta_subtitle'] ?? 'Join thousands of successful vendors and buyers on AlphaVendor today' }}</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
                     @if(!empty($content['cta_primary_text']))
-                    <a href="{{ $content['cta_primary_link'] ?? route('register') }}" class="bg-white text-[#FFA500] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <a href="{{ $content['cta_primary_link'] ?? route('register') }}" class="bg-white text-[#0d5c63] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
                         {{ $content['cta_primary_text'] }}
                     </a>
                     @endif
                     @if(!empty($content['cta_secondary_text']))
-                    <a href="{{ $content['cta_secondary_link'] ?? route('shop') }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#FFA500] transition-all duration-300 transform hover:scale-105">
+                    <a href="{{ $content['cta_secondary_link'] ?? route('shop') }}" class="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-white hover:text-[#0d5c63] transition-all duration-300 transform hover:scale-105">
                         {{ $content['cta_secondary_text'] }}
                     </a>
                     @endif

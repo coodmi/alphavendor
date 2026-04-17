@@ -65,7 +65,7 @@
                             $cartCount = array_sum(array_column($cart, 'quantity'));
                         @endphp
                         @if($cartCount > 0)
-                            <span style="position: absolute; top: -8px; right: -8px; background: #FFA500; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">{{ $cartCount }}</span>
+                            <span style="position: absolute; top: -8px; right: -8px; background: #0d5c63; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">{{ $cartCount }}</span>
                         @endif
                     </a>
                     @auth
@@ -177,7 +177,7 @@
                     $cartCount = array_sum(array_column($cart, 'quantity'));
                 @endphp
                 @if($cartCount > 0)
-                    <span style="margin-left: auto; background: #FFA500; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">{{ $cartCount }}</span>
+                    <span style="margin-left: auto; background: #0d5c63; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">{{ $cartCount }}</span>
                 @endif
             </a></li>
             <li style="border-bottom: 2px solid rgba(0,0,0,0.05); margin-bottom: 12px;"></li>
@@ -356,7 +356,7 @@
             </div>
             <div class="footer-bottom">
                 <p>{{ $siteSettings->footer_copyright ?: '© ' . date('Y') . ' ' . $siteSettings->site_name . '. All rights reserved.' }}</p>
-                <p>Design & Developed By <a href="https://alphainno.com" target="_blank" rel="noopener noreferrer" style="color: #FFA500; text-decoration: none;">Alphainno</a></p>
+                <p>Design & Developed By <a href="https://alphainno.com" target="_blank" rel="noopener noreferrer" style="color: #0d5c63; text-decoration: none;">Alphainno</a></p>
             </div>
         </div>
     </footer>
@@ -400,13 +400,13 @@
 
     <style>
         #chatbot-container { position:fixed!important; bottom:20px!important; right:20px!important; z-index:999999!important; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
-        .chat-toggle { width:60px!important; height:60px!important; border-radius:50%!important; background:linear-gradient(135deg,#FFA500,#FF8C00)!important; border:none!important; color:white!important; font-size:24px!important; cursor:pointer!important; box-shadow:0 4px 12px rgba(255,165,0,.4)!important; transition:all .3s!important; position:relative!important; display:flex!important; align-items:center!important; justify-content:center!important; }
+        .chat-toggle { width:60px!important; height:60px!important; border-radius:50%!important; background:linear-gradient(135deg,#0d5c63,#0a4a50)!important; border:none!important; color:white!important; font-size:24px!important; cursor:pointer!important; box-shadow:0 4px 12px rgba(255,165,0,.4)!important; transition:all .3s!important; position:relative!important; display:flex!important; align-items:center!important; justify-content:center!important; }
         .chat-toggle:hover { transform:scale(1.1); }
         .chat-badge { position:absolute; top:-5px; right:-5px; background:#ff4444; color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold; border:2px solid white; }
         .chat-window { position:absolute; bottom:80px; right:0; width:380px; height:560px; background:white; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,.15); display:none; flex-direction:column; overflow:hidden; animation:slideUp .3s ease; }
         .chat-window.active { display:flex; }
         @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        .chat-header { background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; }
+        .chat-header { background:linear-gradient(135deg,#0d5c63,#0a4a50); color:white; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; }
         .chat-header-info { display:flex; align-items:center; gap:12px; }
         .chat-header-info h4 { margin:0; font-size:15px; font-weight:700; }
         .chat-status { font-size:12px; opacity:.9; }
@@ -416,19 +416,19 @@
         .chat-message { display:flex; gap:10px; animation:fadeIn .3s ease; }
         .user-message { flex-direction:row-reverse; }
         @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-        .message-avatar { width:34px; height:34px; border-radius:50%; background:#FFA500; color:white; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; }
+        .message-avatar { width:34px; height:34px; border-radius:50%; background:#0d5c63; color:white; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; }
         .user-message .message-avatar { background:#6c757d; }
         .message-content p { background:white; padding:10px 14px; border-radius:12px; margin:0 0 3px; box-shadow:0 1px 2px rgba(0,0,0,.06); line-height:1.5; font-size:14px; }
-        .user-message .message-content p { background:#FFA500; color:white; }
+        .user-message .message-content p { background:#0d5c63; color:white; }
         .message-time { font-size:11px; color:#9ca3af; padding-left:4px; }
         .quick-replies { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
         .quick-reply-btn { background:white; border:1px solid #e0e0e0; padding:7px 13px; border-radius:20px; font-size:13px; cursor:pointer; transition:all .2s; }
-        .quick-reply-btn:hover { background:#FFA500; color:white; border-color:#FFA500; }
+        .quick-reply-btn:hover { background:#0d5c63; color:white; border-color:#0d5c63; }
         .chat-footer { padding:12px 16px; background:white; border-top:1px solid #e0e0e0; display:flex; gap:10px; }
         #chat-input { flex:1; padding:11px 16px; border:1px solid #e0e0e0; border-radius:24px; outline:none; font-size:14px; }
-        #chat-input:focus { border-color:#FFA500; }
-        .chat-send-btn { width:44px; height:44px; border-radius:50%; background:#FFA500; border:none; color:white; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; }
-        .chat-send-btn:hover { background:#FF8C00; transform:scale(1.05); }
+        #chat-input:focus { border-color:#0d5c63; }
+        .chat-send-btn { width:44px; height:44px; border-radius:50%; background:#0d5c63; border:none; color:white; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; }
+        .chat-send-btn:hover { background:#0a4a50; transform:scale(1.05); }
         .typing-indicator p { background:white!important; color:#9ca3af!important; font-style:italic; }
         @media(max-width:480px){ .chat-window{width:calc(100vw - 40px);height:calc(100vh - 120px);} }
     </style>

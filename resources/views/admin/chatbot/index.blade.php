@@ -193,7 +193,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Theme Color</label>
-                    <input type="color" name="chatbot_theme_color" value="{{ $settings['chatbot_theme_color'] ?? '#FFA500' }}"
+                    <input type="color" name="chatbot_theme_color" value="{{ $settings['chatbot_theme_color'] ?? '#0d5c63' }}"
                         class="h-10 w-20 border border-gray-300 rounded-lg cursor-pointer">
                 </div>
                 <button type="submit"
