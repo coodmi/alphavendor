@@ -90,7 +90,7 @@ body {
 }
 
 .action-link {
-    color: var(--text-color);
+    color: #ffffff;
     text-decoration: none;
     font-size: 20px;
     transition: transform 0.3s;
@@ -98,7 +98,7 @@ body {
 
 .action-link:hover {
     transform: scale(1.1);
-    color: var(--primary-color);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .user-menu {
@@ -107,14 +107,17 @@ body {
     align-items: flex-start;
     font-size: 14px;
     gap: 2px;
+    color: #ffffff;
 }
 
 .user-menu i {
     font-size: 20px;
+    color: #ffffff;
 }
 
 .user-menu span {
     font-weight: 600;
+    color: #ffffff;
 }
 
 .user-menu small {
