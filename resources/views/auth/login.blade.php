@@ -121,7 +121,7 @@
 }
 
 .btn-primary:hover {
-    background: #FFB833;
+    background: #0a4a52;
 }
 
 .auth-link {
