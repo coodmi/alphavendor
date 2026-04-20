@@ -29,7 +29,7 @@
 
 <!-- Statistics Cards -->
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="background: linear-gradient(135deg, #1a6b73 0%, #d97706 100%); color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
         <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">Pending Review</div>
         <div style="font-size: 32px; font-weight: 700;">{{ $stats['pending'] }}</div>
     </div>

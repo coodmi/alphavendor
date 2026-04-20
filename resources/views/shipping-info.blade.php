@@ -3,7 +3,7 @@
 @section('title', $page->title ?? 'Shipping Information')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
+<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-teal-50">
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-20">
         <div class="container mx-auto px-4">

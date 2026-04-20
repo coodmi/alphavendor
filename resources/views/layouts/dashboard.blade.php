@@ -754,7 +754,7 @@
                         const typeIcons = {
                             info: { icon: 'fa-info-circle', color: '#3b82f6' },
                             success: { icon: 'fa-check-circle', color: '#10b981' },
-                            warning: { icon: 'fa-exclamation-triangle', color: '#f59e0b' },
+                            warning: { icon: 'fa-exclamation-triangle', color: '#1a6b73' },
                             error: { icon: 'fa-times-circle', color: '#ef4444' }
                         };
                         const style = typeIcons[notif.type] || typeIcons.info;

@@ -11,7 +11,7 @@
 <!-- Verification Alert Banner -->
 @if(auth()->user()->needsVerification())
     @if(auth()->user()->verification_status === 'unverified')
-    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="background: linear-gradient(135deg, #1a6b73 0%, #d97706 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
         <div style="display: flex; align-items: center; gap: 16px;">
             <div style="font-size: 48px;">⚠️</div>
             <div style="flex: 1;">

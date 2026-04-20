@@ -391,7 +391,7 @@
                                                 <h4 style="font-weight: 600; color: #1f2937;">{{ $review->user->name }}</h4>
                                                 <div style="display: flex; gap: 2px;">
                                                     @for($i = 1; $i <= 5; $i++)
-                                                        <i class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star" style="color: #f59e0b;"></i>
+                                                        <i class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star" style="color: #1a6b73;"></i>
                                                     @endfor
                                                 </div>
                                                 <span style="font-size: 14px; color: #6b7280;">{{ $review->created_at->format('M d, Y') }}</span>

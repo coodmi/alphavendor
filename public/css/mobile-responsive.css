@@ -83,7 +83,7 @@ html {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(135deg, #ffd000 0%, #ffdb33 100%);
+    background: linear-gradient(135deg, #1a6b73 0%, #0d7a82 100%);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
@@ -317,7 +317,7 @@ html {
     .mobile-nav-strip {
         display: flex;
         overflow-x: auto;
-        background: #ffd000;
+        background: #1a6b73;
         border-top: 1px solid rgba(0,0,0,0.08);
         padding: 0 10px;
         gap: 0;

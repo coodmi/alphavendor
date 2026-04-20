@@ -88,7 +88,7 @@
         <i class="fas fa-user-check"></i>
         <span>Verification</span>
         @if(auth()->user()->verification_status === 'unverified')
-            <span class="badge" style="background: #f59e0b;">!</span>
+            <span class="badge" style="background: #1a6b73;">!</span>
         @elseif(auth()->user()->verification_status === 'pending')
             <span class="badge" style="background: #3b82f6;">⏳</span>
         @elseif(auth()->user()->verification_status === 'verified')

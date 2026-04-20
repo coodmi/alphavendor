@@ -256,7 +256,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Best Products</h2>
                         <a href="{{ route('shop') }}"
-                            class="text-yellow-500 hover:text-amber-600 flex items-center gap-2 font-medium transition-colors">
+                            class="text-yellow-500 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
                             More Products
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -314,7 +314,7 @@
                                         <div class="flex gap-2">
                                             <button
                                                 onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                                class="flex-1 py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-2 text-sm md:text-base">
+                                                class="flex-1 py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-teal-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                                             </button>
                                             <button
@@ -331,7 +331,7 @@
                         <!-- See More Button -->
                         <div class="text-center mt-8">
                             <a href="{{ route('shop') }}"
-                                class="inline-flex items-center gap-2 px-8 py-3 bg-yellow-500 hover:bg-amber-600 text-white font-semibold rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+                                class="inline-flex items-center gap-2 px-8 py-3 bg-yellow-500 hover:bg-teal-600 text-white font-semibold rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
                                 <span>See More Products</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -567,7 +567,7 @@
                         <div class="flex justify-between items-center mb-6 md:mb-8">
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Special Offers</h2>
                             <a href="{{ route('special-offers.index') }}"
-                                class="text-yellow-500 hover:text-amber-600 flex items-center gap-2 font-medium transition-colors">
+                                class="text-yellow-500 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
                                 View All Offers
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -721,7 +721,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
+                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-store text-white text-xl"></i>
                             </div>
                             <div>
@@ -768,7 +768,7 @@
                                         <div class="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                                             <button
                                                 onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                                class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-2">
+                                                class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-teal-500 text-white font-semibold hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
                                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                                             </button>
                                             <button
@@ -813,7 +813,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
+                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-warehouse text-white text-xl"></i>
                             </div>
                             <div>
@@ -861,7 +861,7 @@
                                     <div class="flex gap-1">
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-2">
+                                            class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-teal-500 text-white font-semibold hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
                                             <i class="fas fa-shopping-cart"></i> Quick Add
                                         </button>
                                         <button
@@ -910,7 +910,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
+                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-globe text-white text-xl"></i>
                             </div>
                             <div>
@@ -957,7 +957,7 @@
                                     <div class="flex gap-1">
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-2">
+                                            class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-teal-500 text-white font-semibold hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
                                             <i class="fas fa-shopping-cart"></i> Quick Add
                                         </button>
                                         <button

@@ -66,8 +66,8 @@
     </div>
 
     @if(auth()->user()->verification_status === 'pending')
-    <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 16px; border-radius: 8px; margin-top: 16px;">
-        <i class="fas fa-clock" style="color: #f59e0b;"></i>
+    <div style="background: #fef3c7; border: 1px solid #1a6b73; padding: 16px; border-radius: 8px; margin-top: 16px;">
+        <i class="fas fa-clock" style="color: #1a6b73;"></i>
         <strong style="color: #92400e;">Your account is under verification.</strong>
         <p style="color: #92400e; margin: 8px 0 0 0;">Please wait for admin approval. You will be notified once your account is verified.</p>
     </div>

@@ -222,7 +222,7 @@
 
             <!-- Wallet Info -->
             @if($wallet)
-                <div class="bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg shadow-md p-6 text-white">
+                <div class="bg-gradient-to-br from-orange-500 to-teal-600 rounded-lg shadow-md p-6 text-white">
                     <h3 class="text-lg font-bold mb-4">Wallet Balance</h3>
                     <p class="text-3xl font-bold">{{ currency_symbol() }}{{ number_format($wallet->balance, 2) }}</p>
                     <p class="text-sm opacity-90 mt-2">Available Balance</p>

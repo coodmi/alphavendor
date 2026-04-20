@@ -168,7 +168,7 @@
     <form method="POST" action="{{ route('admin.verification.reset', $user->id) }}" onsubmit="return confirm('Reset verification? This will delete all documents and allow the user to resubmit.');">
         @csrf
         <button type="submit" 
-            style="background: #f59e0b; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">
+            style="background: #1a6b73; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">
             <i class="fas fa-redo"></i> Reset Verification
         </button>
     </form>
