@@ -127,7 +127,7 @@ body {
 
 /* Navigation */
 .navbar {
-    background: var(--white);
+    background: #0d5c63;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -161,21 +161,21 @@ body {
 
 .nav-menu a {
     text-decoration: none;
-    color: var(--text-color);
+    color: #ffffff;
     font-weight: 500;
     transition: color 0.3s;
 }
 
 .nav-menu a:hover,
 .nav-menu a.active {
-    color: var(--primary-color);
+    color: #FFB833;
 }
 
 .daily-deals {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--primary-color);
+    color: #FFB833;
     text-decoration: none;
     font-weight: 600;
 }
