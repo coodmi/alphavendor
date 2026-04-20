@@ -103,7 +103,7 @@
 /* Product Grid Mobile Optimization */
 @media (max-width: 640px) {
     .grid {
-        gap: 12px !important;
+        gap: 10px !important;
     }
     
     .grid-cols-2 {
@@ -112,39 +112,66 @@
     
     /* Product Card Adjustments */
     .bg-white.rounded-xl {
-        border-radius: 12px !important;
+        border-radius: 10px !important;
     }
     
     .bg-white.rounded-xl img {
-        height: 160px !important;
+        height: 140px !important;
     }
     
     .bg-white.rounded-xl .p-3,
     .bg-white.rounded-xl .p-4 {
-        padding: 12px !important;
+        padding: 8px !important;
     }
     
     .bg-white.rounded-xl h4 {
-        font-size: 13px !important;
+        font-size: 12px !important;
         line-height: 1.3 !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 6px !important;
+        height: auto !important;
+        min-height: 32px !important;
     }
     
     .bg-white.rounded-xl .text-xl {
-        font-size: 16px !important;
-    }
-    
-    .bg-white.rounded-xl .text-lg {
         font-size: 15px !important;
     }
     
-    .bg-white.rounded-xl button {
-        padding: 8px 10px !important;
-        font-size: 12px !important;
+    .bg-white.rounded-xl .text-lg {
+        font-size: 14px !important;
     }
     
-    .bg-white.rounded-xl .gap-2 {
+    /* Star ratings smaller */
+    .bg-white.rounded-xl .fas.fa-star,
+    .bg-white.rounded-xl .far.fa-star {
+        font-size: 10px !important;
+    }
+    
+    .bg-white.rounded-xl .text-xs {
+        font-size: 10px !important;
+    }
+    
+    /* Price section */
+    .bg-white.rounded-xl .flex.items-center.gap-2 {
         gap: 6px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* Discount badge */
+    .bg-white.rounded-xl .absolute.top-3.left-3 {
+        top: 6px !important;
+        left: 6px !important;
+        font-size: 9px !important;
+        padding: 3px 6px !important;
+    }
+    
+    /* Wishlist and view icons */
+    .bg-white.rounded-xl .absolute.top-3.right-3 span {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    
+    .bg-white.rounded-xl .absolute.top-3.right-3 i {
+        font-size: 11px !important;
     }
 }
 
@@ -410,24 +437,45 @@
 
 /* Product Action Buttons Mobile */
 @media (max-width: 640px) {
-    .flex.gap-2 button {
-        font-size: 11px !important;
-        padding: 8px 6px !important;
+    /* Product card buttons */
+    .bg-white.rounded-xl .flex.gap-2 button,
+    .bg-white.rounded-xl button[onclick*="quickAddToCart"],
+    .bg-white.rounded-xl button[onclick*="buyNow"] {
+        font-size: 10px !important;
+        padding: 6px 8px !important;
+        border-radius: 6px !important;
+        min-height: 36px !important;
     }
     
-    .flex.gap-2 button i {
-        font-size: 11px !important;
+    .bg-white.rounded-xl .flex.gap-2 button i,
+    .bg-white.rounded-xl button[onclick*="quickAddToCart"] i,
+    .bg-white.rounded-xl button[onclick*="buyNow"] i {
+        font-size: 10px !important;
     }
     
-    /* Hide text on very small screens, show only icons */
-    @media (max-width: 380px) {
-        .flex.gap-2 button span {
-            display: none;
-        }
-        
-        .flex.gap-2 button {
-            padding: 10px !important;
-        }
+    .bg-white.rounded-xl .flex.gap-2 {
+        gap: 4px !important;
+    }
+    
+    /* Make button text smaller */
+    .bg-white.rounded-xl button span {
+        font-size: 10px !important;
+    }
+}
+
+/* Extra small screens - compact buttons */
+@media (max-width: 380px) {
+    .bg-white.rounded-xl .flex.gap-2 button,
+    .bg-white.rounded-xl button[onclick*="quickAddToCart"],
+    .bg-white.rounded-xl button[onclick*="buyNow"] {
+        font-size: 9px !important;
+        padding: 5px 6px !important;
+        min-height: 32px !important;
+    }
+    
+    .bg-white.rounded-xl .flex.gap-2 button i {
+        font-size: 9px !important;
+        margin-right: 2px !important;
     }
 }
 
