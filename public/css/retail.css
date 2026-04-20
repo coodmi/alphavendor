@@ -108,7 +108,7 @@
 
 .stat-item i {
     font-size: 42px;
-    color: #FFFFFF;
+    color: #0d5c63;
     background: linear-gradient(135deg, #0d5c63, #0a4a50);
     width: 64px;
     height: 64px;
@@ -142,7 +142,7 @@
 
 .btn-explore {
     background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%);
-    color: #FFFFFF;
+    color: #0d5c63;
     border: none;
     padding: 18px 48px;
     border-radius: 50px;

@@ -131,7 +131,7 @@
 
 .import-hero .stat-item i {
     font-size: 42px;
-    color: #FFFFFF;
+    color: #0d5c63;
     background: linear-gradient(135deg, #0d5c63, #0a4a50);
     width: 64px;
     height: 64px;
@@ -171,7 +171,7 @@
 
 .import-hero .btn-primary {
     background: linear-gradient(135deg, #0d5c63 0%, #0a4a50 100%);
-    color: #FFFFFF;
+    color: #0d5c63;
     border: none;
     padding: 18px 48px;
     border-radius: 50px;
@@ -211,7 +211,7 @@
 .import-hero .btn-secondary {
     background: transparent;
     color: #ffffff;
-    border: 2px solid #2C3E50;
+    border: 2px solid #ffffff;
     padding: 16px 48px;
     border-radius: 50px;
     font-size: 18px;
@@ -225,8 +225,8 @@
 }
 
 .import-hero .btn-secondary:hover {
-    background: #2C3E50;
-    color: #FFFFFF;
+    background: #ffffff;
+    color: #0d5c63;
     transform: translateY(-3px);
 }
 
@@ -347,12 +347,12 @@
 
 .import-hero ~ .shop-section .badge-hot {
     background: #FF4444;
-    color: #FFFFFF;
+    color: #0d5c63;
 }
 
 .import-hero ~ .shop-section .badge-new {
     background: #FF6B35;
-    color: #FFFFFF;
+    color: #0d5c63;
 }
 
 /* Product Action Buttons */
@@ -390,7 +390,7 @@
 
 .import-hero ~ .shop-section .action-btn:hover {
     background: #0d5c63;
-    color: #FFFFFF;
+    color: #0d5c63;
     transform: scale(1.1);
 }
 
@@ -555,7 +555,7 @@
 
 .import-hero ~ .shop-section .btn-add-cart:hover {
     background: #0d5c63;
-    color: #FFFFFF;
+    color: #0d5c63;
     border-color: #0d5c63;
 }
 
