@@ -46,17 +46,17 @@
 
 .hero-text h1 {
     font-size: 56px;
-    color: #2C3E50;
+    color: #ffffff;
     margin-bottom: 20px;
     font-weight: 800;
     line-height: 1.2;
-    text-shadow: 0 2px 8px rgba(255, 165, 0, 0.15);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     letter-spacing: -1px;
 }
 
 .hero-text p {
     font-size: 20px;
-    color: #5D6D7E;
+    color: #e0e0e0;
     margin-bottom: 40px;
     line-height: 1.6;
     font-weight: 400;
@@ -70,9 +70,9 @@
 }
 
 .stat-item {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 165, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     padding: 20px 24px;
     display: flex;
@@ -127,7 +127,7 @@
 .stat-item h3 {
     font-size: 36px;
     font-weight: 800;
-    color: #2C3E50;
+    color: #ffffff;
     margin: 0;
     line-height: 1;
     text-shadow: none;
@@ -135,7 +135,7 @@
 
 .stat-item span {
     font-size: 14px;
-    color: #5D6D7E;
+    color: #e0e0e0;
     margin-top: 4px;
     font-weight: 500;
 }

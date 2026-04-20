@@ -51,16 +51,16 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    color: #C05A00;
+    color: #0d5c63;
     padding: 10px 20px;
     border-radius: 50px;
     font-size: 13px;
     font-weight: 700;
     margin-bottom: 16px;
-    border: 1px solid rgba(255, 165, 0, 0.2);
-    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .import-hero .hero-badge i {
@@ -69,17 +69,17 @@
 
 .import-hero h1 {
     font-size: 56px;
-    color: #2C3E50;
+    color: #ffffff;
     margin-bottom: 20px;
     font-weight: 800;
     line-height: 1.2;
-    text-shadow: 0 2px 8px rgba(255, 165, 0, 0.15);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     letter-spacing: -1px;
 }
 
 .import-hero .hero-text > p {
     font-size: 20px;
-    color: #5D6D7E;
+    color: #e0e0e0;
     margin-bottom: 40px;
     line-height: 1.6;
     font-weight: 400;
@@ -93,9 +93,9 @@
 }
 
 .import-hero .stat-item {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 165, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     padding: 20px 24px;
     display: flex;
@@ -151,14 +151,14 @@
 .import-hero .stat-item h3 {
     font-size: 36px;
     font-weight: 800;
-    color: #2C3E50;
+    color: #ffffff;
     margin: 0;
     line-height: 1;
 }
 
 .import-hero .stat-item span {
     font-size: 14px;
-    color: #5D6D7E;
+    color: #e0e0e0;
     margin-top: 4px;
     font-weight: 500;
 }
@@ -210,7 +210,7 @@
 
 .import-hero .btn-secondary {
     background: transparent;
-    color: #2C3E50;
+    color: #ffffff;
     border: 2px solid #2C3E50;
     padding: 16px 48px;
     border-radius: 50px;
@@ -562,7 +562,7 @@
 /* Active filter tags for export */
 .import-hero ~ .shop-section .filter-tag {
     background: #FFF4E5;
-    color: #C05A00;
+    color: #0d5c63;
     border: 1px solid #0d7a82;
 }
 
@@ -579,7 +579,7 @@
 
 .import-hero ~ .shop-section .page-btn:hover:not(:disabled):not(.active) {
     background: #FFF4E5;
-    color: #C05A00;
+    color: #0d5c63;
 }
 
 /* Responsive Design */
