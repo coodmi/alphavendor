@@ -17,10 +17,10 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-gradient-to-br from-yellow-500 to-teal-700 rounded-xl p-6 text-white">
+        <div class="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-yellow-100 text-sm font-medium">Total Pending</p>
+                    <p class="text-teal-100 text-sm font-medium">Total Pending</p>
                     <h3 class="text-3xl font-bold mt-2">{{ $stats['total_pending'] }}</h3>
                 </div>
                 <div class="bg-white bg-opacity-20 rounded-full p-4">
@@ -133,7 +133,7 @@
                         <td class="px-6 py-4">
                             <div class="space-y-1">
                                 <span class="inline-flex px-2 py-1 rounded text-xs font-medium
-                                    {{ $application->verification_status === 'pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
+                                    {{ $application->verification_status === 'pending' ? 'bg-teal-100 text-teal-700' : '' }}
                                     {{ $application->verification_status === 'verified' ? 'bg-green-100 text-green-700' : '' }}
                                     {{ $application->verification_status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}
                                     {{ $application->verification_status === 'unverified' ? 'bg-gray-100 text-gray-700' : '' }}">

@@ -42,7 +42,7 @@
 
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
-                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <div class="p-3 rounded-full bg-teal-100 text-teal-700">
                     <i class="fas fa-clock text-2xl"></i>
                 </div>
                 <div class="ml-4">
@@ -111,7 +111,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                    {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                    {{ $order->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
                                     {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
                                     {{ $order->status === 'shipped' ? 'bg-purple-100 text-purple-800' : '' }}
                                     {{ $order->status === 'delivered' ? 'bg-green-100 text-green-800' : '' }}
@@ -127,7 +127,7 @@
                                     <a href="{{ route('employee.orders.show', $order) }}" class="text-blue-600 hover:text-blue-900">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <button onclick="openStatusModal({{ $order->id }}, '{{ $order->status }}')" class="text-yellow-600 hover:text-yellow-900">
+                                    <button onclick="openStatusModal({{ $order->id }}, '{{ $order->status }}')" class="text-teal-700 hover:text-teal-900">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 </div>

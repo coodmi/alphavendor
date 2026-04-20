@@ -62,7 +62,7 @@
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
-            <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600" id="saveBtn">Save Settings</button>
+            <button type="submit" class="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700" id="saveBtn">Save Settings</button>
         </form>
     </div>
 </div>

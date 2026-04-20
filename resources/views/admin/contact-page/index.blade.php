@@ -321,7 +321,7 @@
 
             <!-- FAQ Section -->
             <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">
-                <div class="bg-gradient-to-r from-yellow-600 to-teal-700 px-6 py-4">
+                <div class="bg-gradient-to-r from-teal-700 to-teal-700 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
                         <i class="fas fa-question-circle"></i>
                         FAQ Section
@@ -331,12 +331,12 @@
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">Section Title</label>
                         <input type="text" name="faq_title" value="{{ old('faq_title', $content->faq_title) }}" required 
-                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all">
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-teal-200 focus:border-teal-600 transition-all">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">Subtitle</label>
                         <textarea name="faq_subtitle" rows="2" 
-                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all">{{ old('faq_subtitle', $content->faq_subtitle) }}</textarea>
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-teal-200 focus:border-teal-600 transition-all">{{ old('faq_subtitle', $content->faq_subtitle) }}</textarea>
                     </div>
                 </div>
             </div>

@@ -196,13 +196,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <h3 class="text-lg font-semibold text-gray-700 mb-3">
-                        <i class="fas fa-star text-yellow-500"></i> Exporter Rating
+                        <i class="fas fa-star text-teal-600"></i> Exporter Rating
                     </h3>
                     <div id="currentRating" class="flex items-center gap-3">
                         @if(Auth::user()->exporter_rating)
                             <span class="text-3xl font-bold text-indigo-600">{{ Auth::user()->exporter_rating }}</span>
                             <span class="text-gray-600">/ 5.0</span>
-                            <div class="flex text-yellow-400 text-xl ml-2">
+                            <div class="flex text-teal-500 text-xl ml-2">
                                 @for($i = 1; $i <= 5; $i++)
                                     @if($i <= Auth::user()->exporter_rating)
                                         <i class="fas fa-star"></i>
@@ -319,7 +319,7 @@
             <!-- Exporter Rating -->
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    <i class="fas fa-star text-yellow-500"></i> Exporter Rating
+                    <i class="fas fa-star text-teal-600"></i> Exporter Rating
                 </label>
                 <div class="flex items-center gap-4">
                     <input type="number" name="exporter_rating" id="exporterRatingInput"
@@ -663,7 +663,7 @@ document.getElementById('certificationsForm').addEventListener('submit', functio
                 currentRatingDiv.innerHTML = `
                     <span class="text-3xl font-bold text-indigo-600">${rating}</span>
                     <span class="text-gray-600">/ 5.0</span>
-                    <div class="flex text-yellow-400 text-xl ml-2">${starsHtml}</div>
+                    <div class="flex text-teal-500 text-xl ml-2">${starsHtml}</div>
                 `;
             } else {
                 currentRatingDiv.innerHTML = '<p class="text-gray-500 text-sm">No rating set yet</p>';

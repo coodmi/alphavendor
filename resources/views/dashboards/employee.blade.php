@@ -33,7 +33,7 @@
 
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
-                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <div class="p-3 rounded-full bg-teal-100 text-teal-700">
                     <i class="fas fa-file-alt text-2xl"></i>
                 </div>
                 <div class="ml-4">
@@ -90,7 +90,7 @@
                                 <div class="text-right">
                                     <p class="font-bold text-teal-600">${{ number_format($order->total, 2) }}</p>
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                        {{ $order->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
                                         {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
                                         {{ $order->status === 'delivered' ? 'bg-green-100 text-green-800' : '' }}">
                                         {{ ucfirst($order->status) }}
@@ -123,7 +123,7 @@
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <div class="flex items-center justify-between mb-2">
                                     <p class="font-medium text-gray-900">{{ $application->user->name }}</p>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">
                                         {{ ucfirst($application->requested_role) }}
                                     </span>
                                 </div>
@@ -207,9 +207,9 @@
                     <i class="fas fa-box text-purple-600 text-xl mr-3"></i>
                     <span class="font-medium text-purple-800">Manage Products</span>
                 </a>
-                <a href="{{ route('employee.users') }}" class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors">
-                    <i class="fas fa-users text-yellow-600 text-xl mr-3"></i>
-                    <span class="font-medium text-yellow-800">Manage Users</span>
+                <a href="{{ route('employee.users') }}" class="flex items-center p-4 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors">
+                    <i class="fas fa-users text-teal-700 text-xl mr-3"></i>
+                    <span class="font-medium text-teal-800">Manage Users</span>
                 </a>
             </div>
         </div>

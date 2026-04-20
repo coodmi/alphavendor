@@ -14,14 +14,14 @@
 
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-lg">
+        <div class="bg-teal-50 border-l-4 border-teal-600 p-6 rounded-lg">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-yellow-600 text-sm font-semibold uppercase">Pending</p>
-                    <p class="text-3xl font-bold text-yellow-700 mt-2">{{ $stats['pending'] }}</p>
-                    <p class="text-yellow-600 text-sm mt-1">{{ currency_symbol() }}{{ number_format($stats['total_pending_amount'], 2) }}</p>
+                    <p class="text-teal-700 text-sm font-semibold uppercase">Pending</p>
+                    <p class="text-3xl font-bold text-teal-700 mt-2">{{ $stats['pending'] }}</p>
+                    <p class="text-teal-700 text-sm mt-1">{{ currency_symbol() }}{{ number_format($stats['total_pending_amount'], 2) }}</p>
                 </div>
-                <i class="fas fa-clock text-4xl text-yellow-300"></i>
+                <i class="fas fa-clock text-4xl text-teal-300"></i>
             </div>
         </div>
 
@@ -163,7 +163,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 @if($withdrawal->status == 'pending')
-                                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">Pending</span>
                                 @elseif($withdrawal->status == 'approved')
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Approved</span>
                                 @elseif($withdrawal->status == 'completed')

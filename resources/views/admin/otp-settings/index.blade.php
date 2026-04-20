@@ -36,7 +36,7 @@
 
         <!-- MiMSMS API Configuration -->
         <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
-            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-yellow-50">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-teal-50">
                 <h2 class="text-lg font-semibold text-gray-800 flex items-center">
                     <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
@@ -145,10 +145,10 @@
                 </div>
 
                 <!-- Test Mode -->
-                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" name="sms_test_mode" value="1" {{ $settings['sms_test_mode'] ? 'checked' : '' }} 
-                               class="w-5 h-5 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500">
+                               class="w-5 h-5 text-teal-700 border-gray-300 rounded focus:ring-teal-600">
                         <span class="ml-3">
                             <span class="text-sm font-medium text-gray-900">Enable Test Mode</span>
                             <span class="block text-sm text-gray-600">When enabled, OTP will be shown on screen instead of sending SMS (for development/testing)</span>

@@ -22,7 +22,7 @@
                         <p class="text-gray-600 mt-1">{{ $withdrawal->withdrawal_number }}</p>
                     </div>
                     @if($withdrawal->status == 'pending')
-                        <span class="px-4 py-2 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        <span class="px-4 py-2 text-sm font-semibold rounded-full bg-teal-100 text-teal-800">Pending</span>
                     @elseif($withdrawal->status == 'approved')
                         <span class="px-4 py-2 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">Approved</span>
                     @elseif($withdrawal->status == 'completed')
@@ -244,7 +244,7 @@
                                 @if($recent->status == 'completed')
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
                                 @elseif($recent->status == 'pending')
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">Pending</span>
                                 @elseif($recent->status == 'rejected')
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
                                 @endif

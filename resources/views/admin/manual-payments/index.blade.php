@@ -18,28 +18,28 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-yellow-600 text-sm font-medium">Pending Payments</p>
-                    <p class="text-2xl font-bold text-yellow-700">{{ $stats['pending_count'] }}</p>
+                    <p class="text-teal-700 text-sm font-medium">Pending Payments</p>
+                    <p class="text-2xl font-bold text-teal-700">{{ $stats['pending_count'] }}</p>
                 </div>
-                <div class="bg-yellow-100 p-3 rounded-full">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-teal-100 p-3 rounded-full">
+                    <svg class="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
             </div>
         </div>
 
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-yellow-600 text-sm font-medium">Pending Amount</p>
-                    <p class="text-2xl font-bold text-yellow-700">৳{{ number_format($stats['pending_amount'], 2) }}</p>
+                    <p class="text-teal-700 text-sm font-medium">Pending Amount</p>
+                    <p class="text-2xl font-bold text-teal-700">৳{{ number_format($stats['pending_amount'], 2) }}</p>
                 </div>
-                <div class="bg-yellow-100 p-3 rounded-full">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-teal-100 p-3 rounded-full">
+                    <svg class="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                 </div>
@@ -91,7 +91,7 @@
     <div class="bg-white rounded-lg shadow mb-6">
         <div class="px-6 py-4 border-b border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                <span class="w-3 h-3 bg-teal-600 rounded-full"></span>
                 Pending Payments ({{ $pendingPayments->total() }})
             </h2>
         </div>

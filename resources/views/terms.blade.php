@@ -3,9 +3,9 @@
 @section('title', $page->title ?? 'Terms & Conditions')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-teal-50">
+<div class="min-h-screen bg-gradient-to-br from-teal-50 via-teal-50 to-teal-50">
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-teal-700 to-yellow-500 text-white py-20">
+    <div class="bg-gradient-to-r from-teal-700 to-teal-600 text-white py-20">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <div class="inline-block p-4 bg-white/10 rounded-full mb-6">
@@ -37,7 +37,7 @@
                 @endif
 
                 <!-- Contact Section -->
-                <div class="mt-12 p-6 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border-l-4 border-teal-600">
+                <div class="mt-12 p-6 bg-gradient-to-r from-teal-50 to-teal-50 rounded-xl border-l-4 border-teal-600">
                     <h3 class="text-xl font-bold text-teal-900 mb-3">
                         <i class="fas fa-envelope mr-2 text-teal-700"></i>Questions About Our Terms?
                     </h3>

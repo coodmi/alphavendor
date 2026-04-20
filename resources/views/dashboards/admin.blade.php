@@ -352,7 +352,7 @@
                 <div class="text-3xl font-extrabold">{{ $stats['retailers'] }}</div>
             </div>
         </div>
-        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-yellow-500 to-yellow-300 text-white">
+        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-teal-600 to-teal-300 text-white">
             <div class="mr-4"><i class="fas fa-box fa-2x"></i></div>
             <div>
                 <div class="text-lg font-semibold">Wholesalers</div>
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="flex flex-wrap gap-4">
                 <a href="{{ route('admin.users') }}" class="px-5 py-2 rounded-lg bg-blue-500 text-white font-semibold shadow hover:bg-blue-600 transition">Manage Users</a>
                 <a href="{{ route('admin.users.create') }}" class="px-5 py-2 rounded-lg bg-green-500 text-white font-semibold shadow hover:bg-green-600 transition">Add New User</a>
-                <a href="{{ route('admin.applications') }}" class="px-5 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold shadow hover:bg-yellow-500 transition">View Applications</a>
+                <a href="{{ route('admin.applications') }}" class="px-5 py-2 rounded-lg bg-teal-500 text-gray-900 font-semibold shadow hover:bg-teal-600 transition">View Applications</a>
             </div>
         </div>
         <div class="bg-white rounded-xl shadow-lg p-8">

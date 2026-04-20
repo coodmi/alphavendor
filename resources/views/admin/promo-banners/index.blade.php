@@ -14,7 +14,7 @@
             <h2 class="text-2xl font-bold text-gray-800">Promo Banner Management</h2>
             <p class="text-gray-500 mt-1">Manage promotional banners with text and images (displayed on homepage)</p>
         </div>
-        <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-teal-600 text-white rounded-lg hover:from-yellow-600 hover:to-teal-700 transition-all flex items-center gap-2 shadow-lg">
+        <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-lg hover:from-teal-700 hover:to-teal-700 transition-all flex items-center gap-2 shadow-lg">
             <i class="fas fa-plus"></i> Add Promo Banner
         </button>
     </div>
@@ -48,7 +48,7 @@
                     </td>
                     <td class="px-6 py-4">
                         @if($banner->button_text)
-                            <span class="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                            <span class="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700">
                                 {{ $banner->button_text }}
                             </span>
                         @else
@@ -73,7 +73,7 @@
                     </td>
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-2">
-                            <button onclick='editBanner(@json($banner))' class="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm">
+                            <button onclick='editBanner(@json($banner))' class="px-3 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                             <button onclick="openDeleteModal({{ $banner->id }}, '{{ $banner->title }}')" class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm">
@@ -114,36 +114,36 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
-                    <input type="text" name="title" id="bannerTitle" required placeholder="e.g., Mega Sale Event" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                    <input type="text" name="title" id="bannerTitle" required placeholder="e.g., Mega Sale Event" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>
-                    <input type="text" name="subtitle" id="bannerSubtitle" placeholder="e.g., Limited Time Offer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                    <input type="text" name="subtitle" id="bannerSubtitle" placeholder="e.g., Limited Time Offer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
             </div>
 
             <div class="mt-5">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                <textarea name="description" id="bannerDescription" rows="3" placeholder="Promotional message..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all"></textarea>
+                <textarea name="description" id="bannerDescription" rows="3" placeholder="Promotional message..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all"></textarea>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Button Text</label>
-                    <input type="text" name="button_text" id="bannerButtonText" placeholder="e.g., Shop Now" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                    <input type="text" name="button_text" id="bannerButtonText" placeholder="e.g., Shop Now" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Button Link</label>
-                    <input type="text" name="button_link" id="bannerButtonLink" placeholder="e.g., /shop" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                    <input type="text" name="button_link" id="bannerButtonLink" placeholder="e.g., /shop" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
             </div>
 
             <div class="mt-5">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Banner Image *</label>
-                <input type="file" name="image" id="bannerImage" accept="image/*" onchange="previewImage(event)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                <input type="file" name="image" id="bannerImage" accept="image/*" onchange="previewImage(event)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 <p class="text-xs text-gray-400 mt-1">Recommended size: 800x600px. Max 2MB.</p>
                 <div id="imagePreview" class="hidden mt-4 relative">
-                    <img id="previewImg" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg border-2 border-yellow-500">
+                    <img id="previewImg" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg border-2 border-teal-600">
                     <button type="button" onclick="cancelImage()" class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
@@ -167,13 +167,13 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Sort Order</label>
-                    <input type="number" name="sort_order" id="bannerSortOrder" value="0" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                    <input type="number" name="sort_order" id="bannerSortOrder" value="0" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
             </div>
 
             <div class="mt-5">
                 <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_active" id="bannerStatus" value="1" checked class="w-5 h-5 text-yellow-500 rounded focus:ring-yellow-500">
+                    <input type="checkbox" name="is_active" id="bannerStatus" value="1" checked class="w-5 h-5 text-teal-600 rounded focus:ring-teal-600">
                     <span class="ml-3 text-gray-700">Active (visible on homepage)</span>
                 </label>
             </div>
@@ -182,7 +182,7 @@
                 <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
-                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-teal-600 text-white rounded-lg hover:from-yellow-600 hover:to-teal-700 transition-all flex items-center gap-2">
+                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-lg hover:from-teal-700 hover:to-teal-700 transition-all flex items-center gap-2">
                     <i class="fas fa-save"></i> Save Promo Banner
                 </button>
             </div>

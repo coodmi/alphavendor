@@ -22,10 +22,10 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
+    <div class="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-yellow-100 text-sm mb-1">Pending</p>
+                <p class="text-teal-100 text-sm mb-1">Pending</p>
                 <h3 class="text-3xl font-bold">{{ $stats['pending'] }}</h3>
             </div>
             <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">

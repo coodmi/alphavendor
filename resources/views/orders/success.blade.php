@@ -15,14 +15,14 @@
             <p class="text-gray-600 mb-4">Thank you for your order. We've received your order and will process it soon.</p>
 
             @if(session('payment_pending_verification'))
-                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 text-left max-w-2xl mx-auto">
+                <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6 text-left max-w-2xl mx-auto">
                     <div class="flex items-start gap-3">
-                        <div class="bg-yellow-100 p-2 rounded-full">
-                            <i class="fas fa-clock text-yellow-600"></i>
+                        <div class="bg-teal-100 p-2 rounded-full">
+                            <i class="fas fa-clock text-teal-700"></i>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-yellow-800">Payment Verification Pending</h3>
-                            <p class="text-sm text-yellow-700 mt-1">
+                            <h3 class="font-semibold text-teal-800">Payment Verification Pending</h3>
+                            <p class="text-sm text-teal-700 mt-1">
                                 Your payment is being verified. We will confirm your payment within 24 hours.
                                 You will receive a notification once your payment is verified.
                             </p>
@@ -44,13 +44,13 @@
                                 <p class="text-sm text-gray-500 mt-1">Placed on {{ $order->created_at->format('F d, Y \a\t h:i A') }}</p>
                             </div>
                             <div class="text-right">
-                                <span class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                <span class="px-3 py-1 text-sm font-semibold rounded-full bg-teal-100 text-teal-800">
                                     {{ ucfirst($order->status) }}
                                 </span>
                                 <p class="text-sm text-gray-500 mt-1">
                                     Payment: 
                                     @if($order->payment_status == 'pending_verification')
-                                        <span class="text-yellow-600">Pending Verification</span>
+                                        <span class="text-teal-700">Pending Verification</span>
                                     @else
                                         <span class="text-gray-600">{{ ucfirst($order->payment_status) }}</span>
                                     @endif

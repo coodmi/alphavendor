@@ -55,7 +55,7 @@
                     <p class="text-gray-600 text-sm md:text-base">Explore our wide range of product categories</p>
                 </div>
                 <a href="{{ route('shop') }}"
-                    class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-semibold rounded-xl hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     Browse All Categories
                     <i class="fas fa-arrow-right"></i>
                 </a>
@@ -66,7 +66,7 @@
                 <div class="relative group">
                     <!-- Left Arrow -->
                     <button onclick="scrollCategoriesLeft()" id="catPrevBtn"
-                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 border-2 border-gray-100 hover:border-yellow-400 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-left text-lg"></i>
                     </button>
 
@@ -77,8 +77,8 @@
                                 <a href="{{ route('shop') }}?category={{ $category->slug }}" 
                                    class="block flex-shrink-0 category-card-mobile"
                                    style="width: calc((100% - 1rem) / 2);">
-                                    <div class="bg-white rounded-2xl p-4 md:p-5 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 group/card border-2 border-gray-100 hover:border-yellow-400 transform hover:-translate-y-1">
-                                        <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 rounded-xl overflow-hidden border-3 border-gray-100 group-hover/card:border-yellow-400 transition-all duration-300 shadow-md group-hover/card:shadow-xl">
+                                    <div class="bg-white rounded-2xl p-4 md:p-5 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 group/card border-2 border-gray-100 hover:border-teal-500 transform hover:-translate-y-1">
+                                        <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 rounded-xl overflow-hidden border-3 border-gray-100 group-hover/card:border-teal-500 transition-all duration-300 shadow-md group-hover/card:shadow-xl">
                                             @php
                                                 $catImage = $category->image
                                                     ? (str_starts_with($category->image, 'http') ? $category->image : asset('storage/' . $category->image))
@@ -87,7 +87,7 @@
                                             <img src="{{ $catImage }}" alt="{{ $category->name }}"
                                                 class="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500">
                                         </div>
-                                        <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover/card:text-yellow-600 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                        <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover/card:text-teal-700 transition-colors line-clamp-2 min-h-[2.5rem]">
                                             {{ $category->name }}
                                         </h3>
                                         @if($category->products_count ?? 0)
@@ -101,7 +101,7 @@
 
                     <!-- Right Arrow -->
                     <button onclick="scrollCategoriesRight()" id="catNextBtn"
-                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 border-2 border-gray-100 hover:border-yellow-400 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-right text-lg"></i>
                     </button>
 
@@ -207,7 +207,7 @@
                 const dot = document.createElement('button');
                 dot.className = `cat-dot h-2 rounded-full transition-all duration-300 ${
                     i === currentDot 
-                        ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 w-8' 
+                        ? 'bg-gradient-to-r from-teal-500 to-teal-600 w-8' 
                         : 'bg-gray-300 hover:bg-gray-400 w-2'
                 }`;
                 dot.onclick = () => goToCategorySlide(i);
@@ -256,7 +256,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Best Products</h2>
                         <a href="{{ route('shop') }}"
-                            class="text-yellow-500 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
+                            class="text-teal-600 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
                             More Products
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -283,11 +283,11 @@
                                         <div
                                             class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <span
-                                                class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-colors">
+                                                class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-heart text-sm"></i>
                                             </span>
                                             <span
-                                                class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-yellow-500 hover:text-white transition-colors">
+                                                class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-eye text-sm"></i>
                                             </span>
                                         </div>
@@ -298,14 +298,14 @@
                                         <div class="flex items-center gap-1 mb-1 md:mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
-                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span
                                                 class="text-gray-500 text-xs ml-1">({{ number_format($product->rating ?? 4.5, 1) }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2 md:mb-3">
                                             <span
-                                                class="text-lg md:text-xl font-bold text-yellow-600">{{ currency_symbol() }}{{ number_format($product->price, 2) }}</span>
+                                                class="text-lg md:text-xl font-bold text-teal-700">{{ currency_symbol() }}{{ number_format($product->price, 2) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
                                                     class="text-xs md:text-sm text-gray-400 line-through">{{ currency_symbol() }}{{ number_format($product->old_price, 2) }}</span>
@@ -331,7 +331,7 @@
                         <!-- See More Button -->
                         <div class="text-center mt-8">
                             <a href="{{ route('shop') }}"
-                                class="inline-flex items-center gap-2 px-8 py-3 bg-yellow-500 hover:bg-teal-600 text-white font-semibold rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+                                class="inline-flex items-center gap-2 px-8 py-3 bg-teal-600 hover:bg-teal-600 text-white font-semibold rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
                                 <span>See More Products</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -341,7 +341,7 @@
                             <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
                             <p class="text-gray-500">No products available at the moment</p>
                             <a href="{{ route('shop') }}"
-                                class="inline-block mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">
+                                class="inline-block mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
                                 Browse All Products
                             </a>
                         </div>
@@ -359,7 +359,7 @@
                     <p class="text-gray-600 text-sm md:text-base">Shop from your favorite brands</p>
                 </div>
                 <a href="{{ route('shop') }}"
-                    class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-semibold rounded-xl hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     Browse All Brands
                     <i class="fas fa-arrow-right"></i>
                 </a>
@@ -370,7 +370,7 @@
                 <div class="relative group">
                     <!-- Left Arrow -->
                     <button onclick="scrollBrandsLeft()" id="brandPrevBtn"
-                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 border-2 border-gray-100 hover:border-yellow-400 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-left text-lg"></i>
                     </button>
 
@@ -381,8 +381,8 @@
                                 <a href="{{ route('shop') }}?brand={{ $brand->slug }}" 
                                    class="block flex-shrink-0 brand-card-mobile"
                                    style="width: calc((100% - 1rem) / 2);">
-                                    <div class="bg-white rounded-2xl p-4 md:p-5 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 group/card border-2 border-gray-100 hover:border-yellow-400 transform hover:-translate-y-1">
-                                        <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 rounded-xl overflow-hidden border-3 border-gray-100 group-hover/card:border-yellow-400 transition-all duration-300 shadow-md group-hover/card:shadow-xl bg-gray-50 flex items-center justify-center p-2">
+                                    <div class="bg-white rounded-2xl p-4 md:p-5 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 group/card border-2 border-gray-100 hover:border-teal-500 transform hover:-translate-y-1">
+                                        <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 rounded-xl overflow-hidden border-3 border-gray-100 group-hover/card:border-teal-500 transition-all duration-300 shadow-md group-hover/card:shadow-xl bg-gray-50 flex items-center justify-center p-2">
                                             @php
                                                 $brandImage = $brand->logo
                                                     ? (str_starts_with($brand->logo, 'http') ? $brand->logo : asset('storage/' . $brand->logo))
@@ -392,12 +392,12 @@
                                                 <img src="{{ $brandImage }}" alt="{{ $brand->name }}"
                                                     class="w-full h-full object-contain group-hover/card:scale-110 transition-transform duration-500">
                                             @else
-                                                <span class="text-2xl md:text-3xl font-bold text-gray-400 group-hover/card:text-yellow-500 transition-colors">
+                                                <span class="text-2xl md:text-3xl font-bold text-gray-400 group-hover/card:text-teal-600 transition-colors">
                                                     {{ strtoupper(substr($brand->name, 0, 2)) }}
                                                 </span>
                                             @endif
                                         </div>
-                                        <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover/card:text-yellow-600 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                        <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover/card:text-teal-700 transition-colors line-clamp-2 min-h-[2.5rem]">
                                             {{ $brand->name }}
                                         </h3>
                                         @if($brand->products_count ?? 0)
@@ -411,7 +411,7 @@
 
                     <!-- Right Arrow -->
                     <button onclick="scrollBrandsRight()" id="brandNextBtn"
-                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 border-2 border-gray-100 hover:border-yellow-400 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-right text-lg"></i>
                     </button>
 
@@ -517,7 +517,7 @@
                 const dot = document.createElement('button');
                 dot.className = `brand-dot h-2 rounded-full transition-all duration-300 ${
                     i === currentDot 
-                        ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 w-8' 
+                        ? 'bg-gradient-to-r from-teal-500 to-teal-600 w-8' 
                         : 'bg-gray-300 hover:bg-gray-400 w-2'
                 }`;
                 dot.onclick = () => goToBrandSlide(i);
@@ -567,7 +567,7 @@
                         <div class="flex justify-between items-center mb-6 md:mb-8">
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Special Offers</h2>
                             <a href="{{ route('special-offers.index') }}"
-                                class="text-yellow-500 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
+                                class="text-teal-600 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
                                 View All Offers
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -783,7 +783,7 @@
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
-                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
@@ -875,7 +875,7 @@
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
-                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
@@ -971,7 +971,7 @@
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
-                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>

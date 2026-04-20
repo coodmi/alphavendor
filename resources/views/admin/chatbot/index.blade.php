@@ -53,7 +53,7 @@
                     <p class="text-xs text-gray-500 truncate">{{ $conv->latestMessage?->message ?? 'No messages' }}</p>
                     <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium
                         {{ $conv->status === 'open' ? 'bg-blue-100 text-blue-700' : '' }}
-                        {{ $conv->status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' : '' }}
+                        {{ $conv->status === 'in_progress' ? 'bg-teal-100 text-teal-700' : '' }}
                         {{ $conv->status === 'resolved' ? 'bg-green-100 text-green-700' : '' }}
                         {{ $conv->status === 'closed' ? 'bg-gray-100 text-gray-500' : '' }}">
                         {{ ucfirst(str_replace('_',' ',$conv->status)) }}

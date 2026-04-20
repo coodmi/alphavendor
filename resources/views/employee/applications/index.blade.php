@@ -42,7 +42,7 @@
 
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
-                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <div class="p-3 rounded-full bg-teal-100 text-teal-700">
                     <i class="fas fa-clock text-2xl"></i>
                 </div>
                 <div class="ml-4">
@@ -120,7 +120,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                    {{ $application->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                    {{ $application->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
                                     {{ $application->status === 'approved' ? 'bg-green-100 text-green-800' : '' }}
                                     {{ $application->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
                                     {{ ucfirst($application->status) }}

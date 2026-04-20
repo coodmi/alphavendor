@@ -52,10 +52,10 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-500 text-sm">Pending Pickup</p>
-                    <h3 class="text-2xl font-bold text-yellow-600">{{ $stats['pending_pickup'] }}</h3>
+                    <h3 class="text-2xl font-bold text-teal-700">{{ $stats['pending_pickup'] }}</h3>
                 </div>
-                <div class="bg-yellow-100 p-3 rounded-full">
-                    <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                <div class="bg-teal-100 p-3 rounded-full">
+                    <i class="fas fa-clock text-teal-700 text-xl"></i>
                 </div>
             </div>
         </div>
@@ -183,7 +183,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
                                     $statusColors = [
-                                        'pending' => 'yellow',
+                                        'pending' => 'teal',
                                         'picked' => 'blue',
                                         'in_transit' => 'indigo',
                                         'out_for_delivery' => 'purple',

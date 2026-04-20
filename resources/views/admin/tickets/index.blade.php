@@ -37,10 +37,10 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-500 text-sm">In Progress</p>
-                    <p class="text-2xl font-bold text-yellow-600">{{ $stats['in_progress'] }}</p>
+                    <p class="text-2xl font-bold text-teal-700">{{ $stats['in_progress'] }}</p>
                 </div>
-                <div class="bg-yellow-100 p-3 rounded-full">
-                    <i class="fas fa-spinner text-yellow-600 text-xl"></i>
+                <div class="bg-teal-100 p-3 rounded-full">
+                    <i class="fas fa-spinner text-teal-700 text-xl"></i>
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
                                         {{ $ticket->priority === 'low' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $ticket->priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                        {{ $ticket->priority === 'medium' ? 'bg-teal-100 text-teal-800' : '' }}
                                         {{ $ticket->priority === 'high' ? 'bg-teal-100 text-teal-900' : '' }}
                                         {{ $ticket->priority === 'urgent' ? 'bg-red-100 text-red-800' : '' }}">
                                         {{ ucfirst($ticket->priority) }}
@@ -173,7 +173,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
                                         {{ $ticket->status === 'open' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $ticket->status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                        {{ $ticket->status === 'in_progress' ? 'bg-teal-100 text-teal-800' : '' }}
                                         {{ $ticket->status === 'waiting_response' ? 'bg-teal-100 text-teal-900' : '' }}
                                         {{ $ticket->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
                                         {{ $ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">

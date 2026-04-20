@@ -25,7 +25,7 @@
         <div class="px-6 py-4 flex flex-wrap gap-3 items-center justify-between">
             <div class="flex items-center gap-3">
                 <span class="px-3 py-1 rounded-full text-xs font-bold
-                    {{ $review->status === 'pending'  ? 'bg-yellow-100 text-yellow-800' : '' }}
+                    {{ $review->status === 'pending'  ? 'bg-teal-100 text-teal-800' : '' }}
                     {{ $review->status === 'approved' ? 'bg-green-100 text-green-800'  : '' }}
                     {{ $review->status === 'rejected' ? 'bg-red-100 text-red-800'      : '' }}
                     {{ $review->status === 'reported' ? 'bg-teal-100 text-teal-900': '' }}">
@@ -65,7 +65,7 @@
                     <div class="flex gap-1" id="adminRatingStars">
                         @for($i = 1; $i <= 5; $i++)
                             <button type="button" onclick="setAdminRating({{ $i }})"
-                                class="text-3xl transition admin-star {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}"
+                                class="text-3xl transition admin-star {{ $i <= $review->rating ? 'text-teal-500' : 'text-gray-300' }}"
                                 data-val="{{ $i }}">★</button>
                         @endfor
                     </div>
@@ -127,7 +127,7 @@ const CSRF = document.querySelector('meta[name="csrf-token"]')?.content || '{{ c
 function setAdminRating(val) {
     document.getElementById('adminRatingInput').value = val;
     document.querySelectorAll('.admin-star').forEach(s => {
-        s.classList.toggle('text-yellow-400', parseInt(s.dataset.val) <= val);
+        s.classList.toggle('text-teal-500', parseInt(s.dataset.val) <= val);
         s.classList.toggle('text-gray-300',   parseInt(s.dataset.val) >  val);
     });
 }

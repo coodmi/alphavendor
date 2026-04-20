@@ -86,7 +86,7 @@
                         <p class="mt-1">
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
                                 {{ $ticket->status === 'open' ? 'bg-blue-100 text-blue-800' : '' }}
-                                {{ $ticket->status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                {{ $ticket->status === 'in_progress' ? 'bg-teal-100 text-teal-800' : '' }}
                                 {{ $ticket->status === 'waiting_response' ? 'bg-teal-100 text-teal-900' : '' }}
                                 {{ $ticket->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
                                 {{ $ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
@@ -99,7 +99,7 @@
                         <p class="mt-1">
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
                                 {{ $ticket->priority === 'low' ? 'bg-green-100 text-green-800' : '' }}
-                                {{ $ticket->priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                {{ $ticket->priority === 'medium' ? 'bg-teal-100 text-teal-800' : '' }}
                                 {{ $ticket->priority === 'high' ? 'bg-teal-100 text-teal-900' : '' }}
                                 {{ $ticket->priority === 'urgent' ? 'bg-red-100 text-red-800' : '' }}">
                                 {{ ucfirst($ticket->priority) }}

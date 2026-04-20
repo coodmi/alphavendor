@@ -40,7 +40,7 @@
                 </span>
                 <div class="mt-2">
                     <span class="inline-flex px-3 py-1 rounded text-xs font-medium
-                        {{ $user->verification_status === 'pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
+                        {{ $user->verification_status === 'pending' ? 'bg-teal-100 text-teal-700' : '' }}
                         {{ $user->verification_status === 'verified' ? 'bg-green-100 text-green-700' : '' }}
                         {{ $user->verification_status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}
                         {{ $user->verification_status === 'unverified' ? 'bg-gray-100 text-gray-700' : '' }}">
@@ -139,7 +139,7 @@
                             </div>
                         </div>
                         <span class="inline-flex px-2 py-1 rounded text-xs font-medium
-                            {{ $document->status === 'pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
+                            {{ $document->status === 'pending' ? 'bg-teal-100 text-teal-700' : '' }}
                             {{ $document->status === 'approved' ? 'bg-green-100 text-green-700' : '' }}
                             {{ $document->status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}">
                             {{ ucfirst($document->status) }}

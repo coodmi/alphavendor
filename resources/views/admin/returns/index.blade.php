@@ -37,7 +37,7 @@
 
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center">
-                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <div class="p-3 rounded-full bg-teal-100 text-teal-700">
                     <i class="fas fa-clock text-2xl"></i>
                 </div>
                 <div class="ml-4">

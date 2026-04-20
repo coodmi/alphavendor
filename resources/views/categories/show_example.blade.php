@@ -136,7 +136,7 @@
                         
                         @if($product->rating > 0)
                             <div class="flex items-center gap-1 mt-2">
-                                <div class="flex text-yellow-400">
+                                <div class="flex text-teal-500">
                                     @for($i = 1; $i <= 5; $i++)
                                         <i class="fas fa-star {{ $i <= $product->rating ? '' : 'text-gray-300' }}"></i>
                                     @endfor

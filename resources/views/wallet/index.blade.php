@@ -31,7 +31,7 @@
             <p class="text-xs opacity-75 mt-1">Ready to withdraw</p>
         </div>
 
-        <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-lg shadow-lg p-6">
+        <div class="bg-gradient-to-br from-teal-600 to-teal-700 text-white rounded-lg shadow-lg p-6">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-sm font-medium opacity-90">Pending Balance</h3>
                 <i class="fas fa-clock text-2xl opacity-75"></i>
@@ -147,7 +147,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-block px-2 py-1 rounded text-xs font-semibold
                                     @if($transaction->status === 'completed') bg-green-100 text-green-800
-                                    @elseif($transaction->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($transaction->status === 'pending') bg-teal-100 text-teal-800
                                     @else bg-red-100 text-red-800
                                     @endif">
                                     {{ ucfirst($transaction->status) }}

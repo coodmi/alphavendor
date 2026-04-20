@@ -283,11 +283,11 @@
                             <div class="flex items-center gap-1 mb-2">
                                 @for($i = 1; $i <= 5; $i++)
                                     @if($i <= floor($product->rating))
-                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-teal-500 text-xs"></i>
                                     @elseif($i - 0.5 <= $product->rating)
-                                        <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star-half-alt text-teal-500 text-xs"></i>
                                     @else
-                                        <i class="far fa-star text-yellow-400 text-xs"></i>
+                                        <i class="far fa-star text-teal-500 text-xs"></i>
                                     @endif
                                 @endfor
                                 <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>

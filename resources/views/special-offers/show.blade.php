@@ -94,7 +94,7 @@
                                 @endif
 
                                 <div class="flex items-center gap-2 mb-3">
-                                    <div class="flex items-center text-yellow-400">
+                                    <div class="flex items-center text-teal-500">
                                         @for($i = 1; $i <= 5; $i++)
                                             @if($i <= floor($product->rating))
                                                 <i class="fas fa-star text-xs"></i>

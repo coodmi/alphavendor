@@ -41,7 +41,7 @@
                         <td>
                             <form method="POST" action="{{ route('admin.otp.resend', $otp->id) }}">
                                 @csrf
-                                <button type="submit" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Resend</button>
+                                <button type="submit" class="px-3 py-1 bg-teal-600 text-white rounded hover:bg-teal-700">Resend</button>
                             </form>
                         </td>
                     </tr>

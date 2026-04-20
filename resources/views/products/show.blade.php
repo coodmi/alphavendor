@@ -69,7 +69,7 @@
 
                 <div class="flex items-center gap-5 py-4 border-b border-gray-200">
                     <div class="flex items-center gap-2">
-                        <div class="flex text-yellow-400 text-base">
+                        <div class="flex text-teal-500 text-base">
                             @for($i = 0; $i < 5; $i++)
                                 @if($i < floor($product->rating))
                                     <i class="fas fa-star"></i>
@@ -341,7 +341,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Rating *</label>
                                 <div class="flex gap-1" id="ratingStars">
                                     @for($i = 1; $i <= 5; $i++)
-                                        <button type="button" class="text-3xl text-gray-300 hover:text-yellow-400 transition-colors star-rating-btn" data-rating="{{ $i }}" title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">
+                                        <button type="button" class="text-3xl text-gray-300 hover:text-teal-500 transition-colors star-rating-btn" data-rating="{{ $i }}" title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">
                                             <i class="far fa-star"></i>
                                         </button>
                                     @endfor
@@ -622,7 +622,7 @@
         stars.forEach((star, index) => {
             const icon = star.querySelector('i');
             if (index < rating) {
-                icon.className = 'fas fa-star text-yellow-400';
+                icon.className = 'fas fa-star text-teal-500';
                 star.classList.add('selected');
             } else {
                 icon.className = 'far fa-star text-gray-300';
@@ -735,7 +735,7 @@
     function generateStars(rating) {
         let stars = '';
         for (let i = 1; i <= 5; i++) {
-            stars += `<i class="fa${i <= rating ? 's' : 'r'} fa-star text-yellow-400"></i>`;
+            stars += `<i class="fa${i <= rating ? 's' : 'r'} fa-star text-teal-500"></i>`;
         }
         return stars;
     }

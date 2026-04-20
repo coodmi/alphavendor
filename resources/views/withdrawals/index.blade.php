@@ -38,9 +38,9 @@
             <h3 class="text-sm text-gray-600 mb-2">Available Balance</h3>
             <p class="text-3xl font-bold text-green-600">${{ number_format($wallet->balance ?? 0, 2) }}</p>
         </div>
-        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
+        <div class="bg-teal-50 border-2 border-teal-200 rounded-lg p-6">
             <h3 class="text-sm text-gray-600 mb-2">Pending Balance</h3>
-            <p class="text-3xl font-bold text-yellow-600">${{ number_format($wallet->pending_balance ?? 0, 2) }}</p>
+            <p class="text-3xl font-bold text-teal-700">${{ number_format($wallet->pending_balance ?? 0, 2) }}</p>
         </div>
         <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
             <h3 class="text-sm text-gray-600 mb-2">Total Withdrawn</h3>
@@ -94,7 +94,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-block px-3 py-1 rounded text-xs font-semibold
-                                    @if($withdrawal->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @if($withdrawal->status === 'pending') bg-teal-100 text-teal-800
                                     @elseif($withdrawal->status === 'approved') bg-blue-100 text-blue-800
                                     @elseif($withdrawal->status === 'completed') bg-green-100 text-green-800
                                     @else bg-red-100 text-red-800

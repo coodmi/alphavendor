@@ -3,9 +3,9 @@
 @section('title', 'Special Offers')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-yellow-50">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-teal-50">
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-teal-700 to-yellow-500 text-white py-16">
+    <div class="bg-gradient-to-r from-teal-700 to-teal-600 text-white py-16">
         <div class="container mx-auto px-4">
             <div class="text-center">
                 <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
@@ -105,7 +105,7 @@
 
     <!-- Call to Action -->
     @if($specialOffers->count() > 0)
-        <div class="bg-gradient-to-r from-teal-700 to-yellow-500 text-white py-12 mt-12">
+        <div class="bg-gradient-to-r from-teal-700 to-teal-600 text-white py-12 mt-12">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold mb-4">Don't Miss Out on These Amazing Deals!</h2>
                 <p class="text-xl mb-6 opacity-90">Shop now and save big on your favorite products</p>

@@ -40,13 +40,13 @@
     </div>
 
     @if(!$paymentMethods || $paymentMethods->isEmpty())
-        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 mb-6">
+        <div class="bg-teal-50 border-2 border-teal-200 rounded-lg p-6 mb-6">
             <div class="flex items-start gap-4">
-                <i class="fas fa-exclamation-triangle text-yellow-500 text-2xl"></i>
+                <i class="fas fa-exclamation-triangle text-teal-600 text-2xl"></i>
                 <div>
-                    <h3 class="font-bold text-yellow-800 mb-2">Payment Method Required</h3>
-                    <p class="text-yellow-700 mb-4">Please add a payment method before requesting a withdrawal.</p>
-                    <a href="{{ route('withdrawals.payment-methods') }}" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                    <h3 class="font-bold text-teal-800 mb-2">Payment Method Required</h3>
+                    <p class="text-teal-700 mb-4">Please add a payment method before requesting a withdrawal.</p>
+                    <a href="{{ route('withdrawals.payment-methods') }}" class="inline-block bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700">
                         Add Payment Method
                     </a>
                 </div>

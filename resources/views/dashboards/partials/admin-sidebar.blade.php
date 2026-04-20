@@ -126,7 +126,7 @@
                 ->count();
         @endphp
         @if($categoriesWithoutCommission > 0)
-            <span class="ml-auto bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">{{ $categoriesWithoutCommission }}</span>
+            <span class="ml-auto bg-teal-600 text-white text-xs px-2 py-1 rounded-full">{{ $categoriesWithoutCommission }}</span>
         @endif
     </a>
     <a href="{{ route('admin.delivery.index') }}" class="menu-item {{ request()->routeIs('admin.delivery*') ? 'active' : '' }}">
