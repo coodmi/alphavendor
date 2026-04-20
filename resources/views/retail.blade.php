@@ -4,8 +4,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/retail-mobile.css') }}">
-<link rel="stylesheet" href="{{ asset('css/shop-mobile.css') }}">
-<link rel="stylesheet" href="{{ asset('css/buy-now-button.css') }}">
 @endpush
 
 @section('content')
@@ -54,311 +52,302 @@
     </div>
 </section>
 
-<!-- Shop Section -->
-<section class="shop-section">
-    <div class="container">
-        <!-- Filter Sidebar Overlay -->
-        <div class="filter-sidebar-overlay" id="filterSidebarOverlay"></div>
+<!-- Shop Section with Tailwind -->
+<section class="py-10">
+    <div class="container mx-auto px-4">
+        <!-- Mobile Filter Toggle Button -->
+        <button class="mobile-filter-toggle-wholesale" id="mobileFilterToggleRetail">
+            <i class="fas fa-filter"></i>
+            Filters & Categories
+        </button>
 
-        <div class="shop-wrapper">
+        <!-- Filter Sidebar Overlay -->
+        <div class="filter-sidebar-overlay-wholesale" id="filterSidebarOverlayRetail"></div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar Filters -->
-            <aside class="shop-sidebar" id="shopSidebar">
+            <aside class="lg:w-64 flex-shrink-0" id="retailSidebar">
                 <!-- Mobile Filter Header -->
-                <div class="filter-sidebar-header" style="display: none;">
+                <div class="filter-sidebar-header-wholesale" style="display: none;">
                     <h3>Filters</h3>
-                    <button class="filter-close-btn" id="filterCloseBtn">
+                    <button class="filter-close-btn-wholesale" id="filterCloseBtnRetail">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
 
-                <!-- Categories Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Categories</h3>
-                    <ul class="filter-list">
-                        @forelse($categories as $category)
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="category-checkbox" value="{{ $category->id }}"
-                                    {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}>
-                                <span>{{ $category->name }}</span>
-                                <span class="count">({{ $category->products_count }})</span>
-                            </label>
-                        </li>
-                        @empty
-                        <li style="padding: 10px; color: #7f8c8d;">No categories available</li>
-                        @endforelse
-                    </ul>
-                </div>
-
-                <!-- Price Range Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Price Range</h3>
-                    <div class="price-range-slider">
-                        <input type="range" min="0" max="10000" value="{{ request('min_price', 0) }}" class="range-min">
-                        <input type="range" min="0" max="10000" value="{{ request('max_price', 10000) }}" class="range-max">
+                <form method="GET" action="{{ route('retail') }}" id="filterForm">
+                    <!-- Categories Filter -->
+                    <div class="bg-white rounded-lg shadow-md p-5 mb-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-tags text-teal-600"></i> Categories
+                        </h3>
+                        <ul class="space-y-2">
+                            @forelse($categories as $category)
+                            <li>
+                                <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <input type="radio" name="category" value="{{ $category->id }}" {{ request('category') == $category->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600">
+                                        <span class="text-sm text-gray-700">{{ $category->name }}</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">({{ $category->products_count }})</span>
+                                </label>
+                            </li>
+                            @empty
+                            <li class="text-sm text-gray-500 p-2">No categories available</li>
+                            @endforelse
+                        </ul>
                     </div>
-                    <div class="price-inputs">
-                        <div class="price-input">
-                            <label>Min</label>
-                            <input type="number" class="min-price-input" value="{{ request('min_price', 0) }}" min="0" max="10000">
+
+                    <!-- Price Range Filter -->
+                    <div class="bg-white rounded-lg shadow-md p-5 mb-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-dollar-sign text-teal-600"></i> Price Range
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex gap-3">
+                                <div class="flex-1">
+                                    <label class="text-xs text-gray-600 block mb-1">Min</label>
+                                    <input type="number" name="min_price" value="{{ request('min_price', 0) }}" min="0" max="10000" id="retail-min-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="text-xs text-gray-600 block mb-1">Max</label>
+                                    <input type="number" name="max_price" value="{{ request('max_price', 10000) }}" min="0" max="10000" id="retail-max-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition-colors font-medium text-sm">
+                                Apply Filter
+                            </button>
                         </div>
-                        <div class="price-input">
-                            <label>Max</label>
-                            <input type="number" class="max-price-input" value="{{ request('max_price', 10000) }}" min="0" max="10000">
-                        </div>
                     </div>
-                    <button type="button" class="btn-apply-filter">Apply Filter</button>
-                </div>
 
-                <!-- Brands Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Brands</h3>
-                    <div class="search-filter">
-                        <input type="text" placeholder="Search brands..." class="brand-search-input">
+                    <!-- Brands Filter -->
+                    <div class="bg-white rounded-lg shadow-md p-5 mb-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-star text-teal-600"></i> Brands
+                        </h3>
+                        <ul class="space-y-2">
+                            @forelse($brands ?? [] as $brand)
+                            <li>
+                                <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <input type="radio" name="brand" value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600">
+                                        <span class="text-sm text-gray-700">{{ $brand->name }}</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">({{ $brand->products_count ?? 0 }})</span>
+                                </label>
+                            </li>
+                            @empty
+                            <li class="text-sm text-gray-500 p-2">No brands available</li>
+                            @endforelse
+                        </ul>
                     </div>
-                    <ul class="filter-list brand-filter-list">
-                        @forelse($brands ?? [] as $brand)
-                        <li style="{{ $loop->index >= 5 ? 'display: none;' : '' }}" class="brand-filter-item" data-brand-name="{{ strtolower($brand->name) }}">
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="brand-checkbox" value="{{ $brand->id }}"
-                                    {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
-                                <span>{{ $brand->name }}</span>
-                            </label>
-                        </li>
-                        @empty
-                        <li style="padding: 10px; color: #7f8c8d;">No brands available</li>
-                        @endforelse
-                    </ul>
-                    @if(isset($brands) && $brands->count() > 5)
-                    <button class="show-more-btn">Show More +</button>
-                    @endif
-                </div>
 
-                <!-- Rating Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Rating</h3>
-                    <ul class="filter-list rating-filter">
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="5"
-                                    {{ request('min_rating') == 5 ? 'checked' : '' }}>
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="4"
-                                    {{ request('min_rating') == 4 ? 'checked' : '' }}>
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                <span>& Up</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="3"
-                                    {{ request('min_rating') == 3 ? 'checked' : '' }}>
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                <span>& Up</span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
+                    <!-- Rating Filter -->
+                    <div class="bg-white rounded-lg shadow-md p-5 mb-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-star text-teal-600"></i> Rating
+                        </h3>
+                        <ul class="space-y-2">
+                            <li>
+                                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                                    <input type="radio" name="min_rating" value="5" {{ request('min_rating') == 5 ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
+                                    <span class="text-sm text-gray-700 flex items-center gap-1">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    </span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                                    <input type="radio" name="min_rating" value="4" {{ request('min_rating') == 4 ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
+                                    <span class="text-sm text-gray-700 flex items-center gap-1">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="far fa-star text-yellow-400 text-xs"></i>
+                                        <span class="ml-1">& Up</span>
+                                    </span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
+                                    <input type="radio" name="min_rating" value="3" {{ request('min_rating') == 3 ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
+                                    <span class="text-sm text-gray-700 flex items-center gap-1">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="far fa-star text-yellow-400 text-xs"></i>
+                                        <i class="far fa-star text-yellow-400 text-xs"></i>
+                                        <span class="ml-1">& Up</span>
+                                    </span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
 
-                <!-- Clear All Filters -->
-                <button class="btn-clear-filters">
-                    <i class="fas fa-times"></i> Clear All Filters
-                </button>
+                    <!-- Clear All Filters -->
+                    <a href="{{ route('retail') }}" class="block w-full bg-gray-100 text-gray-700 text-center py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm">
+                        <i class="fas fa-times"></i> Clear All Filters
+                    </a>
+                </form>
             </aside>
 
             <!-- Products Area -->
-            <div class="shop-content">
+            <div class="flex-1">
                 <!-- Toolbar -->
-                <div class="shop-toolbar">
-                    <div class="toolbar-left">
-                        <p class="results-count">Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> results</p>
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">
+                            Showing <strong class="text-gray-900">{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong class="text-gray-900">{{ $products->total() }}</strong> retail products
+                        </p>
                     </div>
-                    <div class="toolbar-right">
-                        <div class="view-mode">
-                            <button class="view-btn active" data-view="grid">
-                                <i class="fas fa-th"></i>
-                            </button>
-                            <button class="view-btn" data-view="list">
-                                <i class="fas fa-list"></i>
-                            </button>
-                        </div>
-                        <div class="sort-dropdown">
-                            <select>
-                                <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Sort by: Default</option>
-                                <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
-                                <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
-                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Best Rating</option>
-                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
-                            </select>
-                        </div>
-                        <div class="per-page-dropdown">
-                            <select>
-                                <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>Show: 12</option>
-                                <option value="24" {{ request('per_page', 12) == 24 ? 'selected' : '' }}>Show: 24</option>
-                                <option value="36" {{ request('per_page', 12) == 36 ? 'selected' : '' }}>Show: 36</option>
-                                <option value="48" {{ request('per_page', 12) == 48 ? 'selected' : '' }}>Show: 48</option>
-                            </select>
-                        </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
                     </div>
                 </div>
 
                 <!-- Active Filters Tags -->
-                @if(request()->hasAny(['categories', 'brands', 'min_price', 'max_price', 'min_rating']))
-                <div class="active-filters">
-                    @if(request('categories'))
-                        @foreach(request('categories') as $categoryId)
-                            @php
-                                $category = $categories->firstWhere('id', $categoryId);
-                            @endphp
-                            @if($category)
-                            <span class="filter-tag" data-filter-type="category" data-filter-value="{{ $categoryId }}">
-                                {{ $category->name }}
-                                <button class="remove-filter"><i class="fas fa-times"></i></button>
-                            </span>
-                            @endif
-                        @endforeach
-                    @endif
-
-                    @if(request('min_price') || request('max_price'))
-                    <span class="filter-tag">
-                        Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
-                    @endif
-
-                    @if(request('brands'))
-                        @foreach(request('brands') as $brand)
-                        <span class="filter-tag" data-filter-type="brand" data-filter-value="{{ $brand }}">
-                            {{ $brand }}
-                            <button class="remove-filter"><i class="fas fa-times"></i></button>
+                @if(request()->hasAny(['category', 'brand', 'min_price', 'max_price', 'min_rating']))
+                <div class="flex flex-wrap gap-2 mb-6">
+                    @if(request('category'))
+                        @php $selectedCategory = $categories->firstWhere('id', request('category')); @endphp
+                        @if($selectedCategory)
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
+                            {{ $selectedCategory->name }}
+                            <a href="{{ request()->fullUrlWithoutQuery('category') }}" class="hover:text-teal-900">
+                                <i class="fas fa-times"></i>
+                            </a>
                         </span>
-                        @endforeach
+                        @endif
                     @endif
-
+                    @if(request('brand'))
+                        @php $selectedBrand = collect($brands ?? [])->firstWhere('id', request('brand')); @endphp
+                        @if($selectedBrand)
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
+                            {{ $selectedBrand->name }}
+                            <a href="{{ request()->fullUrlWithoutQuery('brand') }}" class="hover:text-teal-900">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                    @endif
+                    @if(request('min_price') || request('max_price'))
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
+                            Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
+                            <a href="{{ request()->fullUrlWithoutQuery(['min_price', 'max_price']) }}" class="hover:text-teal-900">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                    @endif
                     @if(request('min_rating'))
-                    <span class="filter-tag">
-                        {{ request('min_rating') }}+ Stars
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
+                            {{ request('min_rating') }}+ Stars
+                            <a href="{{ request()->fullUrlWithoutQuery('min_rating') }}" class="hover:text-teal-900">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
                     @endif
                 </div>
                 @endif
 
                 <!-- Products Grid -->
-                <div class="products-grid-view">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @forelse($products as $product)
-                    <a href="{{ route('product.show', $product->id) }}" class="product-card">
-                        <div class="product-image">
+                    <a href="{{ route('product.show', $product->id) }}" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group block">
+                        <div class="relative overflow-hidden aspect-square">
                             @if($product->image)
-                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                             @else
-                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
+                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             @endif
                             @if($product->badge)
-                            <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
+                                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">{{ $product->badge }}</span>
                             @endif
-                            <div class="product-actions">
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 @auth
-                                    <button class="action-btn wishlist-btn" 
-                                            data-product-id="{{ $product->id }}"
-                                            title="Add to Wishlist" 
-                                            onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ $product->id }}, this);">
+                                    <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Add to Wishlist" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ $product->id }}, this);">
                                         <i class="far fa-heart"></i>
                                     </button>
                                 @else
-                                    <button class="action-btn" 
-                                            title="Login to add to wishlist" 
-                                            onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('login') }}';">
+                                    <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Login to add to wishlist" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('login') }}';">
                                         <i class="far fa-heart"></i>
                                     </button>
                                 @endauth
-                                <button class="action-btn" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>
-                                <button class="action-btn" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
                         </div>
-                        <div class="product-card-actions">
-                            <button class="quick-add-btn" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);">
+                        <div class="flex gap-1">
+                            <button class="flex-1 bg-teal-600 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
                             </button>
-                            <button class="buy-now-btn" data-product-id="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);">
+                            <button class="flex-1 bg-teal-700 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-bolt"></i>
                                 Buy Now
                             </button>
                         </div>
-                        <div class="product-info">
-                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4>{{ $product->name }}</h4>
-                            <div class="vendor-name">
-                                <i class="fas fa-store"></i> {{ $product->vendor->name ?? 'AlphaVendor' }}
+                        <div class="p-4">
+                            <div class="text-xs text-teal-700 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
+                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
+                                <i class="fas fa-store text-teal-600"></i>
+                                <span>{{ $product->vendor->name ?? 'AlphaVendor' }}</span>
                             </div>
-                            <div class="rating">
+                            <div class="flex items-center gap-1 mb-2">
                                 @for($i = 0; $i < 5; $i++)
                                     @if($i < floor($product->rating))
-                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star text-teal-500 text-xs"></i>
                                     @elseif($i < $product->rating)
-                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="fas fa-star-half-alt text-teal-500 text-xs"></i>
                                     @else
-                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star text-teal-500 text-xs"></i>
                                     @endif
                                 @endfor
-                                <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                                <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
-                            <div class="price">
-                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
                                 @if($product->old_price)
-                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
-                                    <span class="discount">-{{ $product->discount_percentage }}%</span>
+                                    <span class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="text-xs font-semibold text-red-500">-{{ $product->discount_percentage }}%</span>
                                 @endif
                             </div>
                         </div>
                     </a>
                     @empty
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                        <i class="fas fa-box-open" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
-                        <h3 style="color: #2c3e50; margin-bottom: 10px;">No Products Found</h3>
-                        <p style="color: #7f8c8d;">Check back later for new products!</p>
+                    <div class="col-span-full text-center py-16">
+                        <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">No Products Found</h3>
+                        <p class="text-gray-500">Try adjusting your filters or <a href="{{ route('retail') }}" class="text-teal-600 hover:text-teal-700">clear all filters</a>.</p>
                     </div>
                     @endforelse
                 </div>
 
                 <!-- Pagination -->
                 @if($products->hasPages())
-                <div class="pagination-wrapper">
-                    {{ $products->links('vendor.pagination.custom') }}
+                <div class="mt-8">
+                    {{ $products->withQueryString()->links() }}
                 </div>
                 @endif
             </div>
         </div>
     </div>
 </section>
+
 @endsection
 
 @push('scripts')
@@ -476,203 +465,86 @@ function quickAddToCart(productId, button) {
     });
 }
 
-// Price Range Slider - Synchronize sliders with inputs
-document.addEventListener('DOMContentLoaded', function() {
-    const rangeMin = document.querySelector(".range-min");
-    const rangeMax = document.querySelector(".range-max");
-    const minPriceInput = document.querySelector('.min-price-input');
-    const maxPriceInput = document.querySelector('.max-price-input');
+// Buy Now function
+function buyNow(productId, button) {
+    const originalContent = button.innerHTML;
 
-    if (!rangeMin || !rangeMax || !minPriceInput || !maxPriceInput) {
-        return;
-    }
-
-    // Update min slider
-    rangeMin.addEventListener('input', function() {
-        let min = parseInt(this.value);
-        let max = parseInt(rangeMax.value);
-
-        if (min > max - 100) {
-            min = max - 100;
-            this.value = min;
-        }
-
-        minPriceInput.value = min;
-    });
-
-    // Update max slider
-    rangeMax.addEventListener('input', function() {
-        let min = parseInt(rangeMin.value);
-        let max = parseInt(this.value);
-
-        if (max < min + 100) {
-            max = min + 100;
-            this.value = max;
-        }
-
-        maxPriceInput.value = max;
-    });
-
-    // Update min input
-    minPriceInput.addEventListener('input', function() {
-        let min = parseInt(this.value) || 0;
-        let max = parseInt(maxPriceInput.value) || 10000;
-
-        if (min < 0) {
-            min = 0;
-            this.value = min;
-        }
-        if (min > max - 100) {
-            min = max - 100;
-            this.value = min;
-        }
-
-        rangeMin.value = min;
-    });
-
-    // Update max input
-    maxPriceInput.addEventListener('input', function() {
-        let min = parseInt(minPriceInput.value) || 0;
-        let max = parseInt(this.value) || 10000;
-
-        if (max > 10000) {
-            max = 10000;
-            this.value = max;
-        }
-        if (max < min + 100) {
-            max = min + 100;
-            this.value = max;
-        }
-
-        rangeMax.value = max;
-    });
-});
-
-// Wishlist functionality - Define in global scope
-window.toggleWishlist = function(productId, button) {
-    console.log('toggleWishlist called with productId:', productId);
-    
-    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-    
-    if (!isAuthenticated) {
-        console.log('User not authenticated, redirecting to login');
-        window.location.href = '{{ route("login") }}';
-        return;
-    }
-
-    const icon = button.querySelector('i');
-    const originalClass = icon.className;
-    
-    console.log('Starting wishlist toggle...');
-    
-    // Show loading state
+    // Disable button and show loading
     button.disabled = true;
-    icon.className = 'fas fa-spinner fa-spin';
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
-    fetch('/wishlist/toggle/' + productId, {
+    fetch(`/cart/add/${productId}`, {
         method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
     })
-    .then(response => {
-        console.log('Response status:', response.status);
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        console.log('Response data:', data);
-        
         if (data.success) {
-            // Update icon based on wishlist status
-            if (data.inWishlist) {
-                icon.className = 'fas fa-heart';
-                button.style.color = '#e74c3c';
-            } else {
-                icon.className = 'far fa-heart';
-                button.style.color = '';
-            }
-            
-            // Update wishlist count in header
-            updateWishlistCount(data.wishlistCount);
-            
-            // Show toast notification
-            showToast(data.message, 'success');
+            // Redirect to checkout
+            window.location.href = '/checkout';
         } else {
-            icon.className = originalClass;
-            showToast(data.message || 'Failed to update wishlist', 'error');
+            throw new Error(data.message || 'Failed to add product');
         }
-        button.disabled = false;
     })
     .catch(error => {
         console.error('Error:', error);
-        icon.className = originalClass;
         button.disabled = false;
+        button.innerHTML = originalContent;
+        showToast('Failed to process order', 'error');
+    });
+}
+
+// Toggle Wishlist function
+function toggleWishlist(productId, button) {
+    const icon = button.querySelector('i');
+    const isFilled = icon.classList.contains('fas');
+
+    fetch(`/wishlist/toggle/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.added) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                showToast('Added to wishlist!', 'success');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                showToast('Removed from wishlist', 'success');
+            }
+        } else {
+            throw new Error(data.message || 'Failed to update wishlist');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
         showToast('Failed to update wishlist', 'error');
     });
-};
+}
 
-window.updateWishlistCount = function(count) {
-    console.log('Updating wishlist count to:', count);
-    const headerWishlist = document.querySelector('.header-actions a[href*="wishlist"]');
-    if (headerWishlist) {
-        let badge = headerWishlist.querySelector('span');
-        if (count > 0) {
-            if (!badge) {
-                badge = document.createElement('span');
-                badge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
-                headerWishlist.appendChild(badge);
-            }
-            badge.textContent = count;
-        } else if (badge) {
-            badge.remove();
-        }
-    }
-};
-
-console.log('Wishlist functions loaded');
-
-// Check wishlist status on page load
-@if(auth()->check())
+// Mobile Filter Toggle Functionality for Retail
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Checking wishlist status for products...');
-    const wishlistButtons = document.querySelectorAll('.wishlist-btn');
-    console.log('Found wishlist buttons:', wishlistButtons.length);
-    
-    wishlistButtons.forEach(button => {
-        const productId = button.dataset.productId;
-        if (productId) {
-            fetch('/wishlist/check/' + productId, {
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.inWishlist) {
-                    const icon = button.querySelector('i');
-                    icon.className = 'fas fa-heart';
-                    button.style.color = '#e74c3c';
-                }
-            })
-            .catch(error => console.error('Error checking wishlist:', error));
-        }
-    });
-});
-@endif
-</script>
-
-<script>
-// Mobile Filter Toggle Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
-    const shopSidebar = document.getElementById('shopSidebar');
-    const filterSidebarOverlay = document.getElementById('filterSidebarOverlay');
-    const filterCloseBtn = document.getElementById('filterCloseBtn');
-    const filterHeader = document.querySelector('.filter-sidebar-header');
+    const mobileFilterToggle = document.getElementById('mobileFilterToggleRetail');
+    const retailSidebar = document.getElementById('retailSidebar');
+    const filterSidebarOverlay = document.getElementById('filterSidebarOverlayRetail');
+    const filterCloseBtn = document.getElementById('filterCloseBtnRetail');
+    const filterHeader = document.querySelector('.filter-sidebar-header-wholesale');
 
     // Show filter header on mobile
     function updateFilterHeader() {
-        if (window.innerWidth <= 768 && filterHeader) {
+        if (window.innerWidth <= 1024 && filterHeader) {
             filterHeader.style.display = 'flex';
         } else if (filterHeader) {
             filterHeader.style.display = 'none';
@@ -683,16 +555,16 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', updateFilterHeader);
 
     function openFilters() {
-        if (shopSidebar && filterSidebarOverlay) {
-            shopSidebar.classList.add('active');
+        if (retailSidebar && filterSidebarOverlay) {
+            retailSidebar.classList.add('active');
             filterSidebarOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
     }
 
     function closeFilters() {
-        if (shopSidebar && filterSidebarOverlay) {
-            shopSidebar.classList.remove('active');
+        if (retailSidebar && filterSidebarOverlay) {
+            retailSidebar.classList.remove('active');
             filterSidebarOverlay.classList.remove('active');
             document.body.style.overflow = '';
         }
@@ -711,60 +583,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Close filters when applying filter
-    const applyFilterBtn = document.querySelector('.btn-apply-filter');
+    const applyFilterBtn = document.querySelector('.bg-teal-600');
     if (applyFilterBtn) {
         applyFilterBtn.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                setTimeout(closeFilters, 300);
-            }
-        });
-    }
-
-    // Close filters when clearing all
-    const clearFiltersBtn = document.querySelector('.btn-clear-filters');
-    if (clearFiltersBtn) {
-        clearFiltersBtn.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                setTimeout(closeFilters, 300);
-            }
+            setTimeout(closeFilters, 300);
         });
     }
 });
-
-// Buy Now function
-function buyNow(productId, button) {
-    const originalContent = button.innerHTML;
-    button.disabled = true;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-    fetch('/cart/buy-now', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ 
-            product_id: productId,
-            quantity: 1 
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = '/checkout';
-        } else {
-            throw new Error(data.message || 'Failed to process');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        button.disabled = false;
-        button.innerHTML = originalContent;
-        showToast('Failed to process order', 'error');
-    });
-}
 </script>
-
-<script src="{{ asset('js/shop.js') }}"></script>
 @endpush
