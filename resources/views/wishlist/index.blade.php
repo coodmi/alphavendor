@@ -67,7 +67,7 @@
 @section('content')
 <div style="max-width: 1200px;">
     <div class="mb-8">
-        <p class="text-gray-100 mt-2">{{ $wishlistCount }} item(s) in your wishlist</p>
+        <p class="text-gray-600 mt-2">{{ $wishlistCount }} item(s) in your wishlist</p>
     </div>
 
     @if(session('success'))
@@ -112,7 +112,7 @@
 
                     <div class="p-4">
                         <a href="{{ route('product.show', $wishlist->product->id) }}" 
-                           class="text-lg font-semibold text-white hover:text-teal-700 line-clamp-2">
+                           class="text-lg font-semibold text-gray-900 hover:text-teal-700 line-clamp-2">
                             {{ $wishlist->product->name }}
                         </a>
 
@@ -122,18 +122,18 @@
                                     <span class="text-xl font-bold text-teal-700">
                                         ${{ number_format($wishlist->product->discount_price, 2) }}
                                     </span>
-                                    <span class="text-sm text-gray-200 line-through ml-2">
+                                    <span class="text-sm text-gray-500 line-through ml-2">
                                         ${{ number_format($wishlist->product->price, 2) }}
                                     </span>
                                 @else
-                                    <span class="text-xl font-bold text-white">
+                                    <span class="text-xl font-bold text-gray-900">
                                         ${{ number_format($wishlist->product->price, 2) }}
                                     </span>
                                 @endif
                             </div>
                         </div>
 
-                        <div class="mt-2 text-sm text-gray-100">
+                        <div class="mt-2 text-sm text-gray-600">
                             <i class="fas fa-store"></i>
                             {{ $wishlist->product->vendor->name ?? 'Unknown Vendor' }}
                         </div>
@@ -149,13 +149,13 @@
                                 </form>
                             @else
                                 <button disabled 
-                                        class="flex-1 bg-gray-300 text-gray-200 py-2 px-4 rounded-lg cursor-not-allowed font-semibold">
+                                        class="flex-1 bg-gray-300 text-gray-500 py-2 px-4 rounded-lg cursor-not-allowed font-semibold">
                                     Out of Stock
                                 </button>
                             @endif
                         </div>
 
-                        <div class="mt-2 text-xs text-gray-200">
+                        <div class="mt-2 text-xs text-gray-500">
                             Added {{ $wishlist->created_at->diffForHumans() }}
                         </div>
                     </div>
@@ -165,8 +165,8 @@
     @else
         <div class="bg-white rounded-lg shadow-md p-12 text-center">
             <i class="fas fa-heart text-gray-300 text-8xl mb-6"></i>
-            <h2 class="text-2xl font-bold text-white mb-4">Your Wishlist is Empty</h2>
-            <p class="text-gray-100 mb-8">Start adding products you love to your wishlist!</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Your Wishlist is Empty</h2>
+            <p class="text-gray-600 mb-8">Start adding products you love to your wishlist!</p>
             <a href="{{ route('shop') }}" 
                class="inline-block bg-teal-600 text-white py-3 px-8 rounded-lg hover:bg-teal-700 transition-colors font-semibold">
                 <i class="fas fa-shopping-bag"></i> Browse Products
@@ -199,7 +199,7 @@ function removeFromWishlist(productId, button) {
             button.closest('.bg-white').remove();
             
             // Update wishlist count
-            const countElement = document.querySelector('.text-gray-100');
+            const countElement = document.querySelector('.text-gray-600');
             if (countElement) {
                 countElement.textContent = `${data.wishlistCount} item(s) in your wishlist`;
             }

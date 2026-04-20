@@ -11,8 +11,8 @@
 <div class="mb-8">
     <div class="flex justify-between items-center">
         <div>
-            <h2 class="text-3xl font-bold text-white mb-1">Products Management</h2>
-            <p class="text-gray-100">Manage your export products</p>
+            <h2 class="text-3xl font-bold text-gray-800 mb-1">Products Management</h2>
+            <p class="text-gray-600">Manage your export products</p>
         </div>
         <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
             <i class="fas fa-plus"></i> Add Product
@@ -25,15 +25,15 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Image</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Product</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Category</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Brand</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Price</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">MOQ</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Certifications</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Image</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Product</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Category</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Brand</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Price</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">MOQ</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Certifications</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody id="productsTableBody" class="bg-white divide-y divide-gray-200">
@@ -53,21 +53,21 @@
                         @endif
                     </td>
                     <td class="px-6 py-4">
-                        <div class="font-semibold text-white">{{ $product->name }}</div>
-                        <div class="text-sm text-gray-200">SKU: {{ $product->sku }}</div>
+                        <div class="font-semibold text-gray-900">{{ $product->name }}</div>
+                        <div class="text-sm text-gray-500">SKU: {{ $product->sku }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
                             {{ $product->category->name ?? 'N/A' }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {{ $product->brand->name ?? 'No Brand' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="font-semibold text-white">${{ number_format($product->price, 2) }}</div>
+                        <div class="font-semibold text-gray-900">${{ number_format($product->price, 2) }}</div>
                         @if($product->old_price)
-                            <div class="text-sm text-gray-200 line-through">${{ number_format($product->old_price, 2) }}</div>
+                            <div class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</div>
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -91,7 +91,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                            {{ $product->status === 'active' ? 'bg-green-100 text-green-800' : ($product->status === 'out_of_stock' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-white') }}">
+                            {{ $product->status === 'active' ? 'bg-green-100 text-green-800' : ($product->status === 'out_of_stock' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800') }}">
                             {{ ucfirst(str_replace('_', ' ', $product->status)) }}
                         </span>
                     </td>
@@ -108,7 +108,7 @@
                 <tr>
                     <td colspan="9" class="px-6 py-16 text-center">
                         <i class="fas fa-box text-gray-300 text-6xl mb-4"></i>
-                        <p class="text-gray-200 text-lg">No products found. Click "Add Product" to create one.</p>
+                        <p class="text-gray-500 text-lg">No products found. Click "Add Product" to create one.</p>
                     </td>
                 </tr>
                 @endforelse
@@ -132,24 +132,24 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Product Name *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Product Name *</label>
                     <input type="text" name="name" id="productName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">SKU *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">SKU *</label>
                     <input type="text" name="sku" id="productSku" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-white mb-2">Description</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                 <textarea name="description" id="productDescription" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"></textarea>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Category *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
                     <select name="category_id" id="productCategory" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                         <option value="">Select Category</option>
                         @foreach($categories as $category)
@@ -159,7 +159,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Brand</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Brand</label>
                     <select name="brand_id" id="productBrand" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                         <option value="">Select Brand (Optional)</option>
                         @foreach($brands as $brand)
@@ -170,17 +170,17 @@
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-white mb-2">Product Image</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Product Image</label>
 
                 <!-- Image Source Toggle -->
                 <div class="flex gap-4 mb-3">
                     <label class="flex items-center cursor-pointer">
                         <input type="radio" name="imageSource" value="upload" checked onchange="toggleImageSource()" class="mr-2">
-                        <span class="text-sm text-white">Upload File</span>
+                        <span class="text-sm text-gray-700">Upload File</span>
                     </label>
                     <label class="flex items-center cursor-pointer">
                         <input type="radio" name="imageSource" value="url" onchange="toggleImageSource()" class="mr-2">
-                        <span class="text-sm text-white">Image URL</span>
+                        <span class="text-sm text-gray-700">Image URL</span>
                     </label>
                 </div>
 
@@ -205,29 +205,29 @@
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Price *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Price *</label>
                     <input type="number" name="price" id="productPrice" step="0.01" min="0" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Old Price</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Old Price</label>
                     <input type="number" name="old_price" id="productOldPrice" step="0.01" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Stock *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Stock *</label>
                     <input type="number" name="stock" id="productStock" min="0" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Min Order (MOQ)</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Min Order (MOQ)</label>
                     <input type="number" name="minimum_order" id="productMinOrder" min="1" value="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Status *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
                     <select name="status" id="productStatus" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -236,25 +236,25 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Badge</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Badge</label>
                     <input type="text" name="badge" id="productBadge" placeholder="e.g., New, Sale, Hot" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-white mb-2">Supplier Location</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Supplier Location</label>
                     <input type="text" name="supplier_location" id="productLocation" placeholder="e.g., Shanghai, China" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                 </div>
             </div>
 
             <!-- Export Certifications -->
             <div>
-                <label class="block text-sm font-semibold text-white mb-3">Export Certifications</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Export Certifications</label>
                 @if($certifications && $certifications->count() > 0)
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         @foreach($certifications as $cert)
                             <label class="flex items-center cursor-pointer p-3 border border-gray-300 rounded-lg hover:bg-indigo-50 transition-colors duration-150">
                                 <input type="checkbox" name="certifications[]" value="cert_{{ $cert->id }}" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                <span class="ml-2 text-sm text-white">{{ $cert->name }}</span>
+                                <span class="ml-2 text-sm text-gray-700">{{ $cert->name }}</span>
                             </label>
                         @endforeach
                     </div>
@@ -270,17 +270,17 @@
 
             <!-- Exporter Rating -->
             <div>
-                <label class="block text-sm font-semibold text-white mb-2">Exporter Rating</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Exporter Rating</label>
                 <div class="flex items-center gap-4">
                     <input type="number" name="exporter_rating" id="exporterRating" min="0" max="5" step="0.1" placeholder="0.0" class="w-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
-                    <span class="text-sm text-gray-200">Rating out of 5 stars (e.g., 4.5)</span>
+                    <span class="text-sm text-gray-500">Rating out of 5 stars (e.g., 4.5)</span>
                 </div>
             </div>
 
             <div>
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" name="is_featured" id="productFeatured" value="1" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                    <span class="ml-3 text-sm font-medium text-white">Featured Product</span>
+                    <span class="ml-3 text-sm font-medium text-gray-700">Featured Product</span>
                 </label>
             </div>
 
@@ -303,12 +303,12 @@
             <div class="flex items-center justify-center w-16 h-16 mx-auto bg-gradient-to-br from-red-500 to-red-600 rounded-full mb-4">
                 <i class="fas fa-trash-alt text-white text-2xl"></i>
             </div>
-            <h3 class="text-2xl font-bold text-white text-center mb-2" id="deleteModalTitle">Delete Product?</h3>
-            <p class="text-gray-100 text-center mb-6">
-                Are you sure you want to delete "<span id="deleteItemName" class="font-semibold text-white"></span>"? This action cannot be undone.
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-2" id="deleteModalTitle">Delete Product?</h3>
+            <p class="text-gray-600 text-center mb-6">
+                Are you sure you want to delete "<span id="deleteItemName" class="font-semibold text-gray-900"></span>"? This action cannot be undone.
             </p>
             <div class="flex gap-3">
-                <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3 bg-gray-200 text-white rounded-lg hover:bg-gray-300 transition-colors duration-150 font-semibold">
+                <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-150 font-semibold">
                     Cancel
                 </button>
                 <button onclick="executeSoftDelete()" class="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-150 font-semibold">
@@ -460,7 +460,7 @@ function executeSoftDelete() {
                     <tr>
                         <td colspan="9" class="px-6 py-16 text-center">
                             <i class="fas fa-box text-gray-300 text-6xl mb-4"></i>
-                            <p class="text-gray-200 text-lg">No products found. Click "Add Product" to create one.</p>
+                            <p class="text-gray-500 text-lg">No products found. Click "Add Product" to create one.</p>
                         </td>
                     </tr>
                 `;

@@ -9,8 +9,8 @@
 <div class="max-w-4xl mx-auto">
 
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-white">Review Details</h2>
-        <a href="{{ route('admin.reviews.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-white rounded-lg text-sm font-medium transition">
+        <h2 class="text-2xl font-bold text-gray-800">Review Details</h2>
+        <a href="{{ route('admin.reviews.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition">
             ← Back to Reviews
         </a>
     </div>
@@ -31,7 +31,7 @@
                     {{ $review->status === 'reported' ? 'bg-teal-100 text-teal-900': '' }}">
                     {{ ucfirst($review->status) }}
                 </span>
-                <span class="text-sm text-gray-200">{{ $review->created_at->format('M d, Y H:i') }}</span>
+                <span class="text-sm text-gray-500">{{ $review->created_at->format('M d, Y H:i') }}</span>
             </div>
             <div class="flex gap-2">
                 @if($review->status === 'pending')
@@ -45,23 +45,23 @@
         {{-- Product + Customer --}}
         <div class="px-6 py-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-                <p class="text-gray-200 mb-1 font-medium">Product</p>
-                <p class="font-semibold text-white">{{ $review->product->name ?? 'N/A' }}</p>
+                <p class="text-gray-500 mb-1 font-medium">Product</p>
+                <p class="font-semibold text-gray-800">{{ $review->product->name ?? 'N/A' }}</p>
             </div>
             <div>
-                <p class="text-gray-200 mb-1 font-medium">Customer</p>
-                <p class="font-semibold text-white">{{ $review->user->name ?? 'N/A' }}</p>
-                <p class="text-gray-200 text-xs">{{ $review->user->email ?? '' }}</p>
+                <p class="text-gray-500 mb-1 font-medium">Customer</p>
+                <p class="font-semibold text-gray-800">{{ $review->user->name ?? 'N/A' }}</p>
+                <p class="text-gray-500 text-xs">{{ $review->user->email ?? '' }}</p>
             </div>
         </div>
 
         {{-- Edit Review Content --}}
         <div class="px-6 py-5">
-            <h3 class="text-base font-bold text-white mb-4">Review Content <span class="text-xs text-indigo-600 font-normal">(Admin can edit)</span></h3>
+            <h3 class="text-base font-bold text-gray-700 mb-4">Review Content <span class="text-xs text-indigo-600 font-normal">(Admin can edit)</span></h3>
             <form id="editReviewForm" class="space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-sm font-medium text-gray-100 mb-1">Rating</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Rating</label>
                     <div class="flex gap-1" id="adminRatingStars">
                         @for($i = 1; $i <= 5; $i++)
                             <button type="button" onclick="setAdminRating({{ $i }})"
@@ -72,12 +72,12 @@
                     <input type="hidden" id="adminRatingInput" value="{{ $review->rating }}">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-100 mb-1">Title</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Title</label>
                     <input type="text" id="editTitle" value="{{ $review->title }}"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none text-sm">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-100 mb-1">Comment</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Comment</label>
                     <textarea id="editComment" rows="4"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none text-sm resize-none">{{ $review->comment }}</textarea>
                 </div>
@@ -89,9 +89,9 @@
 
         {{-- Admin Reply --}}
         <div class="px-6 py-5">
-            <h3 class="text-base font-bold text-white mb-4">Admin Reply</h3>
+            <h3 class="text-base font-bold text-gray-700 mb-4">Admin Reply</h3>
             @if($review->admin_response)
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-sm text-white">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-sm text-gray-700">
                     <p>{{ $review->admin_response }}</p>
                     <p class="text-xs text-gray-400 mt-2">Replied {{ $review->admin_responded_at->format('M d, Y H:i') }}</p>
                 </div>
@@ -110,8 +110,8 @@
         {{-- Vendor Reply (read-only for admin) --}}
         @if($review->vendor_reply)
         <div class="px-6 py-5">
-            <h3 class="text-base font-bold text-white mb-3">Seller Reply</h3>
-            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-white">
+            <h3 class="text-base font-bold text-gray-700 mb-3">Seller Reply</h3>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
                 <p>{{ $review->vendor_reply }}</p>
                 <p class="text-xs text-gray-400 mt-2">Replied {{ $review->vendor_replied_at->format('M d, Y H:i') }}</p>
             </div>

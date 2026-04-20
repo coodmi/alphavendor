@@ -63,8 +63,8 @@
 <div class="bg-white rounded-xl shadow-sm p-6">
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-white">Coupon Management</h2>
-            <p class="text-gray-200 mt-1">Create and manage discount coupons</p>
+            <h2 class="text-2xl font-bold text-gray-800">Coupon Management</h2>
+            <p class="text-gray-500 mt-1">Create and manage discount coupons</p>
         </div>
         <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:from-purple-600 hover:to-indigo-700 transition-all flex items-center gap-2 shadow-lg">
             <i class="fas fa-plus"></i> Add Coupon
@@ -76,13 +76,13 @@
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Code</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Type</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Value</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Usage</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Valid Period</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Status</th>
-                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Code</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Type</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Value</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Usage</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Valid Period</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -99,7 +99,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="font-semibold text-white">
+                            <span class="font-semibold text-gray-800">
                                 @if($coupon->type === 'percentage')
                                     {{ $coupon->value }}%
                                 @else
@@ -109,11 +109,11 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="text-sm">
-                                <div class="text-white">{{ $coupon->used_count }} / {{ $coupon->usage_limit ?? '∞' }}</div>
+                                <div class="text-gray-700">{{ $coupon->used_count }} / {{ $coupon->usage_limit ?? '∞' }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-white">
+                            <div class="text-sm text-gray-700">
                                 @if($coupon->start_date)
                                     <div>From: {{ $coupon->start_date->format('M d, Y') }}</div>
                                 @endif
@@ -121,7 +121,7 @@
                                     <div>To: {{ $coupon->end_date->format('M d, Y') }}</div>
                                 @endif
                                 @if(!$coupon->start_date && !$coupon->end_date)
-                                    <span class="text-gray-200">No expiry</span>
+                                    <span class="text-gray-500">No expiry</span>
                                 @endif
                             </div>
                         </td>
@@ -153,7 +153,7 @@
     @else
         <div class="text-center py-12">
             <i class="fas fa-ticket-alt text-6xl text-gray-200 mb-4"></i>
-            <p class="text-gray-200 text-lg">No coupons found</p>
+            <p class="text-gray-500 text-lg">No coupons found</p>
             <p class="text-gray-400 text-sm mt-1">Click "Add Coupon" to create your first coupon</p>
         </div>
     @endif
@@ -163,8 +163,8 @@
 <div id="couponModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
-            <h3 class="text-xl font-bold text-white" id="modalTitle">Add Coupon</h3>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-100 transition-colors">
+            <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Add Coupon</h3>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
@@ -174,12 +174,12 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Coupon Code *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Coupon Code *</label>
                     <input type="text" name="code" id="couponCode" required placeholder="e.g., SAVE20" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 uppercase">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Type *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Type *</label>
                     <select name="type" id="couponType" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                         <option value="percentage">Percentage</option>
                         <option value="fixed">Fixed Amount</option>
@@ -187,55 +187,55 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Value *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Value *</label>
                     <input type="number" name="value" id="couponValue" required step="0.01" min="0" placeholder="e.g., 20" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Min Purchase</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Min Purchase</label>
                     <input type="number" name="min_purchase" id="couponMinPurchase" step="0.01" min="0" placeholder="Optional" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Max Discount</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Discount</label>
                     <input type="number" name="max_discount" id="couponMaxDiscount" step="0.01" min="0" placeholder="Optional" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Usage Limit</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Usage Limit</label>
                     <input type="number" name="usage_limit" id="couponUsageLimit" min="1" placeholder="Unlimited" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Per User Limit</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Per User Limit</label>
                     <input type="number" name="per_user_limit" id="couponPerUserLimit" min="1" placeholder="Unlimited" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Start Date</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
                     <input type="datetime-local" name="start_date" id="couponStartDate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">End Date</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
                     <input type="datetime-local" name="end_date" id="couponEndDate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
             </div>
 
             <div class="mt-5">
-                <label class="block text-sm font-medium text-white mb-2">Description</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                 <textarea name="description" id="couponDescription" rows="3" placeholder="Optional description" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"></textarea>
             </div>
 
             <div class="mt-5">
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" name="is_active" id="couponStatus" value="1" checked class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
-                    <span class="ml-3 text-white">Active</span>
+                    <span class="ml-3 text-gray-700">Active</span>
                 </label>
             </div>
 
             <div class="flex gap-3 justify-end mt-6">
-                <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-gray-100 text-white rounded-lg hover:bg-gray-200 transition-colors">
+                <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
                 <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:from-purple-600 hover:to-indigo-700 transition-all flex items-center gap-2">
@@ -253,14 +253,14 @@
             <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-trash-alt text-red-500 text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">Delete Coupon</h3>
-            <p class="text-gray-200">Are you sure you want to delete coupon "<span id="deleteCouponCode" class="font-semibold text-white"></span>"?</p>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Delete Coupon</h3>
+            <p class="text-gray-500">Are you sure you want to delete coupon "<span id="deleteCouponCode" class="font-semibold text-gray-700"></span>"?</p>
         </div>
         <form id="deleteForm" method="POST">
             @csrf
             @method('DELETE')
             <div class="flex gap-3 justify-center">
-                <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 text-white rounded-lg hover:bg-gray-200 transition-colors">
+                <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
                 <button type="submit" class="px-5 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">

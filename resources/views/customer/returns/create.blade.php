@@ -12,7 +12,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-2xl font-bold text-white mb-6">Request Return/Refund</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Request Return/Refund</h2>
 
             <!-- Product Info -->
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
@@ -21,10 +21,10 @@
                         <img src="{{ asset('storage/' . $orderItem->product->image) }}" alt="{{ $orderItem->product->name }}" class="w-20 h-20 rounded object-cover mr-4">
                     @endif
                     <div>
-                        <h3 class="font-semibold text-white">{{ $orderItem->product->name }}</h3>
-                        <p class="text-sm text-gray-100">Order: {{ $orderItem->order->order_number }}</p>
-                        <p class="text-sm text-gray-100">Quantity: {{ $orderItem->quantity }}</p>
-                        <p class="text-sm font-semibold text-white">Price: ${{ number_format($orderItem->price, 2) }}</p>
+                        <h3 class="font-semibold text-gray-900">{{ $orderItem->product->name }}</h3>
+                        <p class="text-sm text-gray-600">Order: {{ $orderItem->order->order_number }}</p>
+                        <p class="text-sm text-gray-600">Quantity: {{ $orderItem->quantity }}</p>
+                        <p class="text-sm font-semibold text-gray-900">Price: ${{ number_format($orderItem->price, 2) }}</p>
                     </div>
                 </div>
             </div>
@@ -35,27 +35,27 @@
 
                 <!-- Return Type -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-white mb-2">Request Type *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Request Type *</label>
                     <div class="grid grid-cols-3 gap-4">
                         <label class="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
                             <input type="radio" name="type" value="return" required class="mr-3">
                             <div>
                                 <div class="font-semibold">Return</div>
-                                <div class="text-xs text-gray-200">Send back item</div>
+                                <div class="text-xs text-gray-500">Send back item</div>
                             </div>
                         </label>
                         <label class="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
                             <input type="radio" name="type" value="refund" required class="mr-3">
                             <div>
                                 <div class="font-semibold">Refund</div>
-                                <div class="text-xs text-gray-200">Get money back</div>
+                                <div class="text-xs text-gray-500">Get money back</div>
                             </div>
                         </label>
                         <label class="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
                             <input type="radio" name="type" value="exchange" required class="mr-3">
                             <div>
                                 <div class="font-semibold">Exchange</div>
-                                <div class="text-xs text-gray-200">Replace item</div>
+                                <div class="text-xs text-gray-500">Replace item</div>
                             </div>
                         </label>
                     </div>
@@ -66,7 +66,7 @@
 
                 <!-- Reason -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-white mb-2">Reason *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Reason *</label>
                     <select name="reason" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">Select a reason</option>
                         <option value="defective">Defective/Not Working</option>
@@ -85,7 +85,7 @@
 
                 <!-- Reason Details -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-white mb-2">Detailed Explanation *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Detailed Explanation *</label>
                     <textarea name="reason_details" rows="4" required maxlength="1000" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Please provide detailed information about the issue..."></textarea>
                     @error('reason_details')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -94,9 +94,9 @@
 
                 <!-- Quantity -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-white mb-2">Quantity *</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Quantity *</label>
                     <input type="number" name="quantity" min="1" max="{{ $orderItem->quantity }}" value="1" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    <p class="text-sm text-gray-200 mt-1">Maximum: {{ $orderItem->quantity }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Maximum: {{ $orderItem->quantity }}</p>
                     @error('quantity')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -104,9 +104,9 @@
 
                 <!-- Images -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-white mb-2">Upload Images (Optional)</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Images (Optional)</label>
                     <input type="file" name="images[]" multiple accept="image/*" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    <p class="text-sm text-gray-200 mt-1">Upload photos showing the issue (max 2MB per image)</p>
+                    <p class="text-sm text-gray-500 mt-1">Upload photos showing the issue (max 2MB per image)</p>
                     @error('images.*')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -114,7 +114,7 @@
 
                 <!-- Exchange Product (shown only when exchange is selected) -->
                 <div id="exchange-section" class="mb-6 hidden">
-                    <label class="block text-sm font-semibold text-white mb-2">Exchange With Product</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Exchange With Product</label>
                     <select name="exchange_product_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">Select a product</option>
                         <!-- This would be populated with similar products -->
@@ -123,7 +123,7 @@
 
                 <!-- Customer Notes -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-white mb-2">Additional Notes (Optional)</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Additional Notes (Optional)</label>
                     <textarea name="customer_notes" rows="3" maxlength="500" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Any additional information..."></textarea>
                     @error('customer_notes')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -135,7 +135,7 @@
                     <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold">
                         Submit Request
                     </button>
-                    <a href="{{ route('orders.show', $orderItem->order) }}" class="flex-1 bg-gray-200 text-white px-6 py-3 rounded-lg hover:bg-gray-300 font-semibold text-center">
+                    <a href="{{ route('orders.show', $orderItem->order) }}" class="flex-1 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 font-semibold text-center">
                         Cancel
                     </a>
                 </div>

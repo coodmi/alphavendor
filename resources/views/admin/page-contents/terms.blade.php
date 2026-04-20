@@ -12,10 +12,10 @@
     <div class="max-w-5xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-white mb-2">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
                 <i class="fas fa-file-contract text-teal-700 mr-3"></i>Terms & Conditions Management
             </h1>
-            <p class="text-gray-100">Manage the content displayed on your Terms & Conditions page</p>
+            <p class="text-gray-600">Manage the content displayed on your Terms & Conditions page</p>
         </div>
 
         <!-- Success Message -->
@@ -35,7 +35,7 @@
             <div class="space-y-6">
                 <!-- Title -->
                 <div>
-                    <label class="block text-sm font-bold text-white mb-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fas fa-heading text-teal-700 mr-2"></i>Page Title
                     </label>
                     <input type="text" name="title" value="{{ old('title', $page->title ?? 'Terms & Conditions') }}" required
@@ -47,7 +47,7 @@
 
                 <!-- Content -->
                 <div>
-                    <label class="block text-sm font-bold text-white mb-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fas fa-align-left text-teal-700 mr-2"></i>Content
                     </label>
                     <textarea name="content" id="terms-editor" required
@@ -62,7 +62,7 @@
                     <input type="checkbox" name="is_active" id="is_active" value="1" 
                         {{ old('is_active', $page->is_active ?? true) ? 'checked' : '' }}
                         class="w-5 h-5 text-teal-700 border-gray-300 rounded focus:ring-teal-600">
-                    <label for="is_active" class="ml-3 text-sm font-bold text-white">
+                    <label for="is_active" class="ml-3 text-sm font-bold text-gray-700">
                         Active (Display this page to users)
                     </label>
                 </div>
@@ -72,7 +72,7 @@
                     <button type="submit" class="flex-1 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                         <i class="fas fa-save mr-2"></i>Save Changes
                     </button>
-                    <a href="{{ route('terms') }}" target="_blank" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-white rounded-xl font-bold transition-all">
+                    <a href="{{ route('terms') }}" target="_blank" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-bold transition-all">
                         <i class="fas fa-external-link-alt mr-2"></i>Preview Page
                     </a>
                 </div>

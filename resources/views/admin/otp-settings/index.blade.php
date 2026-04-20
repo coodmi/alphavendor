@@ -10,8 +10,8 @@
 <div class="container mx-auto px-4 py-6">
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-white">OTP & API Configuration</h1>
-            <p class="text-gray-100">Configure MiMSMS API credentials and OTP settings</p>
+            <h1 class="text-2xl font-bold text-gray-800">OTP & API Configuration</h1>
+            <p class="text-gray-600">Configure MiMSMS API credentials and OTP settings</p>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
         <!-- MiMSMS API Configuration -->
         <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-teal-50">
-                <h2 class="text-lg font-semibold text-white flex items-center">
+                <h2 class="text-lg font-semibold text-gray-800 flex items-center">
                     <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                     </svg>
@@ -48,57 +48,57 @@
             <div class="p-6 space-y-4">
                 <!-- API Key -->
                 <div>
-                    <label class="block text-sm font-medium text-white mb-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
                         MiMSMS API Key <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="mimsms_apikey" value="{{ $settings['mimsms_apikey'] }}" 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="VTSJEXXXXXXXXXX9CL" required>
-                    <p class="mt-1 text-sm text-gray-200">Your MiMSMS API key from the provider</p>
+                    <p class="mt-1 text-sm text-gray-500">Your MiMSMS API key from the provider</p>
                 </div>
 
                 <!-- Username -->
                 <div>
-                    <label class="block text-sm font-medium text-white mb-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
                         MiMSMS Username (Email) <span class="text-red-500">*</span>
                     </label>
                     <input type="email" name="mimsms_username" value="{{ $settings['mimsms_username'] }}" 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="your@email.com" required>
-                    <p class="mt-1 text-sm text-gray-200">Your MiMSMS account email</p>
+                    <p class="mt-1 text-sm text-gray-500">Your MiMSMS account email</p>
                 </div>
 
                 <!-- Sender Name -->
                 <div>
-                    <label class="block text-sm font-medium text-white mb-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
                         Sender Name <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="mimsms_sender_name" value="{{ $settings['mimsms_sender_name'] }}" 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="iSMS" required>
-                    <p class="mt-1 text-sm text-gray-200">Approved sender name from MiMSMS (e.g., iSMS)</p>
+                    <p class="mt-1 text-sm text-gray-500">Approved sender name from MiMSMS (e.g., iSMS)</p>
                 </div>
 
                 <!-- Campaign Name -->
                 <div>
-                    <label class="block text-sm font-medium text-white mb-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
                         Campaign Name
                     </label>
                     <input type="text" name="mimsms_campaign_name" value="{{ $settings['mimsms_campaign_name'] }}" 
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="armarketbd">
-                    <p class="mt-1 text-sm text-gray-200">Optional campaign identifier</p>
+                    <p class="mt-1 text-sm text-gray-500">Optional campaign identifier</p>
                 </div>
 
                 <!-- SMS Message Template -->
                 <div>
-                    <label class="block text-sm font-medium text-white mb-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
                         OTP SMS Message Template <span class="text-red-500">*</span>
                     </label>
                     <textarea name="otp_sms_template" rows="3"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="Your OTP is: {otp}. Valid for 15 minutes. Do not share this code." required>{{ $settings['otp_sms_template'] ?? 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.' }}</textarea>
-                    <p class="mt-1 text-sm text-gray-200">
+                    <p class="mt-1 text-sm text-gray-500">
                         <span class="font-semibold">Use {otp} placeholder</span> where the OTP code should appear. 
                         Example: "Your OTP is: {otp}. Valid for 15 minutes."
                     </p>
@@ -109,7 +109,7 @@
         <!-- OTP Configuration -->
         <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                <h2 class="text-lg font-semibold text-white flex items-center">
+                <h2 class="text-lg font-semibold text-gray-800 flex items-center">
                     <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                     </svg>
@@ -121,26 +121,26 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- OTP Expiry -->
                     <div>
-                        <label class="block text-sm font-medium text-white mb-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
                             OTP Expiry (minutes) <span class="text-red-500">*</span>
                         </label>
                         <input type="number" name="otp_expiry_minutes" value="{{ $settings['otp_expiry_minutes'] }}" 
                                min="1" max="60"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" 
                                required>
-                        <p class="mt-1 text-sm text-gray-200">How long OTP remains valid (1-60 minutes)</p>
+                        <p class="mt-1 text-sm text-gray-500">How long OTP remains valid (1-60 minutes)</p>
                     </div>
 
                     <!-- Max Attempts -->
                     <div>
-                        <label class="block text-sm font-medium text-white mb-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
                             Maximum Attempts <span class="text-red-500">*</span>
                         </label>
                         <input type="number" name="otp_max_attempts" value="{{ $settings['otp_max_attempts'] }}" 
                                min="1" max="10"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" 
                                required>
-                        <p class="mt-1 text-sm text-gray-200">Maximum verification attempts allowed (1-10)</p>
+                        <p class="mt-1 text-sm text-gray-500">Maximum verification attempts allowed (1-10)</p>
                     </div>
                 </div>
 
@@ -150,8 +150,8 @@
                         <input type="checkbox" name="sms_test_mode" value="1" {{ $settings['sms_test_mode'] ? 'checked' : '' }} 
                                class="w-5 h-5 text-teal-700 border-gray-300 rounded focus:ring-teal-600">
                         <span class="ml-3">
-                            <span class="text-sm font-medium text-white">Enable Test Mode</span>
-                            <span class="block text-sm text-gray-100">When enabled, OTP will be shown on screen instead of sending SMS (for development/testing)</span>
+                            <span class="text-sm font-medium text-gray-900">Enable Test Mode</span>
+                            <span class="block text-sm text-gray-600">When enabled, OTP will be shown on screen instead of sending SMS (for development/testing)</span>
                         </span>
                     </label>
                 </div>
@@ -161,7 +161,7 @@
         <!-- Test API Connection -->
         <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
-                <h2 class="text-lg font-semibold text-white flex items-center">
+                <h2 class="text-lg font-semibold text-gray-800 flex items-center">
                     <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -172,13 +172,13 @@
             <div class="p-6">
                 <div class="flex items-end gap-4">
                     <div class="flex-1">
-                        <label class="block text-sm font-medium text-white mb-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
                             Test Mobile Number
                         </label>
                         <input type="text" id="test_mobile" 
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                                placeholder="01XXXXXXXXX or 8801XXXXXXXXX">
-                        <p class="mt-1 text-sm text-gray-200">Enter a mobile number to receive test OTP</p>
+                        <p class="mt-1 text-sm text-gray-500">Enter a mobile number to receive test OTP</p>
                     </div>
                     <button type="button" id="testApiBtn" 
                             class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center">

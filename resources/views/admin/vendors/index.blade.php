@@ -75,8 +75,8 @@
 <div class="bg-white rounded-xl shadow-sm p-6">
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-white">Vendor Management</h2>
-            <p class="text-gray-200 mt-1">Manage all vendors and their activities</p>
+            <h2 class="text-2xl font-bold text-gray-800">Vendor Management</h2>
+            <p class="text-gray-500 mt-1">Manage all vendors and their activities</p>
         </div>
         <div class="flex gap-3">
             <select id="roleFilter" onchange="filterByRole()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
@@ -118,7 +118,7 @@
             <button onclick="bulkDelete()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
                 <i class="fas fa-trash"></i> Delete
             </button>
-            <button onclick="clearSelection()" class="px-4 py-2 bg-white border border-gray-300 text-white rounded-lg hover:bg-gray-50 transition-colors">
+            <button onclick="clearSelection()" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
                 <i class="fas fa-times"></i> Clear
             </button>
         </div>
@@ -132,14 +132,14 @@
                         <th class="px-6 py-4 text-left">
                             <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" class="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer">
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Vendor</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Badge</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Contact</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Products</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Orders</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vendor</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Badge</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Products</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Orders</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -154,8 +154,8 @@
                                     {{ strtoupper(substr($vendor->name, 0, 1)) }}
                                 </div>
                                 <div>
-                                    <div class="font-medium text-white">{{ $vendor->name }}</div>
-                                    <div class="text-xs text-gray-200">ID: #{{ $vendor->id }}</div>
+                                    <div class="font-medium text-gray-800">{{ $vendor->name }}</div>
+                                    <div class="text-xs text-gray-500">ID: #{{ $vendor->id }}</div>
                                 </div>
                             </div>
                         </td>
@@ -195,21 +195,21 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="text-sm">
-                                <div class="text-white">{{ $vendor->email }}</div>
-                                <div class="text-gray-200">{{ $vendor->phone ?? 'N/A' }}</div>
+                                <div class="text-gray-700">{{ $vendor->email }}</div>
+                                <div class="text-gray-500">{{ $vendor->phone ?? 'N/A' }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-white font-medium">{{ $vendor->products_count }}</span>
+                            <span class="text-gray-700 font-medium">{{ $vendor->products_count }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-white font-medium">{{ $vendor->orders_count }}</span>
+                            <span class="text-gray-700 font-medium">{{ $vendor->orders_count }}</span>
                         </td>
                         <td class="px-6 py-4">
                             <select onchange="updateVendorStatus({{ $vendor->id }}, this.value)" 
                                 class="px-3 py-1 rounded-full text-xs font-medium border-0 cursor-pointer
                                 {{ $vendor->status === 'active' ? 'bg-green-100 text-green-700' : '' }}
-                                {{ $vendor->status === 'inactive' ? 'bg-gray-100 text-white' : '' }}
+                                {{ $vendor->status === 'inactive' ? 'bg-gray-100 text-gray-700' : '' }}
                                 {{ $vendor->status === 'pending' ? 'bg-teal-100 text-teal-700' : '' }}
                                 {{ $vendor->status === 'suspended' ? 'bg-red-100 text-red-700' : '' }}">
                                 <option value="pending" {{ $vendor->status === 'pending' ? 'selected' : '' }}>Pending</option>
@@ -235,7 +235,7 @@
     @else
         <div class="text-center py-12">
             <i class="fas fa-store text-6xl text-gray-200 mb-4"></i>
-            <p class="text-gray-200 text-lg">No vendors found</p>
+            <p class="text-gray-500 text-lg">No vendors found</p>
         </div>
     @endif
 </div>

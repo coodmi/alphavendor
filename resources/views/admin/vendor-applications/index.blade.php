@@ -11,8 +11,8 @@
 <div class="bg-white rounded-xl shadow-sm p-6">
     <!-- Header -->
     <div class="mb-6">
-        <h2 class="text-2xl font-bold text-white">Vendor Applications</h2>
-        <p class="text-gray-200 mt-1">Review and manage vendor registration applications and verification documents</p>
+        <h2 class="text-2xl font-bold text-gray-800">Vendor Applications</h2>
+        <p class="text-gray-500 mt-1">Review and manage vendor registration applications and verification documents</p>
     </div>
 
     <!-- Stats Cards -->
@@ -74,13 +74,13 @@
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Vendor</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Business Info</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Documents</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Applied</th>
-                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vendor</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Business Info</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Documents</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Applied</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -95,8 +95,8 @@
                                     {{ strtoupper(substr($application->name, 0, 1)) }}
                                 </div>
                                 <div>
-                                    <div class="font-medium text-white">{{ $application->name }}</div>
-                                    <div class="text-sm text-gray-200">{{ $application->email }}</div>
+                                    <div class="font-medium text-gray-800">{{ $application->name }}</div>
+                                    <div class="text-sm text-gray-500">{{ $application->email }}</div>
                                     <div class="text-xs text-gray-400">{{ $application->mobile_number }}</div>
                                 </div>
                             </div>
@@ -113,8 +113,8 @@
                         <td class="px-6 py-4">
                             @if($roleApp)
                                 <div class="text-sm">
-                                    <div class="font-medium text-white">{{ $roleApp->business_name ?? 'N/A' }}</div>
-                                    <div class="text-gray-200">{{ $roleApp->business_type ?? 'N/A' }}</div>
+                                    <div class="font-medium text-gray-800">{{ $roleApp->business_name ?? 'N/A' }}</div>
+                                    <div class="text-gray-500">{{ $roleApp->business_type ?? 'N/A' }}</div>
                                     @if($roleApp->business_phone)
                                         <div class="text-xs text-gray-400">{{ $roleApp->business_phone }}</div>
                                     @endif
@@ -126,8 +126,8 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <i class="fas fa-file-alt text-gray-400"></i>
-                                <span class="text-sm font-medium text-white">{{ $application->verification_documents_count }}</span>
-                                <span class="text-xs text-gray-200">docs</span>
+                                <span class="text-sm font-medium text-gray-700">{{ $application->verification_documents_count }}</span>
+                                <span class="text-xs text-gray-500">docs</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -136,7 +136,7 @@
                                     {{ $application->verification_status === 'pending' ? 'bg-teal-100 text-teal-700' : '' }}
                                     {{ $application->verification_status === 'verified' ? 'bg-green-100 text-green-700' : '' }}
                                     {{ $application->verification_status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}
-                                    {{ $application->verification_status === 'unverified' ? 'bg-gray-100 text-white' : '' }}">
+                                    {{ $application->verification_status === 'unverified' ? 'bg-gray-100 text-gray-700' : '' }}">
                                     {{ ucfirst($application->verification_status) }}
                                 </span>
                                 @if($roleApp && $roleApp->status === 'pending')
@@ -147,7 +147,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-sm text-white">{{ $application->created_at->format('M d, Y') }}</span>
+                            <span class="text-sm text-gray-700">{{ $application->created_at->format('M d, Y') }}</span>
                             <span class="block text-xs text-gray-400">{{ $application->created_at->diffForHumans() }}</span>
                         </td>
                         <td class="px-6 py-4 text-center">
@@ -169,7 +169,7 @@
     @else
         <div class="text-center py-12">
             <i class="fas fa-inbox text-6xl text-gray-200 mb-4"></i>
-            <p class="text-gray-200 text-lg">No pending vendor applications</p>
+            <p class="text-gray-500 text-lg">No pending vendor applications</p>
             <p class="text-gray-400 text-sm mt-1">New vendor applications will appear here</p>
         </div>
     @endif

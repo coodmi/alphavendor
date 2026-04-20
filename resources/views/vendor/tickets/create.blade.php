@@ -70,7 +70,7 @@
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-white">Create New Support Ticket</h2>
+                    <h2 class="text-2xl font-bold text-gray-800">Create New Support Ticket</h2>
                     <a href="{{ route('vendor.tickets.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
                         Back to Tickets
                     </a>
@@ -84,7 +84,7 @@
                     <div class="space-y-6">
                         <!-- Subject -->
                         <div>
-                            <label for="subject" class="block text-sm font-semibold text-white mb-2">Subject *</label>
+                            <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Subject *</label>
                             <input type="text" id="subject" name="subject" required
                                    value="{{ old('subject') }}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('subject') border-red-500 @enderror"
@@ -96,7 +96,7 @@
 
                         <!-- Category -->
                         <div>
-                            <label for="category" class="block text-sm font-semibold text-white mb-2">Category *</label>
+                            <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
                             <select id="category" name="category" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('category') border-red-500 @enderror">
                                 <option value="">Select a category</option>
@@ -114,7 +114,7 @@
 
                         <!-- Priority -->
                         <div>
-                            <label for="priority" class="block text-sm font-semibold text-white mb-2">Priority *</label>
+                            <label for="priority" class="block text-sm font-semibold text-gray-700 mb-2">Priority *</label>
                             <select id="priority" name="priority" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('priority') border-red-500 @enderror">
                                 <option value="">Select priority</option>
@@ -130,19 +130,19 @@
 
                         <!-- Description -->
                         <div>
-                            <label for="description" class="block text-sm font-semibold text-white mb-2">Description *</label>
+                            <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">Description *</label>
                             <textarea id="description" name="description" rows="6" required
                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('description') border-red-500 @enderror"
                                       placeholder="Please provide detailed information about your issue...">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
-                            <p class="mt-1 text-sm text-gray-200">Please be as detailed as possible to help us resolve your issue quickly.</p>
+                            <p class="mt-1 text-sm text-gray-500">Please be as detailed as possible to help us resolve your issue quickly.</p>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="flex justify-end gap-4">
-                            <a href="{{ route('vendor.tickets.index') }}" class="px-6 py-2 bg-gray-300 text-white rounded-lg hover:bg-gray-400 transition">
+                            <a href="{{ route('vendor.tickets.index') }}" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
                                 Cancel
                             </a>
                             <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">

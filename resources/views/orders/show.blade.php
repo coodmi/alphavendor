@@ -13,8 +13,8 @@
     <div class="bg-white rounded-lg shadow p-8">
         <div class="flex justify-between items-start mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-white">Order {{ $order->order_number }}</h1>
-                <p class="text-gray-100 mt-1">Placed on {{ $order->created_at->format('F d, Y \a\t h:i A') }}</p>
+                <h1 class="text-2xl font-bold text-gray-900">Order {{ $order->order_number }}</h1>
+                <p class="text-gray-600 mt-1">Placed on {{ $order->created_at->format('F d, Y \a\t h:i A') }}</p>
             </div>
             <span class="inline-block px-4 py-2 rounded text-sm font-semibold
                 @if($order->status === 'pending') bg-teal-100 text-teal-800
@@ -32,21 +32,21 @@
                 <h2 class="font-bold text-lg mb-3">Shipping Information</h2>
                 <div class="bg-gray-50 p-4 rounded">
                     <p class="font-semibold">{{ $order->user->name }}</p>
-                    <p class="text-white mt-2">{{ $order->shipping_address }}</p>
-                    <p class="text-white">{{ $order->shipping_city }}, {{ $order->shipping_state }} {{ $order->shipping_zip }}</p>
-                    <p class="text-white">{{ $order->shipping_country }}</p>
-                    <p class="text-white mt-2">Phone: {{ $order->phone }}</p>
+                    <p class="text-gray-700 mt-2">{{ $order->shipping_address }}</p>
+                    <p class="text-gray-700">{{ $order->shipping_city }}, {{ $order->shipping_state }} {{ $order->shipping_zip }}</p>
+                    <p class="text-gray-700">{{ $order->shipping_country }}</p>
+                    <p class="text-gray-700 mt-2">Phone: {{ $order->phone }}</p>
                 </div>
             </div>
 
             <div>
                 <h2 class="font-bold text-lg mb-3">Payment Information</h2>
                 <div class="bg-gray-50 p-4 rounded">
-                    <p class="text-white">
+                    <p class="text-gray-700">
                         <span class="font-semibold">Payment Method:</span>
                         {{ ucwords(str_replace('_', ' ', $order->payment_method)) }}
                     </p>
-                    <p class="text-white mt-2">
+                    <p class="text-gray-700 mt-2">
                         <span class="font-semibold">Payment Status:</span>
                         <span class="inline-block ml-2 px-2 py-1 rounded text-xs
                             @if($order->payment_status === 'paid') bg-green-100 text-green-800
@@ -56,7 +56,7 @@
                             {{ ucfirst($order->payment_status) }}
                         </span>
                     </p>
-                    <p class="text-white mt-2">
+                    <p class="text-gray-700 mt-2">
                         <span class="font-semibold">Vendor:</span> {{ $order->vendor->name }}
                     </p>
                 </div>
@@ -69,11 +69,11 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Product</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Price</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Quantity</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-200 uppercase">Subtotal</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-200 uppercase">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Subtotal</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -103,7 +103,7 @@
                                             <i class="fas fa-undo mr-1"></i> Return/Refund
                                         </a>
                                     @elseif($item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
-                                        <span class="text-sm text-gray-200">Return Requested</span>
+                                        <span class="text-sm text-gray-500">Return Requested</span>
                                     @else
                                         <span class="text-sm text-gray-400">-</span>
                                     @endif
@@ -119,11 +119,11 @@
             <div class="w-full md:w-1/3">
                 <div class="bg-gray-50 p-6 rounded">
                     <div class="flex justify-between mb-2">
-                        <span class="text-white">Subtotal:</span>
+                        <span class="text-gray-700">Subtotal:</span>
                         <span class="font-semibold">${{ number_format($order->subtotal, 2) }}</span>
                     </div>
                     <div class="flex justify-between mb-2">
-                        <span class="text-white">Shipping:</span>
+                        <span class="text-gray-700">Shipping:</span>
                         <span class="font-semibold">Free</span>
                     </div>
                     <div class="border-t pt-2 mt-2">
@@ -139,7 +139,7 @@
         @if($order->notes)
             <div class="mt-6 p-4 bg-blue-50 rounded">
                 <h3 class="font-semibold mb-2">Order Notes:</h3>
-                <p class="text-white">{{ $order->notes }}</p>
+                <p class="text-gray-700">{{ $order->notes }}</p>
             </div>
         @endif
     </div>

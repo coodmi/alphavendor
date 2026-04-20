@@ -11,7 +11,7 @@
 <div class="max-w-6xl mx-auto">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('admin.vendor-applications') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-white rounded-lg hover:bg-gray-200 transition-colors">
+        <a href="{{ route('admin.vendor-applications') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
             <i class="fas fa-arrow-left"></i>
             Back to Applications
         </a>
@@ -25,8 +25,8 @@
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-white">{{ $user->name }}</h2>
-                    <p class="text-gray-200">{{ $user->email }}</p>
+                    <h2 class="text-2xl font-bold text-gray-800">{{ $user->name }}</h2>
+                    <p class="text-gray-500">{{ $user->email }}</p>
                     <p class="text-gray-400 text-sm">{{ $user->mobile_number }}</p>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                         {{ $user->verification_status === 'pending' ? 'bg-teal-100 text-teal-700' : '' }}
                         {{ $user->verification_status === 'verified' ? 'bg-green-100 text-green-700' : '' }}
                         {{ $user->verification_status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}
-                        {{ $user->verification_status === 'unverified' ? 'bg-gray-100 text-white' : '' }}">
+                        {{ $user->verification_status === 'unverified' ? 'bg-gray-100 text-gray-700' : '' }}">
                         {{ ucfirst($user->verification_status) }}
                     </span>
                 </div>
@@ -52,17 +52,17 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-gray-200">
             <div>
-                <p class="text-sm text-gray-200">Registered</p>
-                <p class="font-medium text-white">{{ $user->created_at->format('M d, Y') }}</p>
+                <p class="text-sm text-gray-500">Registered</p>
+                <p class="font-medium text-gray-800">{{ $user->created_at->format('M d, Y') }}</p>
                 <p class="text-xs text-gray-400">{{ $user->created_at->diffForHumans() }}</p>
             </div>
             <div>
-                <p class="text-sm text-gray-200">Account Status</p>
-                <p class="font-medium text-white">{{ ucfirst($user->status) }}</p>
+                <p class="text-sm text-gray-500">Account Status</p>
+                <p class="font-medium text-gray-800">{{ ucfirst($user->status) }}</p>
             </div>
             <div>
-                <p class="text-sm text-gray-200">Documents Submitted</p>
-                <p class="font-medium text-white">{{ $user->verificationDocuments->count() }} files</p>
+                <p class="text-sm text-gray-500">Documents Submitted</p>
+                <p class="font-medium text-gray-800">{{ $user->verificationDocuments->count() }} files</p>
             </div>
         </div>
     </div>
@@ -73,44 +73,44 @@
     @endphp
     @if($roleApp)
     <div class="bg-white rounded-xl shadow-sm p-8 mb-6">
-        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             <i class="fas fa-briefcase text-blue-600"></i>
             Business Information
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Business Name</label>
-                <p class="text-white">{{ $roleApp->business_name ?? 'Not provided' }}</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Business Name</label>
+                <p class="text-gray-800">{{ $roleApp->business_name ?? 'Not provided' }}</p>
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Business Type</label>
-                <p class="text-white">{{ $roleApp->business_type ?? 'Not provided' }}</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Business Type</label>
+                <p class="text-gray-800">{{ $roleApp->business_type ?? 'Not provided' }}</p>
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Business Phone</label>
-                <p class="text-white">{{ $roleApp->business_phone ?? 'Not provided' }}</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Business Phone</label>
+                <p class="text-gray-800">{{ $roleApp->business_phone ?? 'Not provided' }}</p>
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Business Email</label>
-                <p class="text-white">{{ $roleApp->business_email ?? 'Not provided' }}</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Business Email</label>
+                <p class="text-gray-800">{{ $roleApp->business_email ?? 'Not provided' }}</p>
             </div>
             <div class="md:col-span-2">
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Business Address</label>
-                <p class="text-white">{{ $roleApp->business_address ?? 'Not provided' }}</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Business Address</label>
+                <p class="text-gray-800">{{ $roleApp->business_address ?? 'Not provided' }}</p>
             </div>
             @if($roleApp->city || $roleApp->state || $roleApp->country)
             <div class="md:col-span-2">
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Location</label>
-                <p class="text-white">
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Location</label>
+                <p class="text-gray-800">
                     {{ collect([$roleApp->city, $roleApp->state, $roleApp->country])->filter()->implode(', ') }}
                 </p>
             </div>
             @endif
             @if($roleApp->contact_person)
             <div>
-                <label class="block text-sm font-semibold text-gray-100 mb-1">Contact Person</label>
-                <p class="text-white">{{ $roleApp->contact_person }}</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Contact Person</label>
+                <p class="text-gray-800">{{ $roleApp->contact_person }}</p>
             </div>
             @endif
         </div>
@@ -119,7 +119,7 @@
 
     <!-- Verification Documents -->
     <div class="bg-white rounded-xl shadow-sm p-8 mb-6">
-        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             <i class="fas fa-file-alt text-green-600"></i>
             Verification Documents
         </h3>
@@ -134,8 +134,8 @@
                                 <i class="fas fa-file-image text-blue-600 text-xl"></i>
                             </div>
                             <div>
-                                <p class="font-medium text-white">{{ ucwords(str_replace('_', ' ', $document->document_type)) }}</p>
-                                <p class="text-xs text-gray-200">{{ $document->created_at->format('M d, Y') }}</p>
+                                <p class="font-medium text-gray-800">{{ ucwords(str_replace('_', ' ', $document->document_type)) }}</p>
+                                <p class="text-xs text-gray-500">{{ $document->created_at->format('M d, Y') }}</p>
                             </div>
                         </div>
                         <span class="inline-flex px-2 py-1 rounded text-xs font-medium
@@ -169,7 +169,7 @@
         @else
             <div class="text-center py-8 bg-gray-50 rounded-lg">
                 <i class="fas fa-file-alt text-4xl text-gray-300 mb-3"></i>
-                <p class="text-gray-200">No documents uploaded yet</p>
+                <p class="text-gray-500">No documents uploaded yet</p>
             </div>
         @endif
     </div>
@@ -177,7 +177,7 @@
     <!-- Action Buttons -->
     @if($user->verification_status === 'pending' || ($roleApp && $roleApp->status === 'pending'))
     <div class="bg-white rounded-xl shadow-sm p-8">
-        <h3 class="text-xl font-bold text-white mb-6">Review Application</h3>
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Review Application</h3>
 
         <div class="flex items-center gap-4">
             <form action="{{ route('admin.vendor-applications.approve', $user) }}" method="POST" class="flex-1">
@@ -204,19 +204,19 @@
             <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-times-circle text-red-500 text-3xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">Reject Application</h3>
-            <p class="text-gray-200">Please provide a reason for rejection</p>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Reject Application</h3>
+            <p class="text-gray-500">Please provide a reason for rejection</p>
         </div>
         <form action="{{ route('admin.vendor-applications.reject', $user) }}" method="POST">
             @csrf
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-white mb-2">Rejection Reason</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Rejection Reason</label>
                 <textarea name="reason" rows="4" required
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                     placeholder="Explain why this application is being rejected..."></textarea>
             </div>
             <div class="flex gap-3 justify-center">
-                <button type="button" onclick="closeRejectModal()" class="px-5 py-2.5 bg-gray-100 text-white rounded-lg hover:bg-gray-200 transition-colors">
+                <button type="button" onclick="closeRejectModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
                 <button type="submit" class="px-5 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">

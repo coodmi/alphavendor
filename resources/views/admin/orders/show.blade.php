@@ -23,15 +23,15 @@
         <!-- Order Details -->
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-bold text-white mb-4">Order #{{ $order->order_number }}</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Order #{{ $order->order_number }}</h2>
 
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                        <p class="text-sm text-gray-200">Order Date</p>
+                        <p class="text-sm text-gray-500">Order Date</p>
                         <p class="font-semibold">{{ $order->created_at->format('M d, Y h:i A') }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-200">Status</p>
+                        <p class="text-sm text-gray-500">Status</p>
                         <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full
                             {{ $order->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
                             {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
@@ -60,9 +60,9 @@
                                     @endif
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="font-semibold text-white">{{ $item->product_name }}</h4>
-                                    <p class="text-sm text-gray-100">Quantity: {{ $item->quantity }}</p>
-                                    <p class="text-sm text-gray-100">Price: ${{ number_format($item->price, 2) }}</p>
+                                    <h4 class="font-semibold text-gray-800">{{ $item->product_name }}</h4>
+                                    <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }}</p>
+                                    <p class="text-sm text-gray-600">Price: ${{ number_format($item->price, 2) }}</p>
                                 </div>
                                 <div class="text-right">
                                     <p class="font-bold text-teal-600">${{ number_format($item->subtotal, 2) }}</p>
@@ -98,15 +98,15 @@
                 <h3 class="font-semibold text-lg mb-4">Order Summary</h3>
                 <div class="space-y-2">
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-100">Subtotal</span>
+                        <span class="text-gray-600">Subtotal</span>
                         <span class="font-semibold">${{ number_format($order->subtotal, 2) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-100">Commission</span>
+                        <span class="text-gray-600">Commission</span>
                         <span class="font-semibold">${{ number_format($order->commission_amount, 2) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-100">Vendor Earning</span>
+                        <span class="text-gray-600">Vendor Earning</span>
                         <span class="font-semibold">${{ number_format($order->vendor_earning, 2) }}</span>
                     </div>
                     <div class="border-t pt-2 flex justify-between font-bold text-lg">
@@ -120,7 +120,7 @@
                 <h3 class="font-semibold text-lg mb-4">Payment</h3>
                 <p class="text-sm mb-2"><span class="font-semibold">Method:</span> {{ ucfirst(str_replace('_', ' ', $order->payment_method)) }}</p>
                 <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full
-                    {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-white' }}">
+                    {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
                     {{ ucfirst($order->payment_status) }}
                 </span>
             </div>

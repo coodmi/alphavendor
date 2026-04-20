@@ -131,7 +131,7 @@
         <!-- Certifications Management Section -->
         <div class="dashboard-section">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-white">Import Certifications & Rating</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Import Certifications & Rating</h2>
                 <button onclick="openCertificationsModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-150 flex items-center gap-2">
                     <i class="fas fa-certificate"></i> Manage Certifications
                 </button>
@@ -141,7 +141,7 @@
             <div class="grid grid-cols-1 gap-6">
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-lg font-semibold text-white">
+                        <h3 class="text-lg font-semibold text-gray-700">
                             <i class="fas fa-award text-indigo-600"></i> Your Certifications
                             <span class="ml-2 px-2 py-1 bg-indigo-600 text-white text-xs rounded-full">{{ $certifications->count() }}</span>
                         </h3>
@@ -159,9 +159,9 @@
                                                 <i class="fas fa-certificate text-indigo-600 text-lg"></i>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <h4 class="font-semibold text-white text-sm truncate" title="{{ $cert->name }}">{{ $cert->name }}</h4>
+                                                <h4 class="font-semibold text-gray-800 text-sm truncate" title="{{ $cert->name }}">{{ $cert->name }}</h4>
                                                 @if($cert->code)
-                                                    <p class="text-xs text-gray-200 mt-1">{{ $cert->code }}</p>
+                                                    <p class="text-xs text-gray-500 mt-1">{{ $cert->code }}</p>
                                                 @endif
                                                 @if($cert->expiry_date)
                                                     <div class="mt-2 flex items-center gap-1">
@@ -182,7 +182,7 @@
                         @else
                             <div class="text-center py-8">
                                 <i class="fas fa-certificate text-gray-300 text-5xl mb-3"></i>
-                                <p class="text-gray-200 text-sm mb-4">No certifications added yet</p>
+                                <p class="text-gray-500 text-sm mb-4">No certifications added yet</p>
                                 <a href="{{ route('importer.certifications') }}" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">
                                     <i class="fas fa-plus mr-2"></i>Add Your First Certification
                                 </a>
@@ -195,13 +195,13 @@
             <!-- Importer Rating Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div class="p-4 bg-gray-50 rounded-lg">
-                    <h3 class="text-lg font-semibold text-white mb-3">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">
                         <i class="fas fa-star text-teal-600"></i> Importer Rating
                     </h3>
                     <div id="currentRating" class="flex items-center gap-3">
                         @if(Auth::user()->importer_rating ?? Auth::user()->exporter_rating)
                             <span class="text-3xl font-bold text-indigo-600">{{ Auth::user()->importer_rating ?? Auth::user()->exporter_rating }}</span>
-                            <span class="text-gray-100">/ 5.0</span>
+                            <span class="text-gray-600">/ 5.0</span>
                             <div class="flex text-teal-500 text-xl ml-2">
                                 @php $ratingToShow = Auth::user()->importer_rating ?? Auth::user()->exporter_rating; @endphp
                                 @for($i = 1; $i <= 5; $i++)
@@ -215,7 +215,7 @@
                                 @endfor
                             </div>
                         @else
-                            <p class="text-gray-200 text-sm">No rating set yet</p>
+                            <p class="text-gray-500 text-sm">No rating set yet</p>
                         @endif
                     </div>
                 </div>
@@ -223,21 +223,21 @@
                 <div class="p-4 bg-gray-50 rounded-lg">
 
                 <div class="p-4 bg-gray-50 rounded-lg">
-                    <h3 class="text-lg font-semibold text-white mb-3">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">
                         <i class="fas fa-chart-line text-green-500"></i> Import Statistics
                     </h3>
                     <div class="space-y-2">
                         <div class="flex justify-between">
-                            <span class="text-gray-100 text-sm">Total Products:</span>
-                            <span class="font-semibold text-white">{{ $totalProducts }}</span>
+                            <span class="text-gray-600 text-sm">Total Products:</span>
+                            <span class="font-semibold text-gray-800">{{ $totalProducts }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-100 text-sm">Active Certifications:</span>
-                            <span class="font-semibold text-white">{{ $certifications->count() }}</span>
+                            <span class="text-gray-600 text-sm">Active Certifications:</span>
+                            <span class="font-semibold text-gray-800">{{ $certifications->count() }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-100 text-sm">Total Orders:</span>
-                            <span class="font-semibold text-white">{{ $totalOrders }}</span>
+                            <span class="text-gray-600 text-sm">Total Orders:</span>
+                            <span class="font-semibold text-gray-800">{{ $totalOrders }}</span>
                         </div>
                     </div>
                 </div>
@@ -277,13 +277,13 @@
 
             <!-- Certifications Selection -->
             <div>
-                <label class="block text-sm font-semibold text-white mb-3">Import Certifications</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Import Certifications</label>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <label class="flex items-center cursor-pointer p-4 border-2 border-gray-300 rounded-lg hover:border-indigo-500 transition-all duration-150 {{ in_array('iso_certified', Auth::user()->certifications ?? []) ? 'border-indigo-500 bg-indigo-50' : '' }}">
                         <input type="checkbox" name="certifications[]" value="iso_certified"
                             {{ in_array('iso_certified', Auth::user()->certifications ?? []) ? 'checked' : '' }}
                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="ml-3 text-white font-medium">
+                        <span class="ml-3 text-gray-700 font-medium">
                             <i class="fas fa-certificate text-indigo-600"></i> ISO Certified
                         </span>
                     </label>
@@ -292,7 +292,7 @@
                         <input type="checkbox" name="certifications[]" value="ce_certified"
                             {{ in_array('ce_certified', Auth::user()->certifications ?? []) ? 'checked' : '' }}
                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="ml-3 text-white font-medium">
+                        <span class="ml-3 text-gray-700 font-medium">
                             <i class="fas fa-certificate text-indigo-600"></i> CE Certified
                         </span>
                     </label>
@@ -301,7 +301,7 @@
                         <input type="checkbox" name="certifications[]" value="fda_approved"
                             {{ in_array('fda_approved', Auth::user()->certifications ?? []) ? 'checked' : '' }}
                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="ml-3 text-white font-medium">
+                        <span class="ml-3 text-gray-700 font-medium">
                             <i class="fas fa-certificate text-indigo-600"></i> FDA Approved
                         </span>
                     </label>
@@ -310,7 +310,7 @@
                         <input type="checkbox" name="certifications[]" value="export_license"
                             {{ in_array('export_license', Auth::user()->certifications ?? []) ? 'checked' : '' }}
                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="ml-3 text-white font-medium">
+                        <span class="ml-3 text-gray-700 font-medium">
                             <i class="fas fa-certificate text-indigo-600"></i> Import License
                         </span>
                     </label>
@@ -319,7 +319,7 @@
 
             <!-- Importer Rating -->
             <div>
-                <label class="block text-sm font-semibold text-white mb-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
                     <i class="fas fa-star text-teal-600"></i> Importer Rating
                 </label>
                 <div class="flex items-center gap-4">
@@ -328,7 +328,7 @@
                         min="0" max="5" step="0.1"
                         placeholder="0.0"
                         class="w-32 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200">
-                    <span class="text-sm text-gray-100">Rating out of 5 stars (e.g., 4.5)</span>
+                    <span class="text-sm text-gray-600">Rating out of 5 stars (e.g., 4.5)</span>
                 </div>
             </div>
 
@@ -644,7 +644,7 @@ document.getElementById('certificationsForm').addEventListener('submit', functio
                     </span>`;
                 }).join('');
             } else {
-                currentCertsDiv.innerHTML = '<p class="text-gray-200 text-sm">No certifications added yet</p>';
+                currentCertsDiv.innerHTML = '<p class="text-gray-500 text-sm">No certifications added yet</p>';
             }
 
             // Update rating display
@@ -663,11 +663,11 @@ document.getElementById('certificationsForm').addEventListener('submit', functio
                 }
                 currentRatingDiv.innerHTML = `
                     <span class="text-3xl font-bold text-indigo-600">${rating}</span>
-                    <span class="text-gray-100">/ 5.0</span>
+                    <span class="text-gray-600">/ 5.0</span>
                     <div class="flex text-teal-500 text-xl ml-2">${starsHtml}</div>
                 `;
             } else {
-                currentRatingDiv.innerHTML = '<p class="text-gray-200 text-sm">No rating set yet</p>';
+                currentRatingDiv.innerHTML = '<p class="text-gray-500 text-sm">No rating set yet</p>';
             }
 
             closeCertificationsModal();

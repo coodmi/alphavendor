@@ -71,8 +71,8 @@
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-200 text-sm">Total Tickets</p>
-                    <p class="text-2xl font-bold text-white">{{ $stats['total'] }}</p>
+                    <p class="text-gray-500 text-sm">Total Tickets</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ $stats['total'] }}</p>
                 </div>
                 <div class="bg-blue-100 p-3 rounded-full">
                     <i class="fas fa-ticket-alt text-blue-600 text-xl"></i>
@@ -82,7 +82,7 @@
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-200 text-sm">Open</p>
+                    <p class="text-gray-500 text-sm">Open</p>
                     <p class="text-2xl font-bold text-blue-600">{{ $stats['open'] }}</p>
                 </div>
                 <div class="bg-blue-100 p-3 rounded-full">
@@ -93,7 +93,7 @@
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-200 text-sm">In Progress</p>
+                    <p class="text-gray-500 text-sm">In Progress</p>
                     <p class="text-2xl font-bold text-teal-700">{{ $stats['in_progress'] }}</p>
                 </div>
                 <div class="bg-teal-100 p-3 rounded-full">
@@ -104,7 +104,7 @@
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-200 text-sm">Resolved</p>
+                    <p class="text-gray-500 text-sm">Resolved</p>
                     <p class="text-2xl font-bold text-green-600">{{ $stats['resolved'] }}</p>
                 </div>
                 <div class="bg-green-100 p-3 rounded-full">
@@ -117,7 +117,7 @@
     <div class="bg-white rounded-lg shadow-md">
         <div class="p-6 border-b border-gray-200">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-white">My Support Tickets</h2>
+                <h2 class="text-2xl font-bold text-gray-800">My Support Tickets</h2>
                 <a href="{{ route('vendor.tickets.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                     <i class="fas fa-plus mr-2"></i>Create New Ticket
                 </a>
@@ -129,14 +129,14 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Ticket #</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Subject</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Category</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Priority</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Last Reply</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Created</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket #</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Reply</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -146,10 +146,10 @@
                                     <span class="text-sm font-medium text-blue-600">{{ $ticket->ticket_number }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="text-sm text-white max-w-xs truncate">{{ $ticket->subject }}</div>
+                                    <div class="text-sm text-gray-900 max-w-xs truncate">{{ $ticket->subject }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-white">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
                                         {{ ucfirst($ticket->category) }}
                                     </span>
                                 </td>
@@ -168,14 +168,14 @@
                                         {{ $ticket->status === 'in_progress' ? 'bg-teal-100 text-teal-800' : '' }}
                                         {{ $ticket->status === 'waiting_response' ? 'bg-teal-100 text-teal-900' : '' }}
                                         {{ $ticket->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $ticket->status === 'closed' ? 'bg-gray-100 text-white' : '' }}">
+                                        {{ $ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
                                         {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $ticket->last_reply_at ? $ticket->last_reply_at->diffForHumans() : 'No replies' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $ticket->created_at->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -194,7 +194,7 @@
             @else
                 <div class="text-center py-12">
                     <i class="fas fa-ticket-alt text-6xl text-gray-300 mb-4"></i>
-                    <p class="text-xl text-gray-100 mb-4">No tickets found</p>
+                    <p class="text-xl text-gray-600 mb-4">No tickets found</p>
                     <a href="{{ route('vendor.tickets.create') }}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                         Create Your First Ticket
                     </a>

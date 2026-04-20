@@ -57,7 +57,7 @@
             <div class="mb-4">
                 <label class="block font-semibold mb-1">OTP SMS Template</label>
                 <input type="text" name="OTP_TEMPLATE" value="{{ $settings['OTP_TEMPLATE'] }}" class="w-full border rounded px-3 py-2" required>
-                <small class="text-gray-200">Use <code>{otp}</code> where the OTP should appear.</small>
+                <small class="text-gray-500">Use <code>{otp}</code> where the OTP should appear.</small>
                 @error('OTP_TEMPLATE')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror

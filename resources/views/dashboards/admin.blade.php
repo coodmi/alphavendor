@@ -411,7 +411,7 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-lg p-8 mb-10">
-        <h3 class="font-bold text-xl mb-6 text-white">Orders & Sales Overview</h3>
+        <h3 class="font-bold text-xl mb-6 text-gray-700">Orders & Sales Overview</h3>
         <canvas id="ordersChart" height="80"></canvas>
     </div>
 @push('scripts')
@@ -461,30 +461,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col justify-between">
-            <h2 class="text-xl font-bold mb-4 text-white">Quick Actions</h2>
+            <h2 class="text-xl font-bold mb-4 text-gray-700">Quick Actions</h2>
             <div class="flex flex-wrap gap-4">
                 <a href="{{ route('admin.users') }}" class="px-5 py-2 rounded-lg bg-blue-500 text-white font-semibold shadow hover:bg-blue-600 transition">Manage Users</a>
                 <a href="{{ route('admin.users.create') }}" class="px-5 py-2 rounded-lg bg-green-500 text-white font-semibold shadow hover:bg-green-600 transition">Add New User</a>
-                <a href="{{ route('admin.applications') }}" class="px-5 py-2 rounded-lg bg-teal-500 text-white font-semibold shadow hover:bg-teal-600 transition">View Applications</a>
+                <a href="{{ route('admin.applications') }}" class="px-5 py-2 rounded-lg bg-teal-500 text-gray-900 font-semibold shadow hover:bg-teal-600 transition">View Applications</a>
             </div>
         </div>
         <div class="bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-xl font-bold mb-4 text-white">Recent Role Applications</h2>
+            <h2 class="text-xl font-bold mb-4 text-gray-700">Recent Role Applications</h2>
             @if($recentApplications->count() > 0)
                 <div class="divide-y">
                     @foreach($recentApplications as $application)
                         <div class="flex items-center justify-between py-3">
                             <div>
-                                <span class="font-semibold text-white">{{ $application->user->name }}</span>
+                                <span class="font-semibold text-gray-800">{{ $application->user->name }}</span>
                                 <span class="ml-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">{{ ucfirst($application->requested_role) }}</span>
                             </div>
-                            <div class="text-sm text-gray-200">{{ $application->created_at->diffForHumans() }}</div>
+                            <div class="text-sm text-gray-500">{{ $application->created_at->diffForHumans() }}</div>
                             <a href="{{ route('admin.applications.show', $application) }}" class="ml-4 px-4 py-1 rounded bg-blue-500 text-white text-xs font-semibold hover:bg-blue-600 transition">View</a>
                         </div>
                     @endforeach
                 </div>
             @else
-                <p class="text-gray-200">No pending applications.</p>
+                <p class="text-gray-500">No pending applications.</p>
             @endif
 
         <div style="overflow-x: auto;">
@@ -3633,7 +3633,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p style="color: #7f8c8d;">Manage all orders and transactions</p>
             </div>
             <div style="display:flex; gap:12px; align-items:center;">
-                <a href="{{ route('admin.orders') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-white rounded-md hover:bg-gray-50">View all orders</a>
+                <a href="{{ route('admin.orders') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-md hover:bg-gray-50">View all orders</a>
                 <button onclick="exportOrders()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; gap: 8px;">
                     <i class="fas fa-download"></i> Export Orders
                 </button>

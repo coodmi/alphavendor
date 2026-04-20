@@ -48,19 +48,19 @@
 
                             <!-- Content -->
                             <div class="p-6">
-                                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-teal-700 transition-colors">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors">
                                     {{ $offer->name }}
                                 </h3>
 
                                 @if($offer->description)
-                                    <p class="text-gray-100 text-sm mb-4 line-clamp-2">
+                                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
                                         {{ $offer->description }}
                                     </p>
                                 @endif
 
                                 <!-- Stats -->
                                 <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                                    <div class="flex items-center text-gray-100">
+                                    <div class="flex items-center text-gray-600">
                                         <i class="fas fa-box text-teal-600 mr-2"></i>
                                         <span class="text-sm font-semibold">{{ $offer->products()->count() }} Products</span>
                                     </div>
@@ -72,7 +72,7 @@
 
                                 <!-- Date Range -->
                                 @if($offer->start_date || $offer->end_date)
-                                    <div class="mt-3 text-xs text-gray-200">
+                                    <div class="mt-3 text-xs text-gray-500">
                                         <i class="fas fa-calendar-alt mr-1"></i>
                                         @if($offer->start_date && $offer->end_date)
                                             {{ $offer->start_date->format('M d') }} - {{ $offer->end_date->format('M d, Y') }}
@@ -94,8 +94,8 @@
                 <div class="inline-block p-8 bg-white rounded-full shadow-lg mb-6">
                     <i class="fas fa-tag text-6xl text-gray-300"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-2">No Special Offers Available</h3>
-                <p class="text-gray-200 mb-6">Check back soon for exciting deals and offers!</p>
+                <h3 class="text-2xl font-bold text-gray-700 mb-2">No Special Offers Available</h3>
+                <p class="text-gray-500 mb-6">Check back soon for exciting deals and offers!</p>
                 <a href="{{ route('shop') }}" class="inline-block bg-teal-700 hover:bg-teal-800 text-white px-8 py-3 rounded-xl font-bold transition-colors">
                     <i class="fas fa-shopping-bag mr-2"></i>Browse Products
                 </a>

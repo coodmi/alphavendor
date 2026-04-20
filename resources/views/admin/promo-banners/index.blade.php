@@ -11,8 +11,8 @@
 <div class="mb-8">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-            <h2 class="text-2xl font-bold text-white">Promo Banner Management</h2>
-            <p class="text-gray-200 mt-1">Manage promotional banners with text and images (displayed on homepage)</p>
+            <h2 class="text-2xl font-bold text-gray-800">Promo Banner Management</h2>
+            <p class="text-gray-500 mt-1">Manage promotional banners with text and images (displayed on homepage)</p>
         </div>
         <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-lg hover:from-teal-700 hover:to-teal-700 transition-all flex items-center gap-2 shadow-lg">
             <i class="fas fa-plus"></i> Add Promo Banner
@@ -25,13 +25,13 @@
         <table class="w-full">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-200">
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-white">Preview</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-white">Title & Subtitle</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-white">Button</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-white">Colors</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-white">Order</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-white">Status</th>
-                    <th class="px-6 py-4 text-center text-sm font-semibold text-white">Actions</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Preview</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Title & Subtitle</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Button</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Colors</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Order</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                    <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
@@ -41,9 +41,9 @@
                         <img src="{{ $banner->image_url }}" alt="{{ $banner->title }}" class="w-24 h-16 object-cover rounded-lg shadow-sm border border-gray-200">
                     </td>
                     <td class="px-6 py-4">
-                        <span class="font-medium text-white">{{ $banner->title }}</span>
+                        <span class="font-medium text-gray-800">{{ $banner->title }}</span>
                         @if($banner->subtitle)
-                            <br><span class="text-sm text-gray-200">{{ $banner->subtitle }}</span>
+                            <br><span class="text-sm text-gray-500">{{ $banner->subtitle }}</span>
                         @endif
                     </td>
                     <td class="px-6 py-4">
@@ -62,7 +62,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-white font-semibold text-sm">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-700 font-semibold text-sm">
                             {{ $banner->sort_order }}
                         </span>
                     </td>
@@ -87,7 +87,7 @@
                     <td colspan="7" class="px-6 py-16 text-center">
                         <div class="flex flex-col items-center">
                             <i class="fas fa-bullhorn text-6xl text-gray-200 mb-4"></i>
-                            <p class="text-gray-200 text-lg">No promo banners found</p>
+                            <p class="text-gray-500 text-lg">No promo banners found</p>
                             <p class="text-gray-400 text-sm mt-1">Click "Add Promo Banner" to create your first promo banner</p>
                         </div>
                     </td>
@@ -102,8 +102,8 @@
 <div id="bannerModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
-            <h3 class="text-xl font-bold text-white" id="modalTitle">Add Promo Banner</h3>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-100 transition-colors">
+            <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Add Promo Banner</h3>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
@@ -113,33 +113,33 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Title *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
                     <input type="text" name="title" id="bannerTitle" required placeholder="e.g., Mega Sale Event" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Subtitle</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>
                     <input type="text" name="subtitle" id="bannerSubtitle" placeholder="e.g., Limited Time Offer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
             </div>
 
             <div class="mt-5">
-                <label class="block text-sm font-medium text-white mb-2">Description</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                 <textarea name="description" id="bannerDescription" rows="3" placeholder="Promotional message..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all"></textarea>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Button Text</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Button Text</label>
                     <input type="text" name="button_text" id="bannerButtonText" placeholder="e.g., Shop Now" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Button Link</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Button Link</label>
                     <input type="text" name="button_link" id="bannerButtonLink" placeholder="e.g., /shop" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
             </div>
 
             <div class="mt-5">
-                <label class="block text-sm font-medium text-white mb-2">Banner Image *</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Banner Image *</label>
                 <input type="file" name="image" id="bannerImage" accept="image/*" onchange="previewImage(event)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 <p class="text-xs text-gray-400 mt-1">Recommended size: 800x600px. Max 2MB.</p>
                 <div id="imagePreview" class="hidden mt-4 relative">
@@ -152,21 +152,21 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Background Color</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
                     <div class="flex items-center gap-2">
                         <input type="color" name="background_color" id="bannerBgColor" value="#0d5c63" class="w-12 h-10 rounded border border-gray-300 cursor-pointer">
                         <input type="text" id="bannerBgColorText" value="#0d5c63" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" onchange="document.getElementById('bannerBgColor').value = this.value">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Text Color</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
                     <div class="flex items-center gap-2">
                         <input type="color" name="text_color" id="bannerTextColor" value="#FFFFFF" class="w-12 h-10 rounded border border-gray-300 cursor-pointer">
                         <input type="text" id="bannerTextColorText" value="#FFFFFF" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" onchange="document.getElementById('bannerTextColor').value = this.value">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-white mb-2">Sort Order</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort Order</label>
                     <input type="number" name="sort_order" id="bannerSortOrder" value="0" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all">
                 </div>
             </div>
@@ -174,12 +174,12 @@
             <div class="mt-5">
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" name="is_active" id="bannerStatus" value="1" checked class="w-5 h-5 text-teal-600 rounded focus:ring-teal-600">
-                    <span class="ml-3 text-white">Active (visible on homepage)</span>
+                    <span class="ml-3 text-gray-700">Active (visible on homepage)</span>
                 </label>
             </div>
 
             <div class="flex gap-3 justify-end pt-6 mt-6 border-t border-gray-100">
-                <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-gray-100 text-white rounded-lg hover:bg-gray-200 transition-colors">
+                <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
                 <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-lg hover:from-teal-700 hover:to-teal-700 transition-all flex items-center gap-2">
@@ -197,10 +197,10 @@
             <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-trash-alt text-red-500 text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">Delete Promo Banner</h3>
-            <p class="text-gray-200 mb-6">Are you sure you want to delete "<span id="deleteBannerName" class="font-semibold text-white"></span>"? This action cannot be undone.</p>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Delete Promo Banner</h3>
+            <p class="text-gray-500 mb-6">Are you sure you want to delete "<span id="deleteBannerName" class="font-semibold text-gray-700"></span>"? This action cannot be undone.</p>
             <div class="flex gap-3 justify-center">
-                <button onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 text-white rounded-lg hover:bg-gray-200 transition-colors">
+                <button onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
                 <form id="deleteForm" method="POST" class="inline">

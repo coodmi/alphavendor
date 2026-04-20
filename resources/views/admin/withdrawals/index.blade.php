@@ -7,8 +7,8 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-white">Withdrawal Management</h1>
-            <p class="text-gray-100 mt-1">Manage vendor withdrawal requests</p>
+            <h1 class="text-3xl font-bold text-gray-800">Withdrawal Management</h1>
+            <p class="text-gray-600 mt-1">Manage vendor withdrawal requests</p>
         </div>
     </div>
 
@@ -61,7 +61,7 @@
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <form method="GET" action="{{ route('admin.withdrawals.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-                <label class="block text-sm font-medium text-white mb-2">Status</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select name="status" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
                     <option value="">All Status</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
@@ -72,7 +72,7 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-white mb-2">Payment Method</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
                 <select name="payment_type" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
                     <option value="">All Methods</option>
                     <option value="bank" {{ request('payment_type') == 'bank' ? 'selected' : '' }}>Bank Transfer</option>
@@ -82,7 +82,7 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-white mb-2">Vendor</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Vendor</label>
                 <select name="vendor_id" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
                     <option value="">All Vendors</option>
                     @foreach($vendors as $vendor)
@@ -94,7 +94,7 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-white mb-2">Search</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
                 <div class="flex gap-2">
                     <input type="text" name="search" value="{{ request('search') }}" 
                            placeholder="Withdrawal #" 
@@ -113,16 +113,16 @@
             <table class="w-full">
                 <thead class="bg-gray-50 border-b">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
                             <input type="checkbox" id="selectAll" class="rounded">
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Withdrawal #</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Vendor</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Amount</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Method</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Date</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Withdrawal #</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Vendor</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Amount</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Method</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Date</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -132,16 +132,16 @@
                                 <input type="checkbox" name="withdrawal_ids[]" value="{{ $withdrawal->id }}" class="withdrawal-checkbox rounded">
                             </td>
                             <td class="px-6 py-4">
-                                <span class="font-mono text-sm font-semibold text-white">{{ $withdrawal->withdrawal_number }}</span>
+                                <span class="font-mono text-sm font-semibold text-gray-800">{{ $withdrawal->withdrawal_number }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <div>
-                                    <p class="font-semibold text-white">{{ $withdrawal->vendor->name }}</p>
-                                    <p class="text-xs text-gray-200">{{ ucfirst($withdrawal->vendor->role) }}</p>
+                                    <p class="font-semibold text-gray-800">{{ $withdrawal->vendor->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ ucfirst($withdrawal->vendor->role) }}</p>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-lg font-bold text-white">{{ currency_symbol() }}{{ number_format($withdrawal->amount, 2) }}</span>
+                                <span class="text-lg font-bold text-gray-800">{{ currency_symbol() }}{{ number_format($withdrawal->amount, 2) }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 @if($withdrawal->withdrawalMethod)
@@ -172,7 +172,7 @@
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-100">
+                            <td class="px-6 py-4 text-sm text-gray-600">
                                 {{ $withdrawal->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4">
@@ -184,7 +184,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-12 text-center text-gray-200">
+                            <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                                 <i class="fas fa-inbox text-4xl mb-4 text-gray-300"></i>
                                 <p>No withdrawal requests found</p>
                             </td>

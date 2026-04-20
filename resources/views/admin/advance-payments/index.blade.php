@@ -87,8 +87,8 @@
 <div class="bg-white rounded-xl shadow-sm p-6">
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-white">Advance Payments Management</h2>
-            <p class="text-gray-200 mt-1">Manage all advance payment requests</p>
+            <h2 class="text-2xl font-bold text-gray-800">Advance Payments Management</h2>
+            <p class="text-gray-500 mt-1">Manage all advance payment requests</p>
         </div>
         <div class="flex gap-3">
             <select id="statusFilter" onchange="filterByStatus()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
@@ -115,45 +115,45 @@
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Customer</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Product</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Vendor</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Advance</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Payment</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Product</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vendor</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Advance</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Payment</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @foreach($payments as $payment)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
-                            <span class="font-semibold text-white">#{{ $payment->id }}</span>
+                            <span class="font-semibold text-gray-800">#{{ $payment->id }}</span>
                         </td>
                         <td class="px-6 py-4">
                             <div>
-                                <div class="font-medium text-white">{{ $payment->user->name }}</div>
-                                <div class="text-xs text-gray-200">{{ $payment->contact_number }}</div>
+                                <div class="font-medium text-gray-800">{{ $payment->user->name }}</div>
+                                <div class="text-xs text-gray-500">{{ $payment->contact_number }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
                             <div>
-                                <div class="font-medium text-white">{{ Str::limit($payment->product->name, 30) }}</div>
-                                <div class="text-xs text-gray-200">Qty: {{ $payment->quantity }}</div>
+                                <div class="font-medium text-gray-800">{{ Str::limit($payment->product->name, 30) }}</div>
+                                <div class="text-xs text-gray-500">Qty: {{ $payment->quantity }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-white">{{ $payment->vendor->name }}</span>
+                            <span class="text-gray-700">{{ $payment->vendor->name }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="font-semibold text-white">${{ number_format($payment->total_amount, 2) }}</span>
+                            <span class="font-semibold text-gray-800">${{ number_format($payment->total_amount, 2) }}</span>
                         </td>
                         <td class="px-6 py-4">
                             <div>
                                 <div class="font-semibold text-green-600">${{ number_format($payment->advance_amount, 2) }}</div>
-                                <div class="text-xs text-gray-200">{{ $payment->advance_percentage }}%</div>
+                                <div class="text-xs text-gray-500">{{ $payment->advance_percentage }}%</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -187,7 +187,7 @@
     @else
         <div class="text-center py-12">
             <i class="fas fa-file-invoice-dollar text-6xl text-gray-200 mb-4"></i>
-            <p class="text-gray-200 text-lg">No advance payment requests found</p>
+            <p class="text-gray-500 text-lg">No advance payment requests found</p>
         </div>
     @endif
 </div>

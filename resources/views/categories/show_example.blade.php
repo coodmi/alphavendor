@@ -78,7 +78,7 @@
         <ol class="flex items-center space-x-2">
             <li><a href="{{ url('/') }}" class="text-blue-600 hover:underline">Home</a></li>
             <li><span class="text-gray-400">/</span></li>
-            <li class="text-gray-100">{{ $category->name }}</li>
+            <li class="text-gray-600">{{ $category->name }}</li>
         </ol>
     </nav>
 
@@ -92,13 +92,13 @@
             @endif
             
             <div class="flex-1">
-                <h1 class="text-4xl font-bold text-white mb-3">{{ $category->name }}</h1>
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">{{ $category->name }}</h1>
                 
                 @if($category->description)
-                    <p class="text-lg text-gray-100 mb-4">{{ $category->description }}</p>
+                    <p class="text-lg text-gray-600 mb-4">{{ $category->description }}</p>
                 @endif
                 
-                <div class="flex items-center gap-4 text-sm text-gray-200">
+                <div class="flex items-center gap-4 text-sm text-gray-500">
                     <span>
                         <i class="fas fa-box"></i> 
                         {{ $category->products_count }} Products
@@ -124,13 +124,13 @@
                     @endif
                     
                     <div class="p-4">
-                        <h3 class="font-semibold text-white mb-2 line-clamp-2">{{ $product->name }}</h3>
+                        <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">{{ $product->name }}</h3>
                         
                         <div class="flex items-center justify-between">
                             <span class="text-xl font-bold text-blue-600">৳{{ number_format($product->price, 2) }}</span>
                             
                             @if($product->old_price && $product->old_price > $product->price)
-                                <span class="text-sm text-gray-200 line-through">৳{{ number_format($product->old_price, 2) }}</span>
+                                <span class="text-sm text-gray-500 line-through">৳{{ number_format($product->old_price, 2) }}</span>
                             @endif
                         </div>
                         
@@ -141,7 +141,7 @@
                                         <i class="fas fa-star {{ $i <= $product->rating ? '' : 'text-gray-300' }}"></i>
                                     @endfor
                                 </div>
-                                <span class="text-sm text-gray-200">({{ $product->reviews_count }})</span>
+                                <span class="text-sm text-gray-500">({{ $product->reviews_count }})</span>
                             </div>
                         @endif
                     </div>
@@ -150,7 +150,7 @@
         @empty
             <div class="col-span-full text-center py-12">
                 <i class="fas fa-box-open text-gray-300 text-6xl mb-4"></i>
-                <p class="text-gray-200 text-lg">No products found in this category.</p>
+                <p class="text-gray-500 text-lg">No products found in this category.</p>
             </div>
         @endforelse
     </div>
@@ -158,15 +158,15 @@
     {{-- SEO Content Section (optional) --}}
     @if($category->meta_description)
         <div class="mt-12 bg-gray-50 rounded-lg p-6">
-            <h2 class="text-2xl font-bold text-white mb-4">About {{ $category->name }}</h2>
-            <p class="text-white leading-relaxed">{{ $category->meta_description }}</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">About {{ $category->name }}</h2>
+            <p class="text-gray-700 leading-relaxed">{{ $category->meta_description }}</p>
             
             @if($category->meta_keywords)
                 <div class="mt-4">
-                    <h3 class="text-sm font-semibold text-gray-100 mb-2">Related Keywords:</h3>
+                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Related Keywords:</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($category->meta_keywords_array as $keyword)
-                            <span class="px-3 py-1 bg-white rounded-full text-sm text-white border border-gray-200">
+                            <span class="px-3 py-1 bg-white rounded-full text-sm text-gray-700 border border-gray-200">
                                 {{ $keyword }}
                             </span>
                         @endforeach

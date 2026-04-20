@@ -25,8 +25,8 @@
                     <i class="fas fa-users text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Total Users</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($stats['total_users']) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Total Users</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_users']) }}</p>
                 </div>
             </div>
         </div>
@@ -37,8 +37,8 @@
                     <i class="fas fa-file-alt text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Pending Applications</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($stats['pending_applications']) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Pending Applications</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['pending_applications']) }}</p>
                 </div>
             </div>
         </div>
@@ -49,8 +49,8 @@
                     <i class="fas fa-shopping-cart text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Total Orders</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($stats['total_orders']) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Total Orders</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_orders']) }}</p>
                 </div>
             </div>
         </div>
@@ -61,8 +61,8 @@
                     <i class="fas fa-box text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Total Products</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($stats['total_products']) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Total Products</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_products']) }}</p>
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-white">Recent Orders</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Recent Orders</h3>
                     <a href="{{ route('employee.orders') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</a>
                 </div>
             </div>
@@ -84,8 +84,8 @@
                         @foreach($recentOrders->take(5) as $order)
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <div>
-                                    <p class="font-medium text-white">Order #{{ $order->order_number ?? $order->id }}</p>
-                                    <p class="text-sm text-gray-200">{{ $order->user->name ?? 'Guest' }}</p>
+                                    <p class="font-medium text-gray-900">Order #{{ $order->order_number ?? $order->id }}</p>
+                                    <p class="text-sm text-gray-500">{{ $order->user->name ?? 'Guest' }}</p>
                                 </div>
                                 <div class="text-right">
                                     <p class="font-bold text-teal-600">${{ number_format($order->total, 2) }}</p>
@@ -102,7 +102,7 @@
                 @else
                     <div class="text-center py-8">
                         <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-200">No orders found</p>
+                        <p class="text-gray-500">No orders found</p>
                     </div>
                 @endif
             </div>
@@ -112,7 +112,7 @@
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-white">Pending Applications</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Pending Applications</h3>
                     <a href="{{ route('employee.applications') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</a>
                 </div>
             </div>
@@ -122,12 +122,12 @@
                         @foreach($recentApplications as $application)
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <div class="flex items-center justify-between mb-2">
-                                    <p class="font-medium text-white">{{ $application->user->name }}</p>
+                                    <p class="font-medium text-gray-900">{{ $application->user->name }}</p>
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">
                                         {{ ucfirst($application->requested_role) }}
                                     </span>
                                 </div>
-                                <p class="text-sm text-gray-200">{{ $application->created_at->format('M d, Y') }}</p>
+                                <p class="text-sm text-gray-500">{{ $application->created_at->format('M d, Y') }}</p>
                                 <div class="flex gap-2 mt-2">
                                     <form action="{{ route('employee.applications.approve', $application) }}" method="POST" class="inline">
                                         @csrf
@@ -145,7 +145,7 @@
                 @else
                     <div class="text-center py-8">
                         <i class="fas fa-file-alt text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-200">No pending applications</p>
+                        <p class="text-gray-500">No pending applications</p>
                     </div>
                 @endif
             </div>
@@ -155,7 +155,7 @@
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-white">Recent Products</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Recent Products</h3>
                     <a href="{{ route('employee.products') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</a>
                 </div>
             </div>
@@ -173,8 +173,8 @@
                                     @endif
                                 </div>
                                 <div class="flex-1">
-                                    <p class="font-medium text-white text-sm">{{ Str::limit($product->name, 30) }}</p>
-                                    <p class="text-xs text-gray-200">{{ $product->vendor->name ?? 'Unknown Vendor' }}</p>
+                                    <p class="font-medium text-gray-900 text-sm">{{ Str::limit($product->name, 30) }}</p>
+                                    <p class="text-xs text-gray-500">{{ $product->vendor->name ?? 'Unknown Vendor' }}</p>
                                     <p class="text-xs text-teal-600 font-bold">${{ number_format($product->price, 2) }}</p>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                 @else
                     <div class="text-center py-8">
                         <i class="fas fa-box text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-200">No products found</p>
+                        <p class="text-gray-500">No products found</p>
                     </div>
                 @endif
             </div>
@@ -193,7 +193,7 @@
     <!-- Quick Actions -->
     <div class="mt-8">
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <a href="{{ route('employee.orders') }}" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                     <i class="fas fa-shopping-cart text-blue-600 text-xl mr-3"></i>

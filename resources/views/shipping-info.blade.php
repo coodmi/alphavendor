@@ -26,13 +26,13 @@
         <div class="max-w-4xl mx-auto">
             <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
                 @if($page && $page->content)
-                    <div class="prose prose-lg max-w-none text-white">
+                    <div class="prose prose-lg max-w-none text-gray-700">
                         {!! $page->content !!}
                     </div>
                 @else
                     <div class="text-center py-12">
                         <i class="fas fa-shipping-fast text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-200 text-lg">Content not available. Please check back later.</p>
+                        <p class="text-gray-500 text-lg">Content not available. Please check back later.</p>
                     </div>
                 @endif
 
@@ -41,10 +41,10 @@
                     <h3 class="text-xl font-bold text-teal-900 mb-3">
                         <i class="fas fa-headset mr-2 text-teal-700"></i>Need Help with Shipping?
                     </h3>
-                    <p class="text-white mb-4">
+                    <p class="text-gray-700 mb-4">
                         Our customer support team is here to help with any shipping questions:
                     </p>
-                    <div class="space-y-2 text-white">
+                    <div class="space-y-2 text-gray-700">
                         <p><i class="fas fa-phone text-teal-700 mr-2"></i> <a href="tel:+8801700000000" class="hover:text-teal-700">+880 1700-000000</a></p>
                         <p><i class="fas fa-envelope text-teal-700 mr-2"></i> <a href="mailto:support@armarketbd.com" class="hover:text-teal-700">support@armarketbd.com</a></p>
                         <p><i class="fas fa-map-marker-alt text-teal-700 mr-2"></i> Dhaka, Bangladesh</p>

@@ -13,8 +13,8 @@
     <div class="mb-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-white">Order Management</h2>
-                <p class="text-gray-200 mt-1">Manage and update order statuses</p>
+                <h2 class="text-2xl font-bold text-gray-800">Order Management</h2>
+                <p class="text-gray-500 mt-1">Manage and update order statuses</p>
             </div>
         </div>
     </div>
@@ -34,8 +34,8 @@
                     <i class="fas fa-shopping-cart text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Total Orders</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($totalOrders) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Total Orders</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($totalOrders) }}</p>
                 </div>
             </div>
         </div>
@@ -46,8 +46,8 @@
                     <i class="fas fa-clock text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Pending</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($pendingOrders) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Pending</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($pendingOrders) }}</p>
                 </div>
             </div>
         </div>
@@ -58,8 +58,8 @@
                     <i class="fas fa-cog text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Processing</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($processingOrders) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Processing</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($processingOrders) }}</p>
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
                     <i class="fas fa-check-circle text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-200">Completed</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($completedOrders) }}</p>
+                    <p class="text-sm font-medium text-gray-500">Completed</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($completedOrders) }}</p>
                 </div>
             </div>
         </div>
@@ -83,27 +83,27 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Order</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Customer</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Items</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Total</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($orders as $order)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-white">#{{ $order->order_number ?? $order->id }}</div>
-                                <div class="text-sm text-gray-200">{{ $order->payment_method ? ucfirst(str_replace('_', ' ', $order->payment_method)) : 'N/A' }}</div>
+                                <div class="text-sm font-medium text-gray-900">#{{ $order->order_number ?? $order->id }}</div>
+                                <div class="text-sm text-gray-500">{{ $order->payment_method ? ucfirst(str_replace('_', ' ', $order->payment_method)) : 'N/A' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-white">{{ $order->user->name ?? 'Guest' }}</div>
-                                <div class="text-sm text-gray-200">{{ $order->user->email ?? 'N/A' }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $order->user->name ?? 'Guest' }}</div>
+                                <div class="text-sm text-gray-500">{{ $order->user->email ?? 'N/A' }}</div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $order->items->count() }} item(s)
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -119,7 +119,7 @@
                                     {{ ucfirst($order->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $order->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -136,7 +136,7 @@
                     @empty
                         <tr>
                             <td colspan="7" class="px-6 py-12 text-center">
-                                <div class="text-gray-200">
+                                <div class="text-gray-500">
                                     <i class="fas fa-shopping-cart text-4xl mb-4"></i>
                                     <p>No orders found</p>
                                 </div>
@@ -161,13 +161,13 @@
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="p-6">
-                <h3 class="text-lg font-semibold text-white mb-4">Update Order Status</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Update Order Status</h3>
                 
                 <form id="statusForm" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-white mb-2">Status</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                         <select name="status" id="statusSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="pending">Pending</option>
                             <option value="processing">Processing</option>
@@ -178,7 +178,7 @@
                     </div>
                     
                     <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeStatusModal()" class="px-4 py-2 text-gray-100 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <button type="button" onclick="closeStatusModal()" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
                             Cancel
                         </button>
                         <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">

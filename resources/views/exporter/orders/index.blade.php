@@ -12,7 +12,7 @@
     <div class="bg-white rounded-lg shadow-md">
         <div class="p-6 border-b border-gray-200">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-white">Export Orders</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Export Orders</h2>
                 <a href="{{ route('exporter.dashboard') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
                     Back to Dashboard
                 </a>
@@ -24,31 +24,31 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Order #</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Customer</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Items</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Total</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Payment</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach($orders as $order)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-white">{{ $order->order_number }}</span>
+                                    <span class="text-sm font-medium text-gray-900">{{ $order->order_number }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-white">{{ $order->user->name ?? 'N/A' }}</div>
-                                    <div class="text-sm text-gray-200">{{ $order->user->email ?? 'N/A' }}</div>
+                                    <div class="text-sm text-gray-900">{{ $order->user->name ?? 'N/A' }}</div>
+                                    <div class="text-sm text-gray-500">{{ $order->user->email ?? 'N/A' }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm text-white">{{ $order->items->count() }} item(s)</span>
+                                    <span class="text-sm text-gray-900">{{ $order->items->count() }} item(s)</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-semibold text-white">${{ number_format($order->total, 2) }}</span>
+                                    <span class="text-sm font-semibold text-gray-900">${{ number_format($order->total, 2) }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -62,11 +62,11 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                        {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-white' }}">
+                                        {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
                                         {{ ucfirst($order->payment_status) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $order->created_at->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -83,8 +83,8 @@
             @else
                 <div class="text-center py-12">
                     <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
-                    <p class="text-xl text-gray-100">No orders found</p>
-                    <p class="text-sm text-gray-200 mt-2">Orders from your export products will appear here</p>
+                    <p class="text-xl text-gray-600">No orders found</p>
+                    <p class="text-sm text-gray-500 mt-2">Orders from your export products will appear here</p>
                 </div>
             @endif
         </div>

@@ -68,30 +68,30 @@
 @section('content')
 <!-- Header -->
 <div class="mb-8">
-    <h1 class="text-4xl font-bold text-white mb-2">Analytics & Reports</h1>
-    <p class="text-gray-100">Comprehensive business insights and performance metrics</p>
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">Analytics & Reports</h1>
+    <p class="text-gray-600">Comprehensive business insights and performance metrics</p>
 </div>
 
         <!-- Today vs Yesterday Comparison -->
         <div class="mb-8">
-            <h2 class="text-2xl font-bold text-white mb-4">Today vs Yesterday</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Today vs Yesterday</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Retailer Orders -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-white">Retailer Orders</h3>
+                        <h3 class="text-lg font-semibold text-gray-700">Retailer Orders</h3>
                         <i class="fas fa-store text-green-500 text-2xl"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm text-gray-200">Today</p>
+                            <p class="text-sm text-gray-500">Today</p>
                             <p class="text-3xl font-bold text-green-600">{{ $todayStats['retailer_orders_today'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['retailer_sales_today'], 2) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['retailer_sales_today'], 2) }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-200">Yesterday</p>
-                            <p class="text-3xl font-bold text-gray-100">{{ $yesterdayStats['retailer_orders_yesterday'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['retailer_sales_yesterday'], 2) }}</p>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['retailer_orders_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['retailer_sales_yesterday'], 2) }}</p>
                         </div>
                     </div>
                     @php
@@ -107,7 +107,7 @@
                             <i class="fas fa-arrow-down text-red-500 mr-2"></i>
                             <span class="text-sm text-red-600 font-semibold">{{ number_format($change, 1) }}%</span>
                         @else
-                            <span class="text-sm text-gray-200">No change</span>
+                            <span class="text-sm text-gray-500">No change</span>
                         @endif
                     </div>
                 </div>
@@ -115,19 +115,19 @@
                 <!-- Wholesaler Orders -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-white">Wholesaler Orders</h3>
+                        <h3 class="text-lg font-semibold text-gray-700">Wholesaler Orders</h3>
                         <i class="fas fa-warehouse text-blue-500 text-2xl"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm text-gray-200">Today</p>
+                            <p class="text-sm text-gray-500">Today</p>
                             <p class="text-3xl font-bold text-blue-600">{{ $todayStats['wholesaler_orders_today'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['wholesaler_sales_today'], 2) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['wholesaler_sales_today'], 2) }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-200">Yesterday</p>
-                            <p class="text-3xl font-bold text-gray-100">{{ $yesterdayStats['wholesaler_orders_yesterday'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['wholesaler_sales_yesterday'], 2) }}</p>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['wholesaler_orders_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['wholesaler_sales_yesterday'], 2) }}</p>
                         </div>
                     </div>
                     @php
@@ -143,7 +143,7 @@
                             <i class="fas fa-arrow-down text-red-500 mr-2"></i>
                             <span class="text-sm text-red-600 font-semibold">{{ number_format($change, 1) }}%</span>
                         @else
-                            <span class="text-sm text-gray-200">No change</span>
+                            <span class="text-sm text-gray-500">No change</span>
                         @endif
                     </div>
                 </div>
@@ -151,19 +151,19 @@
                 <!-- Importer Orders -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-white">Importer Orders</h3>
+                        <h3 class="text-lg font-semibold text-gray-700">Importer Orders</h3>
                         <i class="fas fa-globe text-purple-500 text-2xl"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm text-gray-200">Today</p>
+                            <p class="text-sm text-gray-500">Today</p>
                             <p class="text-3xl font-bold text-purple-600">{{ $todayStats['importer_orders_today'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['importer_sales_today'], 2) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($todayStats['importer_sales_today'], 2) }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-200">Yesterday</p>
-                            <p class="text-3xl font-bold text-gray-100">{{ $yesterdayStats['importer_orders_yesterday'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['importer_sales_yesterday'], 2) }}</p>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['importer_orders_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ currency_symbol() }}{{ number_format($yesterdayStats['importer_sales_yesterday'], 2) }}</p>
                         </div>
                     </div>
                     @php
@@ -179,7 +179,7 @@
                             <i class="fas fa-arrow-down text-red-500 mr-2"></i>
                             <span class="text-sm text-red-600 font-semibold">{{ number_format($change, 1) }}%</span>
                         @else
-                            <span class="text-sm text-gray-200">No change</span>
+                            <span class="text-sm text-gray-500">No change</span>
                         @endif
                     </div>
                 </div>
@@ -187,19 +187,19 @@
                 <!-- Returns & Refunds -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-teal-600">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-white">Returns & Refunds</h3>
+                        <h3 class="text-lg font-semibold text-gray-700">Returns & Refunds</h3>
                         <i class="fas fa-undo text-teal-600 text-2xl"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm text-gray-200">Today</p>
+                            <p class="text-sm text-gray-500">Today</p>
                             <p class="text-3xl font-bold text-teal-700">{{ $todayStats['returns_today'] + $todayStats['refunds_today'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ $todayStats['returns_today'] }} returns, {{ $todayStats['refunds_today'] }} refunds</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ $todayStats['returns_today'] }} returns, {{ $todayStats['refunds_today'] }} refunds</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-200">Yesterday</p>
-                            <p class="text-3xl font-bold text-gray-100">{{ $yesterdayStats['returns_yesterday'] + $yesterdayStats['refunds_yesterday'] }}</p>
-                            <p class="text-xs text-gray-200 mt-1">{{ $yesterdayStats['returns_yesterday'] }} returns, {{ $yesterdayStats['refunds_yesterday'] }} refunds</p>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['returns_yesterday'] + $yesterdayStats['refunds_yesterday'] }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ $yesterdayStats['returns_yesterday'] }} returns, {{ $yesterdayStats['refunds_yesterday'] }} refunds</p>
                         </div>
                     </div>
                 </div>
@@ -207,17 +207,17 @@
                 <!-- Cancelled Orders -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-white">Cancelled Orders</h3>
+                        <h3 class="text-lg font-semibold text-gray-700">Cancelled Orders</h3>
                         <i class="fas fa-times-circle text-red-500 text-2xl"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm text-gray-200">Today</p>
+                            <p class="text-sm text-gray-500">Today</p>
                             <p class="text-3xl font-bold text-red-600">{{ $todayStats['cancelled_today'] }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-200">Yesterday</p>
-                            <p class="text-3xl font-bold text-gray-100">{{ $yesterdayStats['cancelled_yesterday'] }}</p>
+                            <p class="text-sm text-gray-500">Yesterday</p>
+                            <p class="text-3xl font-bold text-gray-600">{{ $yesterdayStats['cancelled_yesterday'] }}</p>
                         </div>
                     </div>
                     @php
@@ -233,7 +233,7 @@
                             <i class="fas fa-arrow-down text-green-500 mr-2"></i>
                             <span class="text-sm text-green-600 font-semibold">{{ number_format($change, 1) }}%</span>
                         @else
-                            <span class="text-sm text-gray-200">No change</span>
+                            <span class="text-sm text-gray-500">No change</span>
                         @endif
                     </div>
                 </div>
@@ -242,7 +242,7 @@
 
         <!-- Overall Statistics -->
         <div class="mb-8">
-            <h2 class="text-2xl font-bold text-white mb-4">Overall Performance</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Overall Performance</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Total Sales -->
                 <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
@@ -290,7 +290,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Sales Chart -->
             <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-                <h3 class="text-base font-semibold text-white mb-3">Sales Trend (Last 7 Days)</h3>
+                <h3 class="text-base font-semibold text-gray-800 mb-3">Sales Trend (Last 7 Days)</h3>
                 <div style="height: 200px;">
                     <canvas id="salesChart"></canvas>
                 </div>
@@ -298,7 +298,7 @@
 
             <!-- Orders Chart -->
             <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-                <h3 class="text-base font-semibold text-white mb-3">Orders Trend (Last 7 Days)</h3>
+                <h3 class="text-base font-semibold text-gray-800 mb-3">Orders Trend (Last 7 Days)</h3>
                 <div style="height: 200px;">
                     <canvas id="ordersChart"></canvas>
                 </div>
@@ -309,7 +309,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Top Vendors -->
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-xl font-bold text-white mb-4">Top Performing Vendors</h3>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Top Performing Vendors</h3>
                 <div class="space-y-4">
                     @forelse($topVendors as $index => $vendor)
                         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
@@ -318,24 +318,24 @@
                                     {{ $index + 1 }}
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-white">{{ $vendor->name }}</p>
-                                    <p class="text-sm text-gray-200">{{ ucfirst($vendor->role) }}</p>
+                                    <p class="font-semibold text-gray-800">{{ $vendor->name }}</p>
+                                    <p class="text-sm text-gray-500">{{ ucfirst($vendor->role) }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <p class="font-bold text-green-600">{{ currency_symbol() }}{{ number_format($vendor->total_sales ?? 0, 2) }}</p>
-                                <p class="text-sm text-gray-200">{{ $vendor->total_orders }} orders</p>
+                                <p class="text-sm text-gray-500">{{ $vendor->total_orders }} orders</p>
                             </div>
                         </div>
                     @empty
-                        <p class="text-gray-200 text-center py-8">No vendor data available</p>
+                        <p class="text-gray-500 text-center py-8">No vendor data available</p>
                     @endforelse
                 </div>
             </div>
 
             <!-- Top Products -->
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-xl font-bold text-white mb-4">Top Selling Products</h3>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Top Selling Products</h3>
                 <div class="space-y-4">
                     @forelse($topProducts as $index => $product)
                         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
@@ -344,17 +344,17 @@
                                     {{ $index + 1 }}
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-white">{{ Str::limit($product->name, 30) }}</p>
-                                    <p class="text-sm text-gray-200">{{ $product->category->name ?? 'N/A' }}</p>
+                                    <p class="font-semibold text-gray-800">{{ Str::limit($product->name, 30) }}</p>
+                                    <p class="text-sm text-gray-500">{{ $product->category->name ?? 'N/A' }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <p class="font-bold text-green-600">{{ currency_symbol() }}{{ number_format($product->total_revenue ?? 0, 2) }}</p>
-                                <p class="text-sm text-gray-200">{{ $product->total_sold }} sold</p>
+                                <p class="text-sm text-gray-500">{{ $product->total_sold }} sold</p>
                             </div>
                         </div>
                     @empty
-                        <p class="text-gray-200 text-center py-8">No product data available</p>
+                        <p class="text-gray-500 text-center py-8">No product data available</p>
                     @endforelse
                 </div>
             </div>
@@ -362,42 +362,42 @@
 
         <!-- Recent Orders -->
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-xl font-bold text-white mb-4">Recent Orders</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Recent Orders</h3>
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Order ID</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Customer</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Vendor</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Amount</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Status</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Date</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Order ID</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Customer</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Vendor</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Amount</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($recentOrders as $order)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 text-sm font-medium text-white">#{{ $order->id }}</td>
-                                <td class="px-4 py-3 text-sm text-white">{{ $order->user->name ?? 'N/A' }}</td>
-                                <td class="px-4 py-3 text-sm text-white">{{ $order->vendor->name ?? 'N/A' }}</td>
-                                <td class="px-4 py-3 text-sm font-semibold text-white">{{ currency_symbol() }}{{ number_format($order->total, 2) }}</td>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900">#{{ $order->id }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $order->user->name ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $order->vendor->name ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ currency_symbol() }}{{ number_format($order->total, 2) }}</td>
                                 <td class="px-4 py-3">
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full
                                         @if($order->status == 'delivered' || $order->status == 'completed') bg-green-100 text-green-800
                                         @elseif($order->status == 'pending') bg-teal-100 text-teal-800
                                         @elseif($order->status == 'processing') bg-blue-100 text-blue-800
                                         @elseif($order->status == 'cancelled') bg-red-100 text-red-800
-                                        @else bg-gray-100 text-white
+                                        @else bg-gray-100 text-gray-800
                                         @endif">
                                         {{ ucfirst($order->status) }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-sm text-gray-200">{{ $order->created_at->format('M d, Y') }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-500">{{ $order->created_at->format('M d, Y') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-gray-200">No recent orders</td>
+                                <td colspan="6" class="px-4 py-8 text-center text-gray-500">No recent orders</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -6,34 +6,34 @@
 @endsection
 @section('content')
 <div class="mb-6 flex justify-between items-center">
-<div><h2 class="text-2xl font-bold">Certifications</h2><p class="text-gray-100">Manage your certifications</p></div>
+<div><h2 class="text-2xl font-bold">Certifications</h2><p class="text-gray-600">Manage your certifications</p></div>
 <button onclick="openModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"><i class="fas fa-plus mr-2"></i>Add</button>
 </div>
 <div class="bg-white rounded-lg shadow">
 <table class="min-w-full">
 <thead class="bg-gray-50"><tr>
-<th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase">Name</th>
-<th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase">Code</th>
-<th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase">Authority</th>
-<th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase">Expiry</th>
-<th class="px-6 py-3 text-left text-xs font-semibold text-white uppercase">Status</th>
-<th class="px-6 py-3 text-center text-xs font-semibold text-white uppercase">Actions</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Code</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Authority</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Expiry</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
+<th class="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Actions</th>
 </tr></thead>
 <tbody id="tbody">
 @forelse($certifications as $c)
 <tr id="row-{{$c->id}}">
-<td class="px-6 py-4"><div class="font-semibold">{{$c->name}}</div><div class="text-sm text-gray-200">{{$c->certificate_number ?? '-'}}</div></td>
+<td class="px-6 py-4"><div class="font-semibold">{{$c->name}}</div><div class="text-sm text-gray-500">{{$c->certificate_number ?? '-'}}</div></td>
 <td class="px-6 py-4">{{$c->code ?? '-'}}</td>
 <td class="px-6 py-4">{{$c->issuing_authority ?? '-'}}</td>
 <td class="px-6 py-4">{{$c->expiry_date ? $c->expiry_date->format('M d, Y') : 'No Expiry'}}</td>
-<td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full {{$c->is_active?'bg-green-100 text-green-800':'bg-gray-100 text-white'}}">{{$c->is_active?'Active':'Inactive'}}</span></td>
+<td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full {{$c->is_active?'bg-green-100 text-green-800':'bg-gray-100 text-gray-800'}}">{{$c->is_active?'Active':'Inactive'}}</span></td>
 <td class="px-6 py-4 text-center">
 <button onclick='edit(@json($c))' class="px-3 py-1 bg-blue-500 text-white rounded mr-2"><i class="fas fa-edit"></i></button>
 <button onclick="del({{$c->id}},'{{$c->name}}')" class="px-3 py-1 bg-red-500 text-white rounded"><i class="fas fa-trash"></i></button>
 </td>
 </tr>
 @empty
-<tr><td colspan="6" class="px-6 py-12 text-center text-gray-200">No certifications</td></tr>
+<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">No certifications</td></tr>
 @endforelse
 </tbody>
 </table>
@@ -41,7 +41,7 @@
 <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[95vh] overflow-hidden flex flex-col">
         <div class="px-8 pt-8 pb-4 border-b border-gray-200">
-            <h3 id="title" class="text-2xl font-bold text-white">Add Certification</h3>
+            <h3 id="title" class="text-2xl font-bold text-gray-800">Add Certification</h3>
         </div>
         <div class="px-8 py-6 overflow-y-auto flex-1">
             <form id="form">
@@ -51,7 +51,7 @@
                 <div class="space-y-5">
                     <!-- Name Field -->
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Name <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name <span class="text-red-500">*</span></label>
                         <input type="text" name="name" id="name" required
                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
@@ -59,12 +59,12 @@
                     <!-- Code and Certificate Number -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-white mb-2">Code</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Code</label>
                             <input type="text" name="code" id="code"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white mb-2">Certificate Number</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Certificate Number</label>
                             <input type="text" name="certificate_number" id="number"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                         </div>
@@ -72,14 +72,14 @@
 
                     <!-- Issuing Authority -->
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Issuing Authority</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Issuing Authority</label>
                         <input type="text" name="issuing_authority" id="authority"
                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <!-- Description -->
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Description</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                         <textarea name="description" id="desc" rows="3"
                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"></textarea>
                     </div>
@@ -87,12 +87,12 @@
                     <!-- Issue Date and Expiry Date -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-white mb-2">Issue Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Issue Date</label>
                             <input type="date" name="issue_date" id="issue"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white mb-2">Expiry Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
                             <input type="date" name="expiry_date" id="expiry"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                         </div>
@@ -100,7 +100,7 @@
 
                     <!-- Document Upload -->
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Document (PDF/Image, Max 5MB)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Document (PDF/Image, Max 5MB)</label>
                         <input type="file" name="document" id="doc" accept=".pdf,.jpg,.jpeg,.png"
                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition">
                     </div>
@@ -110,7 +110,7 @@
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" name="is_active" id="active" value="1" checked
                                    class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500">
-                            <span class="ml-3 text-sm font-medium text-white">Active</span>
+                            <span class="ml-3 text-sm font-medium text-gray-700">Active</span>
                         </label>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
         <div class="px-8 py-6 border-t border-gray-200 bg-gray-50">
             <div class="flex gap-3">
                 <button type="button" onclick="closeModal()"
-                        class="flex-1 px-6 py-3 bg-white border border-gray-300 text-white font-medium rounded-lg hover:bg-gray-50 transition">
+                        class="flex-1 px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
                     Cancel
                 </button>
                 <button type="button" onclick="document.getElementById('form').requestSubmit()"
@@ -140,12 +140,12 @@
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
             </div>
-            <h3 class="text-lg font-semibold text-white mb-2">Delete Certification</h3>
-            <p class="text-sm text-gray-200 mb-6">Are you sure you want to delete "<span id="deleteName" class="font-semibold text-white"></span>"? This action cannot be undone.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete Certification</h3>
+            <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete "<span id="deleteName" class="font-semibold text-gray-700"></span>"? This action cannot be undone.</p>
         </div>
         <div class="flex gap-3">
             <button type="button" onclick="closeDeleteModal()"
-                    class="flex-1 px-4 py-2.5 bg-gray-100 text-white font-medium rounded-lg hover:bg-gray-200 transition">
+                    class="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition">
                 No, Cancel
             </button>
             <button type="button" onclick="confirmDelete()"

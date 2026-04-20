@@ -9,8 +9,8 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-white">Commission Settings</h1>
-        <p class="text-gray-100 mt-2">Manage category-based and COD commission rates</p>
+        <h1 class="text-3xl font-bold text-gray-900">Commission Settings</h1>
+        <p class="text-gray-600 mt-2">Manage category-based and COD commission rates</p>
     </div>
 
     @if(session('success'))
@@ -28,14 +28,14 @@
     <!-- COD Commission Settings -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4">COD Commission Settings</h2>
-        <p class="text-gray-100 mb-4">Set commission rate for Cash on Delivery orders</p>
+        <p class="text-gray-600 mb-4">Set commission rate for Cash on Delivery orders</p>
         
         <form action="{{ route('admin.commissions.cod.update') }}" method="POST" class="max-w-md">
             @csrf
             @method('PUT')
             
             <div class="mb-4">
-                <label class="block text-white font-medium mb-2">COD Commission Rate (%)</label>
+                <label class="block text-gray-700 font-medium mb-2">COD Commission Rate (%)</label>
                 <input type="number" 
                        name="commission_rate" 
                        step="0.01" 
@@ -44,7 +44,7 @@
                        value="{{ $codCommission->commission_rate ?? 0 }}"
                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                        required>
-                <p class="text-sm text-gray-200 mt-1">Applied to: (Order Amount - Delivery Charge) × Rate</p>
+                <p class="text-sm text-gray-500 mt-1">Applied to: (Order Amount - Delivery Charge) × Rate</p>
             </div>
             
             <div class="mb-4">
@@ -54,7 +54,7 @@
                            value="1"
                            {{ ($codCommission && $codCommission->is_active) ? 'checked' : '' }}
                            class="mr-2">
-                    <span class="text-white">Enable COD Commission</span>
+                    <span class="text-gray-700">Enable COD Commission</span>
                 </label>
             </div>
             
@@ -68,7 +68,7 @@
     <!-- Category-Based Commission Settings -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-semibold mb-4">Category-Based Commission Rates</h2>
-        <p class="text-gray-100 mb-6">Set different commission rates for each seller type per category</p>
+        <p class="text-gray-600 mb-6">Set different commission rates for each seller type per category</p>
         
         <!-- Add/Update Commission Form -->
         <div class="mb-8 p-4 bg-gray-50 rounded-lg">
@@ -78,7 +78,7 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <div>
-                        <label class="block text-white font-medium mb-2">Category</label>
+                        <label class="block text-gray-700 font-medium mb-2">Category</label>
                         <select name="category_id" class="w-full px-4 py-2 border rounded-lg" required>
                             <option value="">Select Category</option>
                             @foreach($categories as $category)
@@ -88,7 +88,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-white font-medium mb-2">Retail Seller (%)</label>
+                        <label class="block text-gray-700 font-medium mb-2">Retail Seller (%)</label>
                         <input type="number" 
                                name="retailer_rate" 
                                step="0.01" 
@@ -100,7 +100,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-white font-medium mb-2">Wholesale Seller (%)</label>
+                        <label class="block text-gray-700 font-medium mb-2">Wholesale Seller (%)</label>
                         <input type="number" 
                                name="wholesaler_rate" 
                                step="0.01" 
@@ -112,7 +112,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-white font-medium mb-2">Importer (%)</label>
+                        <label class="block text-gray-700 font-medium mb-2">Importer (%)</label>
                         <input type="number" 
                                name="importer_rate" 
                                step="0.01" 
@@ -135,12 +135,12 @@
             <table class="min-w-full bg-white">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Category</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Retail Seller</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Wholesale Seller</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Importer</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Retail Seller</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wholesale Seller</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Importer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -153,22 +153,22 @@
                         @endphp
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="font-medium text-white">{{ $category->name ?? 'N/A' }}</div>
+                                <div class="font-medium text-gray-900">{{ $category->name ?? 'N/A' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-white">{{ $retailer->commission_rate ?? 'N/A' }}%</span>
+                                <span class="text-gray-900">{{ $retailer->commission_rate ?? 'N/A' }}%</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-white">{{ $wholesaler->commission_rate ?? 'N/A' }}%</span>
+                                <span class="text-gray-900">{{ $wholesaler->commission_rate ?? 'N/A' }}%</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-white">{{ $importer->commission_rate ?? 'N/A' }}%</span>
+                                <span class="text-gray-900">{{ $importer->commission_rate ?? 'N/A' }}%</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($retailer && $retailer->is_active)
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                                 @else
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-white">Inactive</span>
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -178,7 +178,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-200">
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
                                 No commission rates configured yet. Add your first commission rate above.
                             </td>
                         </tr>
