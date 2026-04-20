@@ -12,10 +12,10 @@
     <div class="max-w-5xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                 <i class="fas fa-cog text-indigo-600 mr-3"></i>Header & Footer Settings
             </h1>
-            <p class="text-gray-600 mt-2 text-sm sm:text-base">Customize your site's header logo and footer content</p>
+            <p class="text-gray-100 mt-2 text-sm sm:text-base">Customize your site's header logo and footer content</p>
         </div>
 
         <!-- Success Message -->
@@ -87,7 +87,7 @@
                 <div class="p-6 space-y-6">
                     <!-- Site Name -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-tag text-indigo-600 mr-2"></i>Site Name
                         </label>
                         <input type="text" name="site_name" value="{{ old('site_name', $settings->site_name) }}" required 
@@ -99,18 +99,18 @@
 
                     <!-- Site Logo -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-image text-indigo-600 mr-2"></i>Site Logo
                         </label>
                         @if($settings->site_logo)
                             <div class="mb-3">
                                 <img src="{{ asset('storage/' . $settings->site_logo) }}" alt="Current Logo" class="h-16 object-contain border border-gray-200 rounded-lg p-2">
-                                <p class="text-xs text-gray-500 mt-1">Current logo</p>
+                                <p class="text-xs text-gray-200 mt-1">Current logo</p>
                             </div>
                         @endif
                         <input type="file" name="site_logo" accept="image/*" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all @error('site_logo') border-red-500 @enderror">
-                        <p class="text-xs text-gray-500 mt-2">Recommended: PNG or SVG format, max 2MB</p>
+                        <p class="text-xs text-gray-200 mt-2">Recommended: PNG or SVG format, max 2MB</p>
                         @error('site_logo')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -118,7 +118,7 @@
 
                     <!-- Site Description -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-align-left text-indigo-600 mr-2"></i>Site Description
                         </label>
                         <textarea name="site_description" rows="3" 
@@ -141,7 +141,7 @@
                 <div class="p-6 space-y-6">
                     <!-- Footer Text -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-paragraph text-blue-600 mr-2"></i>Footer About Text
                         </label>
                         <textarea name="footer_text" rows="3" 
@@ -153,7 +153,7 @@
 
                     <!-- Footer Copyright -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-copyright text-blue-600 mr-2"></i>Copyright Text
                         </label>
                         <input type="text" name="footer_copyright" value="{{ old('footer_copyright', $settings->footer_copyright) }}" 
@@ -175,54 +175,54 @@
                     </h2>
                 </div>
                 <div class="p-6 space-y-6">
-                    <p class="text-sm text-gray-600 mb-4">Upload up to 3 payment method logos to display in the footer (recommended size: 100x60px)</p>
+                    <p class="text-sm text-gray-100 mb-4">Upload up to 3 payment method logos to display in the footer (recommended size: 100x60px)</p>
                     
                     <!-- Payment Logo 1 -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-credit-card text-green-600 mr-2"></i>Payment Logo 1
                         </label>
                         @if($settings->payment_logo_1)
                             <div class="mb-3">
                                 <img src="{{ asset('storage/' . $settings->payment_logo_1) }}" alt="Payment Logo 1" class="h-12 object-contain border border-gray-200 rounded-lg p-2 bg-white">
-                                <p class="text-xs text-gray-500 mt-1">Current logo</p>
+                                <p class="text-xs text-gray-200 mt-1">Current logo</p>
                             </div>
                         @endif
                         <input type="file" name="payment_logo_1" accept="image/*" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">
-                        <p class="text-xs text-gray-500 mt-2">PNG or SVG format recommended, max 2MB</p>
+                        <p class="text-xs text-gray-200 mt-2">PNG or SVG format recommended, max 2MB</p>
                     </div>
 
                     <!-- Payment Logo 2 -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-credit-card text-green-600 mr-2"></i>Payment Logo 2
                         </label>
                         @if($settings->payment_logo_2)
                             <div class="mb-3">
                                 <img src="{{ asset('storage/' . $settings->payment_logo_2) }}" alt="Payment Logo 2" class="h-12 object-contain border border-gray-200 rounded-lg p-2 bg-white">
-                                <p class="text-xs text-gray-500 mt-1">Current logo</p>
+                                <p class="text-xs text-gray-200 mt-1">Current logo</p>
                             </div>
                         @endif
                         <input type="file" name="payment_logo_2" accept="image/*" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">
-                        <p class="text-xs text-gray-500 mt-2">PNG or SVG format recommended, max 2MB</p>
+                        <p class="text-xs text-gray-200 mt-2">PNG or SVG format recommended, max 2MB</p>
                     </div>
 
                     <!-- Payment Logo 3 -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-credit-card text-green-600 mr-2"></i>Payment Logo 3
                         </label>
                         @if($settings->payment_logo_3)
                             <div class="mb-3">
                                 <img src="{{ asset('storage/' . $settings->payment_logo_3) }}" alt="Payment Logo 3" class="h-12 object-contain border border-gray-200 rounded-lg p-2 bg-white">
-                                <p class="text-xs text-gray-500 mt-1">Current logo</p>
+                                <p class="text-xs text-gray-200 mt-1">Current logo</p>
                             </div>
                         @endif
                         <input type="file" name="payment_logo_3" accept="image/*" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">
-                        <p class="text-xs text-gray-500 mt-2">PNG or SVG format recommended, max 2MB</p>
+                        <p class="text-xs text-gray-200 mt-2">PNG or SVG format recommended, max 2MB</p>
                     </div>
                 </div>
             </div>
@@ -239,28 +239,28 @@
                     <!-- Social Media Links -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <label class="block text-sm font-bold text-white mb-2">
                                 <i class="fab fa-facebook text-blue-600 mr-2"></i>Facebook URL
                             </label>
                             <input type="url" name="facebook_url" value="{{ old('facebook_url', $settings->facebook_url) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <label class="block text-sm font-bold text-white mb-2">
                                 <i class="fab fa-twitter text-blue-400 mr-2"></i>Twitter URL
                             </label>
                             <input type="url" name="twitter_url" value="{{ old('twitter_url', $settings->twitter_url) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <label class="block text-sm font-bold text-white mb-2">
                                 <i class="fab fa-instagram text-pink-600 mr-2"></i>Instagram URL
                             </label>
                             <input type="url" name="instagram_url" value="{{ old('instagram_url', $settings->instagram_url) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <label class="block text-sm font-bold text-white mb-2">
                                 <i class="fab fa-linkedin text-blue-700 mr-2"></i>LinkedIn URL
                             </label>
                             <input type="url" name="linkedin_url" value="{{ old('linkedin_url', $settings->linkedin_url) }}" 
@@ -271,14 +271,14 @@
                     <!-- Contact Information -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <label class="block text-sm font-bold text-white mb-2">
                                 <i class="fas fa-envelope text-purple-600 mr-2"></i>Contact Email
                             </label>
                             <input type="email" name="contact_email" value="{{ old('contact_email', $settings->contact_email) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <label class="block text-sm font-bold text-white mb-2">
                                 <i class="fas fa-phone text-purple-600 mr-2"></i>Contact Phone
                             </label>
                             <input type="text" name="contact_phone" value="{{ old('contact_phone', $settings->contact_phone) }}" 
@@ -287,7 +287,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <label class="block text-sm font-bold text-white mb-2">
                             <i class="fas fa-map-marker-alt text-purple-600 mr-2"></i>Contact Address
                         </label>
                         <textarea name="contact_address" rows="2" 
@@ -298,37 +298,37 @@
 
             <!-- Bank Transfer Info -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                     <i class="fas fa-university text-indigo-600"></i> Bank Transfer Details
                 </h2>
-                <p class="text-sm text-gray-500 mb-6">This info will be shown to customers when they select Bank Transfer as payment method.</p>
+                <p class="text-sm text-gray-200 mb-6">This info will be shown to customers when they select Bank Transfer as payment method.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Bank Name</label>
+                        <label class="block text-sm font-bold text-white mb-2">Bank Name</label>
                         <input type="text" name="bank_name" value="{{ old('bank_name', $settings->bank_name) }}"
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
                             placeholder="e.g. Dutch-Bangla Bank">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Account Name</label>
+                        <label class="block text-sm font-bold text-white mb-2">Account Name</label>
                         <input type="text" name="bank_account_name" value="{{ old('bank_account_name', $settings->bank_account_name) }}"
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
                             placeholder="Account holder name">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Account Number</label>
+                        <label class="block text-sm font-bold text-white mb-2">Account Number</label>
                         <input type="text" name="bank_account_number" value="{{ old('bank_account_number', $settings->bank_account_number) }}"
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
                             placeholder="e.g. 1234567890">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Branch Name</label>
+                        <label class="block text-sm font-bold text-white mb-2">Branch Name</label>
                         <input type="text" name="bank_branch" value="{{ old('bank_branch', $settings->bank_branch) }}"
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
                             placeholder="e.g. Gulshan Branch">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Routing Number</label>
+                        <label class="block text-sm font-bold text-white mb-2">Routing Number</label>
                         <input type="text" name="bank_routing_number" value="{{ old('bank_routing_number', $settings->bank_routing_number) }}"
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
                             placeholder="e.g. 090261539">

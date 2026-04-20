@@ -24,7 +24,7 @@
 
                     @if($addresses->count() > 0)
                         <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <label class="block text-gray-700 font-semibold mb-3">
+                            <label class="block text-white font-semibold mb-3">
                                 <i class="fas fa-map-marker-alt text-blue-600"></i> Select Saved Address
                             </label>
                             <select id="savedAddressSelect" class="w-full border rounded px-3 py-2 mb-3" style="background-color: white; color: #333;">
@@ -43,7 +43,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <p class="text-sm text-gray-600">
+                            <p class="text-sm text-gray-100">
                                 <i class="fas fa-info-circle"></i> Select a saved address to auto-fill the form below
                             </p>
                         </div>
@@ -52,23 +52,23 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-2">
                             <div>
-                                <label class="block text-gray-700 mb-2">First Name *</label>
+                                <label class="block text-white mb-2">First Name *</label>
                                 <input type="text" name="shipping_first_name" id="first_name" required class="w-full border rounded px-3 py-2">
                                 @error('shipping_first_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 mb-2">Last Name *</label>
+                                <label class="block text-white mb-2">Last Name *</label>
                                 <input type="text" name="shipping_last_name" id="last_name" required class="w-full border rounded px-3 py-2">
                                 @error('shipping_last_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-gray-700 mb-2">Street Address *</label>
+                            <label class="block text-white mb-2">Street Address *</label>
                             <textarea name="shipping_address" id="address" required class="w-full border rounded px-3 py-2" rows="2"></textarea>
                             @error('shipping_address')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
                         <div>
-                            <label class="block text-gray-700 mb-2">Division *</label>
+                            <label class="block text-white mb-2">Division *</label>
                             <select name="shipping_state" id="shipping_division" required class="w-full border rounded px-3 py-2" style="background-color: white; color: #333;">
                                 <option value="">Select Division</option>
                                 <option value="Dhaka">Dhaka</option>
@@ -83,14 +83,14 @@
                             @error('shipping_state')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
                         <div>
-                            <label class="block text-gray-700 mb-2">District *</label>
+                            <label class="block text-white mb-2">District *</label>
                             <select name="shipping_district" id="shipping_district" required class="w-full border rounded px-3 py-2" style="background-color: white; color: #333;">
                                 <option value="">Select Division First</option>
                             </select>
                             @error('shipping_district')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-gray-700 mb-2">Phone Number *</label>
+                            <label class="block text-white mb-2">Phone Number *</label>
                             <input type="tel" name="phone" id="phone" required class="w-full border rounded px-3 py-2">
                             @error('phone')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
@@ -259,14 +259,14 @@
                             bKash Payment Instructions
                         </h3>
                         <div class="bg-white p-3 rounded mb-3">
-                            <p class="text-sm text-gray-600 mb-2">Send money to:</p>
+                            <p class="text-sm text-gray-100 mb-2">Send money to:</p>
                             <p class="text-2xl font-bold text-pink-600">{{ $paymentSettings['bkash_number'] }}</p>
                             @if($paymentSettings['bkash_name'])
-                                <p class="text-sm text-gray-500">Account Name: {{ $paymentSettings['bkash_name'] }}</p>
+                                <p class="text-sm text-gray-200">Account Name: {{ $paymentSettings['bkash_name'] }}</p>
                             @endif
                             <p class="text-xs text-gray-400 mt-1">Account Type: {{ ucfirst($paymentSettings['bkash_type']) }}</p>
                         </div>
-                        <ol class="text-sm text-gray-700 space-y-1 mb-4">
+                        <ol class="text-sm text-white space-y-1 mb-4">
                             <li>1. Open bKash App or Dial *247#</li>
                             <li>2. Select "Send Money"</li>
                             <li>3. Enter the number above</li>
@@ -276,12 +276,12 @@
                         </ol>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-gray-700 text-sm font-medium mb-1">Your bKash Number *</label>
+                                <label class="block text-white text-sm font-medium mb-1">Your bKash Number *</label>
                                 <input type="text" name="sender_number" class="w-full border border-pink-300 rounded px-3 py-2 focus:ring-pink-500 focus:border-pink-500 bkash-input" placeholder="01XXXXXXXXX">
                                 @error('sender_number')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 text-sm font-medium mb-1">Transaction ID (TrxID) *</label>
+                                <label class="block text-white text-sm font-medium mb-1">Transaction ID (TrxID) *</label>
                                 <input type="text" name="transaction_id" class="w-full border border-pink-300 rounded px-3 py-2 focus:ring-pink-500 focus:border-pink-500 bkash-input" placeholder="e.g., 8K7D3F2G1H">
                                 @error('transaction_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
@@ -297,14 +297,14 @@
                             Nagad Payment Instructions
                         </h3>
                         <div class="bg-white p-3 rounded mb-3">
-                            <p class="text-sm text-gray-600 mb-2">Send money to:</p>
+                            <p class="text-sm text-gray-100 mb-2">Send money to:</p>
                             <p class="text-2xl font-bold text-teal-700">{{ $paymentSettings['nagad_number'] }}</p>
                             @if($paymentSettings['nagad_name'])
-                                <p class="text-sm text-gray-500">Account Name: {{ $paymentSettings['nagad_name'] }}</p>
+                                <p class="text-sm text-gray-200">Account Name: {{ $paymentSettings['nagad_name'] }}</p>
                             @endif
                             <p class="text-xs text-gray-400 mt-1">Account Type: {{ ucfirst($paymentSettings['nagad_type']) }}</p>
                         </div>
-                        <ol class="text-sm text-gray-700 space-y-1 mb-4">
+                        <ol class="text-sm text-white space-y-1 mb-4">
                             <li>1. Open Nagad App or Dial *167#</li>
                             <li>2. Select "Send Money"</li>
                             <li>3. Enter the number above</li>
@@ -314,12 +314,12 @@
                         </ol>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-gray-700 text-sm font-medium mb-1">Your Nagad Number *</label>
+                                <label class="block text-white text-sm font-medium mb-1">Your Nagad Number *</label>
                                 <input type="text" name="sender_number" class="w-full border border-teal-400 rounded px-3 py-2 focus:ring-teal-600 focus:border-teal-600 nagad-input" placeholder="01XXXXXXXXX">
                                 @error('sender_number')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 text-sm font-medium mb-1">Transaction ID *</label>
+                                <label class="block text-white text-sm font-medium mb-1">Transaction ID *</label>
                                 <input type="text" name="transaction_id" class="w-full border border-teal-400 rounded px-3 py-2 focus:ring-teal-600 focus:border-teal-600 nagad-input" placeholder="e.g., NAG123456789">
                                 @error('transaction_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
@@ -335,13 +335,13 @@
                             Rocket Payment Instructions
                         </h3>
                         <div class="bg-white p-3 rounded mb-3">
-                            <p class="text-sm text-gray-600 mb-2">Send money to:</p>
+                            <p class="text-sm text-gray-100 mb-2">Send money to:</p>
                             <p class="text-2xl font-bold text-purple-600">{{ $paymentSettings['rocket_number'] }}</p>
                             @if($paymentSettings['rocket_name'])
-                                <p class="text-sm text-gray-500">Account Name: {{ $paymentSettings['rocket_name'] }}</p>
+                                <p class="text-sm text-gray-200">Account Name: {{ $paymentSettings['rocket_name'] }}</p>
                             @endif
                         </div>
-                        <ol class="text-sm text-gray-700 space-y-1 mb-4">
+                        <ol class="text-sm text-white space-y-1 mb-4">
                             <li>1. Open Rocket App or Dial *322#</li>
                             <li>2. Select "Send Money"</li>
                             <li>3. Enter the number above</li>
@@ -351,12 +351,12 @@
                         </ol>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-gray-700 text-sm font-medium mb-1">Your Rocket Number *</label>
+                                <label class="block text-white text-sm font-medium mb-1">Your Rocket Number *</label>
                                 <input type="text" name="sender_number" class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-purple-500 focus:border-purple-500 rocket-input" placeholder="01XXXXXXXXX">
                                 @error('sender_number')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 text-sm font-medium mb-1">Transaction ID *</label>
+                                <label class="block text-white text-sm font-medium mb-1">Transaction ID *</label>
                                 <input type="text" name="transaction_id" class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-purple-500 focus:border-purple-500 rocket-input" placeholder="e.g., RKT123456789">
                                 @error('transaction_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
@@ -365,7 +365,7 @@
                     @endif
 
                     <div class="mt-4">
-                        <label class="block text-gray-700 mb-2">Order Notes (Optional)</label>
+                        <label class="block text-white mb-2">Order Notes (Optional)</label>
                         <textarea name="notes" class="w-full border rounded px-3 py-2" rows="3" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
                     </div>
                 </div>
@@ -390,10 +390,10 @@
                                     @endif
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h3 class="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">{{ $item['name'] }}</h3>
+                                    <h3 class="font-semibold text-sm text-white mb-1 line-clamp-2">{{ $item['name'] }}</h3>
                                     <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-500">Qty: {{ $item['quantity'] }}</span>
-                                        <span class="text-gray-600">${{ number_format($item['price'], 2) }} each</span>
+                                        <span class="text-gray-200">Qty: {{ $item['quantity'] }}</span>
+                                        <span class="text-gray-100">${{ number_format($item['price'], 2) }} each</span>
                                     </div>
                                     <div class="mt-1 text-right">
                                         <span class="font-bold text-teal-600">${{ number_format($item['price'] * $item['quantity'], 2) }}</span>
@@ -404,11 +404,11 @@
                     </div>
 
                     <div class="border-t pt-4 space-y-2 mb-6">
-                        <div class="flex justify-between text-sm text-gray-600">
+                        <div class="flex justify-between text-sm text-gray-100">
                             <span>Subtotal</span>
                             <span class="font-semibold">${{ number_format($total, 2) }}</span>
                         </div>
-                        <div class="flex justify-between text-sm text-gray-600">
+                        <div class="flex justify-between text-sm text-gray-100">
                             <span>Shipping</span>
                             <span class="font-semibold">Calculated at checkout</span>
                         </div>
@@ -422,7 +422,7 @@
                         Place Order
                     </button>
 
-                    <a href="{{ route('cart.index') }}" class="block text-center mt-4 text-gray-600 hover:text-gray-800">
+                    <a href="{{ route('cart.index') }}" class="block text-center mt-4 text-gray-100 hover:text-white">
                         Back to Cart
                     </a>
                 </div>

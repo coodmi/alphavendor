@@ -51,8 +51,8 @@
             <!-- Section Header -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-10">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Popular Categories</h2>
-                    <p class="text-gray-600 text-sm md:text-base">Explore our wide range of product categories</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Popular Categories</h2>
+                    <p class="text-gray-100 text-sm md:text-base">Explore our wide range of product categories</p>
                 </div>
                 <a href="{{ route('shop') }}"
                     class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
@@ -66,7 +66,7 @@
                 <div class="relative group">
                     <!-- Left Arrow -->
                     <button onclick="scrollCategoriesLeft()" id="catPrevBtn"
-                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-white hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-white opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-left text-lg"></i>
                     </button>
 
@@ -87,11 +87,11 @@
                                             <img src="{{ $catImage }}" alt="{{ $category->name }}"
                                                 class="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500">
                                         </div>
-                                        <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover/card:text-teal-700 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                        <h3 class="text-sm md:text-base font-bold text-white group-hover/card:text-teal-700 transition-colors line-clamp-2 min-h-[2.5rem]">
                                             {{ $category->name }}
                                         </h3>
                                         @if($category->products_count ?? 0)
-                                            <p class="text-xs text-gray-500 mt-1">{{ $category->products_count }} items</p>
+                                            <p class="text-xs text-gray-200 mt-1">{{ $category->products_count }} items</p>
                                         @endif
                                     </div>
                                 </a>
@@ -101,7 +101,7 @@
 
                     <!-- Right Arrow -->
                     <button onclick="scrollCategoriesRight()" id="catNextBtn"
-                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-white hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-white opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-right text-lg"></i>
                     </button>
 
@@ -117,8 +117,8 @@
                     <div class="w-20 h-20 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
                         <i class="fas fa-folder-open text-4xl text-gray-400"></i>
                     </div>
-                    <p class="text-gray-600 font-medium">No categories available at the moment</p>
-                    <p class="text-gray-500 text-sm mt-2">Check back soon for new categories</p>
+                    <p class="text-gray-100 font-medium">No categories available at the moment</p>
+                    <p class="text-gray-200 text-sm mt-2">Check back soon for new categories</p>
                 </div>
             @endif
         </div>
@@ -254,7 +254,7 @@
             <section class="py-10 md:py-16 bg-white">
                 <div class="container mx-auto px-4">
                     <div class="flex justify-between items-center mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Best Products</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white">Best Products</h2>
                         <a href="{{ route('shop') }}"
                             class="text-teal-600 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
                             More Products
@@ -293,7 +293,7 @@
                                         </div>
                                     </div>
                                     <div class="p-3 md:p-4">
-                                        <h4 class="font-semibold text-gray-800 mb-1 md:mb-2 text-sm md:text-base line-clamp-2">
+                                        <h4 class="font-semibold text-white mb-1 md:mb-2 text-sm md:text-base line-clamp-2">
                                             {{ $product->name }}</h4>
                                         <div class="flex items-center gap-1 mb-1 md:mb-2">
                                             @for($i = 1; $i <= 5; $i++)
@@ -301,7 +301,7 @@
                                                     class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span
-                                                class="text-gray-500 text-xs ml-1">({{ number_format($product->rating ?? 4.5, 1) }})</span>
+                                                class="text-gray-200 text-xs ml-1">({{ number_format($product->rating ?? 4.5, 1) }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2 md:mb-3">
                                             <span
@@ -339,7 +339,7 @@
                     @else
                         <div class="text-center py-12 bg-gray-50 rounded-xl">
                             <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">No products available at the moment</p>
+                            <p class="text-gray-200">No products available at the moment</p>
                             <a href="{{ route('shop') }}"
                                 class="inline-block mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
                                 Browse All Products
@@ -355,8 +355,8 @@
             <!-- Section Header -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-10">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Popular Brands</h2>
-                    <p class="text-gray-600 text-sm md:text-base">Shop from your favorite brands</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Popular Brands</h2>
+                    <p class="text-gray-100 text-sm md:text-base">Shop from your favorite brands</p>
                 </div>
                 <a href="{{ route('shop') }}"
                     class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
@@ -370,7 +370,7 @@
                 <div class="relative group">
                     <!-- Left Arrow -->
                     <button onclick="scrollBrandsLeft()" id="brandPrevBtn"
-                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-white hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-white opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-left text-lg"></i>
                     </button>
 
@@ -397,11 +397,11 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover/card:text-teal-700 transition-colors line-clamp-2 min-h-[2.5rem]">
+                                        <h3 class="text-sm md:text-base font-bold text-white group-hover/card:text-teal-700 transition-colors line-clamp-2 min-h-[2.5rem]">
                                             {{ $brand->name }}
                                         </h3>
                                         @if($brand->products_count ?? 0)
-                                            <p class="text-xs text-gray-500 mt-1">{{ $brand->products_count }} items</p>
+                                            <p class="text-xs text-gray-200 mt-1">{{ $brand->products_count }} items</p>
                                         @endif
                                     </div>
                                 </a>
@@ -411,7 +411,7 @@
 
                     <!-- Right Arrow -->
                     <button onclick="scrollBrandsRight()" id="brandNextBtn"
-                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 opacity-0 group-hover:opacity-100">
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white shadow-2xl rounded-full flex items-center justify-center text-white hover:text-white hover:bg-gradient-to-r hover:from-teal-500 hover:to-teal-600 transition-all duration-300 border-2 border-gray-100 hover:border-teal-500 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-white opacity-0 group-hover:opacity-100">
                         <i class="fas fa-chevron-right text-lg"></i>
                     </button>
 
@@ -427,8 +427,8 @@
                     <div class="w-20 h-20 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
                         <i class="fas fa-tag text-4xl text-gray-400"></i>
                     </div>
-                    <p class="text-gray-600 font-medium">No brands available at the moment</p>
-                    <p class="text-gray-500 text-sm mt-2">Check back soon for new brands</p>
+                    <p class="text-gray-100 font-medium">No brands available at the moment</p>
+                    <p class="text-gray-200 text-sm mt-2">Check back soon for new brands</p>
                 </div>
             @endif
         </div>
@@ -565,7 +565,7 @@
                 <section class="py-10 md:py-16 bg-gray-50">
                     <div class="container mx-auto px-4">
                         <div class="flex justify-between items-center mb-6 md:mb-8">
-                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Special Offers</h2>
+                            <h2 class="text-2xl md:text-3xl font-bold text-white">Special Offers</h2>
                             <a href="{{ route('special-offers.index') }}"
                                 class="text-teal-600 hover:text-teal-600 flex items-center gap-2 font-medium transition-colors">
                                 View All Offers
@@ -725,8 +725,8 @@
                                 <i class="fas fa-store text-white text-xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Retail Products</h2>
-                                <p class="text-gray-500 text-sm">Top picks from our retailers</p>
+                                <h2 class="text-2xl md:text-3xl font-bold text-white">Retail Products</h2>
+                                <p class="text-gray-200 text-sm">Top picks from our retailers</p>
                             </div>
                         </div>
                         <a href="{{ route('retail') }}"
@@ -779,13 +779,13 @@
                                         </div>
                                     </div>
                                     <div class="p-4">
-                                        <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
+                                        <h4 class="font-semibold text-white mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
                                                     class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
-                                            <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
+                                            <span class="text-gray-200 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-3">
                                             <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
@@ -801,7 +801,7 @@
                     @else
                         <div class="text-center py-12 bg-gray-50 rounded-xl">
                             <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">No retail products available yet</p>
+                            <p class="text-gray-200">No retail products available yet</p>
                         </div>
                     @endif
                 </div>
@@ -817,8 +817,8 @@
                                 <i class="fas fa-warehouse text-white text-xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Wholesale Products</h2>
-                                <p class="text-gray-500 text-sm">Bulk deals from wholesalers</p>
+                                <h2 class="text-2xl md:text-3xl font-bold text-white">Wholesale Products</h2>
+                                <p class="text-gray-200 text-sm">Bulk deals from wholesalers</p>
                             </div>
                         </div>
                         <a href="{{ route('wholesale') }}"
@@ -871,13 +871,13 @@
                                         </button>
                                     </div>
                                     <div class="p-4">
-                                        <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
+                                        <h4 class="font-semibold text-white mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
                                                     class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
-                                            <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
+                                            <span class="text-gray-200 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
                                             <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
@@ -887,7 +887,7 @@
                                             @endif
                                         </div>
                                         @if($product->supplier_location)
-                                            <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                                            <p class="text-xs text-gray-200 mb-3 flex items-center gap-1">
                                                 <i class="fas fa-map-marker-alt"></i> {{ $product->supplier_location }}
                                             </p>
                                         @endif
@@ -898,7 +898,7 @@
                     @else
                         <div class="text-center py-12 bg-white rounded-xl">
                             <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">No wholesale products available yet</p>
+                            <p class="text-gray-200">No wholesale products available yet</p>
                         </div>
                     @endif
                 </div>
@@ -914,8 +914,8 @@
                                 <i class="fas fa-globe text-white text-xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Import Products</h2>
-                                <p class="text-gray-500 text-sm">Global trade opportunities</p>
+                                <h2 class="text-2xl md:text-3xl font-bold text-white">Import Products</h2>
+                                <p class="text-gray-200 text-sm">Global trade opportunities</p>
                             </div>
                         </div>
                         <a href="{{ route('import') }}"
@@ -967,13 +967,13 @@
                                         </button>
                                     </div>
                                     <div class="p-4">
-                                        <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
+                                        <h4 class="font-semibold text-white mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i
                                                     class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
-                                            <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
+                                            <span class="text-gray-200 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
                                             <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
@@ -983,7 +983,7 @@
                                             @endif
                                         </div>
                                         @if($product->supplier_location)
-                                            <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                                            <p class="text-xs text-gray-200 mb-3 flex items-center gap-1">
                                                 <i class="fas fa-shipping-fast"></i> Ships from {{ $product->supplier_location }}
                                             </p>
                                         @endif
@@ -994,7 +994,7 @@
                     @else
                         <div class="text-center py-12 bg-gray-50 rounded-xl">
                             <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">No import products available yet</p>
+                            <p class="text-gray-200">No import products available yet</p>
                         </div>
                     @endif
                 </div>

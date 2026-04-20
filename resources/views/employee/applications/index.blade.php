@@ -13,8 +13,8 @@
     <div class="mb-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-gray-800">Role Applications</h2>
-                <p class="text-gray-500 mt-1">Review and approve user role applications</p>
+                <h2 class="text-2xl font-bold text-white">Role Applications</h2>
+                <p class="text-gray-200 mt-1">Review and approve user role applications</p>
             </div>
         </div>
     </div>
@@ -34,8 +34,8 @@
                     <i class="fas fa-file-alt text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total Applications</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($totalApplications) }}</p>
+                    <p class="text-sm font-medium text-gray-200">Total Applications</p>
+                    <p class="text-2xl font-bold text-white">{{ number_format($totalApplications) }}</p>
                 </div>
             </div>
         </div>
@@ -46,8 +46,8 @@
                     <i class="fas fa-clock text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Pending</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($pendingApplications) }}</p>
+                    <p class="text-sm font-medium text-gray-200">Pending</p>
+                    <p class="text-2xl font-bold text-white">{{ number_format($pendingApplications) }}</p>
                 </div>
             </div>
         </div>
@@ -58,8 +58,8 @@
                     <i class="fas fa-check-circle text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Approved</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($approvedApplications) }}</p>
+                    <p class="text-sm font-medium text-gray-200">Approved</p>
+                    <p class="text-2xl font-bold text-white">{{ number_format($approvedApplications) }}</p>
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
                     <i class="fas fa-times-circle text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Rejected</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($rejectedApplications) }}</p>
+                    <p class="text-sm font-medium text-gray-200">Rejected</p>
+                    <p class="text-2xl font-bold text-white">{{ number_format($rejectedApplications) }}</p>
                 </div>
             </div>
         </div>
@@ -83,12 +83,12 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applicant</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Applicant</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Requested Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Current Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Applied Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -100,8 +100,8 @@
                                         {{ strtoupper(substr($application->user->name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <div class="text-sm font-medium text-gray-900">{{ $application->user->name }}</div>
-                                        <div class="text-sm text-gray-500">{{ $application->user->email }}</div>
+                                        <div class="text-sm font-medium text-white">{{ $application->user->name }}</div>
+                                        <div class="text-sm text-gray-200">{{ $application->user->email }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -114,7 +114,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-white">
                                     {{ ucfirst($application->user->role) }}
                                 </span>
                             </td>
@@ -126,7 +126,7 @@
                                     {{ ucfirst($application->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                                 {{ $application->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -151,7 +151,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="px-6 py-12 text-center">
-                                <div class="text-gray-500">
+                                <div class="text-gray-200">
                                     <i class="fas fa-file-alt text-4xl mb-4"></i>
                                     <p>No applications found</p>
                                 </div>
@@ -176,17 +176,17 @@
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Reject Application</h3>
+                <h3 class="text-lg font-semibold text-white mb-4">Reject Application</h3>
                 
                 <form id="rejectForm" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason (Optional)</label>
+                        <label class="block text-sm font-medium text-white mb-2">Rejection Reason (Optional)</label>
                         <textarea name="rejection_reason" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Provide a reason for rejection..."></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeRejectModal()" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <button type="button" onclick="closeRejectModal()" class="px-4 py-2 text-gray-100 border border-gray-300 rounded-lg hover:bg-gray-50">
                             Cancel
                         </button>
                         <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">

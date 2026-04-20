@@ -18,8 +18,8 @@
 
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Notifications</h2>
-            <p class="text-gray-500 text-sm mt-1" id="unreadSummary">Loading...</p>
+            <h2 class="text-2xl font-bold text-white">Notifications</h2>
+            <p class="text-gray-200 text-sm mt-1" id="unreadSummary">Loading...</p>
         </div>
         <button onclick="markAllRead()"
             class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition flex items-center gap-2">
@@ -32,7 +32,7 @@
         <button onclick="filterNotifications('all')" id="tab-all"
             class="notif-tab px-4 py-2 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 -mb-px">All</button>
         <button onclick="filterNotifications('unread')" id="tab-unread"
-            class="notif-tab px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-700 -mb-px">Unread</button>
+            class="notif-tab px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-gray-200 hover:text-white -mb-px">Unread</button>
     </div>
 
     <!-- Notification List -->
@@ -45,7 +45,7 @@
 
     <!-- Load More -->
     <div id="loadMoreWrap" class="hidden text-center mt-6">
-        <button onclick="loadMore()" class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition">
+        <button onclick="loadMore()" class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-white rounded-lg text-sm font-medium transition">
             Load More
         </button>
     </div>

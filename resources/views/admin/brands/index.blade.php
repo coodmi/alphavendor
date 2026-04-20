@@ -10,8 +10,8 @@
 @section('content')
 <div class="flex justify-between items-center mb-6">
     <div>
-        <h2 class="text-2xl font-bold text-gray-800">Brands Management</h2>
-        <p class="text-gray-500 text-sm mt-1">Manage product brands shown on the website</p>
+        <h2 class="text-2xl font-bold text-white">Brands Management</h2>
+        <p class="text-gray-200 text-sm mt-1">Manage product brands shown on the website</p>
     </div>
     <button onclick="openAddModal()"
         class="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition">
@@ -34,12 +34,12 @@
     <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-200">
             <tr>
-                <th class="px-5 py-4 text-left font-semibold text-gray-600">Logo</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-600">Brand Name</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-600">Products</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-600">Status</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-600">Sort</th>
-                <th class="px-5 py-4 text-center font-semibold text-gray-600">Actions</th>
+                <th class="px-5 py-4 text-left font-semibold text-gray-100">Logo</th>
+                <th class="px-5 py-4 text-left font-semibold text-gray-100">Brand Name</th>
+                <th class="px-5 py-4 text-left font-semibold text-gray-100">Products</th>
+                <th class="px-5 py-4 text-left font-semibold text-gray-100">Status</th>
+                <th class="px-5 py-4 text-left font-semibold text-gray-100">Sort</th>
+                <th class="px-5 py-4 text-center font-semibold text-gray-100">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -56,7 +56,7 @@
                     @endif
                 </td>
                 <td class="px-5 py-4">
-                    <p class="font-semibold text-gray-800">{{ $brand->name }}</p>
+                    <p class="font-semibold text-white">{{ $brand->name }}</p>
                     <p class="text-gray-400 text-xs mt-0.5">{{ $brand->description ? Str::limit($brand->description, 55) : '—' }}</p>
                 </td>
                 <td class="px-5 py-4">
@@ -70,7 +70,7 @@
                         {{ $brand->is_active ? 'Active' : 'Inactive' }}
                     </span>
                 </td>
-                <td class="px-5 py-4 text-gray-600">{{ $brand->sort_order }}</td>
+                <td class="px-5 py-4 text-gray-100">{{ $brand->sort_order }}</td>
                 <td class="px-5 py-4 text-center">
                     <button onclick='editBrand(@json($brand))'
                         class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-medium transition mr-1">
@@ -98,8 +98,8 @@
 <div id="brandModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
         <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100">
-            <h3 class="text-lg font-bold text-gray-800" id="modalTitle">Add Brand</h3>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            <h3 class="text-lg font-bold text-white" id="modalTitle">Add Brand</h3>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-100 text-2xl leading-none">&times;</button>
         </div>
 
         <form id="brandForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.brands.store') }}" class="px-6 py-5 space-y-5">
@@ -117,21 +117,21 @@
             @endif
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Brand Name <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-semibold text-white mb-1.5">Brand Name <span class="text-red-500">*</span></label>
                 <input type="text" name="name" id="brandName" required
                     class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none text-sm"
                     placeholder="e.g. Nike">
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Description</label>
+                <label class="block text-sm font-semibold text-white mb-1.5">Description</label>
                 <textarea name="description" id="brandDescription" rows="3"
                     class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none text-sm resize-none"
                     placeholder="Short brand description..."></textarea>
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Brand Logo</label>
+                <label class="block text-sm font-semibold text-white mb-1.5">Brand Logo</label>
                 <input type="file" name="logo" id="brandLogo" accept="image/*" onchange="previewImage(event)"
                     class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-indigo-50 file:text-indigo-700 file:font-medium">
                 <div id="imagePreview" class="hidden mt-3 relative inline-block">
@@ -145,7 +145,7 @@
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Sort Order</label>
+                    <label class="block text-sm font-semibold text-white mb-1.5">Sort Order</label>
                     <input type="number" name="sort_order" id="brandSortOrder" value="0" min="0"
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none text-sm">
                 </div>
@@ -153,14 +153,14 @@
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="is_active" id="brandStatus" value="1" checked
                             class="w-4 h-4 accent-indigo-600">
-                        <span class="text-sm font-semibold text-gray-700">Active</span>
+                        <span class="text-sm font-semibold text-white">Active</span>
                     </label>
                 </div>
             </div>
 
             <div class="flex gap-3 justify-end pt-2">
                 <button type="button" onclick="closeModal()"
-                    class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium text-sm transition">
+                    class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-white rounded-lg font-medium text-sm transition">
                     Cancel
                 </button>
                 <button type="submit"

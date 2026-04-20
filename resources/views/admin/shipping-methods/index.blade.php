@@ -13,10 +13,10 @@
         <!-- Header -->
         <div class="mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                     <i class="fas fa-shipping-fast text-teal-700 mr-3"></i>Shipping Management
                 </h1>
-                <p class="text-gray-600 mt-2">Manage shipping methods, zones, and pricing</p>
+                <p class="text-gray-100 mt-2">Manage shipping methods, zones, and pricing</p>
             </div>
             <button onclick="openCreateModal()" class="bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                 <i class="fas fa-plus mr-2"></i>Add Shipping Method
@@ -44,8 +44,8 @@
             <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 font-semibold">Total Methods</p>
-                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ $shippingMethods->count() }}</p>
+                        <p class="text-sm text-gray-100 font-semibold">Total Methods</p>
+                        <p class="text-3xl font-bold text-white mt-1">{{ $shippingMethods->count() }}</p>
                     </div>
                     <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                         <i class="fas fa-shipping-fast text-blue-600 text-xl"></i>
@@ -56,8 +56,8 @@
             <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 font-semibold">Active Methods</p>
-                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ $shippingMethods->where('is_active', true)->count() }}</p>
+                        <p class="text-sm text-gray-100 font-semibold">Active Methods</p>
+                        <p class="text-3xl font-bold text-white mt-1">{{ $shippingMethods->where('is_active', true)->count() }}</p>
                     </div>
                     <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                         <i class="fas fa-check-circle text-green-600 text-xl"></i>
@@ -68,8 +68,8 @@
             <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-teal-600">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 font-semibold">Zones Covered</p>
-                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ $shippingMethods->pluck('zone')->unique()->count() }}</p>
+                        <p class="text-sm text-gray-100 font-semibold">Zones Covered</p>
+                        <p class="text-3xl font-bold text-white mt-1">{{ $shippingMethods->pluck('zone')->unique()->count() }}</p>
                     </div>
                     <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
                         <i class="fas fa-map-marked-alt text-teal-700 text-xl"></i>
@@ -80,8 +80,8 @@
             <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 font-semibold">Free Shipping</p>
-                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ $shippingMethods->whereNotNull('free_shipping_threshold')->count() }}</p>
+                        <p class="text-sm text-gray-100 font-semibold">Free Shipping</p>
+                        <p class="text-3xl font-bold text-white mt-1">{{ $shippingMethods->whereNotNull('free_shipping_threshold')->count() }}</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                         <i class="fas fa-gift text-purple-600 text-xl"></i>
@@ -94,8 +94,8 @@
         <div class="bg-white rounded-xl shadow-md p-4 mb-6">
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
-                    <i class="fas fa-filter text-gray-600"></i>
-                    <span class="text-sm font-bold text-gray-700">Filter by Zone:</span>
+                    <i class="fas fa-filter text-gray-100"></i>
+                    <span class="text-sm font-bold text-white">Filter by Zone:</span>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="filterByZone('all')" class="zone-filter-btn active px-4 py-2 rounded-lg font-semibold text-sm transition-all" data-zone="all">
@@ -129,9 +129,9 @@
                         @forelse($shippingMethods as $method)
                             <tr class="hover:bg-teal-50 transition-colors shipping-row" data-zone="{{ $method->zone }}">
                                 <td class="px-6 py-4">
-                                    <div class="font-semibold text-gray-900">{{ $method->name }}</div>
+                                    <div class="font-semibold text-white">{{ $method->name }}</div>
                                     @if($method->description)
-                                        <div class="text-sm text-gray-500 mt-1">{{ $method->description }}</div>
+                                        <div class="text-sm text-gray-200 mt-1">{{ $method->description }}</div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
@@ -143,7 +143,7 @@
                                 <td class="px-6 py-4">
                                     <span class="text-lg font-bold text-teal-700">৳{{ number_format($method->cost, 2) }}</span>
                                 </td>
-                                <td class="px-6 py-4 text-gray-600">
+                                <td class="px-6 py-4 text-gray-100">
                                     <i class="fas fa-clock text-gray-400 mr-1"></i>
                                     {{ $method->estimated_days_min }}-{{ $method->estimated_days_max }} days
                                 </td>
@@ -186,7 +186,7 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center justify-center text-gray-500">
+                                    <div class="flex flex-col items-center justify-center text-gray-200">
                                         <i class="fas fa-inbox text-6xl mb-4 opacity-50"></i>
                                         <p class="text-lg font-semibold mb-2">No shipping methods configured</p>
                                         <p class="text-sm">Click "Add Shipping Method" to create your first shipping option</p>
@@ -217,7 +217,7 @@
             
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-tag text-teal-700 mr-2"></i>Method Name *
                     </label>
                     <input type="text" name="name" id="name" required 
@@ -226,7 +226,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-map-marker-alt text-teal-700 mr-2"></i>Zone *
                     </label>
                     <select name="zone" id="zone" required 
@@ -240,7 +240,7 @@
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">
+                <label class="block text-sm font-bold text-white mb-2">
                     <i class="fas fa-align-left text-teal-700 mr-2"></i>Description
                 </label>
                 <textarea name="description" id="description" rows="2" 
@@ -250,7 +250,7 @@
 
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-money-bill-wave text-teal-700 mr-2"></i>Shipping Cost (৳) *
                     </label>
                     <input type="number" name="cost" id="cost" step="0.01" min="0" required 
@@ -259,7 +259,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-gift text-teal-700 mr-2"></i>Free Shipping Threshold (৳)
                     </label>
                     <input type="number" name="free_shipping_threshold" id="free_shipping_threshold" step="0.01" min="0" 
@@ -270,7 +270,7 @@
 
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-clock text-teal-700 mr-2"></i>Min Delivery Days *
                     </label>
                     <input type="number" name="estimated_days_min" id="estimated_days_min" min="1" required 
@@ -279,7 +279,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-clock text-teal-700 mr-2"></i>Max Delivery Days *
                     </label>
                     <input type="number" name="estimated_days_max" id="estimated_days_max" min="1" required 
@@ -290,7 +290,7 @@
 
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <label class="block text-sm font-bold text-white mb-2">
                         <i class="fas fa-sort text-teal-700 mr-2"></i>Sort Order
                     </label>
                     <input type="number" name="sort_order" id="sort_order" min="0" 
@@ -302,7 +302,7 @@
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" name="is_active" id="is_active" value="1" checked
                             class="w-5 h-5 text-teal-700 border-gray-300 rounded focus:ring-teal-600">
-                        <span class="text-sm font-bold text-gray-700">Active</span>
+                        <span class="text-sm font-bold text-white">Active</span>
                     </label>
                 </div>
             </div>
@@ -311,7 +311,7 @@
                 <button type="submit" class="flex-1 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                     <i class="fas fa-save mr-2"></i>Save Shipping Method
                 </button>
-                <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-bold transition-all">
+                <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-white rounded-xl font-bold transition-all">
                     Cancel
                 </button>
             </div>
@@ -324,11 +324,11 @@ function filterByZone(zone) {
     // Update button styles
     document.querySelectorAll('.zone-filter-btn').forEach(btn => {
         btn.classList.remove('active', 'bg-teal-700', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+        btn.classList.add('bg-gray-100', 'text-white', 'hover:bg-gray-200');
     });
     
     const activeBtn = document.querySelector(`[data-zone="${zone}"]`);
-    activeBtn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+    activeBtn.classList.remove('bg-gray-100', 'text-white', 'hover:bg-gray-200');
     activeBtn.classList.add('active', 'bg-teal-700', 'text-white');
     
     // Filter table rows
@@ -384,7 +384,7 @@ document.addEventListener('keydown', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.zone-filter-btn').forEach(btn => {
         if (!btn.classList.contains('active')) {
-            btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            btn.classList.add('bg-gray-100', 'text-white', 'hover:bg-gray-200');
         } else {
             btn.classList.add('bg-teal-700', 'text-white');
         }

@@ -8,8 +8,8 @@
 :root {
     --primary-color: #0d5c63;
     --secondary-color: #0d7a82;
-    --dark-color: #2C3E50;
-    --text-color: #333;
+    --dark-color: #ffffff;
+    --text-color: #ffffff;
     --light-gray: #F5F5F5;
     --border-color: #E0E0E0;
     --white: #FFFFFF;
@@ -552,7 +552,7 @@ body {
 
 .vendor-card p {
     margin-bottom: 20px;
-    color: #666;
+    color: #e0e0e0;
 }
 
 .btn-vendor {

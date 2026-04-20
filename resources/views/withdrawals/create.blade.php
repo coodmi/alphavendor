@@ -58,7 +58,7 @@
                 @csrf
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Payment Method *</label>
+                    <label class="block text-white font-semibold mb-2">Payment Method *</label>
                     <select name="withdrawal_method_id" required class="w-full border border-gray-300 rounded px-4 py-3 focus:ring-2 focus:ring-teal-600">
                         <option value="">Select Payment Method</option>
                         @foreach($paymentMethods as $method)
@@ -81,16 +81,16 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Amount ($) *</label>
+                    <label class="block text-white font-semibold mb-2">Amount ($) *</label>
                     <input type="number" name="amount" min="10" max="{{ $wallet->balance ?? 0 }}" step="0.01" required
                            class="w-full border border-gray-300 rounded px-4 py-3 focus:ring-2 focus:ring-teal-600"
                            placeholder="Enter amount">
                     @error('amount')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-                    <p class="text-sm text-gray-600 mt-1">Maximum: ${{ number_format($wallet->balance ?? 0, 2) }}</p>
+                    <p class="text-sm text-gray-100 mt-1">Maximum: ${{ number_format($wallet->balance ?? 0, 2) }}</p>
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Notes (Optional)</label>
+                    <label class="block text-white font-semibold mb-2">Notes (Optional)</label>
                     <textarea name="notes" rows="3"
                               class="w-full border border-gray-300 rounded px-4 py-3 focus:ring-2 focus:ring-teal-600"
                               placeholder="Any additional notes for this withdrawal..."></textarea>
@@ -109,7 +109,7 @@
                     <button type="submit" class="flex-1 bg-teal-600 text-white py-3 rounded hover:bg-teal-700 font-semibold">
                         <i class="fas fa-paper-plane mr-2"></i>Submit Request
                     </button>
-                    <a href="{{ route('withdrawals.index') }}" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded hover:bg-gray-300 text-center font-semibold">
+                    <a href="{{ route('withdrawals.index') }}" class="flex-1 bg-gray-200 text-white py-3 rounded hover:bg-gray-300 text-center font-semibold">
                         Cancel
                     </a>
                 </div>

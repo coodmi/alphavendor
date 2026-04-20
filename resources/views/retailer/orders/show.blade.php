@@ -23,15 +23,15 @@
         <!-- Order Details -->
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Order #{{ $order->order_number }}</h2>
+                <h2 class="text-2xl font-bold text-white mb-4">Order #{{ $order->order_number }}</h2>
 
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                        <p class="text-sm text-gray-500">Order Date</p>
+                        <p class="text-sm text-gray-200">Order Date</p>
                         <p class="font-semibold">{{ $order->created_at->format('M d, Y h:i A') }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Status</p>
+                        <p class="text-sm text-gray-200">Status</p>
                         <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full
                             {{ $order->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
                             {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
@@ -60,12 +60,12 @@
                                     @endif
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="font-semibold text-gray-900">{{ $item->product_name }}</h4>
-                                    <p class="text-sm text-gray-500">Quantity: {{ $item->quantity }}</p>
-                                    <p class="text-sm text-gray-500">Unit Price: ${{ number_format($item->price, 2) }}</p>
+                                    <h4 class="font-semibold text-white">{{ $item->product_name }}</h4>
+                                    <p class="text-sm text-gray-200">Quantity: {{ $item->quantity }}</p>
+                                    <p class="text-sm text-gray-200">Unit Price: ${{ number_format($item->price, 2) }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-semibold text-gray-900">${{ number_format($item->subtotal, 2) }}</p>
+                                    <p class="font-semibold text-white">${{ number_format($item->subtotal, 2) }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -81,15 +81,15 @@
                 <h3 class="font-semibold text-lg mb-4">Customer Information</h3>
                 <div class="space-y-3">
                     <div>
-                        <p class="text-sm text-gray-500">Name</p>
+                        <p class="text-sm text-gray-200">Name</p>
                         <p class="font-medium">{{ $order->user->name ?? 'N/A' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Email</p>
+                        <p class="text-sm text-gray-200">Email</p>
                         <p class="font-medium">{{ $order->user->email ?? 'N/A' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Phone</p>
+                        <p class="text-sm text-gray-200">Phone</p>
                         <p class="font-medium">{{ $order->phone ?? 'N/A' }}</p>
                     </div>
                 </div>
@@ -98,14 +98,14 @@
             <!-- Shipping Address -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="font-semibold text-lg mb-4">Shipping Address</h3>
-                <p class="text-gray-700">{{ $order->address ?? 'N/A' }}</p>
+                <p class="text-white">{{ $order->address ?? 'N/A' }}</p>
                 @if($order->city || $order->state || $order->zip_code)
-                    <p class="text-gray-700 mt-2">
+                    <p class="text-white mt-2">
                         {{ $order->city }}{{ $order->state ? ', ' . $order->state : '' }} {{ $order->zip_code }}
                     </p>
                 @endif
                 @if($order->country)
-                    <p class="text-gray-700">{{ $order->country }}</p>
+                    <p class="text-white">{{ $order->country }}</p>
                 @endif
             </div>
 
@@ -114,13 +114,13 @@
                 <h3 class="font-semibold text-lg mb-4">Payment Information</h3>
                 <div class="space-y-2">
                     <div>
-                        <p class="text-sm text-gray-500">Payment Method</p>
+                        <p class="text-sm text-gray-200">Payment Method</p>
                         <p class="font-medium">{{ ucfirst($order->payment_method ?? 'N/A') }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Payment Status</p>
+                        <p class="text-sm text-gray-200">Payment Status</p>
                         <span class="px-2 py-1 inline-flex text-xs font-semibold rounded-full
-                            {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                            {{ $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-white' }}">
                             {{ ucfirst($order->payment_status) }}
                         </span>
                     </div>
@@ -132,18 +132,18 @@
                 <h3 class="font-semibold text-lg mb-4">Order Summary</h3>
                 <div class="space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Subtotal</span>
+                        <span class="text-gray-100">Subtotal</span>
                         <span class="font-medium">${{ number_format($order->subtotal, 2) }}</span>
                     </div>
                     @if($order->tax > 0)
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Tax</span>
+                            <span class="text-gray-100">Tax</span>
                             <span class="font-medium">${{ number_format($order->tax, 2) }}</span>
                         </div>
                     @endif
                     @if($order->shipping_cost > 0)
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Shipping</span>
+                            <span class="text-gray-100">Shipping</span>
                             <span class="font-medium">${{ number_format($order->shipping_cost, 2) }}</span>
                         </div>
                     @endif
@@ -156,7 +156,7 @@
                         <span>${{ number_format($order->vendor_earning, 2) }}</span>
                     </div>
                     @if($order->commission > 0)
-                        <div class="flex justify-between text-sm text-gray-500">
+                        <div class="flex justify-between text-sm text-gray-200">
                             <span>Commission ({{ $order->commission_rate }}%)</span>
                             <span>-${{ number_format($order->commission, 2) }}</span>
                         </div>

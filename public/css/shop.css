@@ -199,7 +199,7 @@
     display: block;
     font-size: 13px;
     margin-bottom: 5px;
-    color: #666;
+    color: #e0e0e0;
 }
 
 .price-input input {
@@ -310,7 +310,7 @@
 
 .results-count {
     font-size: 14px;
-    color: #666;
+    color: #e0e0e0;
 }
 
 .results-count strong {
@@ -383,7 +383,7 @@
 .remove-filter {
     background: transparent;
     border: none;
-    color: #666;
+    color: #e0e0e0;
     cursor: pointer;
     font-size: 12px;
     transition: color 0.3s;
@@ -533,7 +533,7 @@
 
 .vendor-name {
     font-size: 13px;
-    color: #666;
+    color: #e0e0e0;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
@@ -554,7 +554,7 @@
 }
 
 .rating span {
-    color: #666;
+    color: #e0e0e0;
     margin-left: 5px;
     font-size: 12px;
 }

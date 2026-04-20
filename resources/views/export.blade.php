@@ -92,7 +92,7 @@
                         </li>
                         @empty
                         <li>
-                            <span class="text-gray-500">No categories available</span>
+                            <span class="text-gray-200">No categories available</span>
                         </li>
                         @endforelse
                     </ul>
@@ -112,7 +112,7 @@
                         </li>
                         @empty
                         <li>
-                            <span class="text-gray-500">No locations available</span>
+                            <span class="text-gray-200">No locations available</span>
                         </li>
                         @endforelse
                     </ul>
@@ -177,7 +177,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <p class="text-gray-500 text-sm px-4 py-2">No certifications available</p>
+                        <p class="text-gray-200 text-sm px-4 py-2">No certifications available</p>
                     @endif
                 </div>
 
@@ -296,13 +296,13 @@
                         </div>
                         <div class="p-4">
                             <div class="text-xs text-teal-700 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
-                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-1">
+                            <h4 class="text-sm font-bold text-white mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
+                            <div class="flex items-center gap-1 text-xs text-gray-100 mb-1">
                                 <i class="fas fa-building text-teal-600"></i>
                                 <span>{{ $product->vendor->name ?? 'Unknown Vendor' }}</span>
                             </div>
                             @if($product->supplier_location)
-                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
+                            <div class="flex items-center gap-1 text-xs text-gray-100 mb-2">
                                 <i class="fas fa-map-marker-alt text-teal-600"></i>
                                 <span>{{ $product->supplier_location }}</span>
                             </div>
@@ -317,26 +317,26 @@
                                         <i class="far fa-star text-teal-500 text-xs"></i>
                                     @endif
                                 @endfor
-                                <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                                <span class="text-xs text-gray-100">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
-                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-3">
+                            <div class="flex items-center gap-1 text-xs text-gray-100 mb-3">
                                 <i class="fas fa-boxes text-teal-600"></i>
                                 <span>MOQ: {{ $product->minimum_order ?? 1 }} units</span>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap mb-2">
-                                <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                <span class="text-lg font-bold text-white">${{ number_format($product->price, 2) }}</span>
                                 @if($product->old_price)
-                                    <span class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="text-sm text-gray-200 line-through">${{ number_format($product->old_price, 2) }}</span>
                                     <span class="text-xs font-semibold text-red-500">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
                                 @endif
                             </div>
-                            <div class="text-xs text-gray-500">per unit (FOB)</div>
+                            <div class="text-xs text-gray-200">per unit (FOB)</div>
                         </div>
                     </a>
                     @empty
                     <div class="col-span-full text-center py-16">
                         <i class="fas fa-box-open text-gray-300 text-6xl mb-4"></i>
-                        <p class="text-gray-500 text-lg">No export products found.</p>
+                        <p class="text-gray-200 text-lg">No export products found.</p>
                     </div>
                     @endforelse
                 </div>

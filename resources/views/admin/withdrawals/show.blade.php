@@ -18,8 +18,8 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Withdrawal Details</h2>
-                        <p class="text-gray-600 mt-1">{{ $withdrawal->withdrawal_number }}</p>
+                        <h2 class="text-2xl font-bold text-white">Withdrawal Details</h2>
+                        <p class="text-gray-100 mt-1">{{ $withdrawal->withdrawal_number }}</p>
                     </div>
                     @if($withdrawal->status == 'pending')
                         <span class="px-4 py-2 text-sm font-semibold rounded-full bg-teal-100 text-teal-800">Pending</span>
@@ -34,19 +34,19 @@
 
                 <div class="grid grid-cols-2 gap-6 mb-6">
                     <div>
-                        <p class="text-sm text-gray-600 mb-1">Amount</p>
-                        <p class="text-3xl font-bold text-gray-800">{{ currency_symbol() }}{{ number_format($withdrawal->amount, 2) }}</p>
+                        <p class="text-sm text-gray-100 mb-1">Amount</p>
+                        <p class="text-3xl font-bold text-white">{{ currency_symbol() }}{{ number_format($withdrawal->amount, 2) }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 mb-1">Request Date</p>
-                        <p class="text-lg font-semibold text-gray-800">{{ $withdrawal->created_at->format('M d, Y h:i A') }}</p>
+                        <p class="text-sm text-gray-100 mb-1">Request Date</p>
+                        <p class="text-lg font-semibold text-white">{{ $withdrawal->created_at->format('M d, Y h:i A') }}</p>
                     </div>
                 </div>
 
                 @if($withdrawal->notes)
                     <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                        <p class="text-sm font-semibold text-gray-700 mb-2">Vendor Notes:</p>
-                        <p class="text-gray-600">{{ $withdrawal->notes }}</p>
+                        <p class="text-sm font-semibold text-white mb-2">Vendor Notes:</p>
+                        <p class="text-gray-100">{{ $withdrawal->notes }}</p>
                     </div>
                 @endif
 
@@ -60,13 +60,13 @@
                 @if($withdrawal->approved_at)
                     <div class="grid grid-cols-2 gap-4 mb-6">
                         <div>
-                            <p class="text-sm text-gray-600 mb-1">Approved At</p>
-                            <p class="font-semibold text-gray-800">{{ $withdrawal->approved_at->format('M d, Y h:i A') }}</p>
+                            <p class="text-sm text-gray-100 mb-1">Approved At</p>
+                            <p class="font-semibold text-white">{{ $withdrawal->approved_at->format('M d, Y h:i A') }}</p>
                         </div>
                         @if($withdrawal->approver)
                             <div>
-                                <p class="text-sm text-gray-600 mb-1">Approved By</p>
-                                <p class="font-semibold text-gray-800">{{ $withdrawal->approver->name }}</p>
+                                <p class="text-sm text-gray-100 mb-1">Approved By</p>
+                                <p class="font-semibold text-white">{{ $withdrawal->approver->name }}</p>
                             </div>
                         @endif
                     </div>
@@ -74,8 +74,8 @@
 
                 @if($withdrawal->completed_at)
                     <div class="mb-6">
-                        <p class="text-sm text-gray-600 mb-1">Completed At</p>
-                        <p class="font-semibold text-gray-800">{{ $withdrawal->completed_at->format('M d, Y h:i A') }}</p>
+                        <p class="text-sm text-gray-100 mb-1">Completed At</p>
+                        <p class="font-semibold text-white">{{ $withdrawal->completed_at->format('M d, Y h:i A') }}</p>
                     </div>
                 @endif
             </div>
@@ -83,71 +83,71 @@
             <!-- Payment Method Details -->
             @if($withdrawal->withdrawalMethod)
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Payment Method Details</h3>
+                    <h3 class="text-xl font-bold text-white mb-4">Payment Method Details</h3>
                     
                     <div class="space-y-4">
                         <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
                             @if($withdrawal->withdrawalMethod->type == 'bank')
                                 <i class="fas fa-university text-3xl text-blue-500"></i>
                                 <div class="flex-1">
-                                    <p class="font-semibold text-gray-800">Bank Transfer</p>
-                                    <p class="text-sm text-gray-600">{{ $withdrawal->withdrawalMethod->bank_name }}</p>
+                                    <p class="font-semibold text-white">Bank Transfer</p>
+                                    <p class="text-sm text-gray-100">{{ $withdrawal->withdrawalMethod->bank_name }}</p>
                                 </div>
                             @elseif($withdrawal->withdrawalMethod->type == 'bkash')
                                 <i class="fas fa-mobile-alt text-3xl text-pink-500"></i>
                                 <div class="flex-1">
-                                    <p class="font-semibold text-gray-800">bKash</p>
-                                    <p class="text-sm text-gray-600">Mobile Wallet</p>
+                                    <p class="font-semibold text-white">bKash</p>
+                                    <p class="text-sm text-gray-100">Mobile Wallet</p>
                                 </div>
                             @elseif($withdrawal->withdrawalMethod->type == 'nagad')
                                 <i class="fas fa-mobile-alt text-3xl text-teal-600"></i>
                                 <div class="flex-1">
-                                    <p class="font-semibold text-gray-800">Nagad</p>
-                                    <p class="text-sm text-gray-600">Mobile Wallet</p>
+                                    <p class="font-semibold text-white">Nagad</p>
+                                    <p class="text-sm text-gray-100">Mobile Wallet</p>
                                 </div>
                             @endif
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <p class="text-sm text-gray-600 mb-1">Account Name</p>
-                                <p class="font-semibold text-gray-800">{{ $withdrawal->withdrawalMethod->account_name }}</p>
+                                <p class="text-sm text-gray-100 mb-1">Account Name</p>
+                                <p class="font-semibold text-white">{{ $withdrawal->withdrawalMethod->account_name }}</p>
                             </div>
 
                             @if($withdrawal->withdrawalMethod->type == 'bank')
                                 <div>
-                                    <p class="text-sm text-gray-600 mb-1">Account Number</p>
-                                    <p class="font-mono font-semibold text-gray-800">{{ $withdrawal->withdrawalMethod->account_number }}</p>
+                                    <p class="text-sm text-gray-100 mb-1">Account Number</p>
+                                    <p class="font-mono font-semibold text-white">{{ $withdrawal->withdrawalMethod->account_number }}</p>
                                 </div>
                                 @if($withdrawal->withdrawalMethod->branch_name)
                                     <div>
-                                        <p class="text-sm text-gray-600 mb-1">Branch</p>
-                                        <p class="font-semibold text-gray-800">{{ $withdrawal->withdrawalMethod->branch_name }}</p>
+                                        <p class="text-sm text-gray-100 mb-1">Branch</p>
+                                        <p class="font-semibold text-white">{{ $withdrawal->withdrawalMethod->branch_name }}</p>
                                     </div>
                                 @endif
                                 @if($withdrawal->withdrawalMethod->routing_number)
                                     <div>
-                                        <p class="text-sm text-gray-600 mb-1">Routing Number</p>
-                                        <p class="font-mono font-semibold text-gray-800">{{ $withdrawal->withdrawalMethod->routing_number }}</p>
+                                        <p class="text-sm text-gray-100 mb-1">Routing Number</p>
+                                        <p class="font-mono font-semibold text-white">{{ $withdrawal->withdrawalMethod->routing_number }}</p>
                                     </div>
                                 @endif
                             @elseif($withdrawal->withdrawalMethod->type == 'bkash')
                                 <div>
-                                    <p class="text-sm text-gray-600 mb-1">bKash Number</p>
-                                    <p class="font-mono font-semibold text-gray-800">{{ $withdrawal->withdrawalMethod->bkash_number }}</p>
+                                    <p class="text-sm text-gray-100 mb-1">bKash Number</p>
+                                    <p class="font-mono font-semibold text-white">{{ $withdrawal->withdrawalMethod->bkash_number }}</p>
                                 </div>
                             @elseif($withdrawal->withdrawalMethod->type == 'nagad')
                                 <div>
-                                    <p class="text-sm text-gray-600 mb-1">Nagad Number</p>
-                                    <p class="font-mono font-semibold text-gray-800">{{ $withdrawal->withdrawalMethod->nagad_number }}</p>
+                                    <p class="text-sm text-gray-100 mb-1">Nagad Number</p>
+                                    <p class="font-mono font-semibold text-white">{{ $withdrawal->withdrawalMethod->nagad_number }}</p>
                                 </div>
                             @endif
                         </div>
 
                         @if($withdrawal->withdrawalMethod->additional_details)
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <p class="text-sm font-semibold text-gray-700 mb-2">Additional Details:</p>
-                                <p class="text-gray-600">{{ $withdrawal->withdrawalMethod->additional_details }}</p>
+                                <p class="text-sm font-semibold text-white mb-2">Additional Details:</p>
+                                <p class="text-gray-100">{{ $withdrawal->withdrawalMethod->additional_details }}</p>
                             </div>
                         @endif
                     </div>
@@ -157,7 +157,7 @@
             <!-- Action Buttons -->
             @if($withdrawal->status == 'pending')
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Actions</h3>
+                    <h3 class="text-xl font-bold text-white mb-4">Actions</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Approve -->
@@ -178,7 +178,7 @@
                 </div>
             @elseif($withdrawal->status == 'approved')
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Actions</h3>
+                    <h3 class="text-xl font-bold text-white mb-4">Actions</h3>
                     
                     <button onclick="openCompleteModal()" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 font-semibold">
                         <i class="fas fa-check-double mr-2"></i>Mark as Completed
@@ -191,31 +191,31 @@
         <div class="space-y-6">
             <!-- Vendor Info -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Vendor Information</h3>
+                <h3 class="text-lg font-bold text-white mb-4">Vendor Information</h3>
                 
                 <div class="space-y-3">
                     <div>
-                        <p class="text-sm text-gray-600">Name</p>
-                        <p class="font-semibold text-gray-800">{{ $withdrawal->vendor->name }}</p>
+                        <p class="text-sm text-gray-100">Name</p>
+                        <p class="font-semibold text-white">{{ $withdrawal->vendor->name }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Email</p>
-                        <p class="font-semibold text-gray-800">{{ $withdrawal->vendor->email }}</p>
+                        <p class="text-sm text-gray-100">Email</p>
+                        <p class="font-semibold text-white">{{ $withdrawal->vendor->email }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Role</p>
-                        <p class="font-semibold text-gray-800">{{ ucfirst($withdrawal->vendor->role) }}</p>
+                        <p class="text-sm text-gray-100">Role</p>
+                        <p class="font-semibold text-white">{{ ucfirst($withdrawal->vendor->role) }}</p>
                     </div>
                     @if($withdrawal->vendor->mobile_number)
                         <div>
-                            <p class="text-sm text-gray-600">Mobile</p>
-                            <p class="font-semibold text-gray-800">{{ $withdrawal->vendor->mobile_number }}</p>
+                            <p class="text-sm text-gray-100">Mobile</p>
+                            <p class="font-semibold text-white">{{ $withdrawal->vendor->mobile_number }}</p>
                         </div>
                     @endif
                 </div>
 
                 <a href="{{ route('admin.vendors.show', $withdrawal->vendor->id) }}" 
-                   class="block mt-4 text-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 font-semibold">
+                   class="block mt-4 text-center bg-gray-100 text-white px-4 py-2 rounded-lg hover:bg-gray-200 font-semibold">
                     View Vendor Profile
                 </a>
             </div>
@@ -232,14 +232,14 @@
             <!-- Recent Withdrawals -->
             @if($recentWithdrawals->count() > 0)
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Withdrawals</h3>
+                    <h3 class="text-lg font-bold text-white mb-4">Recent Withdrawals</h3>
                     
                     <div class="space-y-3">
                         @foreach($recentWithdrawals as $recent)
                             <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                                 <div>
-                                    <p class="font-mono text-xs text-gray-600">{{ $recent->withdrawal_number }}</p>
-                                    <p class="font-semibold text-gray-800">{{ currency_symbol() }}{{ number_format($recent->amount, 2) }}</p>
+                                    <p class="font-mono text-xs text-gray-100">{{ $recent->withdrawal_number }}</p>
+                                    <p class="font-semibold text-white">{{ currency_symbol() }}{{ number_format($recent->amount, 2) }}</p>
                                 </div>
                                 @if($recent->status == 'completed')
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
@@ -260,15 +260,15 @@
 <!-- Approve Modal -->
 <div id="approveModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-lg max-w-md w-full p-6">
-        <h3 class="text-xl font-bold text-gray-800 mb-4">Approve Withdrawal</h3>
+        <h3 class="text-xl font-bold text-white mb-4">Approve Withdrawal</h3>
         <form action="{{ route('admin.withdrawals.approve', $withdrawal->id) }}" method="POST">
             @csrf
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notes (Optional)</label>
+                <label class="block text-sm font-medium text-white mb-2">Admin Notes (Optional)</label>
                 <textarea name="admin_notes" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500" placeholder="Add any notes..."></textarea>
             </div>
             <div class="flex gap-3">
-                <button type="button" onclick="closeApproveModal()" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold">
+                <button type="button" onclick="closeApproveModal()" class="flex-1 bg-gray-200 text-white px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold">
                     Cancel
                 </button>
                 <button type="submit" class="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-semibold">
@@ -282,19 +282,19 @@
 <!-- Complete Modal -->
 <div id="completeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-lg max-w-md w-full p-6">
-        <h3 class="text-xl font-bold text-gray-800 mb-4">Complete Withdrawal</h3>
+        <h3 class="text-xl font-bold text-white mb-4">Complete Withdrawal</h3>
         <form action="{{ route('admin.withdrawals.complete', $withdrawal->id) }}" method="POST">
             @csrf
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Transaction Reference (Optional)</label>
+                <label class="block text-sm font-medium text-white mb-2">Transaction Reference (Optional)</label>
                 <input type="text" name="transaction_reference" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500" placeholder="e.g., TXN123456">
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notes (Optional)</label>
+                <label class="block text-sm font-medium text-white mb-2">Admin Notes (Optional)</label>
                 <textarea name="admin_notes" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500" placeholder="Add any notes..."></textarea>
             </div>
             <div class="flex gap-3">
-                <button type="button" onclick="closeCompleteModal()" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold">
+                <button type="button" onclick="closeCompleteModal()" class="flex-1 bg-gray-200 text-white px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold">
                     Cancel
                 </button>
                 <button type="submit" class="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-semibold">
@@ -308,16 +308,16 @@
 <!-- Reject Modal -->
 <div id="rejectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-lg max-w-md w-full p-6">
-        <h3 class="text-xl font-bold text-gray-800 mb-4">Reject Withdrawal</h3>
+        <h3 class="text-xl font-bold text-white mb-4">Reject Withdrawal</h3>
         <form action="{{ route('admin.withdrawals.reject', $withdrawal->id) }}" method="POST">
             @csrf
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Rejection <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-white mb-2">Reason for Rejection <span class="text-red-500">*</span></label>
                 <textarea name="admin_notes" rows="4" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500" placeholder="Please provide a reason..."></textarea>
-                <p class="text-xs text-gray-500 mt-1">The amount will be refunded to vendor's wallet</p>
+                <p class="text-xs text-gray-200 mt-1">The amount will be refunded to vendor's wallet</p>
             </div>
             <div class="flex gap-3">
-                <button type="button" onclick="closeRejectModal()" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold">
+                <button type="button" onclick="closeRejectModal()" class="flex-1 bg-gray-200 text-white px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold">
                     Cancel
                 </button>
                 <button type="submit" class="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-semibold">

@@ -114,14 +114,14 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <div class="animate-fadeInLeft bg-white p-8 rounded-2xl shadow-lg h-full flex flex-col justify-center">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">{{ $content['story_title'] ?? 'Our Story' }}</h2>
-                    <p class="text-gray-700 text-base sm:text-lg mb-5 leading-relaxed">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">{{ $content['story_title'] ?? 'Our Story' }}</h2>
+                    <p class="text-white text-base sm:text-lg mb-5 leading-relaxed">
                         {{ $content['story_paragraph_1'] ?? 'Founded with a vision to revolutionize B2B commerce, AlphaVendor has grown into a leading multi-vendor marketplace serving thousands of businesses worldwide.' }}
                     </p>
-                    <p class="text-gray-700 text-base sm:text-lg mb-5 leading-relaxed">
+                    <p class="text-white text-base sm:text-lg mb-5 leading-relaxed">
                         {{ $content['story_paragraph_2'] ?? 'We believe in creating seamless connections between retailers, wholesalers, and exporters, making global trade accessible and efficient for businesses of all sizes.' }}
                     </p>
-                    <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
+                    <p class="text-white text-base sm:text-lg leading-relaxed">
                         {{ $content['story_paragraph_3'] ?? 'Our platform is built on trust, transparency, and innovation, empowering vendors to reach new markets and buyers to discover quality products from verified suppliers.' }}
                     </p>
                 </div>
@@ -166,8 +166,8 @@
                     <div class="w-16 h-16 sm:w-20 sm:h-20 bg-[#0d5c63] rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-bullseye text-white text-2xl sm:text-3xl"></i>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['mission_title'] ?? 'Our Mission' }}</h3>
-                    <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">{{ $content['mission_title'] ?? 'Our Mission' }}</h3>
+                    <p class="text-gray-100 text-base sm:text-lg leading-relaxed">
                         {{ $content['mission_content'] ?? 'To empower businesses of all sizes by providing a transparent, efficient, and innovative marketplace that simplifies global trade and fosters meaningful connections between buyers and sellers worldwide.' }}
                     </p>
                 </div>
@@ -175,8 +175,8 @@
                     <div class="w-16 h-16 sm:w-20 sm:h-20 bg-[#0d5c63] rounded-2xl flex items-center justify-center mb-4 sm:mb-6">
                         <i class="fas fa-eye text-white text-2xl sm:text-3xl"></i>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">{{ $content['vision_title'] ?? 'Our Vision' }}</h3>
-                    <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">{{ $content['vision_title'] ?? 'Our Vision' }}</h3>
+                    <p class="text-gray-100 text-base sm:text-lg leading-relaxed">
                         {{ $content['vision_content'] ?? 'To become the world\'s most trusted and innovative multi-vendor marketplace, where every business finds opportunities to grow, scale, and succeed in the global market.' }}
                     </p>
                 </div>

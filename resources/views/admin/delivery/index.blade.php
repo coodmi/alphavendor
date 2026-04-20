@@ -9,8 +9,8 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Delivery Management</h1>
-        <p class="text-gray-600 mt-2">Manage Paperfly delivery orders and track shipments</p>
+        <h1 class="text-3xl font-bold text-white">Delivery Management</h1>
+        <p class="text-gray-100 mt-2">Manage Paperfly delivery orders and track shipments</p>
     </div>
 
     @if(session('success'))
@@ -39,8 +39,8 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Total Orders</p>
-                    <h3 class="text-2xl font-bold text-gray-900">{{ $stats['total_orders'] }}</h3>
+                    <p class="text-gray-200 text-sm">Total Orders</p>
+                    <h3 class="text-2xl font-bold text-white">{{ $stats['total_orders'] }}</h3>
                 </div>
                 <div class="bg-blue-100 p-3 rounded-full">
                     <i class="fas fa-box text-blue-600 text-xl"></i>
@@ -51,7 +51,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Pending Pickup</p>
+                    <p class="text-gray-200 text-sm">Pending Pickup</p>
                     <h3 class="text-2xl font-bold text-teal-700">{{ $stats['pending_pickup'] }}</h3>
                 </div>
                 <div class="bg-teal-100 p-3 rounded-full">
@@ -63,7 +63,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">In Transit</p>
+                    <p class="text-gray-200 text-sm">In Transit</p>
                     <h3 class="text-2xl font-bold text-blue-600">{{ $stats['in_transit'] }}</h3>
                 </div>
                 <div class="bg-blue-100 p-3 rounded-full">
@@ -75,7 +75,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Delivered</p>
+                    <p class="text-gray-200 text-sm">Delivered</p>
                     <h3 class="text-2xl font-bold text-green-600">{{ $stats['delivered'] }}</h3>
                 </div>
                 <div class="bg-green-100 p-3 rounded-full">
@@ -87,7 +87,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Returned</p>
+                    <p class="text-gray-200 text-sm">Returned</p>
                     <h3 class="text-2xl font-bold text-red-600">{{ $stats['returned'] }}</h3>
                 </div>
                 <div class="bg-red-100 p-3 rounded-full">
@@ -101,7 +101,7 @@
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <form method="GET" action="{{ route('admin.delivery.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-                <label class="block text-gray-700 font-medium mb-2">Search</label>
+                <label class="block text-white font-medium mb-2">Search</label>
                 <input type="text" 
                        name="search" 
                        value="{{ request('search') }}"
@@ -110,7 +110,7 @@
             </div>
 
             <div>
-                <label class="block text-gray-700 font-medium mb-2">Delivery Status</label>
+                <label class="block text-white font-medium mb-2">Delivery Status</label>
                 <select name="delivery_status" class="w-full px-4 py-2 border rounded-lg">
                     <option value="">All Status</option>
                     <option value="pending" {{ request('delivery_status') == 'pending' ? 'selected' : '' }}>Pending</option>
@@ -123,7 +123,7 @@
             </div>
 
             <div>
-                <label class="block text-gray-700 font-medium mb-2">Order Status</label>
+                <label class="block text-white font-medium mb-2">Order Status</label>
                 <select name="status" class="w-full px-4 py-2 border rounded-lg">
                     <option value="">All Orders</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
@@ -147,31 +147,31 @@
             <table class="min-w-full">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendor</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tracking</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Delivery Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Order</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Vendor</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Tracking</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Delivery Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($orders as $order)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="font-medium text-gray-900">{{ $order->order_number }}</div>
-                                <div class="text-sm text-gray-500">{{ $order->created_at->format('M d, Y') }}</div>
+                                <div class="font-medium text-white">{{ $order->order_number }}</div>
+                                <div class="text-sm text-gray-200">{{ $order->created_at->format('M d, Y') }}</div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="font-medium text-gray-900">{{ $order->user->name }}</div>
-                                <div class="text-sm text-gray-500">{{ $order->phone }}</div>
+                                <div class="font-medium text-white">{{ $order->user->name }}</div>
+                                <div class="text-sm text-gray-200">{{ $order->phone }}</div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-gray-900">{{ $order->vendor->name ?? 'N/A' }}</div>
+                                <div class="text-white">{{ $order->vendor->name ?? 'N/A' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="font-medium text-gray-900">৳{{ number_format($order->total, 2) }}</div>
+                                <div class="font-medium text-white">৳{{ number_format($order->total, 2) }}</div>
                             </td>
                             <td class="px-6 py-4">
                                 @if($order->paperfly_tracking_number)
@@ -228,7 +228,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-200">
                                 No orders found
                             </td>
                         </tr>

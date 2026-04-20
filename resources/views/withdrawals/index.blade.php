@@ -35,15 +35,15 @@
     <!-- Wallet Balance Summary -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
-            <h3 class="text-sm text-gray-600 mb-2">Available Balance</h3>
+            <h3 class="text-sm text-gray-100 mb-2">Available Balance</h3>
             <p class="text-3xl font-bold text-green-600">${{ number_format($wallet->balance ?? 0, 2) }}</p>
         </div>
         <div class="bg-teal-50 border-2 border-teal-200 rounded-lg p-6">
-            <h3 class="text-sm text-gray-600 mb-2">Pending Balance</h3>
+            <h3 class="text-sm text-gray-100 mb-2">Pending Balance</h3>
             <p class="text-3xl font-bold text-teal-700">${{ number_format($wallet->pending_balance ?? 0, 2) }}</p>
         </div>
         <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-            <h3 class="text-sm text-gray-600 mb-2">Total Withdrawn</h3>
+            <h3 class="text-sm text-gray-100 mb-2">Total Withdrawn</h3>
             <p class="text-3xl font-bold text-blue-600">${{ number_format($wallet->total_withdrawn ?? 0, 2) }}</p>
         </div>
     </div>
@@ -53,7 +53,7 @@
         <a href="{{ route('withdrawals.create') }}" class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700 font-semibold">
             <i class="fas fa-plus mr-2"></i>New Withdrawal Request
         </a>
-        <a href="{{ route('withdrawals.payment-methods') }}" class="bg-gray-200 text-gray-700 px-6 py-3 rounded hover:bg-gray-300 font-semibold">
+        <a href="{{ route('withdrawals.payment-methods') }}" class="bg-gray-200 text-white px-6 py-3 rounded hover:bg-gray-300 font-semibold">
             <i class="fas fa-credit-card mr-2"></i>Payment Methods
         </a>
     </div>
@@ -68,24 +68,24 @@
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Withdrawal #</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notes</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Withdrawal #</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Method</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Notes</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($withdrawals as $withdrawal)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                                 {{ $withdrawal->withdrawal_number }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
                                 ${{ number_format($withdrawal->amount, 2) }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-100">
                                 @if($withdrawal->withdrawalMethod)
                                     {{ ucfirst($withdrawal->withdrawalMethod->type) }}
                                 @else
@@ -102,10 +102,10 @@
                                     {{ ucfirst($withdrawal->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                                 {{ $withdrawal->created_at->format('M d, Y') }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">
+                            <td class="px-6 py-4 text-sm text-gray-100">
                                 @if($withdrawal->admin_notes)
                                     <span class="text-red-600" title="{{ $withdrawal->admin_notes }}">
                                         <i class="fas fa-comment-dots"></i> Admin Note
@@ -119,7 +119,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-200">
                                 <i class="fas fa-money-bill-wave text-4xl mb-2 opacity-50"></i>
                                 <p>No withdrawal requests yet</p>
                             </td>

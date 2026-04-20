@@ -11,8 +11,8 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800">Manual Payment Verification</h1>
-            <p class="text-gray-600">Verify bKash, Nagad, and other manual payments</p>
+            <h1 class="text-2xl font-bold text-white">Manual Payment Verification</h1>
+            <p class="text-gray-100">Verify bKash, Nagad, and other manual payments</p>
         </div>
     </div>
 
@@ -90,7 +90,7 @@
     <!-- Pending Payments Table -->
     <div class="bg-white rounded-lg shadow mb-6">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <h2 class="text-lg font-semibold text-white flex items-center gap-2">
                 <span class="w-3 h-3 bg-teal-600 rounded-full"></span>
                 Pending Payments ({{ $pendingPayments->total() }})
             </h2>
@@ -101,14 +101,14 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sender Number</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Customer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Method</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Sender Number</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Transaction ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -120,8 +120,8 @@
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">{{ $payment->user->name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $payment->user->email }}</div>
+                                    <div class="text-sm font-medium text-white">{{ $payment->user->name }}</div>
+                                    <div class="text-sm text-gray-200">{{ $payment->user->email }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($payment->payment_method === 'bkash')
@@ -129,7 +129,7 @@
                                     @elseif($payment->payment_method === 'nagad')
                                         <span class="px-2 py-1 text-xs font-semibold rounded bg-teal-100 text-teal-900">Nagad</span>
                                     @else
-                                        <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-800">{{ ucfirst($payment->payment_method) }}</span>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-white">{{ ucfirst($payment->payment_method) }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -139,9 +139,9 @@
                                     <span class="font-mono text-sm bg-gray-100 px-2 py-1 rounded">{{ $payment->transaction_id }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="font-semibold text-gray-900">৳{{ number_format($payment->amount, 2) }}</span>
+                                    <span class="font-semibold text-white">৳{{ number_format($payment->amount, 2) }}</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                                     {{ $payment->created_at->format('M d, Y') }}<br>
                                     <span class="text-xs">{{ $payment->created_at->format('h:i A') }}</span>
                                 </td>
@@ -169,7 +169,7 @@
                 {{ $pendingPayments->links() }}
             </div>
         @else
-            <div class="p-8 text-center text-gray-500">
+            <div class="p-8 text-center text-gray-200">
                 <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -183,7 +183,7 @@
     @if($verifiedPayments->count() > 0)
         <div class="bg-white rounded-lg shadow mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
                     <span class="w-3 h-3 bg-green-500 rounded-full"></span>
                     Recently Verified
                 </h2>
@@ -192,12 +192,12 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verified By</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verified At</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Method</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Transaction ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Verified By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Verified At</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -216,7 +216,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">{{ $payment->transaction_id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap font-semibold">৳{{ number_format($payment->amount, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $payment->verifier->name ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->verified_at->format('M d, Y h:i A') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $payment->verified_at->format('M d, Y h:i A') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -229,7 +229,7 @@
     @if($rejectedPayments->count() > 0)
         <div class="bg-white rounded-lg shadow">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
                     <span class="w-3 h-3 bg-red-500 rounded-full"></span>
                     Recently Rejected
                 </h2>
@@ -238,10 +238,10 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rejected At</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Transaction ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Reason</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Rejected At</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -250,7 +250,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $payment->order->order_number }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap font-mono text-sm">{{ $payment->transaction_id }}</td>
                                 <td class="px-6 py-4 text-sm text-red-600">{{ $payment->admin_note }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->verified_at->format('M d, Y h:i A') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{{ $payment->verified_at->format('M d, Y h:i A') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -264,25 +264,25 @@
 <div id="verifyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800">Verify Payment</h3>
+            <h3 class="text-lg font-semibold text-white">Verify Payment</h3>
         </div>
         <form id="verifyForm" method="POST">
             @csrf
             <div class="p-6">
-                <p class="text-gray-600 mb-4">
+                <p class="text-gray-100 mb-4">
                     You are about to verify payment for order <strong id="verifyOrderNumber"></strong>
                 </p>
                 <div class="bg-green-50 border border-green-200 rounded p-3 mb-4">
-                    <p class="text-sm text-gray-600">Transaction ID: <strong id="verifyTxnId" class="font-mono"></strong></p>
-                    <p class="text-sm text-gray-600">Amount: <strong id="verifyAmount"></strong></p>
+                    <p class="text-sm text-gray-100">Transaction ID: <strong id="verifyTxnId" class="font-mono"></strong></p>
+                    <p class="text-sm text-gray-100">Amount: <strong id="verifyAmount"></strong></p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Admin Note (Optional)</label>
+                    <label class="block text-sm font-medium text-white mb-1">Admin Note (Optional)</label>
                     <textarea name="admin_note" rows="2" class="w-full border rounded px-3 py-2" placeholder="Add any notes..."></textarea>
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
-                <button type="button" onclick="closeVerifyModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                <button type="button" onclick="closeVerifyModal()" class="px-4 py-2 text-gray-100 hover:text-white">Cancel</button>
                 <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Confirm Verification</button>
             </div>
         </form>
@@ -293,21 +293,21 @@
 <div id="rejectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800">Reject Payment</h3>
+            <h3 class="text-lg font-semibold text-white">Reject Payment</h3>
         </div>
         <form id="rejectForm" method="POST">
             @csrf
             <div class="p-6">
-                <p class="text-gray-600 mb-4">
+                <p class="text-gray-100 mb-4">
                     You are about to reject payment for order <strong id="rejectOrderNumber"></strong>
                 </p>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Reason for Rejection *</label>
+                    <label class="block text-sm font-medium text-white mb-1">Reason for Rejection *</label>
                     <textarea name="admin_note" rows="3" required class="w-full border rounded px-3 py-2" placeholder="e.g., Transaction ID not found, Amount mismatch..."></textarea>
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
-                <button type="button" onclick="closeRejectModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                <button type="button" onclick="closeRejectModal()" class="px-4 py-2 text-gray-100 hover:text-white">Cancel</button>
                 <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Confirm Rejection</button>
             </div>
         </form>

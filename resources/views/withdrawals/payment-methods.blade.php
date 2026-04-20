@@ -34,21 +34,21 @@
 
     <!-- Add New Payment Method -->
     <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add Payment Method</h2>
+        <h2 class="text-2xl font-bold text-white mb-6">Add Payment Method</h2>
         
         <form action="{{ route('withdrawals.payment-methods.store') }}" method="POST" id="paymentMethodForm">
             @csrf
             
             <!-- Payment Type Selection -->
             <div class="mb-6">
-                <label class="block text-gray-700 font-semibold mb-3">Select Payment Method <span class="text-red-500">*</span></label>
+                <label class="block text-white font-semibold mb-3">Select Payment Method <span class="text-red-500">*</span></label>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <label class="payment-type-card cursor-pointer">
                         <input type="radio" name="type" value="bank" class="hidden payment-type-radio" checked>
                         <div class="border-2 border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-all payment-type-option">
                             <i class="fas fa-university text-4xl text-blue-500 mb-3"></i>
-                            <p class="font-semibold text-gray-800">Bank Transfer</p>
-                            <p class="text-xs text-gray-500 mt-1">Direct bank account</p>
+                            <p class="font-semibold text-white">Bank Transfer</p>
+                            <p class="text-xs text-gray-200 mt-1">Direct bank account</p>
                         </div>
                     </label>
 
@@ -56,8 +56,8 @@
                         <input type="radio" name="type" value="bkash" class="hidden payment-type-radio">
                         <div class="border-2 border-gray-300 rounded-lg p-6 text-center hover:border-pink-500 transition-all payment-type-option">
                             <i class="fas fa-mobile-alt text-4xl text-pink-500 mb-3"></i>
-                            <p class="font-semibold text-gray-800">bKash</p>
-                            <p class="text-xs text-gray-500 mt-1">Mobile wallet</p>
+                            <p class="font-semibold text-white">bKash</p>
+                            <p class="text-xs text-gray-200 mt-1">Mobile wallet</p>
                         </div>
                     </label>
 
@@ -65,8 +65,8 @@
                         <input type="radio" name="type" value="nagad" class="hidden payment-type-radio">
                         <div class="border-2 border-gray-300 rounded-lg p-6 text-center hover:border-teal-600 transition-all payment-type-option">
                             <i class="fas fa-mobile-alt text-4xl text-teal-600 mb-3"></i>
-                            <p class="font-semibold text-gray-800">Nagad</p>
-                            <p class="text-xs text-gray-500 mt-1">Mobile wallet</p>
+                            <p class="font-semibold text-white">Nagad</p>
+                            <p class="text-xs text-gray-200 mt-1">Mobile wallet</p>
                         </div>
                     </label>
                 </div>
@@ -74,7 +74,7 @@
 
             <!-- Common Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Account Holder Name <span class="text-red-500">*</span></label>
+                <label class="block text-white font-semibold mb-2">Account Holder Name <span class="text-red-500">*</span></label>
                 <input type="text" name="account_name" required 
                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                        placeholder="Enter account holder name">
@@ -84,13 +84,13 @@
             <div id="bank_fields" class="payment-fields">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Bank Name <span class="text-red-500">*</span></label>
+                        <label class="block text-white font-semibold mb-2">Bank Name <span class="text-red-500">*</span></label>
                         <input type="text" name="bank_name" 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="e.g., Dutch-Bangla Bank">
                     </div>
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Branch Name</label>
+                        <label class="block text-white font-semibold mb-2">Branch Name</label>
                         <input type="text" name="branch_name" 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="e.g., Gulshan Branch">
@@ -98,20 +98,20 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Account Number <span class="text-red-500">*</span></label>
+                        <label class="block text-white font-semibold mb-2">Account Number <span class="text-red-500">*</span></label>
                         <input type="text" name="account_number" 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="Enter account number">
                     </div>
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Routing Number</label>
+                        <label class="block text-white font-semibold mb-2">Routing Number</label>
                         <input type="text" name="routing_number" 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="9-digit routing number">
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">SWIFT Code (for international)</label>
+                    <label class="block text-white font-semibold mb-2">SWIFT Code (for international)</label>
                     <input type="text" name="swift_code" 
                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                            placeholder="Enter SWIFT code">
@@ -121,28 +121,28 @@
             <!-- bKash Fields -->
             <div id="bkash_fields" class="payment-fields hidden">
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">bKash Number <span class="text-red-500">*</span></label>
+                    <label class="block text-white font-semibold mb-2">bKash Number <span class="text-red-500">*</span></label>
                     <input type="text" name="bkash_number" 
                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                            placeholder="01XXXXXXXXX">
-                    <p class="text-xs text-gray-500 mt-1">Enter your bKash registered mobile number</p>
+                    <p class="text-xs text-gray-200 mt-1">Enter your bKash registered mobile number</p>
                 </div>
             </div>
 
             <!-- Nagad Fields -->
             <div id="nagad_fields" class="payment-fields hidden">
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Nagad Number <span class="text-red-500">*</span></label>
+                    <label class="block text-white font-semibold mb-2">Nagad Number <span class="text-red-500">*</span></label>
                     <input type="text" name="nagad_number" 
                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                            placeholder="01XXXXXXXXX">
-                    <p class="text-xs text-gray-500 mt-1">Enter your Nagad registered mobile number</p>
+                    <p class="text-xs text-gray-200 mt-1">Enter your Nagad registered mobile number</p>
                 </div>
             </div>
 
             <!-- Additional Details -->
             <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Additional Details (Optional)</label>
+                <label class="block text-white font-semibold mb-2">Additional Details (Optional)</label>
                 <textarea name="additional_details" rows="3" 
                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                           placeholder="Any additional information..."></textarea>
@@ -152,7 +152,7 @@
             <div class="mb-6">
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" name="is_default" value="1" class="w-5 h-5 text-teal-600 rounded focus:ring-2 focus:ring-teal-600">
-                    <span class="ml-3 text-gray-700 font-semibold">Set as default payment method</span>
+                    <span class="ml-3 text-white font-semibold">Set as default payment method</span>
                 </label>
             </div>
 
@@ -165,7 +165,7 @@
     <!-- Saved Payment Methods -->
     <div class="bg-white rounded-lg shadow-md">
         <div class="p-6 border-b">
-            <h2 class="text-2xl font-bold text-gray-800">Saved Payment Methods</h2>
+            <h2 class="text-2xl font-bold text-white">Saved Payment Methods</h2>
         </div>
 
         @if($methods->count() > 0)
@@ -194,7 +194,7 @@
                                 <!-- Details -->
                                 <div class="flex-1">
                                     <div class="flex items-center gap-3 mb-2">
-                                        <h3 class="text-lg font-bold text-gray-800">
+                                        <h3 class="text-lg font-bold text-white">
                                             @if($method->type == 'bank')
                                                 Bank Transfer
                                             @elseif($method->type == 'bkash')
@@ -210,7 +210,7 @@
                                         @endif
                                     </div>
 
-                                    <div class="space-y-1 text-sm text-gray-600">
+                                    <div class="space-y-1 text-sm text-gray-100">
                                         <p><span class="font-semibold">Account Name:</span> {{ $method->account_name }}</p>
                                         
                                         @if($method->type == 'bank')
@@ -234,7 +234,7 @@
                                         @endif
 
                                         @if($method->additional_details)
-                                            <p class="text-gray-500 italic">{{ $method->additional_details }}</p>
+                                            <p class="text-gray-200 italic">{{ $method->additional_details }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -256,7 +256,7 @@
                 @endforeach
             </div>
         @else
-            <div class="p-12 text-center text-gray-500">
+            <div class="p-12 text-center text-gray-200">
                 <i class="fas fa-credit-card text-5xl mb-4 text-gray-300"></i>
                 <p class="text-lg font-semibold">No payment methods added yet</p>
                 <p class="text-sm mt-2">Add a payment method to start receiving withdrawals</p>

@@ -80,14 +80,14 @@
 
     <!-- Order Tracking Section -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">
+        <h2 class="text-xl font-bold text-white mb-4">
             <i class="fas fa-map-marker-alt text-teal-600"></i> Track Your Order
         </h2>
         
         <div class="bg-gray-50 p-4 rounded-lg">
             <form action="{{ route('orders.my-orders') }}" method="GET" class="flex gap-4 items-end">
                 <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter Order Number</label>
+                    <label class="block text-sm font-medium text-white mb-2">Enter Order Number</label>
                     <input type="text" name="track_order" value="{{ request('track_order') }}" placeholder="e.g., ORD-1234567890-1234" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent">
                 </div>
@@ -188,7 +188,7 @@
     @if($orders->isEmpty())
         <div class="text-center py-12 bg-white rounded-lg shadow">
             <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-4"></i>
-            <p class="text-xl text-gray-600 mb-6">No orders yet</p>
+            <p class="text-xl text-gray-100 mb-6">No orders yet</p>
             <a href="{{ route('shop') }}" class="inline-block bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700">
                 Start Shopping
             </a>
@@ -199,9 +199,9 @@
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900">Order {{ $order->order_number }}</h3>
-                            <p class="text-sm text-gray-600">Placed on {{ $order->created_at->format('M d, Y h:i A') }}</p>
-                            <p class="text-sm text-gray-600">Vendor: {{ $order->vendor->name }}</p>
+                            <h3 class="text-lg font-bold text-white">Order {{ $order->order_number }}</h3>
+                            <p class="text-sm text-gray-100">Placed on {{ $order->created_at->format('M d, Y h:i A') }}</p>
+                            <p class="text-sm text-gray-100">Vendor: {{ $order->vendor->name }}</p>
                         </div>
                         <div class="text-right">
                             <span class="inline-block px-3 py-1 rounded text-sm font-semibold
@@ -228,7 +228,7 @@
                                 </span>
                             @endif
                             
-                            <p class="text-lg font-bold text-gray-900 mt-2">${{ number_format($order->total, 2) }}</p>
+                            <p class="text-lg font-bold text-white mt-2">${{ number_format($order->total, 2) }}</p>
                         </div>
                     </div>
 
@@ -248,7 +248,7 @@
                                     @endif
                                     <div class="flex-1">
                                         <p class="font-medium">{{ $item->product_name }}</p>
-                                        <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }} × ${{ number_format($item->price, 2) }}</p>
+                                        <p class="text-sm text-gray-100">Quantity: {{ $item->quantity }} × ${{ number_format($item->price, 2) }}</p>
                                     </div>
                                     <div class="text-right">
                                         <p class="font-semibold">${{ number_format($item->subtotal, 2) }}</p>
@@ -261,7 +261,7 @@
                     <div class="border-t mt-4 pt-4">
                         <div class="flex justify-between items-center">
                             <div>
-                                <p class="text-sm text-gray-600">Shipping Address:</p>
+                                <p class="text-sm text-gray-100">Shipping Address:</p>
                                 <p class="text-sm">{{ $order->shipping_address }}, {{ $order->shipping_city }}, {{ $order->shipping_zip }}</p>
                                 <p class="text-sm">{{ $order->shipping_country }}</p>
                             </div>

@@ -85,12 +85,12 @@
 
                             <!-- Product Info -->
                             <div class="p-4">
-                                <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-teal-700 transition-colors">
+                                <h3 class="font-bold text-white mb-2 line-clamp-2 group-hover:text-teal-700 transition-colors">
                                     {{ $product->name }}
                                 </h3>
                                 
                                 @if($product->brand)
-                                    <p class="text-sm text-gray-500 mb-2">{{ $product->brand->name }}</p>
+                                    <p class="text-sm text-gray-200 mb-2">{{ $product->brand->name }}</p>
                                 @endif
 
                                 <div class="flex items-center gap-2 mb-3">
@@ -105,7 +105,7 @@
                                             @endif
                                         @endfor
                                     </div>
-                                    <span class="text-xs text-gray-500">({{ $product->reviews_count }})</span>
+                                    <span class="text-xs text-gray-200">({{ $product->reviews_count }})</span>
                                 </div>
 
                                 <div class="flex items-center justify-between">
@@ -145,8 +145,8 @@
             <!-- Empty State -->
             <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
                 <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                <h3 class="text-2xl font-bold text-gray-700 mb-2">No Products Yet</h3>
-                <p class="text-gray-500 mb-6">Products will appear here once they are assigned to this special offer.</p>
+                <h3 class="text-2xl font-bold text-white mb-2">No Products Yet</h3>
+                <p class="text-gray-200 mb-6">Products will appear here once they are assigned to this special offer.</p>
                 <a href="{{ route('shop') }}" class="inline-block bg-teal-700 hover:bg-teal-800 text-white px-8 py-3 rounded-xl font-bold transition-all">
                     <i class="fas fa-shopping-bag mr-2"></i>Browse All Products
                 </a>

@@ -14,10 +14,10 @@
         <div class="mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                         <i class="fas fa-award text-indigo-600 mr-3"></i>Vendor Badges
                     </h1>
-                    <p class="text-gray-600 mt-2 text-sm sm:text-base">Create and manage badges to recognize your top-performing vendors</p>
+                    <p class="text-gray-100 mt-2 text-sm sm:text-base">Create and manage badges to recognize your top-performing vendors</p>
                 </div>
                 <button onclick="openAddModal()" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                     <i class="fas fa-plus-circle text-lg"></i>
@@ -72,7 +72,7 @@
                                         Active
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 px-3 py-1 bg-gray-200 text-gray-600 text-xs font-bold rounded-full">
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 bg-gray-200 text-gray-100 text-xs font-bold rounded-full">
                                         <i class="fas fa-circle text-[6px]"></i>
                                         Inactive
                                     </span>
@@ -82,7 +82,7 @@
                             <!-- Description -->
                             <div class="mt-3">
                                 @if($badge->description)
-                                    <p class="text-gray-600 text-sm leading-relaxed line-clamp-2">{{ $badge->description }}</p>
+                                    <p class="text-gray-100 text-sm leading-relaxed line-clamp-2">{{ $badge->description }}</p>
                                 @else
                                     <p class="text-gray-400 text-sm italic">No description provided</p>
                                 @endif
@@ -94,18 +94,18 @@
                             <div class="grid grid-cols-3 gap-3">
                                 <div class="text-center">
                                     <div class="text-2xl font-extrabold text-indigo-600">{{ $badge->vendors_count }}</div>
-                                    <div class="text-xs text-gray-500 font-medium mt-1">Vendors</div>
+                                    <div class="text-xs text-gray-200 font-medium mt-1">Vendors</div>
                                 </div>
                                 <div class="text-center border-x border-gray-200">
                                     <div class="text-2xl font-extrabold text-purple-600">{{ $badge->sort_order }}</div>
-                                    <div class="text-xs text-gray-500 font-medium mt-1">Priority</div>
+                                    <div class="text-xs text-gray-200 font-medium mt-1">Priority</div>
                                 </div>
                                 <div class="text-center">
                                     <div class="flex items-center justify-center gap-1.5">
                                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 shadow-sm" style="background-color: {{ $badge->color }};"></div>
                                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 shadow-sm" style="background-color: {{ $badge->bg_color }};"></div>
                                     </div>
-                                    <div class="text-xs text-gray-500 font-medium mt-1">Colors</div>
+                                    <div class="text-xs text-gray-200 font-medium mt-1">Colors</div>
                                 </div>
                             </div>
                         </div>
@@ -136,8 +136,8 @@
                 <div class="w-32 h-32 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                     <i class="fas fa-award text-6xl text-indigo-600"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-3">No Badges Created Yet</h3>
-                <p class="text-gray-600 mb-8 max-w-md mx-auto">Start recognizing your top vendors by creating custom badges that highlight their achievements and trustworthiness</p>
+                <h3 class="text-2xl font-bold text-white mb-3">No Badges Created Yet</h3>
+                <p class="text-gray-100 mb-8 max-w-md mx-auto">Start recognizing your top vendors by creating custom badges that highlight their achievements and trustworthiness</p>
                 <button onclick="openAddModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                     <i class="fas fa-plus-circle text-lg"></i>
                     <span>Create Your First Badge</span>
@@ -189,11 +189,11 @@
 
                 <!-- Badge Name -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-tag text-indigo-600"></i>
                         Badge Name <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="name" value="{{ old('name') }}" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-gray-900 font-medium @error('name') border-red-500 @enderror" placeholder="e.g., Verified Seller, Top Rated, Premium Partner">
+                    <input type="text" name="name" value="{{ old('name') }}" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-white font-medium @error('name') border-red-500 @enderror" placeholder="e.g., Verified Seller, Top Rated, Premium Partner">
                     @error('name')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -201,11 +201,11 @@
 
                 <!-- Description -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-align-left text-indigo-600"></i>
                         Description
                     </label>
-                    <textarea name="description" rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-gray-900 @error('description') border-red-500 @enderror" placeholder="Brief description of what this badge represents and how vendors can earn it">{{ old('description') }}</textarea>
+                    <textarea name="description" rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-white @error('description') border-red-500 @enderror" placeholder="Brief description of what this badge represents and how vendors can earn it">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -213,12 +213,12 @@
 
                 <!-- Icon -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-icons text-indigo-600"></i>
                         Icon (Font Awesome or Emoji)
                     </label>
-                    <input type="text" name="icon" value="{{ old('icon') }}" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-gray-900 font-medium @error('icon') border-red-500 @enderror" placeholder="e.g., fas fa-star or 🏆 or ⭐">
-                    <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                    <input type="text" name="icon" value="{{ old('icon') }}" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-white font-medium @error('icon') border-red-500 @enderror" placeholder="e.g., fas fa-star or 🏆 or ⭐">
+                    <p class="text-xs text-gray-200 mt-2 flex items-center gap-1">
                         <i class="fas fa-info-circle"></i>
                         Paste any emoji (🏆 ⭐ 💎) or Font Awesome class (fas fa-star)
                     </p>
@@ -230,27 +230,27 @@
                 <!-- Colors -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                        <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                             <i class="fas fa-palette text-indigo-600"></i>
                             Text Color
                         </label>
                         <div class="flex items-center gap-4">
                             <input type="color" name="color" value="#3B82F6" class="h-14 w-24 rounded-xl border-2 border-gray-300 cursor-pointer shadow-md hover:shadow-lg transition-all">
                             <div class="flex-1">
-                                <p class="text-sm text-gray-600 font-medium">Badge text color</p>
+                                <p class="text-sm text-gray-100 font-medium">Badge text color</p>
                                 <p class="text-xs text-gray-400">Choose a contrasting color</p>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                        <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                             <i class="fas fa-fill-drip text-indigo-600"></i>
                             Background Color
                         </label>
                         <div class="flex items-center gap-4">
                             <input type="color" name="bg_color" value="#EFF6FF" class="h-14 w-24 rounded-xl border-2 border-gray-300 cursor-pointer shadow-md hover:shadow-lg transition-all">
                             <div class="flex-1">
-                                <p class="text-sm text-gray-600 font-medium">Badge background</p>
+                                <p class="text-sm text-gray-100 font-medium">Badge background</p>
                                 <p class="text-xs text-gray-400">Light colors work best</p>
                             </div>
                         </div>
@@ -259,12 +259,12 @@
 
                 <!-- Sort Order -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-sort-numeric-down text-indigo-600"></i>
                         Display Priority
                     </label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" min="0" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-gray-900 font-medium @error('sort_order') border-red-500 @enderror">
-                    <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" min="0" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all text-white font-medium @error('sort_order') border-red-500 @enderror">
+                    <p class="text-xs text-gray-200 mt-2 flex items-center gap-1">
                         <i class="fas fa-info-circle"></i>
                         Lower numbers appear first (0 = highest priority)
                     </p>
@@ -278,8 +278,8 @@
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" name="is_active" id="addIsActive" checked class="w-6 h-6 text-indigo-600 rounded-lg focus:ring-4 focus:ring-indigo-200 border-2 border-gray-300">
                         <div>
-                            <span class="text-sm font-bold text-gray-800 block">Active Badge</span>
-                            <span class="text-xs text-gray-600">Badge can be assigned to vendors immediately</span>
+                            <span class="text-sm font-bold text-white block">Active Badge</span>
+                            <span class="text-xs text-gray-100">Badge can be assigned to vendors immediately</span>
                         </div>
                     </label>
                 </div>
@@ -287,7 +287,7 @@
 
             <!-- Modal Footer -->
             <div class="bg-gray-50 px-8 py-5 flex items-center justify-end gap-3 border-t border-gray-200">
-                <button type="button" onclick="closeAddModal()" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-100 transition-all">
+                <button type="button" onclick="closeAddModal()" class="px-6 py-3 border-2 border-gray-300 text-white rounded-xl font-semibold hover:bg-gray-100 transition-all">
                     Cancel
                 </button>
                 <button type="submit" class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center gap-2">
@@ -324,28 +324,28 @@
             <!-- Modal Body -->
             <div class="p-8 space-y-6 overflow-y-auto max-h-[calc(90vh-200px)]">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-tag text-blue-600"></i>
                         Badge Name <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="name" id="editName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-gray-900 font-medium">
+                    <input type="text" name="name" id="editName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-white font-medium">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-align-left text-blue-600"></i>
                         Description
                     </label>
-                    <textarea name="description" id="editDescription" rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-gray-900"></textarea>
+                    <textarea name="description" id="editDescription" rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-white"></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-icons text-blue-600"></i>
                         Icon (Font Awesome or Emoji)
                     </label>
-                    <input type="text" name="icon" id="editIcon" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-gray-900 font-medium" placeholder="e.g., fas fa-star or 🏆 or ⭐">
-                    <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                    <input type="text" name="icon" id="editIcon" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-white font-medium" placeholder="e.g., fas fa-star or 🏆 or ⭐">
+                    <p class="text-xs text-gray-200 mt-2 flex items-center gap-1">
                         <i class="fas fa-info-circle"></i>
                         Paste any emoji (🏆 ⭐ 💎) or Font Awesome class (fas fa-star)
                     </p>
@@ -353,14 +353,14 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                        <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                             <i class="fas fa-palette text-blue-600"></i>
                             Text Color
                         </label>
                         <input type="color" name="color" id="editColor" class="h-14 w-full rounded-xl border-2 border-gray-300 cursor-pointer shadow-md hover:shadow-lg transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                        <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                             <i class="fas fa-fill-drip text-blue-600"></i>
                             Background Color
                         </label>
@@ -369,19 +369,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
                         <i class="fas fa-sort-numeric-down text-blue-600"></i>
                         Display Priority
                     </label>
-                    <input type="number" name="sort_order" id="editSortOrder" min="0" value="0" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-gray-900 font-medium">
+                    <input type="number" name="sort_order" id="editSortOrder" min="0" value="0" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all text-white font-medium">
                 </div>
 
                 <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-5 rounded-xl border-2 border-blue-200">
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" name="is_active" id="editIsActive" class="w-6 h-6 text-blue-600 rounded-lg focus:ring-4 focus:ring-blue-200 border-2 border-gray-300">
                         <div>
-                            <span class="text-sm font-bold text-gray-800 block">Active Badge</span>
-                            <span class="text-xs text-gray-600">Badge can be assigned to vendors</span>
+                            <span class="text-sm font-bold text-white block">Active Badge</span>
+                            <span class="text-xs text-gray-100">Badge can be assigned to vendors</span>
                         </div>
                     </label>
                 </div>
@@ -389,7 +389,7 @@
 
             <!-- Modal Footer -->
             <div class="bg-gray-50 px-8 py-5 flex items-center justify-end gap-3 border-t border-gray-200">
-                <button type="button" onclick="closeEditModal()" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-100 transition-all">
+                <button type="button" onclick="closeEditModal()" class="px-6 py-3 border-2 border-gray-300 text-white rounded-xl font-semibold hover:bg-gray-100 transition-all">
                     Cancel
                 </button>
                 <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center gap-2">

@@ -70,8 +70,8 @@
             <div class="p-6 border-b border-gray-200">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">{{ $ticket->ticket_number }}</h2>
-                        <p class="text-gray-600 mt-1">{{ $ticket->subject }}</p>
+                        <h2 class="text-2xl font-bold text-white">{{ $ticket->ticket_number }}</h2>
+                        <p class="text-gray-100 mt-1">{{ $ticket->subject }}</p>
                     </div>
                     <a href="{{ route('vendor.tickets.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
                         Back to Tickets
@@ -82,20 +82,20 @@
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div>
-                        <label class="text-sm font-semibold text-gray-600">Status</label>
+                        <label class="text-sm font-semibold text-gray-100">Status</label>
                         <p class="mt-1">
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
                                 {{ $ticket->status === 'open' ? 'bg-blue-100 text-blue-800' : '' }}
                                 {{ $ticket->status === 'in_progress' ? 'bg-teal-100 text-teal-800' : '' }}
                                 {{ $ticket->status === 'waiting_response' ? 'bg-teal-100 text-teal-900' : '' }}
                                 {{ $ticket->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
-                                {{ $ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
+                                {{ $ticket->status === 'closed' ? 'bg-gray-100 text-white' : '' }}">
                                 {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}
                             </span>
                         </p>
                     </div>
                     <div>
-                        <label class="text-sm font-semibold text-gray-600">Priority</label>
+                        <label class="text-sm font-semibold text-gray-100">Priority</label>
                         <p class="mt-1">
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
                                 {{ $ticket->priority === 'low' ? 'bg-green-100 text-green-800' : '' }}
@@ -107,20 +107,20 @@
                         </p>
                     </div>
                     <div>
-                        <label class="text-sm font-semibold text-gray-600">Category</label>
-                        <p class="text-gray-900 mt-1">{{ ucfirst($ticket->category) }}</p>
+                        <label class="text-sm font-semibold text-gray-100">Category</label>
+                        <p class="text-white mt-1">{{ ucfirst($ticket->category) }}</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label class="text-sm font-semibold text-gray-600">Created</label>
-                        <p class="text-gray-900">{{ $ticket->created_at->format('M d, Y H:i') }}</p>
+                        <label class="text-sm font-semibold text-gray-100">Created</label>
+                        <p class="text-white">{{ $ticket->created_at->format('M d, Y H:i') }}</p>
                     </div>
                     @if($ticket->assignedTo)
                         <div>
-                            <label class="text-sm font-semibold text-gray-600">Assigned To</label>
-                            <p class="text-gray-900">{{ $ticket->assignedTo->name }}</p>
+                            <label class="text-sm font-semibold text-gray-100">Assigned To</label>
+                            <p class="text-white">{{ $ticket->assignedTo->name }}</p>
                         </div>
                     @endif
                 </div>
@@ -129,7 +129,7 @@
                 <div class="border-t pt-6">
                     <h3 class="text-lg font-semibold mb-4">Original Message</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-gray-700 whitespace-pre-wrap">{{ $ticket->description }}</p>
+                        <p class="text-white whitespace-pre-wrap">{{ $ticket->description }}</p>
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@
         <!-- Replies -->
         <div class="bg-white rounded-lg shadow-md mb-6">
             <div class="p-6 border-b border-gray-200">
-                <h3 class="text-xl font-bold text-gray-800">Conversation</h3>
+                <h3 class="text-xl font-bold text-white">Conversation</h3>
             </div>
             <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
                 @forelse($ticket->replies as $reply)
@@ -149,13 +149,13 @@
                                 @if($reply->is_admin_reply)
                                     <span class="px-2 py-1 bg-blue-600 text-white text-xs rounded">Support Team</span>
                                 @endif
-                                <span class="text-xs text-gray-500">{{ $reply->created_at->diffForHumans() }}</span>
+                                <span class="text-xs text-gray-200">{{ $reply->created_at->diffForHumans() }}</span>
                             </div>
-                            <p class="text-gray-700 whitespace-pre-wrap">{{ $reply->message }}</p>
+                            <p class="text-white whitespace-pre-wrap">{{ $reply->message }}</p>
                         </div>
                     </div>
                 @empty
-                    <p class="text-center text-gray-500">No replies yet. Our support team will respond soon.</p>
+                    <p class="text-center text-gray-200">No replies yet. Our support team will respond soon.</p>
                 @endforelse
             </div>
         </div>
@@ -164,7 +164,7 @@
         @if($ticket->status !== 'closed')
             <div class="bg-white rounded-lg shadow-md">
                 <div class="p-6 border-b border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800">Add Reply</h3>
+                    <h3 class="text-xl font-bold text-white">Add Reply</h3>
                 </div>
                 <div class="p-6">
                     <form action="{{ route('vendor.tickets.reply', $ticket) }}" method="POST">
@@ -191,7 +191,7 @@
         @else
             <div class="bg-gray-100 rounded-lg p-6 text-center">
                 <i class="fas fa-lock text-4xl text-gray-400 mb-2"></i>
-                <p class="text-gray-600">This ticket is closed. No further replies can be added.</p>
+                <p class="text-gray-100">This ticket is closed. No further replies can be added.</p>
             </div>
         @endif
     </div>

@@ -429,7 +429,7 @@
 .import-hero ~ .shop-section .product-title {
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 6px;
     line-height: 1.3;
     display: -webkit-box;
@@ -467,7 +467,7 @@
 
 .import-hero ~ .shop-section .product-rating .rating-count {
     font-size: 11px;
-    color: #666;
+    color: #e0e0e0;
 }
 
 /* Export Info */
@@ -481,7 +481,7 @@
 .export-info .moq-info,
 .export-info .destination-info {
     font-size: 11px;
-    color: #666;
+    color: #e0e0e0;
     font-weight: 500;
     margin: 3px 0;
     display: flex;
@@ -539,7 +539,7 @@
 .import-hero ~ .shop-section .btn-add-cart {
     width: 100%;
     background: #F5F5F5;
-    color: #333;
+    color: #ffffff;
     border: 1px solid #E0E0E0;
     padding: 8px 12px;
     font-size: 12px;

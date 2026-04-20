@@ -67,7 +67,7 @@
 @section('content')
 <div style="max-width: 1200px;">
     <div class="mb-8">
-        <p class="text-gray-600 mt-2">Manage your return and refund requests</p>
+        <p class="text-gray-100 mt-2">Manage your return and refund requests</p>
     </div>
 
     @if(session('success'))
@@ -90,8 +90,8 @@
                     <i class="fas fa-undo text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total Returns</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $stats['total'] }}</p>
+                    <p class="text-sm font-medium text-gray-200">Total Returns</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['total'] }}</p>
                 </div>
             </div>
         </div>
@@ -102,8 +102,8 @@
                     <i class="fas fa-clock text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Pending</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $stats['pending'] }}</p>
+                    <p class="text-sm font-medium text-gray-200">Pending</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['pending'] }}</p>
                 </div>
             </div>
         </div>
@@ -114,8 +114,8 @@
                     <i class="fas fa-check text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Approved</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $stats['approved'] }}</p>
+                    <p class="text-sm font-medium text-gray-200">Approved</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['approved'] }}</p>
                 </div>
             </div>
         </div>
@@ -126,8 +126,8 @@
                     <i class="fas fa-check-circle text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Completed</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $stats['completed'] }}</p>
+                    <p class="text-sm font-medium text-gray-200">Completed</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['completed'] }}</p>
                 </div>
             </div>
         </div>
@@ -139,31 +139,31 @@
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Return #</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Return #</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Order #</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Product</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Date</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-200 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($returns as $return)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-semibold text-gray-900">{{ $return->return_number }}</span>
+                                <span class="font-semibold text-white">{{ $return->return_number }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-gray-900">{{ $return->order->order_number }}</span>
+                                <span class="text-white">{{ $return->order->order_number }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     @if($return->product->image)
                                         <img src="{{ asset('storage/' . $return->product->image) }}" alt="{{ $return->product->name }}" class="w-10 h-10 rounded object-cover mr-3">
                                     @endif
-                                    <span class="text-gray-900">{{ Str::limit($return->product->name, 30) }}</span>
+                                    <span class="text-white">{{ Str::limit($return->product->name, 30) }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -172,14 +172,14 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-semibold text-gray-900">${{ number_format($return->amount, 2) }}</span>
+                                <span class="font-semibold text-white">${{ number_format($return->amount, 2) }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $return->getStatusBadgeClass() }}">
                                     {{ ucfirst(str_replace('_', ' ', $return->status)) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                                 {{ $return->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -192,7 +192,7 @@
                         <tr>
                             <td colspan="8" class="px-6 py-12 text-center">
                                 <i class="fas fa-undo text-gray-300 text-6xl mb-4"></i>
-                                <p class="text-gray-500 text-lg">No return requests found</p>
+                                <p class="text-gray-200 text-lg">No return requests found</p>
                                 <a href="{{ route('orders.my-orders') }}" class="mt-4 inline-block text-blue-600 hover:text-blue-800">
                                     View Your Orders
                                 </a>

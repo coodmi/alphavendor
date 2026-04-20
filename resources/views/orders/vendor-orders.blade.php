@@ -30,29 +30,29 @@
         <table class="w-full">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Your Earning</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Order #</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Customer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Items</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Your Earning</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($orders as $order)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                             {{ $order->order_number }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                             {{ $order->user->name }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                             {{ $order->items->count() }} items
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                             ${{ number_format($order->total, 2) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
@@ -78,7 +78,7 @@
                                 </select>
                             </form>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                             {{ $order->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -89,7 +89,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-200">
                             No orders yet
                         </td>
                     </tr>

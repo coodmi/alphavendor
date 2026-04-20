@@ -86,7 +86,7 @@
                 <form method="GET" action="{{ route('wholesale') }}" id="filterForm">
                     <!-- Categories Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                             <i class="fas fa-tags text-teal-600"></i> Categories
                         </h3>
                         <ul class="space-y-2">
@@ -95,9 +95,9 @@
                                 <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
                                     <div class="flex items-center gap-2">
                                         <input type="radio" name="category" value="{{ $category->id }}" {{ request('category') == $category->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600">
-                                        <span class="text-sm text-gray-700">{{ $category->name }}</span>
+                                        <span class="text-sm text-white">{{ $category->name }}</span>
                                     </div>
-                                    <span class="text-xs text-gray-500">({{ $category->products_count }})</span>
+                                    <span class="text-xs text-gray-200">({{ $category->products_count }})</span>
                                 </label>
                             </li>
                             @endforeach
@@ -106,7 +106,7 @@
 
                     <!-- Minimum Order Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                             <i class="fas fa-boxes text-teal-600"></i> Minimum Order
                         </h3>
                         <ul class="space-y-2">
@@ -114,7 +114,7 @@
                             <li>
                                 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
                                     <input type="radio" name="minimum_order" value="{{ $value }}" {{ request('minimum_order') == $value ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
-                                    <span class="text-sm text-gray-700">{{ $label }}</span>
+                                    <span class="text-sm text-white">{{ $label }}</span>
                                 </label>
                             </li>
                             @endforeach
@@ -123,17 +123,17 @@
 
                     <!-- Price Range Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                             <i class="fas fa-dollar-sign text-teal-600"></i> Price Range
                         </h3>
                         <div class="space-y-4">
                             <div class="flex gap-3">
                                 <div class="flex-1">
-                                    <label class="text-xs text-gray-600 block mb-1">Min</label>
+                                    <label class="text-xs text-gray-100 block mb-1">Min</label>
                                     <input type="number" name="min_price" value="{{ request('min_price', 0) }}" min="0" max="10000" id="wholesale-min-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm">
                                 </div>
                                 <div class="flex-1">
-                                    <label class="text-xs text-gray-600 block mb-1">Max</label>
+                                    <label class="text-xs text-gray-100 block mb-1">Max</label>
                                     <input type="number" name="max_price" value="{{ request('max_price', 10000) }}" min="0" max="10000" id="wholesale-max-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm">
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
 
                     <!-- Supplier Location Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                             <i class="fas fa-map-marker-alt text-teal-600"></i> Supplier Location
                         </h3>
                         <ul class="space-y-2">
@@ -153,7 +153,7 @@
                             <li>
                                 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
                                     <input type="radio" name="supplier_location" value="{{ $location->country }}" {{ request('supplier_location') == $location->country ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
-                                    <span class="text-sm text-gray-700">{{ $location->country }}</span>
+                                    <span class="text-sm text-white">{{ $location->country }}</span>
                                 </label>
                             </li>
                             @endforeach
@@ -162,7 +162,7 @@
 
                     <!-- Brands Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                             <i class="fas fa-star text-teal-600"></i> Brands
                         </h3>
                         <ul class="space-y-2">
@@ -171,9 +171,9 @@
                                 <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
                                     <div class="flex items-center gap-2">
                                         <input type="radio" name="brand" value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600">
-                                        <span class="text-sm text-gray-700">{{ $brand->name }}</span>
+                                        <span class="text-sm text-white">{{ $brand->name }}</span>
                                     </div>
-                                    <span class="text-xs text-gray-500">({{ $brand->products_count }})</span>
+                                    <span class="text-xs text-gray-200">({{ $brand->products_count }})</span>
                                 </label>
                             </li>
                             @endforeach
@@ -181,7 +181,7 @@
                     </div>
 
                     <!-- Clear All Filters -->
-                    <a href="{{ route('wholesale') }}" class="block w-full bg-gray-100 text-gray-700 text-center py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm">
+                    <a href="{{ route('wholesale') }}" class="block w-full bg-gray-100 text-white text-center py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm">
                         <i class="fas fa-times"></i> Clear All Filters
                     </a>
                 </form>
@@ -192,15 +192,15 @@
                 <!-- Toolbar -->
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <p class="text-sm text-gray-600">
-                            Showing <strong class="text-gray-900">{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong class="text-gray-900">{{ $products->total() }}</strong> wholesale products
+                        <p class="text-sm text-gray-100">
+                            Showing <strong class="text-white">{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong class="text-white">{{ $products->total() }}</strong> wholesale products
                         </p>
                     </div>
                     <div class="flex gap-2">
                         <button class="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" data-view="grid">
                             <i class="fas fa-th"></i>
                         </button>
-                        <button class="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors" data-view="list">
+                        <button class="p-2 bg-gray-100 text-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-view="list">
                             <i class="fas fa-list"></i>
                         </button>
                     </div>
@@ -299,13 +299,13 @@
                         </div>
                         <div class="p-4">
                             <div class="text-xs text-teal-700 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
-                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-1">
+                            <h4 class="text-sm font-bold text-white mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
+                            <div class="flex items-center gap-1 text-xs text-gray-100 mb-1">
                                 <i class="fas fa-industry text-teal-600"></i>
                                 <span>{{ $product->vendor->name ?? 'Unknown Vendor' }}</span>
                             </div>
                             @if($product->supplier_location)
-                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
+                            <div class="flex items-center gap-1 text-xs text-gray-100 mb-2">
                                 <i class="fas fa-map-marker-alt text-teal-600"></i>
                                 <span>{{ $product->supplier_location }}</span>
                             </div>
@@ -320,16 +320,16 @@
                                         <i class="far fa-star text-teal-500 text-xs"></i>
                                     @endif
                                 @endfor
-                                <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
+                                <span class="text-xs text-gray-100">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
-                            <div class="flex items-center gap-1 text-xs text-gray-600 mb-3">
+                            <div class="flex items-center gap-1 text-xs text-gray-100 mb-3">
                                 <i class="fas fa-boxes text-teal-600"></i>
                                 <span>Min: {{ $product->minimum_order }} units</span>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap">
-                                <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                <span class="text-lg font-bold text-white">${{ number_format($product->price, 2) }}</span>
                                 @if($product->old_price)
-                                    <span class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="text-sm text-gray-200 line-through">${{ number_format($product->old_price, 2) }}</span>
                                     <span class="text-xs font-semibold text-red-500">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
                                 @endif
                             </div>
@@ -338,8 +338,8 @@
                     @empty
                     <div class="col-span-full text-center py-16">
                         <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-600 mb-2">No Products Found</h3>
-                        <p class="text-gray-500">Try adjusting your filters or <a href="{{ route('wholesale') }}" class="text-teal-600 hover:text-teal-700">clear all filters</a>.</p>
+                        <h3 class="text-xl font-semibold text-gray-100 mb-2">No Products Found</h3>
+                        <p class="text-gray-200">Try adjusting your filters or <a href="{{ route('wholesale') }}" class="text-teal-600 hover:text-teal-700">clear all filters</a>.</p>
                     </div>
                     @endforelse
                 </div>
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Close filters when clearing all
-    const clearFiltersBtn = document.querySelector('.bg-gray-100.text-gray-700.text-center.py-3');
+    const clearFiltersBtn = document.querySelector('.bg-gray-100.text-white.text-center.py-3');
     if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener('click', function() {
             if (window.innerWidth <= 1024) {

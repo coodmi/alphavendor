@@ -15,7 +15,7 @@
     @if(empty($cart))
         <div class="text-center py-12">
             <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
-            <p class="text-xl text-gray-600 mb-6">Your cart is empty</p>
+            <p class="text-xl text-gray-100 mb-6">Your cart is empty</p>
             <a href="{{ route('shop') }}" class="inline-block bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700">
                 Continue Shopping
             </a>
@@ -32,7 +32,7 @@
 
                             <div class="flex-1">
                                 <h3 class="font-semibold text-lg">{{ $item['name'] }}</h3>
-                                <p class="text-gray-600 text-sm">Vendor: {{ $item['vendor_name'] }}</p>
+                                <p class="text-gray-100 text-sm">Vendor: {{ $item['vendor_name'] }}</p>
                                 <p class="text-teal-600 font-bold mt-2" data-unit-price="{{ $item['price'] }}">${{ number_format($item['price'], 2) }}</p>
                                 @if(isset($item['coupon_code']) && isset($item['discount_amount']))
                                     <div class="mt-2 flex items-center gap-2">
@@ -87,11 +87,11 @@
 
                     <div class="space-y-2 mb-4">
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Subtotal</span>
+                            <span class="text-gray-100">Subtotal</span>
                             <span class="font-semibold" id="subtotal">${{ number_format($total, 2) }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Shipping</span>
+                            <span class="text-gray-100">Shipping</span>
                             <span class="font-semibold">Calculated at checkout</span>
                         </div>
                     </div>
@@ -119,10 +119,10 @@
             <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
                 <i class="fas fa-trash-alt text-red-600 text-xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 text-center mb-2">Remove Item</h3>
-            <p class="text-gray-600 text-center mb-6">Are you sure you want to remove this item from your cart?</p>
+            <h3 class="text-xl font-bold text-white text-center mb-2">Remove Item</h3>
+            <p class="text-gray-100 text-center mb-6">Are you sure you want to remove this item from your cart?</p>
             <div class="flex gap-3">
-                <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-semibold">
+                <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 bg-gray-200 text-white rounded-lg hover:bg-gray-300 transition font-semibold">
                     Cancel
                 </button>
                 <button onclick="confirmDelete()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">

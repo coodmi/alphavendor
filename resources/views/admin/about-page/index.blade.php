@@ -12,10 +12,10 @@
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                 <i class="fas fa-info-circle text-indigo-600 mr-3"></i>About Page Content
             </h1>
-            <p class="text-gray-600 mt-2 text-sm sm:text-base">Manage all content displayed on the about page</p>
+            <p class="text-gray-100 mt-2 text-sm sm:text-base">Manage all content displayed on the about page</p>
         </div>
 
         <!-- Success Message -->
@@ -86,33 +86,33 @@
                 </div>
                 <div class="p-6 space-y-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Hero Title</label>
+                        <label class="block text-sm font-bold text-white mb-2">Hero Title</label>
                         <input type="text" name="hero_title" value="{{ old('hero_title', $content->hero_title) }}" required 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Hero Subtitle</label>
+                        <label class="block text-sm font-bold text-white mb-2">Hero Subtitle</label>
                         <textarea name="hero_subtitle" rows="2" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all">{{ old('hero_subtitle', $content->hero_subtitle) }}</textarea>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Primary Button Text</label>
+                            <label class="block text-sm font-bold text-white mb-2">Primary Button Text</label>
                             <input type="text" name="hero_cta_primary_text" value="{{ old('hero_cta_primary_text', $content->hero_cta_primary_text) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Primary Button Link</label>
+                            <label class="block text-sm font-bold text-white mb-2">Primary Button Link</label>
                             <input type="text" name="hero_cta_primary_link" value="{{ old('hero_cta_primary_link', $content->hero_cta_primary_link) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Secondary Button Text</label>
+                            <label class="block text-sm font-bold text-white mb-2">Secondary Button Text</label>
                             <input type="text" name="hero_cta_secondary_text" value="{{ old('hero_cta_secondary_text', $content->hero_cta_secondary_text) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Secondary Button Link</label>
+                            <label class="block text-sm font-bold text-white mb-2">Secondary Button Link</label>
                             <input type="text" name="hero_cta_secondary_link" value="{{ old('hero_cta_secondary_link', $content->hero_cta_secondary_link) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all">
                         </div>
@@ -130,22 +130,22 @@
                 </div>
                 <div class="p-6 space-y-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Section Title</label>
+                        <label class="block text-sm font-bold text-white mb-2">Section Title</label>
                         <input type="text" name="story_title" value="{{ old('story_title', $content->story_title) }}" required 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Paragraph 1</label>
+                        <label class="block text-sm font-bold text-white mb-2">Paragraph 1</label>
                         <textarea name="story_paragraph_1" rows="3" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all">{{ old('story_paragraph_1', $content->story_paragraph_1) }}</textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Paragraph 2</label>
+                        <label class="block text-sm font-bold text-white mb-2">Paragraph 2</label>
                         <textarea name="story_paragraph_2" rows="3" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all">{{ old('story_paragraph_2', $content->story_paragraph_2) }}</textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Paragraph 3</label>
+                        <label class="block text-sm font-bold text-white mb-2">Paragraph 3</label>
                         <textarea name="story_paragraph_3" rows="3" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all">{{ old('story_paragraph_3', $content->story_paragraph_3) }}</textarea>
                     </div>
@@ -162,30 +162,30 @@
                 </div>
                 <div class="p-6 space-y-6">
                     <div class="border-b border-gray-200 pb-6">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Mission</h3>
+                        <h3 class="text-lg font-bold text-white mb-4">Mission</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Mission Title</label>
+                                <label class="block text-sm font-bold text-white mb-2">Mission Title</label>
                                 <input type="text" name="mission_title" value="{{ old('mission_title', $content->mission_title) }}" required 
                                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Mission Content</label>
+                                <label class="block text-sm font-bold text-white mb-2">Mission Content</label>
                                 <textarea name="mission_content" rows="4" 
                                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">{{ old('mission_content', $content->mission_content) }}</textarea>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Vision</h3>
+                        <h3 class="text-lg font-bold text-white mb-4">Vision</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Vision Title</label>
+                                <label class="block text-sm font-bold text-white mb-2">Vision Title</label>
                                 <input type="text" name="vision_title" value="{{ old('vision_title', $content->vision_title) }}" required 
                                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Vision Content</label>
+                                <label class="block text-sm font-bold text-white mb-2">Vision Content</label>
                                 <textarea name="vision_content" rows="4" 
                                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all">{{ old('vision_content', $content->vision_content) }}</textarea>
                             </div>
@@ -205,25 +205,25 @@
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Vendors Count</label>
+                            <label class="block text-sm font-bold text-white mb-2">Vendors Count</label>
                             <input type="text" name="stats_vendors" value="{{ old('stats_vendors', $content->stats_vendors) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all"
                                 placeholder="e.g., 1000+">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Products Count</label>
+                            <label class="block text-sm font-bold text-white mb-2">Products Count</label>
                             <input type="text" name="stats_products" value="{{ old('stats_products', $content->stats_products) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all"
                                 placeholder="e.g., 50000+">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Customers Count</label>
+                            <label class="block text-sm font-bold text-white mb-2">Customers Count</label>
                             <input type="text" name="stats_customers" value="{{ old('stats_customers', $content->stats_customers) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all"
                                 placeholder="e.g., 100000+">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Countries Count</label>
+                            <label class="block text-sm font-bold text-white mb-2">Countries Count</label>
                             <input type="text" name="stats_countries" value="{{ old('stats_countries', $content->stats_countries) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all"
                                 placeholder="e.g., 50+">
@@ -242,33 +242,33 @@
                 </div>
                 <div class="p-6 space-y-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">CTA Title</label>
+                        <label class="block text-sm font-bold text-white mb-2">CTA Title</label>
                         <input type="text" name="cta_title" value="{{ old('cta_title', $content->cta_title) }}" required 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">CTA Subtitle</label>
+                        <label class="block text-sm font-bold text-white mb-2">CTA Subtitle</label>
                         <textarea name="cta_subtitle" rows="2" 
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 transition-all">{{ old('cta_subtitle', $content->cta_subtitle) }}</textarea>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Primary Button Text</label>
+                            <label class="block text-sm font-bold text-white mb-2">Primary Button Text</label>
                             <input type="text" name="cta_primary_text" value="{{ old('cta_primary_text', $content->cta_primary_text) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Primary Button Link</label>
+                            <label class="block text-sm font-bold text-white mb-2">Primary Button Link</label>
                             <input type="text" name="cta_primary_link" value="{{ old('cta_primary_link', $content->cta_primary_link) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Secondary Button Text</label>
+                            <label class="block text-sm font-bold text-white mb-2">Secondary Button Text</label>
                             <input type="text" name="cta_secondary_text" value="{{ old('cta_secondary_text', $content->cta_secondary_text) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Secondary Button Link</label>
+                            <label class="block text-sm font-bold text-white mb-2">Secondary Button Link</label>
                             <input type="text" name="cta_secondary_link" value="{{ old('cta_secondary_link', $content->cta_secondary_link) }}" 
                                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 transition-all">
                         </div>

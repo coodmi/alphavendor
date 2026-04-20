@@ -34,8 +34,8 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">{{ $return->return_number }}</h2>
-                        <p class="text-gray-600 mt-1">Requested on {{ $return->created_at->format('M d, Y \a\t h:i A') }}</p>
+                        <h2 class="text-2xl font-bold text-white">{{ $return->return_number }}</h2>
+                        <p class="text-gray-100 mt-1">Requested on {{ $return->created_at->format('M d, Y \a\t h:i A') }}</p>
                     </div>
                     <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $return->getStatusBadgeClass() }}">
                         {{ ucfirst(str_replace('_', ' ', $return->status)) }}
@@ -50,10 +50,10 @@
                             <img src="{{ asset('storage/' . $return->product->image) }}" alt="{{ $return->product->name }}" class="w-20 h-20 rounded object-cover">
                         @endif
                         <div class="flex-1">
-                            <h4 class="font-semibold text-gray-900">{{ $return->product->name }}</h4>
-                            <p class="text-sm text-gray-600">Order: {{ $return->order->order_number }}</p>
-                            <p class="text-sm text-gray-600">Quantity: {{ $return->quantity }}</p>
-                            <p class="text-sm font-semibold text-gray-900">Amount: ${{ number_format($return->amount, 2) }}</p>
+                            <h4 class="font-semibold text-white">{{ $return->product->name }}</h4>
+                            <p class="text-sm text-gray-100">Order: {{ $return->order->order_number }}</p>
+                            <p class="text-sm text-gray-100">Quantity: {{ $return->quantity }}</p>
+                            <p class="text-sm font-semibold text-white">Amount: ${{ number_format($return->amount, 2) }}</p>
                         </div>
                         <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $return->getTypeBadgeClass() }}">
                             {{ ucfirst($return->type) }}
@@ -66,32 +66,32 @@
                     <h3 class="font-semibold text-lg mb-4">Return Details</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <p class="text-sm text-gray-600">Reason</p>
+                            <p class="text-sm text-gray-100">Reason</p>
                             <p class="font-semibold">{{ ucfirst(str_replace('_', ' ', $return->reason)) }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-600">Type</p>
+                            <p class="text-sm text-gray-100">Type</p>
                             <p class="font-semibold">{{ ucfirst($return->type) }}</p>
                         </div>
                     </div>
                     
                     @if($return->reason_details)
                         <div class="mt-4">
-                            <p class="text-sm text-gray-600 mb-2">Detailed Explanation</p>
-                            <p class="text-gray-900 bg-gray-50 p-3 rounded">{{ $return->reason_details }}</p>
+                            <p class="text-sm text-gray-100 mb-2">Detailed Explanation</p>
+                            <p class="text-white bg-gray-50 p-3 rounded">{{ $return->reason_details }}</p>
                         </div>
                     @endif
 
                     @if($return->customer_notes)
                         <div class="mt-4">
-                            <p class="text-sm text-gray-600 mb-2">Customer Notes</p>
-                            <p class="text-gray-900 bg-gray-50 p-3 rounded">{{ $return->customer_notes }}</p>
+                            <p class="text-sm text-gray-100 mb-2">Customer Notes</p>
+                            <p class="text-white bg-gray-50 p-3 rounded">{{ $return->customer_notes }}</p>
                         </div>
                     @endif
 
                     @if($return->images && count($return->images) > 0)
                         <div class="mt-4">
-                            <p class="text-sm text-gray-600 mb-2">Uploaded Images</p>
+                            <p class="text-sm text-gray-100 mb-2">Uploaded Images</p>
                             <div class="grid grid-cols-3 gap-4">
                                 @foreach($return->images as $image)
                                     <img src="{{ asset('storage/' . $image) }}" alt="Return proof" class="w-full h-32 object-cover rounded border">
@@ -105,7 +105,7 @@
                 @if($return->admin_notes)
                     <div class="border-t pt-6 mt-6">
                         <h3 class="font-semibold text-lg mb-2">Admin Notes</h3>
-                        <p class="text-gray-900 bg-blue-50 p-3 rounded">{{ $return->admin_notes }}</p>
+                        <p class="text-white bg-blue-50 p-3 rounded">{{ $return->admin_notes }}</p>
                     </div>
                 @endif
 
@@ -113,7 +113,7 @@
                 @if($return->vendor_notes)
                     <div class="border-t pt-6 mt-6">
                         <h3 class="font-semibold text-lg mb-2">Vendor Notes</h3>
-                        <p class="text-gray-900 bg-purple-50 p-3 rounded">{{ $return->vendor_notes }}</p>
+                        <p class="text-white bg-purple-50 p-3 rounded">{{ $return->vendor_notes }}</p>
                     </div>
                 @endif
 
@@ -121,7 +121,7 @@
                 @if($return->status === 'rejected' && $return->rejection_reason)
                     <div class="border-t pt-6 mt-6">
                         <h3 class="font-semibold text-lg mb-2 text-red-600">Rejection Reason</h3>
-                        <p class="text-gray-900 bg-red-50 p-3 rounded">{{ $return->rejection_reason }}</p>
+                        <p class="text-white bg-red-50 p-3 rounded">{{ $return->rejection_reason }}</p>
                     </div>
                 @endif
             </div>
@@ -133,9 +133,9 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="font-semibold text-lg mb-4">Customer Information</h3>
                 <div class="space-y-2">
-                    <p class="text-sm"><span class="text-gray-600">Name:</span> <span class="font-semibold">{{ $return->user->name }}</span></p>
-                    <p class="text-sm"><span class="text-gray-600">Email:</span> <span class="font-semibold">{{ $return->user->email }}</span></p>
-                    <p class="text-sm"><span class="text-gray-600">Phone:</span> <span class="font-semibold">{{ $return->user->phone ?? 'N/A' }}</span></p>
+                    <p class="text-sm"><span class="text-gray-100">Name:</span> <span class="font-semibold">{{ $return->user->name }}</span></p>
+                    <p class="text-sm"><span class="text-gray-100">Email:</span> <span class="font-semibold">{{ $return->user->email }}</span></p>
+                    <p class="text-sm"><span class="text-gray-100">Phone:</span> <span class="font-semibold">{{ $return->user->phone ?? 'N/A' }}</span></p>
                 </div>
             </div>
 
@@ -143,9 +143,9 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="font-semibold text-lg mb-4">Vendor Information</h3>
                 <div class="space-y-2">
-                    <p class="text-sm"><span class="text-gray-600">Name:</span> <span class="font-semibold">{{ $return->vendor->name }}</span></p>
-                    <p class="text-sm"><span class="text-gray-600">Email:</span> <span class="font-semibold">{{ $return->vendor->email }}</span></p>
-                    <p class="text-sm"><span class="text-gray-600">Role:</span> <span class="font-semibold">{{ ucfirst($return->vendor->role) }}</span></p>
+                    <p class="text-sm"><span class="text-gray-100">Name:</span> <span class="font-semibold">{{ $return->vendor->name }}</span></p>
+                    <p class="text-sm"><span class="text-gray-100">Email:</span> <span class="font-semibold">{{ $return->vendor->email }}</span></p>
+                    <p class="text-sm"><span class="text-gray-100">Role:</span> <span class="font-semibold">{{ ucfirst($return->vendor->role) }}</span></p>
                 </div>
             </div>
 
@@ -205,7 +205,7 @@
             @csrf
             <textarea name="rejection_reason" rows="4" required placeholder="Enter rejection reason..." class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4"></textarea>
             <div class="flex gap-3">
-                <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')" class="flex-1 px-4 py-2 bg-gray-200 text-white rounded-lg hover:bg-gray-300">
                     Cancel
                 </button>
                 <button type="submit" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
@@ -223,7 +223,7 @@
         <form action="{{ route('admin.returns.process-refund', $return) }}" method="POST">
             @csrf
             <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Refund Method</label>
+                <label class="block text-sm font-semibold text-white mb-2">Refund Method</label>
                 <select name="refund_method" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                     <option value="">Select method</option>
                     <option value="original_payment">Original Payment Method</option>
@@ -232,15 +232,15 @@
                 </select>
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Refund Amount</label>
+                <label class="block text-sm font-semibold text-white mb-2">Refund Amount</label>
                 <input type="number" name="refund_amount" step="0.01" max="{{ $return->amount }}" value="{{ $return->amount }}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Transaction ID (Optional)</label>
+                <label class="block text-sm font-semibold text-white mb-2">Transaction ID (Optional)</label>
                 <input type="text" name="refund_transaction_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
             </div>
             <div class="flex gap-3">
-                <button type="button" onclick="document.getElementById('refundModal').classList.add('hidden')" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                <button type="button" onclick="document.getElementById('refundModal').classList.add('hidden')" class="flex-1 px-4 py-2 bg-gray-200 text-white rounded-lg hover:bg-gray-300">
                     Cancel
                 </button>
                 <button type="submit" class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">

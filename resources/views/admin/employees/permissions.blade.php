@@ -10,8 +10,8 @@
 @section('content')
 <div class="bg-white rounded-xl shadow-sm p-6">
     <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Employee Permissions Management</h2>
-        <p class="text-gray-500 mt-1">Manage access permissions for each employee</p>
+        <h2 class="text-2xl font-bold text-white">Employee Permissions Management</h2>
+        <p class="text-gray-200 mt-1">Manage access permissions for each employee</p>
     </div>
 
     @if($employees->count() > 0)
@@ -24,8 +24,8 @@
                             {{ strtoupper(substr($employee->name, 0, 1)) }}
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">{{ $employee->name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $employee->email }}</p>
+                            <h3 class="font-semibold text-white">{{ $employee->name }}</h3>
+                            <p class="text-sm text-gray-200">{{ $employee->email }}</p>
                         </div>
                     </div>
                     <span class="inline-flex px-3 py-1 rounded-full text-xs font-medium {{ $employee->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
@@ -55,7 +55,7 @@
                             <input type="checkbox" name="permissions[]" value="{{ $key }}" 
                                 {{ in_array($key, $userPermissions) ? 'checked' : '' }}
                                 class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
-                            <span class="text-sm text-gray-700">{{ $label }}</span>
+                            <span class="text-sm text-white">{{ $label }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -72,7 +72,7 @@
     @else
         <div class="text-center py-12">
             <i class="fas fa-user-shield text-6xl text-gray-200 mb-4"></i>
-            <p class="text-gray-500 text-lg">No employees found</p>
+            <p class="text-gray-200 text-lg">No employees found</p>
             <p class="text-gray-400 text-sm mt-1">Add employees first to manage their permissions</p>
             <a href="{{ route('admin.employees.create') }}" class="inline-block mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                 <i class="fas fa-plus"></i> Add Employee
