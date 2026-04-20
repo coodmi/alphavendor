@@ -87,14 +87,14 @@
                     <!-- Categories Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-tags text-orange-500"></i> Categories
+                            <i class="fas fa-tags text-teal-600"></i> Categories
                         </h3>
                         <ul class="space-y-2">
                             @foreach($categories as $category)
                             <li>
                                 <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
                                     <div class="flex items-center gap-2">
-                                        <input type="radio" name="category" value="{{ $category->id }}" {{ request('category') == $category->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-orange-500 focus:ring-orange-500">
+                                        <input type="radio" name="category" value="{{ $category->id }}" {{ request('category') == $category->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600">
                                         <span class="text-sm text-gray-700">{{ $category->name }}</span>
                                     </div>
                                     <span class="text-xs text-gray-500">({{ $category->products_count }})</span>
@@ -107,13 +107,13 @@
                     <!-- Minimum Order Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-boxes text-orange-500"></i> Minimum Order
+                            <i class="fas fa-boxes text-teal-600"></i> Minimum Order
                         </h3>
                         <ul class="space-y-2">
                             @foreach($minOrderRanges as $value => $label)
                             <li>
                                 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
-                                    <input type="radio" name="minimum_order" value="{{ $value }}" {{ request('minimum_order') == $value ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-orange-500 focus:ring-orange-500 mr-2">
+                                    <input type="radio" name="minimum_order" value="{{ $value }}" {{ request('minimum_order') == $value ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
                                     <span class="text-sm text-gray-700">{{ $label }}</span>
                                 </label>
                             </li>
@@ -124,20 +124,20 @@
                     <!-- Price Range Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-dollar-sign text-orange-500"></i> Price Range
+                            <i class="fas fa-dollar-sign text-teal-600"></i> Price Range
                         </h3>
                         <div class="space-y-4">
                             <div class="flex gap-3">
                                 <div class="flex-1">
                                     <label class="text-xs text-gray-600 block mb-1">Min</label>
-                                    <input type="number" name="min_price" value="{{ request('min_price', 0) }}" min="0" max="10000" id="wholesale-min-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                    <input type="number" name="min_price" value="{{ request('min_price', 0) }}" min="0" max="10000" id="wholesale-min-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm">
                                 </div>
                                 <div class="flex-1">
                                     <label class="text-xs text-gray-600 block mb-1">Max</label>
-                                    <input type="number" name="max_price" value="{{ request('max_price', 10000) }}" min="0" max="10000" id="wholesale-max-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                    <input type="number" name="max_price" value="{{ request('max_price', 10000) }}" min="0" max="10000" id="wholesale-max-price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm">
                                 </div>
                             </div>
-                            <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium text-sm">
+                            <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition-colors font-medium text-sm">
                                 Apply Filter
                             </button>
                         </div>
@@ -146,13 +146,13 @@
                     <!-- Supplier Location Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-map-marker-alt text-orange-500"></i> Supplier Location
+                            <i class="fas fa-map-marker-alt text-teal-600"></i> Supplier Location
                         </h3>
                         <ul class="space-y-2">
                             @foreach($supplierLocations as $location)
                             <li>
                                 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
-                                    <input type="radio" name="supplier_location" value="{{ $location->country }}" {{ request('supplier_location') == $location->country ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-orange-500 focus:ring-orange-500 mr-2">
+                                    <input type="radio" name="supplier_location" value="{{ $location->country }}" {{ request('supplier_location') == $location->country ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600 mr-2">
                                     <span class="text-sm text-gray-700">{{ $location->country }}</span>
                                 </label>
                             </li>
@@ -163,14 +163,14 @@
                     <!-- Brands Filter -->
                     <div class="bg-white rounded-lg shadow-md p-5 mb-5">
                         <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-star text-orange-500"></i> Brands
+                            <i class="fas fa-star text-teal-600"></i> Brands
                         </h3>
                         <ul class="space-y-2">
                             @foreach($brands as $brand)
                             <li>
                                 <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors">
                                     <div class="flex items-center gap-2">
-                                        <input type="radio" name="brand" value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-orange-500 focus:ring-orange-500">
+                                        <input type="radio" name="brand" value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'checked' : '' }} onchange="document.getElementById('filterForm').submit()" class="text-teal-600 focus:ring-teal-600">
                                         <span class="text-sm text-gray-700">{{ $brand->name }}</span>
                                     </div>
                                     <span class="text-xs text-gray-500">({{ $brand->products_count }})</span>
@@ -197,7 +197,7 @@
                         </p>
                     </div>
                     <div class="flex gap-2">
-                        <button class="p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors" data-view="grid">
+                        <button class="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" data-view="grid">
                             <i class="fas fa-th"></i>
                         </button>
                         <button class="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors" data-view="list">
@@ -212,26 +212,26 @@
                     @if(request('category'))
                         @php $selectedCategory = $categories->firstWhere('id', request('category')); @endphp
                         @if($selectedCategory)
-                        <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full text-sm">
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
                             {{ $selectedCategory->name }}
-                            <a href="{{ request()->fullUrlWithoutQuery('category') }}" class="hover:text-orange-900">
+                            <a href="{{ request()->fullUrlWithoutQuery('category') }}" class="hover:text-teal-900">
                                 <i class="fas fa-times"></i>
                             </a>
                         </span>
                         @endif
                     @endif
                     @if(request('minimum_order'))
-                        <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full text-sm">
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
                             Min Order: {{ $minOrderRanges[request('minimum_order')] ?? request('minimum_order') }}
-                            <a href="{{ request()->fullUrlWithoutQuery('minimum_order') }}" class="hover:text-orange-900">
+                            <a href="{{ request()->fullUrlWithoutQuery('minimum_order') }}" class="hover:text-teal-900">
                                 <i class="fas fa-times"></i>
                             </a>
                         </span>
                     @endif
                     @if(request('supplier_location'))
-                        <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full text-sm">
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
                             Location: {{ request('supplier_location') }}
-                            <a href="{{ request()->fullUrlWithoutQuery('supplier_location') }}" class="hover:text-orange-900">
+                            <a href="{{ request()->fullUrlWithoutQuery('supplier_location') }}" class="hover:text-teal-900">
                                 <i class="fas fa-times"></i>
                             </a>
                         </span>
@@ -239,18 +239,18 @@
                     @if(request('brand'))
                         @php $selectedBrand = $brands->firstWhere('id', request('brand')); @endphp
                         @if($selectedBrand)
-                        <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full text-sm">
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
                             {{ $selectedBrand->name }}
-                            <a href="{{ request()->fullUrlWithoutQuery('brand') }}" class="hover:text-orange-900">
+                            <a href="{{ request()->fullUrlWithoutQuery('brand') }}" class="hover:text-teal-900">
                                 <i class="fas fa-times"></i>
                             </a>
                         </span>
                         @endif
                     @endif
                     @if(request('min_price') || request('max_price'))
-                        <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full text-sm">
+                        <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
                             Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
-                            <a href="{{ request()->fullUrlWithoutQuery(['min_price', 'max_price']) }}" class="hover:text-orange-900">
+                            <a href="{{ request()->fullUrlWithoutQuery(['min_price', 'max_price']) }}" class="hover:text-teal-900">
                                 <i class="fas fa-times"></i>
                             </a>
                         </span>
@@ -276,37 +276,37 @@
                                 <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">{{ $product->badge }}</span>
                             @endif
                             <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-heart"></i>
                                 </button>
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="flex gap-1">
-                            <button class="flex-1 bg-orange-500 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                            <button class="flex-1 bg-teal-600 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
                             </button>
-                            <button class="flex-1 bg-orange-600 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                            <button class="flex-1 bg-teal-700 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-bolt"></i>
                                 Buy Now
                             </button>
                         </div>
                         <div class="p-4">
-                            <div class="text-xs text-orange-600 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-orange-500 transition-colors">{{ $product->name }}</h4>
+                            <div class="text-xs text-teal-700 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-1">
-                                <i class="fas fa-industry text-orange-500"></i>
+                                <i class="fas fa-industry text-teal-600"></i>
                                 <span>{{ $product->vendor->name ?? 'Unknown Vendor' }}</span>
                             </div>
                             @if($product->supplier_location)
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
-                                <i class="fas fa-map-marker-alt text-orange-500"></i>
+                                <i class="fas fa-map-marker-alt text-teal-600"></i>
                                 <span>{{ $product->supplier_location }}</span>
                             </div>
                             @endif
@@ -323,7 +323,7 @@
                                 <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-3">
-                                <i class="fas fa-boxes text-orange-500"></i>
+                                <i class="fas fa-boxes text-teal-600"></i>
                                 <span>Min: {{ $product->minimum_order }} units</span>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap">
@@ -339,7 +339,7 @@
                     <div class="col-span-full text-center py-16">
                         <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
                         <h3 class="text-xl font-semibold text-gray-600 mb-2">No Products Found</h3>
-                        <p class="text-gray-500">Try adjusting your filters or <a href="{{ route('wholesale') }}" class="text-orange-500 hover:text-orange-600">clear all filters</a>.</p>
+                        <p class="text-gray-500">Try adjusting your filters or <a href="{{ route('wholesale') }}" class="text-teal-600 hover:text-teal-700">clear all filters</a>.</p>
                     </div>
                     @endforelse
                 </div>
@@ -595,7 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Close filters when applying filter
-    const applyFilterBtn = document.querySelector('.bg-orange-500.text-white.py-2.rounded-lg');
+    const applyFilterBtn = document.querySelector('.bg-teal-600.text-white.py-2.rounded-lg');
     if (applyFilterBtn) {
         applyFilterBtn.addEventListener('click', function() {
             if (window.innerWidth <= 1024) {

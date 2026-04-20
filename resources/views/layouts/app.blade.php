@@ -33,7 +33,7 @@
                             <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" style="height: 40px; cursor: pointer;">
                         @else
                             <span style="font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: -0.5px;">
-                                Alpha<span style="color: #f97316;">Vendor</span>
+                                Alpha<span style="color: #1a6b73;">Vendor</span>
                             </span>
                         @endif
                     </a>
@@ -88,22 +88,22 @@
                                     <p class="text-xs text-gray-500 mt-1">{{ Auth::user()->email }}</p>
                                 </div>
 
-                                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
                                     <i class="fas fa-dashboard w-5"></i>
                                     <span>Dashboard</span>
                                 </a>
 
-                                <a href="{{ route('orders.my-orders') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                <a href="{{ route('orders.my-orders') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
                                     <i class="fas fa-shopping-bag w-5"></i>
                                     <span>My Orders</span>
                                 </a>
 
-                                <a href="{{ route('customer.returns.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                <a href="{{ route('customer.returns.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
                                     <i class="fas fa-undo w-5"></i>
                                     <span>Returns & Refunds</span>
                                 </a>
 
-                                <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
                                     <i class="fas fa-heart w-5"></i>
                                     <span>Wishlist</span>
                                 </a>

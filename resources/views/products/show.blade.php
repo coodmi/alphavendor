@@ -13,8 +13,8 @@
         <nav class="bg-gradient-to-r from-white to-gray-50 py-3.5 px-5 mb-6 rounded-xl shadow-sm border border-gray-100">
             <ul class="flex items-center gap-1.5 text-sm flex-wrap">
                 <li class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-orange-500 transition-colors duration-200 flex items-center gap-1.5 font-medium px-2.5 py-1.5 rounded-lg hover:bg-orange-50">
-                        <i class="fas fa-home text-orange-500 text-base"></i>
+                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-teal-600 transition-colors duration-200 flex items-center gap-1.5 font-medium px-2.5 py-1.5 rounded-lg hover:bg-teal-50">
+                        <i class="fas fa-home text-teal-600 text-base"></i>
                         <span>Home</span>
                     </a>
                 </li>
@@ -22,19 +22,19 @@
                     <i class="fas fa-chevron-right text-gray-300 text-xs mx-1"></i>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{ route('shop') }}" class="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-2.5 py-1.5 rounded-lg hover:bg-orange-50">Shop</a>
+                    <a href="{{ route('shop') }}" class="text-gray-600 hover:text-teal-600 transition-colors duration-200 font-medium px-2.5 py-1.5 rounded-lg hover:bg-teal-50">Shop</a>
                 </li>
                 <li class="flex items-center">
                     <i class="fas fa-chevron-right text-gray-300 text-xs mx-1"></i>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{ route('shop', ['categories' => [$product->category_id]]) }}" class="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-2.5 py-1.5 rounded-lg hover:bg-orange-50">{{ $product->category->name ?? 'Products' }}</a>
+                    <a href="{{ route('shop', ['categories' => [$product->category_id]]) }}" class="text-gray-600 hover:text-teal-600 transition-colors duration-200 font-medium px-2.5 py-1.5 rounded-lg hover:bg-teal-50">{{ $product->category->name ?? 'Products' }}</a>
                 </li>
                 <li class="flex items-center">
                     <i class="fas fa-chevron-right text-gray-300 text-xs mx-1"></i>
                 </li>
                 <li class="flex items-center">
-                    <span class="text-gray-900 font-semibold px-2.5 py-1.5 bg-orange-50 rounded-lg">{{ Str::limit($product->name, 40) }}</span>
+                    <span class="text-gray-900 font-semibold px-2.5 py-1.5 bg-teal-50 rounded-lg">{{ Str::limit($product->name, 40) }}</span>
                 </li>
             </ul>
         </nav>
@@ -58,8 +58,8 @@
                     <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase w-fit
                         {{ strtolower($product->badge) === 'new' ? 'bg-green-500' : '' }}
                         {{ strtolower($product->badge) === 'sale' ? 'bg-red-500' : '' }}
-                        {{ strtolower($product->badge) === 'hot' ? 'bg-orange-500' : '' }}
-                        {{ !in_array(strtolower($product->badge), ['new', 'sale', 'hot']) ? 'bg-orange-500' : '' }}
+                        {{ strtolower($product->badge) === 'hot' ? 'bg-teal-600' : '' }}
+                        {{ !in_array(strtolower($product->badge), ['new', 'sale', 'hot']) ? 'bg-teal-600' : '' }}
                         text-white">
                         {{ $product->badge }}
                     </span>
@@ -83,7 +83,7 @@
                         <span class="text-gray-500 text-sm">{{ number_format($product->rating, 1) }} ({{ $product->reviews_count }} reviews)</span>
                     </div>
                     <div class="flex items-center gap-2 text-gray-500 text-sm">
-                        <i class="fas fa-store text-orange-500"></i>
+                        <i class="fas fa-store text-teal-600"></i>
                         <span>Sold by: <strong class="text-gray-700">{{ $product->vendor->name ?? 'AlphaVendor' }}</strong></span>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="mb-3">
                         <div class="text-sm text-gray-500 mb-1">Total Price</div>
-                        <span class="text-4xl font-bold text-orange-500" id="totalPrice">{{ currency($product->price) }}</span>
+                        <span class="text-4xl font-bold text-teal-600" id="totalPrice">{{ currency($product->price) }}</span>
                     </div>
                     <div class="mt-2.5 text-sm">
                         @if($product->stock > 0)
@@ -150,11 +150,11 @@
                         <div class="flex items-center gap-2.5 mb-4">
                             <label class="font-semibold text-gray-800">Quantity:</label>
                             <div class="flex items-center border-2 border-gray-200 rounded-lg overflow-hidden">
-                                <button type="button" onclick="decreaseQuantity()" class="w-10 h-10 bg-gray-50 hover:bg-orange-500 hover:text-white transition-all duration-300 text-lg">
+                                <button type="button" onclick="decreaseQuantity()" class="w-10 h-10 bg-gray-50 hover:bg-teal-600 hover:text-white transition-all duration-300 text-lg">
                                     <i class="fas fa-minus"></i>
                                 </button>
                                 <input type="number" name="quantity" id="quantity" value="{{ request('quantity', $product->minimum_order ?? 1) }}" min="{{ $product->minimum_order ?? 1 }}" max="{{ $product->stock }}" readonly class="w-16 h-10 text-center border-none font-semibold text-base">
-                                <button type="button" onclick="increaseQuantity({{ $product->stock }})" class="w-10 h-10 bg-gray-50 hover:bg-orange-500 hover:text-white transition-all duration-300 text-lg">
+                                <button type="button" onclick="increaseQuantity({{ $product->stock }})" class="w-10 h-10 bg-gray-50 hover:bg-teal-600 hover:text-white transition-all duration-300 text-lg">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -193,15 +193,15 @@
                         <input type="hidden" name="discount_amount" id="hiddenDiscountAmount" value="0">
 
                         <div class="flex gap-4">
-                            <button type="submit" class="flex-1 px-8 py-4 bg-orange-500 text-white rounded-lg text-base font-semibold hover:bg-orange-600 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
+                            <button type="submit" class="flex-1 px-8 py-4 bg-teal-600 text-white rounded-lg text-base font-semibold hover:bg-teal-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
                                 <i class="fas fa-shopping-cart"></i>
                                 Add to Cart
                             </button>
-                            <button type="button" onclick="buyNow()" class="flex-1 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg text-base font-semibold hover:from-orange-700 hover:to-orange-800 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
+                            <button type="button" onclick="buyNow()" class="flex-1 px-8 py-4 bg-gradient-to-r from-teal-700 to-teal-800 text-white rounded-lg text-base font-semibold hover:from-teal-800 hover:to-teal-900 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
                                 <i class="fas fa-bolt"></i>
                                 Buy Now
                             </button>
-                            <button type="button" class="w-12 h-12 bg-white border-2 border-orange-500 text-orange-500 rounded-lg text-xl hover:bg-orange-500 hover:text-white transition-all duration-300" title="Add to Wishlist">
+                            <button type="button" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Add to Wishlist">
                                 <i class="far fa-heart"></i>
                             </button>
                         </div>
@@ -235,7 +235,7 @@
 
                 <div class="grid grid-cols-2 gap-4 py-5">
                     <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
-                        <i class="fas fa-tag text-orange-500 text-xl"></i>
+                        <i class="fas fa-tag text-teal-600 text-xl"></i>
                         <div class="flex-1">
                             <div class="text-xs text-gray-500">Category</div>
                             <div class="font-semibold text-gray-800">{{ $product->category->name ?? 'N/A' }}</div>
@@ -243,7 +243,7 @@
                     </div>
                     @if($product->brand)
                     <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
-                        <i class="fas fa-copyright text-orange-500 text-xl"></i>
+                        <i class="fas fa-copyright text-teal-600 text-xl"></i>
                         <div class="flex-1">
                             <div class="text-xs text-gray-500">Brand</div>
                             <div class="font-semibold text-gray-800">{{ $product->brand->name }}</div>
@@ -252,7 +252,7 @@
                     @endif
                     @if($product->sku)
                     <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
-                        <i class="fas fa-barcode text-orange-500 text-xl"></i>
+                        <i class="fas fa-barcode text-teal-600 text-xl"></i>
                         <div class="flex-1">
                             <div class="text-xs text-gray-500">SKU</div>
                             <div class="font-semibold text-gray-800">{{ $product->sku }}</div>
@@ -260,7 +260,7 @@
                     </div>
                     @endif
                     <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
-                        <i class="fas fa-truck text-orange-500 text-xl"></i>
+                        <i class="fas fa-truck text-teal-600 text-xl"></i>
                         <div class="flex-1">
                             <div class="text-xs text-gray-500">Shipping</div>
                             <div class="font-semibold text-gray-800">Free Delivery</div>
@@ -288,8 +288,8 @@
                             <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-white text-xs font-semibold
                                 {{ strtolower($relatedProduct->badge) === 'new' ? 'bg-green-500' : '' }}
                                 {{ strtolower($relatedProduct->badge) === 'sale' ? 'bg-red-500' : '' }}
-                                {{ strtolower($relatedProduct->badge) === 'hot' ? 'bg-orange-500' : '' }}
-                                {{ !in_array(strtolower($relatedProduct->badge), ['new', 'sale', 'hot']) ? 'bg-orange-500' : '' }}">
+                                {{ strtolower($relatedProduct->badge) === 'hot' ? 'bg-teal-600' : '' }}
+                                {{ !in_array(strtolower($relatedProduct->badge), ['new', 'sale', 'hot']) ? 'bg-teal-600' : '' }}">
                                 {{ $relatedProduct->badge }}
                             </span>
                             @endif
@@ -298,7 +298,7 @@
                             <div class="text-gray-500 text-xs mb-1">{{ $relatedProduct->category->name ?? 'Uncategorized' }}</div>
                             <h4 class="text-base font-semibold text-gray-800 mb-2.5 line-clamp-2">{{ $relatedProduct->name }}</h4>
                             <div class="flex items-center gap-2.5">
-                                <span class="text-xl font-bold text-orange-500">${{ number_format($relatedProduct->price, 2) }}</span>
+                                <span class="text-xl font-bold text-teal-600">${{ number_format($relatedProduct->price, 2) }}</span>
                                 @if($relatedProduct->old_price)
                                     <span class="text-sm text-gray-400 line-through">${{ number_format($relatedProduct->old_price, 2) }}</span>
                                 @endif
@@ -317,12 +317,12 @@
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="text-3xl font-bold text-gray-800">Customer Reviews</h2>
                     @auth
-                        <button onclick="toggleReviewForm()" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2">
+                        <button onclick="toggleReviewForm()" class="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300 flex items-center gap-2">
                             <i class="fas fa-star"></i>
                             Write a Review
                         </button>
                     @else
-                        <a href="{{ route('login') }}" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2">
+                        <a href="{{ route('login') }}" class="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300 flex items-center gap-2">
                             <i class="fas fa-sign-in-alt"></i>
                             Login to Review
                         </a>
@@ -351,17 +351,17 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Review Title</label>
-                                <input type="text" name="title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Optional title for your review">
+                                <input type="text" name="title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent" placeholder="Optional title for your review">
                             </div>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Your Review *</label>
-                            <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Share your experience with this product..." required></textarea>
+                            <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent" placeholder="Share your experience with this product..." required></textarea>
                         </div>
                         
                         <div class="flex gap-4">
-                            <button type="submit" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center gap-2">
+                            <button type="submit" class="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300 flex items-center gap-2">
                                 <i class="fas fa-paper-plane"></i>
                                 Submit Review
                             </button>
@@ -1055,7 +1055,7 @@
         const description = document.querySelector('.product-description');
         if (description && description.scrollHeight > 150) {
             const readMoreBtn = document.createElement('button');
-            readMoreBtn.className = 'text-orange-500 font-semibold text-sm mt-2 hover:text-orange-600';
+            readMoreBtn.className = 'text-teal-600 font-semibold text-sm mt-2 hover:text-teal-700';
             readMoreBtn.textContent = 'Read More';
             readMoreBtn.onclick = function() {
                 description.classList.toggle('expanded');
@@ -1098,7 +1098,7 @@
                 </div>
                 <div class="flex items-center justify-between text-sm mt-1 pt-2 border-t border-gray-200">
                     <span class="text-gray-600">Total Amount:</span>
-                    <span class="font-bold text-lg text-orange-500" id="modalTotalPrice">{{ currency($product->price) }}</span>
+                    <span class="font-bold text-lg text-teal-600" id="modalTotalPrice">{{ currency($product->price) }}</span>
                 </div>
             </div>
 

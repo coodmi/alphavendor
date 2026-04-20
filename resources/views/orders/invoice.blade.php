@@ -13,12 +13,12 @@
         .no-print { margin-bottom: 24px; display: flex; gap: 12px; }
         .btn { padding: 10px 22px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
         .btn-print { background: #1e293b; color: #fff; }
-        .btn-download { background: #f97316; color: #fff; }
+        .btn-download { background: #1a6b73; color: #fff; }
         .btn-back { background: #f1f5f9; color: #475569; }
 
         /* Invoice */
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 2px solid #f1f5f9; }
-        .brand { font-size: 26px; font-weight: 800; color: #f97316; }
+        .brand { font-size: 26px; font-weight: 800; color: #1a6b73; }
         .brand span { color: #1e293b; }
         .invoice-meta { text-align: right; }
         .invoice-meta h2 { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }

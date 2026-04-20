@@ -104,7 +104,7 @@
                                 Out of Stock
                             </div>
                         @elseif($wishlist->product->stock < 10)
-                            <div class="absolute top-3 left-3 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <div class="absolute top-3 left-3 bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
                                 Low Stock
                             </div>
                         @endif
@@ -112,14 +112,14 @@
 
                     <div class="p-4">
                         <a href="{{ route('product.show', $wishlist->product->id) }}" 
-                           class="text-lg font-semibold text-gray-900 hover:text-orange-600 line-clamp-2">
+                           class="text-lg font-semibold text-gray-900 hover:text-teal-700 line-clamp-2">
                             {{ $wishlist->product->name }}
                         </a>
 
                         <div class="mt-2 flex items-center justify-between">
                             <div>
                                 @if($wishlist->product->discount_price)
-                                    <span class="text-xl font-bold text-orange-600">
+                                    <span class="text-xl font-bold text-teal-700">
                                         ${{ number_format($wishlist->product->discount_price, 2) }}
                                     </span>
                                     <span class="text-sm text-gray-500 line-through ml-2">
@@ -143,7 +143,7 @@
                                 <form action="{{ route('cart.add', $wishlist->product->id) }}" method="POST" class="flex-1">
                                     @csrf
                                     <button type="submit" 
-                                            class="w-full bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors font-semibold">
+                                            class="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors font-semibold">
                                         <i class="fas fa-shopping-cart"></i> Add to Cart
                                     </button>
                                 </form>
@@ -168,7 +168,7 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Your Wishlist is Empty</h2>
             <p class="text-gray-600 mb-8">Start adding products you love to your wishlist!</p>
             <a href="{{ route('shop') }}" 
-               class="inline-block bg-orange-500 text-white py-3 px-8 rounded-lg hover:bg-orange-600 transition-colors font-semibold">
+               class="inline-block bg-teal-600 text-white py-3 px-8 rounded-lg hover:bg-teal-700 transition-colors font-semibold">
                 <i class="fas fa-shopping-bag"></i> Browse Products
             </a>
         </div>

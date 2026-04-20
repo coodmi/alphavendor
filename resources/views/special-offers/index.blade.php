@@ -5,7 +5,7 @@
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-yellow-50">
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-16">
+    <div class="bg-gradient-to-r from-teal-700 to-yellow-500 text-white py-16">
         <div class="container mx-auto px-4">
             <div class="text-center">
                 <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
@@ -48,7 +48,7 @@
 
                             <!-- Content -->
                             <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors">
                                     {{ $offer->name }}
                                 </h3>
 
@@ -61,11 +61,11 @@
                                 <!-- Stats -->
                                 <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                                     <div class="flex items-center text-gray-600">
-                                        <i class="fas fa-box text-orange-500 mr-2"></i>
+                                        <i class="fas fa-box text-teal-600 mr-2"></i>
                                         <span class="text-sm font-semibold">{{ $offer->products()->count() }} Products</span>
                                     </div>
                                     
-                                    <div class="text-orange-600 font-bold group-hover:translate-x-1 transition-transform">
+                                    <div class="text-teal-700 font-bold group-hover:translate-x-1 transition-transform">
                                         View Offer <i class="fas fa-arrow-right ml-1"></i>
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                 </div>
                 <h3 class="text-2xl font-bold text-gray-700 mb-2">No Special Offers Available</h3>
                 <p class="text-gray-500 mb-6">Check back soon for exciting deals and offers!</p>
-                <a href="{{ route('shop') }}" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">
+                <a href="{{ route('shop') }}" class="inline-block bg-teal-700 hover:bg-teal-800 text-white px-8 py-3 rounded-xl font-bold transition-colors">
                     <i class="fas fa-shopping-bag mr-2"></i>Browse Products
                 </a>
             </div>
@@ -105,11 +105,11 @@
 
     <!-- Call to Action -->
     @if($specialOffers->count() > 0)
-        <div class="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-12 mt-12">
+        <div class="bg-gradient-to-r from-teal-700 to-yellow-500 text-white py-12 mt-12">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold mb-4">Don't Miss Out on These Amazing Deals!</h2>
                 <p class="text-xl mb-6 opacity-90">Shop now and save big on your favorite products</p>
-                <a href="{{ route('shop') }}" class="inline-block bg-white text-orange-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg">
+                <a href="{{ route('shop') }}" class="inline-block bg-white text-teal-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg">
                     <i class="fas fa-shopping-cart mr-2"></i>Start Shopping
                 </a>
             </div>

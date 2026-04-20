@@ -97,10 +97,10 @@
 
             <!-- Nagad Settings -->
             <div class="bg-white rounded-lg shadow overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-200 bg-orange-50">
+                <div class="px-6 py-4 border-b border-gray-200 bg-teal-50">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="bg-orange-500 text-white p-2 rounded-lg">
+                            <div class="bg-teal-600 text-white p-2 rounded-lg">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                 </svg>
@@ -112,7 +112,7 @@
                         </div>
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" name="nagad_enabled" value="1" {{ $settings['nagad_enabled'] == '1' ? 'checked' : '' }} class="sr-only peer">
-                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-400 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
                             <span class="ms-3 text-sm font-medium text-gray-700">Enabled</span>
                         </label>
                     </div>
@@ -127,7 +127,7 @@
                                 </svg>
                             </span>
                             <input type="text" name="nagad_number" value="{{ $settings['nagad_number'] }}" 
-                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                                    placeholder="01XXXXXXXXX">
                         </div>
                         @error('nagad_number')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
@@ -136,13 +136,13 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Account Holder Name</label>
                         <input type="text" name="nagad_name" value="{{ $settings['nagad_name'] }}" 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                                placeholder="e.g., Alpha Vendor">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
-                        <select name="nagad_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+                        <select name="nagad_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600">
                             <option value="personal" {{ $settings['nagad_type'] == 'personal' ? 'selected' : '' }}>Personal</option>
                             <option value="agent" {{ $settings['nagad_type'] == 'agent' ? 'selected' : '' }}>Agent</option>
                             <option value="merchant" {{ $settings['nagad_type'] == 'merchant' ? 'selected' : '' }}>Merchant</option>
@@ -150,9 +150,9 @@
                     </div>
 
                     @if($settings['nagad_number'])
-                        <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                        <div class="bg-teal-50 border border-orange-200 rounded-lg p-3">
                             <p class="text-sm text-gray-600">Customers will see:</p>
-                            <p class="text-lg font-bold text-orange-600">{{ $settings['nagad_number'] }}</p>
+                            <p class="text-lg font-bold text-teal-700">{{ $settings['nagad_number'] }}</p>
                             @if($settings['nagad_name'])
                                 <p class="text-sm text-gray-500">{{ $settings['nagad_name'] }}</p>
                             @endif

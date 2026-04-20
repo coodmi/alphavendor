@@ -81,7 +81,7 @@
     <!-- Order Tracking Section -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 class="text-xl font-bold text-gray-900 mb-4">
-            <i class="fas fa-map-marker-alt text-orange-500"></i> Track Your Order
+            <i class="fas fa-map-marker-alt text-teal-600"></i> Track Your Order
         </h2>
         
         <div class="bg-gray-50 p-4 rounded-lg">
@@ -89,9 +89,9 @@
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Enter Order Number</label>
                     <input type="text" name="track_order" value="{{ request('track_order') }}" placeholder="e.g., ORD-1234567890-1234" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent">
                 </div>
-                <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition whitespace-nowrap">
+                <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition whitespace-nowrap">
                     <i class="fas fa-search mr-2"></i>Track Order
                 </button>
             </form>
@@ -189,7 +189,7 @@
         <div class="text-center py-12 bg-white rounded-lg shadow">
             <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-4"></i>
             <p class="text-xl text-gray-600 mb-6">No orders yet</p>
-            <a href="{{ route('shop') }}" class="inline-block bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-600">
+            <a href="{{ route('shop') }}" class="inline-block bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700">
                 Start Shopping
             </a>
         </div>
@@ -215,7 +215,7 @@
                             </span>
                             
                             @if($order->payment_status === 'pending_verification')
-                                <span class="inline-block px-3 py-1 rounded text-sm font-semibold bg-orange-100 text-orange-800 ml-2">
+                                <span class="inline-block px-3 py-1 rounded text-sm font-semibold bg-teal-100 text-teal-900 ml-2">
                                     <i class="fas fa-clock mr-1"></i> Payment Verifying
                                 </span>
                             @elseif($order->payment_status === 'paid')
@@ -265,7 +265,7 @@
                                 <p class="text-sm">{{ $order->shipping_address }}, {{ $order->shipping_city }}, {{ $order->shipping_zip }}</p>
                                 <p class="text-sm">{{ $order->shipping_country }}</p>
                             </div>
-                            <a href="{{ route('orders.show', $order->id) }}" class="text-orange-500 hover:text-orange-600 font-semibold">
+                            <a href="{{ route('orders.show', $order->id) }}" class="text-teal-600 hover:text-teal-700 font-semibold">
                                 View Details <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>

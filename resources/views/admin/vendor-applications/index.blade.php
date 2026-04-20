@@ -17,7 +17,7 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-6 text-white">
+        <div class="bg-gradient-to-br from-yellow-500 to-teal-700 rounded-xl p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-yellow-100 text-sm font-medium">Total Pending</p>
@@ -140,7 +140,7 @@
                                     {{ ucfirst($application->verification_status) }}
                                 </span>
                                 @if($roleApp && $roleApp->status === 'pending')
-                                    <span class="block text-xs text-orange-600">
+                                    <span class="block text-xs text-teal-700">
                                         <i class="fas fa-clock"></i> Application Pending
                                     </span>
                                 @endif

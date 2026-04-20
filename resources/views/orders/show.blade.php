@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mx-auto px-4 py-12">
     <div class="mb-6">
-        <a href="{{ route('orders.my-orders') }}" class="text-orange-500 hover:text-orange-600">
+        <a href="{{ route('orders.my-orders') }}" class="text-teal-600 hover:text-teal-700">
             <i class="fas fa-arrow-left mr-2"></i>Back to My Orders
         </a>
     </div>
@@ -99,7 +99,7 @@
                                 <td class="px-6 py-4 text-center">
                                     @if(in_array($order->status, ['delivered']) && !$item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
                                         <a href="{{ route('customer.returns.create', ['order_item_id' => $item->id]) }}" 
-                                           class="inline-block px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm">
+                                           class="inline-block px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 text-sm">
                                             <i class="fas fa-undo mr-1"></i> Return/Refund
                                         </a>
                                     @elseif($item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
@@ -129,7 +129,7 @@
                     <div class="border-t pt-2 mt-2">
                         <div class="flex justify-between text-lg">
                             <span class="font-bold">Total:</span>
-                            <span class="font-bold text-orange-500">${{ number_format($order->total, 2) }}</span>
+                            <span class="font-bold text-teal-600">${{ number_format($order->total, 2) }}</span>
                         </div>
                     </div>
                 </div>

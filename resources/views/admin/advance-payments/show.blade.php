@@ -47,7 +47,7 @@
                     </div>
                     <div>
                         <label class="text-sm text-gray-500">Remaining Amount</label>
-                        <p class="font-semibold text-orange-600">${{ number_format($advancePayment->remaining_amount, 2) }}</p>
+                        <p class="font-semibold text-teal-700">${{ number_format($advancePayment->remaining_amount, 2) }}</p>
                     </div>
                     <div>
                         <label class="text-sm text-gray-500">Payment Method</label>
@@ -116,7 +116,7 @@
             <!-- Product Details -->
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <i class="fas fa-box text-orange-600"></i>
+                    <i class="fas fa-box text-teal-700"></i>
                     Product Details
                 </h3>
                 <div class="flex gap-4">

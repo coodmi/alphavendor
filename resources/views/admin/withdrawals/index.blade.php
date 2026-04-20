@@ -62,7 +62,7 @@
         <form method="GET" action="{{ route('admin.withdrawals.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500">
+                <select name="status" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
                     <option value="">All Status</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -73,7 +73,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
-                <select name="payment_type" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500">
+                <select name="payment_type" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
                     <option value="">All Methods</option>
                     <option value="bank" {{ request('payment_type') == 'bank' ? 'selected' : '' }}>Bank Transfer</option>
                     <option value="bkash" {{ request('payment_type') == 'bkash' ? 'selected' : '' }}>bKash</option>
@@ -83,7 +83,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Vendor</label>
-                <select name="vendor_id" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500">
+                <select name="vendor_id" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
                     <option value="">All Vendors</option>
                     @foreach($vendors as $vendor)
                         <option value="{{ $vendor->id }}" {{ request('vendor_id') == $vendor->id ? 'selected' : '' }}>
@@ -98,8 +98,8 @@
                 <div class="flex gap-2">
                     <input type="text" name="search" value="{{ request('search') }}" 
                            placeholder="Withdrawal #" 
-                           class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500">
-                    <button type="submit" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
+                           class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600">
+                    <button type="submit" class="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -153,7 +153,7 @@
                                             <i class="fas fa-mobile-alt text-pink-500"></i>
                                             <span class="text-sm">bKash</span>
                                         @elseif($withdrawal->withdrawalMethod->type == 'nagad')
-                                            <i class="fas fa-mobile-alt text-orange-500"></i>
+                                            <i class="fas fa-mobile-alt text-teal-600"></i>
                                             <span class="text-sm">Nagad</span>
                                         @endif
                                     </div>
@@ -177,7 +177,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('admin.withdrawals.show', $withdrawal->id) }}" 
-                                   class="text-orange-600 hover:text-orange-800 font-semibold">
+                                   class="text-teal-700 hover:text-teal-900 font-semibold">
                                     View Details
                                 </a>
                             </td>

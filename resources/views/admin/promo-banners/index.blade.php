@@ -14,7 +14,7 @@
             <h2 class="text-2xl font-bold text-gray-800">Promo Banner Management</h2>
             <p class="text-gray-500 mt-1">Manage promotional banners with text and images (displayed on homepage)</p>
         </div>
-        <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center gap-2 shadow-lg">
+        <button onclick="openAddModal()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-teal-600 text-white rounded-lg hover:from-yellow-600 hover:to-teal-700 transition-all flex items-center gap-2 shadow-lg">
             <i class="fas fa-plus"></i> Add Promo Banner
         </button>
     </div>
@@ -182,7 +182,7 @@
                 <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     Cancel
                 </button>
-                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center gap-2">
+                <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-teal-600 text-white rounded-lg hover:from-yellow-600 hover:to-teal-700 transition-all flex items-center gap-2">
                     <i class="fas fa-save"></i> Save Promo Banner
                 </button>
             </div>

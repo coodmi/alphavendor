@@ -238,7 +238,7 @@
             $codOrdersCount = \App\Models\Order::where('payment_method', 'cod')->where('payment_status', 'pending')->count();
         @endphp
         @if($codOrdersCount > 0)
-            <span class="ml-auto bg-orange-500 text-white text-xs px-2 py-1 rounded-full">{{ $codOrdersCount }}</span>
+            <span class="ml-auto bg-teal-600 text-white text-xs px-2 py-1 rounded-full">{{ $codOrdersCount }}</span>
         @endif
     </a>
 </div>

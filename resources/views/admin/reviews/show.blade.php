@@ -28,7 +28,7 @@
                     {{ $review->status === 'pending'  ? 'bg-yellow-100 text-yellow-800' : '' }}
                     {{ $review->status === 'approved' ? 'bg-green-100 text-green-800'  : '' }}
                     {{ $review->status === 'rejected' ? 'bg-red-100 text-red-800'      : '' }}
-                    {{ $review->status === 'reported' ? 'bg-orange-100 text-orange-800': '' }}">
+                    {{ $review->status === 'reported' ? 'bg-teal-100 text-teal-900': '' }}">
                     {{ ucfirst($review->status) }}
                 </span>
                 <span class="text-sm text-gray-500">{{ $review->created_at->format('M d, Y H:i') }}</span>

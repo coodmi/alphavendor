@@ -130,7 +130,7 @@
                                 @endif
                                 <div class="flex justify-between py-2 border-t font-bold text-lg">
                                     <span>Total:</span>
-                                    <span class="text-orange-600">৳{{ number_format($order->total, 2) }}</span>
+                                    <span class="text-teal-700">৳{{ number_format($order->total, 2) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
 
                     <!-- Action Buttons -->
                     <div class="flex gap-3 mt-6 pt-4 border-t">
-                        <a href="{{ route('orders.show', $order->id) }}" class="flex-1 bg-orange-500 text-white px-4 py-2 rounded text-center hover:bg-orange-600">
+                        <a href="{{ route('orders.show', $order->id) }}" class="flex-1 bg-teal-600 text-white px-4 py-2 rounded text-center hover:bg-teal-700">
                             <i class="fas fa-file-invoice mr-2"></i>View Invoice
                         </a>
                         <button onclick="window.print()" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">

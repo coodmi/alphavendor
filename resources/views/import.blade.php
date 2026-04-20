@@ -252,31 +252,31 @@
                                 <span class="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded" style="margin-top: {{ $product->badge ? '30px' : '0' }}">Featured</span>
                             @endif
                             <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-heart"></i>
                                 </button>
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-orange-500 hover:text-white transition-colors" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
+                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Compare" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
-                            <button class="absolute bottom-0 left-0 right-0 bg-orange-500 text-white py-3 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
+                            <button class="absolute bottom-0 left-0 right-0 bg-teal-600 text-white py-3 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
                                 <i class="fas fa-shopping-cart"></i>
                                 Quick Add
                             </button>
                         </div>
                         <div class="p-4">
-                            <div class="text-xs text-orange-600 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
-                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-orange-500 transition-colors">{{ $product->name }}</h4>
+                            <div class="text-xs text-teal-700 font-semibold mb-1">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <h4 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 hover:text-teal-600 transition-colors">{{ $product->name }}</h4>
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-1">
-                                <i class="fas fa-building text-orange-500"></i>
+                                <i class="fas fa-building text-teal-600"></i>
                                 <span>{{ $product->vendor->name ?? 'Unknown Vendor' }}</span>
                             </div>
                             @if($product->supplier_location)
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
-                                <i class="fas fa-map-marker-alt text-orange-500"></i>
+                                <i class="fas fa-map-marker-alt text-teal-600"></i>
                                 <span>{{ $product->supplier_location }}</span>
                             </div>
                             @endif
@@ -293,7 +293,7 @@
                                 <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-3">
-                                <i class="fas fa-boxes text-orange-500"></i>
+                                <i class="fas fa-boxes text-teal-600"></i>
                                 <span>MOQ: {{ $product->minimum_order ?? 1 }} units</span>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap mb-2">

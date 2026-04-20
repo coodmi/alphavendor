@@ -88,7 +88,7 @@
                                     <p class="text-sm text-gray-500">{{ $order->user->name ?? 'Guest' }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-bold text-orange-500">${{ number_format($order->total, 2) }}</p>
+                                    <p class="font-bold text-teal-600">${{ number_format($order->total, 2) }}</p>
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
                                         {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
                                         {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
@@ -175,7 +175,7 @@
                                 <div class="flex-1">
                                     <p class="font-medium text-gray-900 text-sm">{{ Str::limit($product->name, 30) }}</p>
                                     <p class="text-xs text-gray-500">{{ $product->vendor->name ?? 'Unknown Vendor' }}</p>
-                                    <p class="text-xs text-orange-500 font-bold">${{ number_format($product->price, 2) }}</p>
+                                    <p class="text-xs text-teal-600 font-bold">${{ number_format($product->price, 2) }}</p>
                                 </div>
                             </div>
                         @endforeach

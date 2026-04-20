@@ -394,7 +394,7 @@
                 <div class="text-3xl font-extrabold">{{ $stats['total_brands'] }}</div>
             </div>
         </div>
-        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-orange-500 to-orange-300 text-white">
+        <div class="rounded-xl shadow-lg p-6 flex items-center bg-gradient-to-tr from-teal-600 to-orange-300 text-white">
             <div class="mr-4"><i class="fas fa-coins fa-2x"></i></div>
             <div>
                 <div class="text-lg font-semibold">Total Sales</div>
@@ -1366,7 +1366,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </select>
             </div>
         </div>
-        <button onclick="addCoupon()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="addCoupon()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-plus"></i> Create Coupon
         </button>
     </div>
@@ -1451,7 +1451,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="file" id="flashSaleBanner" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
             </div>
         </div>
-        <button onclick="createFlashSale()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="createFlashSale()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-bolt"></i> Create Flash Sale
         </button>
     </div>
@@ -1461,7 +1461,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <h3 style="color: #2c3e50; margin-bottom: 20px;">Active & Upcoming Sales</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
             <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
-                <div style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 20px; color: white;">
+                <div style="background: linear-gradient(135deg, #1a6b73 0%, #fb923c 100%); padding: 20px; color: white;">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                         <h4 style="margin: 0; font-size: 18px;">Sample Flash Sale</h4>
                         <span style="background: rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">50% OFF</span>
@@ -1545,7 +1545,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </select>
             </div>
         </div>
-        <button onclick="addBanner()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="addBanner()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-plus"></i> Add Banner
         </button>
     </div>
@@ -1648,7 +1648,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <button onclick="sendTestEmail()" style="padding: 12px 30px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
                 <i class="fas fa-paper-plane"></i> Send Test
             </button>
-            <button onclick="scheduleCampaign()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+            <button onclick="scheduleCampaign()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
                 <i class="fas fa-calendar-check"></i> Schedule Campaign
             </button>
         </div>
@@ -1674,7 +1674,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="fas fa-envelope-open" style="font-size: 24px; opacity: 0.5;"></i>
             </div>
         </div>
-        <div style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 20px; border-radius: 10px; color: white;">
+        <div style="background: linear-gradient(135deg, #1a6b73 0%, #fb923c 100%); padding: 20px; border-radius: 10px; color: white;">
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                 <div>
                     <p style="margin: 0; font-size: 13px; opacity: 0.9;">Click Rate</p>
@@ -1778,7 +1778,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h3 style="margin: 5px 0 0 0; font-size: 28px; color: #2c3e50;">234</h3>
                     <small style="color: #10b981;"><i class="fas fa-arrow-up"></i> +23.1%</small>
                 </div>
-                <div style="background: #f97316; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="background: #1a6b73; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-user-plus" style="color: white; font-size: 24px;"></i>
                 </div>
             </div>
@@ -1841,7 +1841,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <button onclick="sendTestNewsletter()" style="padding: 12px 30px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
                 <i class="fas fa-paper-plane"></i> Send Test
             </button>
-            <button onclick="scheduleNewsletter()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+            <button onclick="scheduleNewsletter()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
                 <i class="fas fa-calendar-check"></i> Schedule Newsletter
             </button>
         </div>
@@ -1922,7 +1922,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="fas fa-check-circle" style="font-size: 28px; opacity: 0.5;"></i>
             </div>
         </div>
-        <div style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 20px; border-radius: 10px; color: white;">
+        <div style="background: linear-gradient(135deg, #1a6b73 0%, #fb923c 100%); padding: 20px; border-radius: 10px; color: white;">
             <div style="display: flex; justify-content: space-between; align-items: start;">
                 <div>
                     <p style="margin: 0; font-size: 13px; opacity: 0.9;">Pending</p>
@@ -2011,7 +2011,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td style="padding: 12px;"><strong style="color: #10b981; font-size: 16px;">$459.50</strong></td>
                         <td style="padding: 12px; color: #2c3e50;"><i class="fab fa-cc-paypal" style="color: #003087;"></i> PayPal</td>
                         <td style="padding: 12px;">
-                            <span style="background: #f97316; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Pending</span>
+                            <span style="background: #1a6b73; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Pending</span>
                         </td>
                         <td style="padding: 12px; text-align: center;">
                             <button onclick="viewTransaction(2)" style="padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">
@@ -2191,7 +2191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </select>
             </div>
         </div>
-        <button onclick="addOfflinePayment()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="addOfflinePayment()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-plus"></i> Add Payment Method
         </button>
     </div>
@@ -2341,7 +2341,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="number" id="taxPriority" value="1" min="1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
             </div>
         </div>
-        <button onclick="addTaxRate()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="addTaxRate()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-plus"></i> Add Tax Rate
         </button>
     </div>
@@ -2366,7 +2366,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td style="padding: 12px; color: #2c3e50;"><strong>US Sales Tax</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">United States</td>
                         <td style="padding: 12px; color: #2c3e50;">California</td>
-                        <td style="padding: 12px;"><strong style="color: #f97316;">8.5%</strong></td>
+                        <td style="padding: 12px;"><strong style="color: #1a6b73;">8.5%</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">1</td>
                         <td style="padding: 12px; text-align: center;">
                             <button onclick="editTaxRate(1)" style="padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-right: 5px;">
@@ -2381,7 +2381,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td style="padding: 12px; color: #2c3e50;"><strong>UK VAT</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">United Kingdom</td>
                         <td style="padding: 12px; color: #7f8c8d;">-</td>
-                        <td style="padding: 12px;"><strong style="color: #f97316;">20%</strong></td>
+                        <td style="padding: 12px;"><strong style="color: #1a6b73;">20%</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">1</td>
                         <td style="padding: 12px; text-align: center;">
                             <button onclick="editTaxRate(2)" style="padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-right: 5px;">
@@ -2485,7 +2485,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="number" id="exchangeRate" placeholder="1.00" min="0" step="0.0001" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
             </div>
             <div>
-                <button onclick="addCurrency()" style="padding: 10px 24px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                <button onclick="addCurrency()" style="padding: 10px 24px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
                     <i class="fas fa-plus"></i> Add
                 </button>
             </div>
@@ -2532,7 +2532,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td style="padding: 12px;"><strong style="color: #2c3e50;">Euro</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">EUR</td>
                         <td style="padding: 12px; color: #2c3e50; font-size: 16px;">€</td>
-                        <td style="padding: 12px;"><strong style="color: #f97316;">0.8523</strong></td>
+                        <td style="padding: 12px;"><strong style="color: #1a6b73;">0.8523</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">Jan 11, 2026</td>
                         <td style="padding: 12px;">
                             <span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Active</span>
@@ -2550,7 +2550,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td style="padding: 12px;"><strong style="color: #2c3e50;">British Pound</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">GBP</td>
                         <td style="padding: 12px; color: #2c3e50; font-size: 16px;">£</td>
-                        <td style="padding: 12px;"><strong style="color: #f97316;">0.7345</strong></td>
+                        <td style="padding: 12px;"><strong style="color: #1a6b73;">0.7345</strong></td>
                         <td style="padding: 12px; color: #2c3e50;">Jan 11, 2026</td>
                         <td style="padding: 12px;">
                             <span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Active</span>
@@ -2635,7 +2635,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="text" id="pickupDistrict" placeholder="e.g., Dhaka" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
             </div>
         </div>
-        <button onclick="savePickupSettings()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="savePickupSettings()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-save"></i> Save Pickup Settings
         </button>
     </div>
@@ -2668,7 +2668,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="flex: 1;">
                         <h4 style="margin: 0 0 10px 0; color: #2c3e50; font-size: 18px;">
-                            <i class="fas fa-shipping-fast" style="color: #f97316;"></i> Express Delivery
+                            <i class="fas fa-shipping-fast" style="color: #1a6b73;"></i> Express Delivery
                         </h4>
                         <p style="margin: 0; color: #7f8c8d; font-size: 14px;">Fast delivery within 1-2 business days</p>
                         <div style="margin-top: 10px;">
@@ -2738,7 +2738,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </select>
             </div>
         </div>
-        <button onclick="addShippingZone()" style="padding: 12px 30px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+        <button onclick="addShippingZone()" style="padding: 12px 30px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
             <i class="fas fa-plus"></i> Add Shipping Zone
         </button>
     </div>
@@ -2820,7 +2820,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <!-- Zone 3: Asia Pacific -->
             <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
-                <div style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 20px; color: white;">
+                <div style="background: linear-gradient(135deg, #1a6b73 0%, #fb923c 100%); padding: 20px; color: white;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <h4 style="margin: 0; font-size: 20px;">Asia Pacific</h4>
@@ -2878,7 +2878,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p style="margin: 0; font-size: 13px; color: #7f8c8d;">In Transit</p>
                     <h3 style="margin: 5px 0 0 0; font-size: 28px; color: #2c3e50;" id="inTransitCount">0</h3>
                 </div>
-                <div style="background: #f97316; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="background: #1a6b73; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-truck" style="color: white; font-size: 24px;"></i>
                 </div>
             </div>
@@ -3033,7 +3033,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="number" id="commissionRate" placeholder="Enter rate" min="0" max="100" step="0.01" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
             </div>
             <div>
-                <button onclick="addCommissionRate()" style="padding: 10px 24px; background: #f97316; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                <button onclick="addCommissionRate()" style="padding: 10px 24px; background: #1a6b73; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
                     <i class="fas fa-plus"></i> Add Commission
                 </button>
             </div>
@@ -3083,8 +3083,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Results</label>
                 <div style="padding: 12px; background: #f8f9fa; border-radius: 6px;">
                     <div style="margin-bottom: 5px;">
-                        <strong style="color: #f97316; font-size: 18px;">Platform Commission:</strong>
-                        <strong style="color: #f97316; font-size: 20px;" id="platformCommission">$10.00</strong>
+                        <strong style="color: #1a6b73; font-size: 18px;">Platform Commission:</strong>
+                        <strong style="color: #1a6b73; font-size: 20px;" id="platformCommission">$10.00</strong>
                     </div>
                     <div>
                         <small style="color: #7f8c8d;">Vendor Receives:</small>
@@ -5293,7 +5293,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p style="margin: 0; font-size: 13px; color: #7f8c8d;">Pending Verification</p>
                     <h3 style="margin: 5px 0 0 0; font-size: 28px; color: #2c3e50;">23</h3>
                 </div>
-                <div style="background: #f97316; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="background: #1a6b73; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-clock" style="color: white; font-size: 24px;"></i>
                 </div>
             </div>
@@ -5413,7 +5413,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div style="font-size: 13px;">
                                 <i class="fas fa-id-card" style="color: #10b981;"></i> National ID<br>
                                 <i class="fas fa-file-alt" style="color: #3b82f6;"></i> Business License<br>
-                                <i class="fas fa-image" style="color: #f97316;"></i> Selfie
+                                <i class="fas fa-image" style="color: #1a6b73;"></i> Selfie
                             </div>
                         </td>
                         <td style="padding: 12px; color: #7f8c8d; font-size: 13px;">
@@ -5451,7 +5451,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td style="padding: 12px; color: #2c3e50;">
                             <div style="font-size: 13px;">
                                 <i class="fas fa-id-card" style="color: #10b981;"></i> National ID<br>
-                                <i class="fas fa-image" style="color: #f97316;"></i> Selfie
+                                <i class="fas fa-image" style="color: #1a6b73;"></i> Selfie
                             </div>
                         </td>
                         <td style="padding: 12px; color: #7f8c8d; font-size: 13px;">
@@ -5472,7 +5472,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <tr style="border-bottom: 1px solid #dee2e6;">
                         <td style="padding: 12px;">
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="background: #f97316; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                <div style="background: #1a6b73; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
                                     MK
                                 </div>
                                 <div>
@@ -5490,7 +5490,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div style="font-size: 13px;">
                                 <i class="fas fa-id-card" style="color: #10b981;"></i> National ID<br>
                                 <i class="fas fa-file-alt" style="color: #3b82f6;"></i> Business License<br>
-                                <i class="fas fa-image" style="color: #f97316;"></i> Selfie
+                                <i class="fas fa-image" style="color: #1a6b73;"></i> Selfie
                             </div>
                         </td>
                         <td style="padding: 12px; color: #7f8c8d; font-size: 13px;">
@@ -5540,7 +5540,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p style="margin: 0; font-size: 13px; color: #7f8c8d;">Medium Risk</p>
                     <h3 style="margin: 5px 0 0 0; font-size: 28px; color: #2c3e50;">18</h3>
                 </div>
-                <div style="background: #f97316; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="background: #1a6b73; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-shield-alt" style="color: white; font-size: 24px;"></i>
                 </div>
             </div>
@@ -5728,7 +5728,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </span>
                         </td>
                         <td style="padding: 12px;">
-                            <span style="background: #f97316; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                            <span style="background: #1a6b73; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
                                 MEDIUM
                             </span>
                         </td>
@@ -5759,7 +5759,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </span>
                         </td>
                         <td style="padding: 12px;">
-                            <span style="background: #f97316; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                            <span style="background: #1a6b73; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
                                 MEDIUM
                             </span>
                         </td>
@@ -5818,7 +5818,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p style="margin: 0; font-size: 13px; color: #7f8c8d;">Permission Changes</p>
                     <h3 style="margin: 5px 0 0 0; font-size: 28px; color: #2c3e50;">8</h3>
                 </div>
-                <div style="background: #f97316; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <div style="background: #1a6b73; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-key" style="color: white; font-size: 24px;"></i>
                 </div>
             </div>
@@ -10146,7 +10146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update status badge
         const badge = document.getElementById('deliveryStatusBadge');
         const statusMap = {
-            'pending': { text: 'Pending Pickup', color: '#f97316' },
+            'pending': { text: 'Pending Pickup', color: '#1a6b73' },
             'picked': { text: 'Picked Up', color: '#3b82f6' },
             'in_transit': { text: 'In Transit', color: '#8b5cf6' },
             'out_for_delivery': { text: 'Out for Delivery', color: '#0d5c63' },

@@ -70,10 +70,10 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg">
+    <div class="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-orange-100 text-sm mb-1">Total Amount</p>
+                <p class="text-teal-100 text-sm mb-1">Total Amount</p>
                 <h3 class="text-2xl font-bold">${{ number_format($stats['total_amount'], 2) }}</h3>
             </div>
             <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
@@ -159,7 +159,7 @@
                         <td class="px-6 py-4">
                             <span class="inline-flex px-2 py-1 rounded text-xs font-medium
                                 {{ $payment->payment_method === 'bkash' ? 'bg-pink-100 text-pink-700' : '' }}
-                                {{ $payment->payment_method === 'nagad' ? 'bg-orange-100 text-orange-700' : '' }}
+                                {{ $payment->payment_method === 'nagad' ? 'bg-teal-100 text-teal-800' : '' }}
                                 {{ $payment->payment_method === 'rocket' ? 'bg-purple-100 text-purple-700' : '' }}
                                 {{ $payment->payment_method === 'bank_transfer' ? 'bg-blue-100 text-blue-700' : '' }}">
                                 {{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}

@@ -38,7 +38,7 @@
         <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-yellow-50">
                 <h2 class="text-lg font-semibold text-gray-800 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                     </svg>
                     MiMSMS API Configuration
@@ -52,7 +52,7 @@
                         MiMSMS API Key <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="mimsms_apikey" value="{{ $settings['mimsms_apikey'] }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="VTSJEXXXXXXXXXX9CL" required>
                     <p class="mt-1 text-sm text-gray-500">Your MiMSMS API key from the provider</p>
                 </div>
@@ -63,7 +63,7 @@
                         MiMSMS Username (Email) <span class="text-red-500">*</span>
                     </label>
                     <input type="email" name="mimsms_username" value="{{ $settings['mimsms_username'] }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="your@email.com" required>
                     <p class="mt-1 text-sm text-gray-500">Your MiMSMS account email</p>
                 </div>
@@ -74,7 +74,7 @@
                         Sender Name <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="mimsms_sender_name" value="{{ $settings['mimsms_sender_name'] }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="iSMS" required>
                     <p class="mt-1 text-sm text-gray-500">Approved sender name from MiMSMS (e.g., iSMS)</p>
                 </div>
@@ -85,7 +85,7 @@
                         Campaign Name
                     </label>
                     <input type="text" name="mimsms_campaign_name" value="{{ $settings['mimsms_campaign_name'] }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="armarketbd">
                     <p class="mt-1 text-sm text-gray-500">Optional campaign identifier</p>
                 </div>
@@ -96,7 +96,7 @@
                         OTP SMS Message Template <span class="text-red-500">*</span>
                     </label>
                     <textarea name="otp_sms_template" rows="3"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
                            placeholder="Your OTP is: {otp}. Valid for 15 minutes. Do not share this code." required>{{ $settings['otp_sms_template'] ?? 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.' }}</textarea>
                     <p class="mt-1 text-sm text-gray-500">
                         <span class="font-semibold">Use {otp} placeholder</span> where the OTP code should appear. 
@@ -197,7 +197,7 @@
         <!-- Save Button -->
         <div class="flex justify-end gap-4">
             <button type="submit" 
-                    class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center font-semibold">
+                    class="px-6 py-3 bg-teal-700 text-white rounded-lg hover:bg-teal-800 transition-colors flex items-center font-semibold">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>

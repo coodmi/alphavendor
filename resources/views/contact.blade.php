@@ -105,7 +105,7 @@
 <section class="py-12 sm:py-16 md:py-20 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-16">
-            <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-100">
+            <div class="text-center p-6 sm:p-8 bg-teal-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-100">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-map-marker-alt text-white text-xl sm:text-2xl"></i>
                 </div>
@@ -116,7 +116,7 @@
                     @if(!empty($content['address_line3'])){{ $content['address_line3'] }}@endif
                 </p>
             </div>
-            <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-200">
+            <div class="text-center p-6 sm:p-8 bg-teal-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-200">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-phone text-white text-xl sm:text-2xl"></i>
                 </div>
@@ -127,7 +127,7 @@
                     @if(!empty($content['phone_hours'])){{ $content['phone_hours'] }}@endif
                 </p>
             </div>
-            <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-300">
+            <div class="text-center p-6 sm:p-8 bg-teal-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-300">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-envelope text-white text-xl sm:text-2xl"></i>
                 </div>
@@ -138,7 +138,7 @@
                     @if(!empty($content['email_sales'])){{ $content['email_sales'] }}@endif
                 </p>
             </div>
-            <div class="text-center p-6 sm:p-8 bg-orange-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-400">
+            <div class="text-center p-6 sm:p-8 bg-teal-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fadeInUp delay-400">
                 <div class="w-14 h-14 sm:w-16 sm:h-16 bg-[#0d5c63] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                     <i class="fas fa-clock text-white text-xl sm:text-2xl"></i>
                 </div>
@@ -255,19 +255,19 @@
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">{{ $content['faq_subtitle'] ?? 'Find quick answers to common questions' }}</p>
         </div>
         <div class="max-w-4xl mx-auto space-y-4 sm:space-y-6">
-            <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-100">
+            <div class="bg-teal-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-100">
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-3">How can I become a vendor on AlphaVendor?</h3>
                 <p class="text-gray-600 text-sm sm:text-base leading-relaxed">To become a vendor, simply register an account and apply for vendor status through your dashboard. Our team will review your application within 24-48 hours.</p>
             </div>
-            <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-200">
+            <div class="bg-teal-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-200">
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-3">What are your shipping policies?</h3>
                 <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Each vendor sets their own shipping policies. You can find specific shipping information on individual product pages. We support both local and international shipping.</p>
             </div>
-            <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-300">
+            <div class="bg-teal-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-300">
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-3">How do I track my order?</h3>
                 <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Once your order ships, you'll receive a tracking number via email. You can also track your orders through your account dashboard.</p>
             </div>
-            <div class="bg-orange-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-400">
+            <div class="bg-teal-50 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeInUp delay-400">
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-3">What payment methods do you accept?</h3>
                 <p class="text-gray-600 text-sm sm:text-base leading-relaxed">We accept all major credit cards, PayPal, bank transfers, and various other payment methods depending on your region.</p>
             </div>

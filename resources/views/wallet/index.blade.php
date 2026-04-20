@@ -84,7 +84,7 @@
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-bold mb-4">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="{{ route('withdrawals.create') }}" class="block p-4 border-2 border-orange-500 text-orange-500 rounded hover:bg-orange-50 transition text-center font-semibold">
+                <a href="{{ route('withdrawals.create') }}" class="block p-4 border-2 border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition text-center font-semibold">
                     <i class="fas fa-hand-holding-usd mr-2"></i>Request Withdrawal
                 </a>
                 <a href="{{ route('vendor.orders') }}" class="block p-4 border-2 border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition text-center font-semibold">

@@ -6,7 +6,7 @@
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="container mx-auto px-4 max-w-7xl">
         <!-- Offer Header -->
-        <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl shadow-xl p-8 mb-8 text-white">
+        <div class="bg-gradient-to-r from-teal-600 to-teal-700 rounded-2xl shadow-xl p-8 mb-8 text-white">
             <div class="flex flex-col md:flex-row items-center gap-6">
                 @if($offer->image)
                     <div class="flex-shrink-0">
@@ -36,7 +36,7 @@
                     @endif
                 </div>
                 <div class="text-center">
-                    <div class="bg-white text-orange-600 rounded-xl px-6 py-4 shadow-lg">
+                    <div class="bg-white text-teal-700 rounded-xl px-6 py-4 shadow-lg">
                         <div class="text-4xl font-bold">{{ $products->total() }}</div>
                         <div class="text-sm font-semibold mt-1">Products</div>
                     </div>
@@ -63,7 +63,7 @@
                                 <!-- Badges -->
                                 <div class="absolute top-3 left-3 flex flex-col gap-2">
                                     @if($product->badge)
-                                        <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                                        <span class="bg-teal-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                                             {{ $product->badge }}
                                         </span>
                                     @endif
@@ -85,7 +85,7 @@
 
                             <!-- Product Info -->
                             <div class="p-4">
-                                <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                                <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-teal-700 transition-colors">
                                     {{ $product->name }}
                                 </h3>
                                 
@@ -110,7 +110,7 @@
 
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <span class="text-2xl font-bold text-orange-600">৳{{ number_format($product->price, 2) }}</span>
+                                        <span class="text-2xl font-bold text-teal-700">৳{{ number_format($product->price, 2) }}</span>
                                         @if($product->old_price && $product->old_price > $product->price)
                                             <div class="text-sm text-gray-400 line-through">৳{{ number_format($product->old_price, 2) }}</div>
                                         @endif
@@ -147,7 +147,7 @@
                 <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
                 <h3 class="text-2xl font-bold text-gray-700 mb-2">No Products Yet</h3>
                 <p class="text-gray-500 mb-6">Products will appear here once they are assigned to this special offer.</p>
-                <a href="{{ route('shop') }}" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-bold transition-all">
+                <a href="{{ route('shop') }}" class="inline-block bg-teal-700 hover:bg-teal-800 text-white px-8 py-3 rounded-xl font-bold transition-all">
                     <i class="fas fa-shopping-bag mr-2"></i>Browse All Products
                 </a>
             </div>

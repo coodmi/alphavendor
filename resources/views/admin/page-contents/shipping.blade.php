@@ -13,7 +13,7 @@
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                <i class="fas fa-shipping-fast text-orange-600 mr-3"></i>Shipping Info Management
+                <i class="fas fa-shipping-fast text-teal-700 mr-3"></i>Shipping Info Management
             </h1>
             <p class="text-gray-600">Manage the content displayed on your Shipping Info page</p>
         </div>
@@ -36,10 +36,10 @@
                 <!-- Title -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-heading text-orange-600 mr-2"></i>Page Title
+                        <i class="fas fa-heading text-teal-700 mr-2"></i>Page Title
                     </label>
                     <input type="text" name="title" value="{{ old('title', $page->title ?? 'Shipping Information') }}" required
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all @error('title') border-red-500 @enderror">
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all @error('title') border-red-500 @enderror">
                     @error('title')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -48,7 +48,7 @@
                 <!-- Content -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-align-left text-orange-600 mr-2"></i>Content
+                        <i class="fas fa-align-left text-teal-700 mr-2"></i>Content
                     </label>
                     <textarea name="content" id="shipping-editor" required
                         class="w-full @error('content') border-red-500 @enderror">{{ old('content', $page->content ?? '') }}</textarea>
@@ -61,7 +61,7 @@
                 <div class="flex items-center">
                     <input type="checkbox" name="is_active" id="is_active" value="1" 
                         {{ old('is_active', $page->is_active ?? true) ? 'checked' : '' }}
-                        class="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500">
+                        class="w-5 h-5 text-teal-700 border-gray-300 rounded focus:ring-teal-600">
                     <label for="is_active" class="ml-3 text-sm font-bold text-gray-700">
                         Active (Display this page to users)
                     </label>
@@ -69,7 +69,7 @@
 
                 <!-- Submit Button -->
                 <div class="flex gap-4 pt-4">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                         <i class="fas fa-save mr-2"></i>Save Changes
                     </button>
                     <a href="{{ route('shipping-info') }}" target="_blank" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-bold transition-all">

@@ -16,7 +16,7 @@
         <div class="text-center py-12">
             <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
             <p class="text-xl text-gray-600 mb-6">Your cart is empty</p>
-            <a href="{{ route('shop') }}" class="inline-block bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-600">
+            <a href="{{ route('shop') }}" class="inline-block bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700">
                 Continue Shopping
             </a>
         </div>
@@ -33,7 +33,7 @@
                             <div class="flex-1">
                                 <h3 class="font-semibold text-lg">{{ $item['name'] }}</h3>
                                 <p class="text-gray-600 text-sm">Vendor: {{ $item['vendor_name'] }}</p>
-                                <p class="text-orange-500 font-bold mt-2" data-unit-price="{{ $item['price'] }}">${{ number_format($item['price'], 2) }}</p>
+                                <p class="text-teal-600 font-bold mt-2" data-unit-price="{{ $item['price'] }}">${{ number_format($item['price'], 2) }}</p>
                                 @if(isset($item['coupon_code']) && isset($item['discount_amount']))
                                     <div class="mt-2 flex items-center gap-2">
                                         <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded">
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="mt-4 flex justify-between">
-                    <a href="{{ route('shop') }}" class="text-orange-500 hover:text-orange-600">
+                    <a href="{{ route('shop') }}" class="text-teal-600 hover:text-teal-700">
                         <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
                     </a>
                     <form action="{{ route('cart.clear') }}" method="POST">
@@ -99,11 +99,11 @@
                     <div class="border-t pt-4 mb-6">
                         <div class="flex justify-between text-lg font-bold">
                             <span>Total</span>
-                            <span class="text-orange-500" id="total">${{ number_format($total, 2) }}</span>
+                            <span class="text-teal-600" id="total">${{ number_format($total, 2) }}</span>
                         </div>
                     </div>
 
-                    <a href="{{ route('orders.checkout') }}" class="block w-full bg-orange-500 text-white text-center py-3 rounded hover:bg-orange-600 font-semibold">
+                    <a href="{{ route('orders.checkout') }}" class="block w-full bg-teal-600 text-white text-center py-3 rounded hover:bg-teal-700 font-semibold">
                         Proceed to Checkout
                     </a>
                 </div>

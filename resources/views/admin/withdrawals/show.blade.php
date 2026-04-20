@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('admin.withdrawals.index') }}" class="text-orange-600 hover:text-orange-800 font-semibold">
+        <a href="{{ route('admin.withdrawals.index') }}" class="text-teal-700 hover:text-teal-900 font-semibold">
             <i class="fas fa-arrow-left mr-2"></i>Back to Withdrawals
         </a>
     </div>
@@ -100,7 +100,7 @@
                                     <p class="text-sm text-gray-600">Mobile Wallet</p>
                                 </div>
                             @elseif($withdrawal->withdrawalMethod->type == 'nagad')
-                                <i class="fas fa-mobile-alt text-3xl text-orange-500"></i>
+                                <i class="fas fa-mobile-alt text-3xl text-teal-600"></i>
                                 <div class="flex-1">
                                     <p class="font-semibold text-gray-800">Nagad</p>
                                     <p class="text-sm text-gray-600">Mobile Wallet</p>
@@ -222,7 +222,7 @@
 
             <!-- Wallet Info -->
             @if($wallet)
-                <div class="bg-gradient-to-br from-orange-500 to-teal-600 rounded-lg shadow-md p-6 text-white">
+                <div class="bg-gradient-to-br from-teal-600 to-teal-600 rounded-lg shadow-md p-6 text-white">
                     <h3 class="text-lg font-bold mb-4">Wallet Balance</h3>
                     <p class="text-3xl font-bold">{{ currency_symbol() }}{{ number_format($wallet->balance, 2) }}</p>
                     <p class="text-sm opacity-90 mt-2">Available Balance</p>

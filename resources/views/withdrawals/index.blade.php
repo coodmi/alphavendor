@@ -50,7 +50,7 @@
 
     <!-- Actions -->
     <div class="flex gap-4">
-        <a href="{{ route('withdrawals.create') }}" class="bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-600 font-semibold">
+        <a href="{{ route('withdrawals.create') }}" class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700 font-semibold">
             <i class="fas fa-plus mr-2"></i>New Withdrawal Request
         </a>
         <a href="{{ route('withdrawals.payment-methods') }}" class="bg-gray-200 text-gray-700 px-6 py-3 rounded hover:bg-gray-300 font-semibold">

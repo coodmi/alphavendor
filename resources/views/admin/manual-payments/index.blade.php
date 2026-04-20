@@ -127,7 +127,7 @@
                                     @if($payment->payment_method === 'bkash')
                                         <span class="px-2 py-1 text-xs font-semibold rounded bg-pink-100 text-pink-800">bKash</span>
                                     @elseif($payment->payment_method === 'nagad')
-                                        <span class="px-2 py-1 text-xs font-semibold rounded bg-orange-100 text-orange-800">Nagad</span>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded bg-teal-100 text-teal-900">Nagad</span>
                                     @else
                                         <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-800">{{ ucfirst($payment->payment_method) }}</span>
                                     @endif
@@ -209,7 +209,7 @@
                                     </a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded {{ $payment->payment_method === 'bkash' ? 'bg-pink-100 text-pink-800' : 'bg-orange-100 text-orange-800' }}">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded {{ $payment->payment_method === 'bkash' ? 'bg-pink-100 text-pink-800' : 'bg-teal-100 text-teal-900' }}">
                                         {{ $payment->payment_method_name }}
                                     </span>
                                 </td>

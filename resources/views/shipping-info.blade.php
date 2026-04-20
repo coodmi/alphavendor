@@ -5,7 +5,7 @@
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-teal-50">
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-20">
+    <div class="bg-gradient-to-r from-teal-700 to-yellow-500 text-white py-20">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <div class="inline-block p-4 bg-white/10 rounded-full mb-6">
@@ -37,17 +37,17 @@
                 @endif
 
                 <!-- Contact Section -->
-                <div class="mt-12 p-6 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border-l-4 border-orange-500">
-                    <h3 class="text-xl font-bold text-orange-900 mb-3">
-                        <i class="fas fa-headset mr-2 text-orange-600"></i>Need Help with Shipping?
+                <div class="mt-12 p-6 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border-l-4 border-teal-600">
+                    <h3 class="text-xl font-bold text-teal-900 mb-3">
+                        <i class="fas fa-headset mr-2 text-teal-700"></i>Need Help with Shipping?
                     </h3>
                     <p class="text-gray-700 mb-4">
                         Our customer support team is here to help with any shipping questions:
                     </p>
                     <div class="space-y-2 text-gray-700">
-                        <p><i class="fas fa-phone text-orange-600 mr-2"></i> <a href="tel:+8801700000000" class="hover:text-orange-600">+880 1700-000000</a></p>
-                        <p><i class="fas fa-envelope text-orange-600 mr-2"></i> <a href="mailto:support@armarketbd.com" class="hover:text-orange-600">support@armarketbd.com</a></p>
-                        <p><i class="fas fa-map-marker-alt text-orange-600 mr-2"></i> Dhaka, Bangladesh</p>
+                        <p><i class="fas fa-phone text-teal-700 mr-2"></i> <a href="tel:+8801700000000" class="hover:text-teal-700">+880 1700-000000</a></p>
+                        <p><i class="fas fa-envelope text-teal-700 mr-2"></i> <a href="mailto:support@armarketbd.com" class="hover:text-teal-700">support@armarketbd.com</a></p>
+                        <p><i class="fas fa-map-marker-alt text-teal-700 mr-2"></i> Dhaka, Bangladesh</p>
                     </div>
                 </div>
             </div>

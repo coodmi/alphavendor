@@ -185,15 +185,15 @@
                 </div>
 
                 <!-- Returns & Refunds -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-teal-600">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-semibold text-gray-700">Returns & Refunds</h3>
-                        <i class="fas fa-undo text-orange-500 text-2xl"></i>
+                        <i class="fas fa-undo text-teal-600 text-2xl"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-sm text-gray-500">Today</p>
-                            <p class="text-3xl font-bold text-orange-600">{{ $todayStats['returns_today'] + $todayStats['refunds_today'] }}</p>
+                            <p class="text-3xl font-bold text-teal-700">{{ $todayStats['returns_today'] + $todayStats['refunds_today'] }}</p>
                             <p class="text-xs text-gray-500 mt-1">{{ $todayStats['returns_today'] }} returns, {{ $todayStats['refunds_today'] }} refunds</p>
                         </div>
                         <div>
@@ -275,7 +275,7 @@
                 </div>
 
                 <!-- Total Products -->
-                <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
+                <div class="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-2">
                         <h3 class="text-lg font-semibold">Total Products</h3>
                         <i class="fas fa-box text-3xl opacity-50"></i>
@@ -340,7 +340,7 @@
                     @forelse($topProducts as $index => $product)
                         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-bold">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-teal-600 to-red-500 flex items-center justify-center text-white font-bold">
                                     {{ $index + 1 }}
                                 </div>
                                 <div>

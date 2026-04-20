@@ -82,7 +82,7 @@
                             {{ $order->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <button onclick="viewOrderDetails({{ $order->id }})" class="text-orange-600 hover:text-orange-900">
+                            <button onclick="viewOrderDetails({{ $order->id }})" class="text-teal-700 hover:text-teal-900">
                                 View Details
                             </button>
                         </td>

@@ -229,7 +229,7 @@
                         <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 border-orange-200">
                             <input type="radio" name="payment_method" value="nagad" class="mr-3">
                             <div class="flex items-center gap-2">
-                                <span class="bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">Nagad</span>
+                                <span class="bg-teal-600 text-white px-2 py-1 rounded text-xs font-bold">Nagad</span>
                                 <span class="font-medium">Nagad Payment</span>
                             </div>
                         </label>
@@ -291,14 +291,14 @@
 
                     <!-- Nagad Payment Instructions -->
                     @if($paymentSettings['nagad_enabled'] == '1' && $paymentSettings['nagad_number'])
-                    <div id="nagad-instructions" class="mt-4 p-4 bg-orange-50 rounded-lg border border-orange-200" style="display: none;">
-                        <h3 class="font-bold text-orange-600 mb-3 flex items-center gap-2">
+                    <div id="nagad-instructions" class="mt-4 p-4 bg-teal-50 rounded-lg border border-orange-200" style="display: none;">
+                        <h3 class="font-bold text-teal-700 mb-3 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
                             Nagad Payment Instructions
                         </h3>
                         <div class="bg-white p-3 rounded mb-3">
                             <p class="text-sm text-gray-600 mb-2">Send money to:</p>
-                            <p class="text-2xl font-bold text-orange-600">{{ $paymentSettings['nagad_number'] }}</p>
+                            <p class="text-2xl font-bold text-teal-700">{{ $paymentSettings['nagad_number'] }}</p>
                             @if($paymentSettings['nagad_name'])
                                 <p class="text-sm text-gray-500">Account Name: {{ $paymentSettings['nagad_name'] }}</p>
                             @endif
@@ -308,19 +308,19 @@
                             <li>1. Open Nagad App or Dial *167#</li>
                             <li>2. Select "Send Money"</li>
                             <li>3. Enter the number above</li>
-                            <li>4. Enter amount: <strong class="text-orange-600">৳{{ number_format($total, 2) }}</strong></li>
+                            <li>4. Enter amount: <strong class="text-teal-700">৳{{ number_format($total, 2) }}</strong></li>
                             <li>5. Enter your PIN and confirm</li>
                             <li>6. Note down the Transaction ID</li>
                         </ol>
                         <div class="space-y-3">
                             <div>
                                 <label class="block text-gray-700 text-sm font-medium mb-1">Your Nagad Number *</label>
-                                <input type="text" name="sender_number" class="w-full border border-orange-300 rounded px-3 py-2 focus:ring-orange-500 focus:border-orange-500 nagad-input" placeholder="01XXXXXXXXX">
+                                <input type="text" name="sender_number" class="w-full border border-teal-400 rounded px-3 py-2 focus:ring-teal-600 focus:border-teal-600 nagad-input" placeholder="01XXXXXXXXX">
                                 @error('sender_number')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                             <div>
                                 <label class="block text-gray-700 text-sm font-medium mb-1">Transaction ID *</label>
-                                <input type="text" name="transaction_id" class="w-full border border-orange-300 rounded px-3 py-2 focus:ring-orange-500 focus:border-orange-500 nagad-input" placeholder="e.g., NAG123456789">
+                                <input type="text" name="transaction_id" class="w-full border border-teal-400 rounded px-3 py-2 focus:ring-teal-600 focus:border-teal-600 nagad-input" placeholder="e.g., NAG123456789">
                                 @error('transaction_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
                         </div>
@@ -396,7 +396,7 @@
                                         <span class="text-gray-600">${{ number_format($item['price'], 2) }} each</span>
                                     </div>
                                     <div class="mt-1 text-right">
-                                        <span class="font-bold text-orange-500">${{ number_format($item['price'] * $item['quantity'], 2) }}</span>
+                                        <span class="font-bold text-teal-600">${{ number_format($item['price'] * $item['quantity'], 2) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -414,11 +414,11 @@
                         </div>
                         <div class="flex justify-between text-lg font-bold pt-2 border-t">
                             <span>Total</span>
-                            <span class="text-orange-500">${{ number_format($total, 2) }}</span>
+                            <span class="text-teal-600">${{ number_format($total, 2) }}</span>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded hover:bg-orange-600 font-semibold transition-all duration-300 hover:shadow-lg">
+                    <button type="submit" class="w-full bg-teal-600 text-white py-3 rounded hover:bg-teal-700 font-semibold transition-all duration-300 hover:shadow-lg">
                         Place Order
                     </button>
 

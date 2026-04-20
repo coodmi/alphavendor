@@ -14,11 +14,11 @@
         <div class="mb-8 flex justify-between items-center">
             <div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
-                    <i class="fas fa-shipping-fast text-orange-600 mr-3"></i>Shipping Management
+                    <i class="fas fa-shipping-fast text-teal-700 mr-3"></i>Shipping Management
                 </h1>
                 <p class="text-gray-600 mt-2">Manage shipping methods, zones, and pricing</p>
             </div>
-            <button onclick="openCreateModal()" class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+            <button onclick="openCreateModal()" class="bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                 <i class="fas fa-plus mr-2"></i>Add Shipping Method
             </button>
         </div>
@@ -65,14 +65,14 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-teal-600">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-600 font-semibold">Zones Covered</p>
                         <p class="text-3xl font-bold text-gray-900 mt-1">{{ $shippingMethods->pluck('zone')->unique()->count() }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-map-marked-alt text-orange-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-map-marked-alt text-teal-700 text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
         <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-gradient-to-r from-orange-600 to-orange-700">
+                    <thead class="bg-gradient-to-r from-teal-700 to-teal-800">
                         <tr>
                             <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase">Method Name</th>
                             <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase">Zone</th>
@@ -127,7 +127,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($shippingMethods as $method)
-                            <tr class="hover:bg-orange-50 transition-colors shipping-row" data-zone="{{ $method->zone }}">
+                            <tr class="hover:bg-teal-50 transition-colors shipping-row" data-zone="{{ $method->zone }}">
                                 <td class="px-6 py-4">
                                     <div class="font-semibold text-gray-900">{{ $method->name }}</div>
                                     @if($method->description)
@@ -141,7 +141,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-lg font-bold text-orange-600">৳{{ number_format($method->cost, 2) }}</span>
+                                    <span class="text-lg font-bold text-teal-700">৳{{ number_format($method->cost, 2) }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-gray-600">
                                     <i class="fas fa-clock text-gray-400 mr-1"></i>
@@ -204,7 +204,7 @@
 <!-- Create/Edit Modal -->
 <div id="shippingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="bg-gradient-to-r from-orange-600 to-orange-700 px-6 py-4 flex justify-between items-center">
+        <div class="bg-gradient-to-r from-teal-700 to-teal-800 px-6 py-4 flex justify-between items-center">
             <h3 id="modalTitle" class="text-xl font-bold text-white">Add Shipping Method</h3>
             <button onclick="closeModal()" class="text-white hover:text-gray-200">
                 <i class="fas fa-times text-2xl"></i>
@@ -218,19 +218,19 @@
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-tag text-orange-600 mr-2"></i>Method Name *
+                        <i class="fas fa-tag text-teal-700 mr-2"></i>Method Name *
                     </label>
                     <input type="text" name="name" id="name" required 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                         placeholder="e.g., Standard Delivery">
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-map-marker-alt text-orange-600 mr-2"></i>Zone *
+                        <i class="fas fa-map-marker-alt text-teal-700 mr-2"></i>Zone *
                     </label>
                     <select name="zone" id="zone" required 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all">
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all">
                         <option value="">Select Zone</option>
                         @foreach($zones as $key => $name)
                             <option value="{{ $key }}">{{ $name }}</option>
@@ -241,29 +241,29 @@
 
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">
-                    <i class="fas fa-align-left text-orange-600 mr-2"></i>Description
+                    <i class="fas fa-align-left text-teal-700 mr-2"></i>Description
                 </label>
                 <textarea name="description" id="description" rows="2" 
-                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                     placeholder="Brief description of this shipping method"></textarea>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-money-bill-wave text-orange-600 mr-2"></i>Shipping Cost (৳) *
+                        <i class="fas fa-money-bill-wave text-teal-700 mr-2"></i>Shipping Cost (৳) *
                     </label>
                     <input type="number" name="cost" id="cost" step="0.01" min="0" required 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                         placeholder="0.00">
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-gift text-orange-600 mr-2"></i>Free Shipping Threshold (৳)
+                        <i class="fas fa-gift text-teal-700 mr-2"></i>Free Shipping Threshold (৳)
                     </label>
                     <input type="number" name="free_shipping_threshold" id="free_shipping_threshold" step="0.01" min="0" 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                         placeholder="Optional">
                 </div>
             </div>
@@ -271,19 +271,19 @@
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-clock text-orange-600 mr-2"></i>Min Delivery Days *
+                        <i class="fas fa-clock text-teal-700 mr-2"></i>Min Delivery Days *
                     </label>
                     <input type="number" name="estimated_days_min" id="estimated_days_min" min="1" required 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                         placeholder="1">
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-clock text-orange-600 mr-2"></i>Max Delivery Days *
+                        <i class="fas fa-clock text-teal-700 mr-2"></i>Max Delivery Days *
                     </label>
                     <input type="number" name="estimated_days_max" id="estimated_days_max" min="1" required 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                         placeholder="7">
                 </div>
             </div>
@@ -291,24 +291,24 @@
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fas fa-sort text-orange-600 mr-2"></i>Sort Order
+                        <i class="fas fa-sort text-teal-700 mr-2"></i>Sort Order
                     </label>
                     <input type="number" name="sort_order" id="sort_order" min="0" 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 transition-all"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-orange-200 focus:border-teal-600 transition-all"
                         placeholder="0">
                 </div>
 
                 <div class="flex items-end">
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" name="is_active" id="is_active" value="1" checked
-                            class="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500">
+                            class="w-5 h-5 text-teal-700 border-gray-300 rounded focus:ring-teal-600">
                         <span class="text-sm font-bold text-gray-700">Active</span>
                     </label>
                 </div>
             </div>
 
             <div class="flex gap-3 pt-4">
-                <button type="submit" class="flex-1 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                <button type="submit" class="flex-1 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
                     <i class="fas fa-save mr-2"></i>Save Shipping Method
                 </button>
                 <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-bold transition-all">
@@ -323,13 +323,13 @@
 function filterByZone(zone) {
     // Update button styles
     document.querySelectorAll('.zone-filter-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-orange-600', 'text-white');
+        btn.classList.remove('active', 'bg-teal-700', 'text-white');
         btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
     });
     
     const activeBtn = document.querySelector(`[data-zone="${zone}"]`);
     activeBtn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
-    activeBtn.classList.add('active', 'bg-orange-600', 'text-white');
+    activeBtn.classList.add('active', 'bg-teal-700', 'text-white');
     
     // Filter table rows
     const rows = document.querySelectorAll('.shipping-row');
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!btn.classList.contains('active')) {
             btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
         } else {
-            btn.classList.add('bg-orange-600', 'text-white');
+            btn.classList.add('bg-teal-700', 'text-white');
         }
     });
 });

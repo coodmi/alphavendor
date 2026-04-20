@@ -65,7 +65,7 @@
                                     <p class="text-sm text-gray-600">Price: ${{ number_format($item->price, 2) }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-bold text-orange-500">${{ number_format($item->subtotal, 2) }}</p>
+                                    <p class="font-bold text-teal-600">${{ number_format($item->subtotal, 2) }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -111,7 +111,7 @@
                     </div>
                     <div class="border-t pt-2 flex justify-between font-bold text-lg">
                         <span>Total</span>
-                        <span class="text-orange-500">${{ number_format($order->total, 2) }}</span>
+                        <span class="text-teal-600">${{ number_format($order->total, 2) }}</span>
                     </div>
                 </div>
             </div>

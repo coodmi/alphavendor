@@ -314,12 +314,12 @@
                                         <div class="flex gap-2">
                                             <button
                                                 onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                                class="flex-1 py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-teal-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2 text-sm md:text-base">
+                                                class="flex-1 py-2 md:py-2.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                                             </button>
                                             <button
                                                 onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                                class="flex-1 py-2 md:py-2.5 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg font-medium hover:from-orange-700 hover:to-orange-800 transition-all flex items-center justify-center gap-2 text-sm md:text-base">
+                                                class="flex-1 py-2 md:py-2.5 bg-gradient-to-r from-teal-700 to-teal-800 text-white rounded-lg font-medium hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                                                 <i class="fas fa-bolt"></i> Buy Now
                                             </button>
                                         </div>
@@ -721,7 +721,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                                class="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-store text-white text-xl"></i>
                             </div>
                             <div>
@@ -730,7 +730,7 @@
                             </div>
                         </div>
                         <a href="{{ route('retail') }}"
-                            class="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-medium transition-colors">
+                            class="text-teal-600 hover:text-teal-700 flex items-center gap-2 font-medium transition-colors">
                             View All
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -757,23 +757,23 @@
                                         <div
                                             class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-heart text-sm"></i>
                                             </span>
                                             <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-eye text-sm"></i>
                                             </span>
                                         </div>
                                         <div class="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                                             <button
                                                 onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                                class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-teal-500 text-white font-semibold hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
+                                                class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
                                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                                             </button>
                                             <button
                                                 onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                                class="flex-1 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white font-semibold hover:from-orange-700 hover:to-orange-800 transition-all flex items-center justify-center gap-2">
+                                                class="flex-1 py-3 bg-gradient-to-r from-teal-700 to-teal-800 text-white font-semibold hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2">
                                                 <i class="fas fa-bolt"></i> Buy Now
                                             </button>
                                         </div>
@@ -788,7 +788,7 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-3">
-                                            <span class="text-xl font-bold text-orange-600">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
                                                     class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
@@ -813,7 +813,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                                class="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-warehouse text-white text-xl"></i>
                             </div>
                             <div>
@@ -822,7 +822,7 @@
                             </div>
                         </div>
                         <a href="{{ route('wholesale') }}"
-                            class="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-medium transition-colors">
+                            class="text-teal-600 hover:text-teal-700 flex items-center gap-2 font-medium transition-colors">
                             View All
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -842,18 +842,18 @@
                                         <img src="{{ $imageUrl }}" alt="{{ $product->name }}"
                                             class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
                                         @if($product->minimum_order)
-                                            <span class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-lg">
+                                            <span class="absolute top-3 left-3 bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded-lg">
                                                 Min: {{ $product->minimum_order }} pcs
                                             </span>
                                         @endif
                                         <div
                                             class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-heart text-sm"></i>
                                             </span>
                                             <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-eye text-sm"></i>
                                             </span>
                                         </div>
@@ -861,12 +861,12 @@
                                     <div class="flex gap-1">
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-teal-500 text-white font-semibold hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
+                                            class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
                                             <i class="fas fa-shopping-cart"></i> Quick Add
                                         </button>
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white font-semibold hover:from-orange-700 hover:to-orange-800 transition-all flex items-center justify-center gap-2">
+                                            class="flex-1 py-3 bg-gradient-to-r from-teal-700 to-teal-800 text-white font-semibold hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2">
                                             <i class="fas fa-bolt"></i> Buy Now
                                         </button>
                                     </div>
@@ -880,7 +880,7 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <span class="text-xl font-bold text-orange-600">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
                                                     class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
@@ -910,7 +910,7 @@
                     <div class="flex justify-between items-center mb-6 md:mb-8">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                                class="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-globe text-white text-xl"></i>
                             </div>
                             <div>
@@ -919,7 +919,7 @@
                             </div>
                         </div>
                         <a href="{{ route('import') }}"
-                            class="text-orange-500 hover:text-orange-600 flex items-center gap-2 font-medium transition-colors">
+                            class="text-teal-600 hover:text-teal-700 flex items-center gap-2 font-medium transition-colors">
                             View All
                             <i class="fas fa-arrow-right"></i>
                         </a>
@@ -939,17 +939,17 @@
                                         <img src="{{ $imageUrl }}" alt="{{ $product->name }}"
                                             class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
                                         <span
-                                            class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+                                            class="absolute top-3 left-3 bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
                                             <i class="fas fa-globe-americas"></i> Import Ready
                                         </span>
                                         <div
                                             class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-heart text-sm"></i>
                                             </span>
                                             <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-colors">
+                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-eye text-sm"></i>
                                             </span>
                                         </div>
@@ -957,12 +957,12 @@
                                     <div class="flex gap-1">
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-teal-500 text-white font-semibold hover:from-orange-600 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
+                                            class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
                                             <i class="fas fa-shopping-cart"></i> Quick Add
                                         </button>
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white font-semibold hover:from-orange-700 hover:to-orange-800 transition-all flex items-center justify-center gap-2">
+                                            class="flex-1 py-3 bg-gradient-to-r from-teal-700 to-teal-800 text-white font-semibold hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2">
                                             <i class="fas fa-bolt"></i> Buy Now
                                         </button>
                                     </div>
@@ -976,7 +976,7 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <span class="text-xl font-bold text-orange-600">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
                                                     class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>

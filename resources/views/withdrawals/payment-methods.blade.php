@@ -63,8 +63,8 @@
 
                     <label class="payment-type-card cursor-pointer">
                         <input type="radio" name="type" value="nagad" class="hidden payment-type-radio">
-                        <div class="border-2 border-gray-300 rounded-lg p-6 text-center hover:border-orange-500 transition-all payment-type-option">
-                            <i class="fas fa-mobile-alt text-4xl text-orange-500 mb-3"></i>
+                        <div class="border-2 border-gray-300 rounded-lg p-6 text-center hover:border-teal-600 transition-all payment-type-option">
+                            <i class="fas fa-mobile-alt text-4xl text-teal-600 mb-3"></i>
                             <p class="font-semibold text-gray-800">Nagad</p>
                             <p class="text-xs text-gray-500 mt-1">Mobile wallet</p>
                         </div>
@@ -76,7 +76,7 @@
             <div class="mb-4">
                 <label class="block text-gray-700 font-semibold mb-2">Account Holder Name <span class="text-red-500">*</span></label>
                 <input type="text" name="account_name" required 
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                        placeholder="Enter account holder name">
             </div>
 
@@ -86,13 +86,13 @@
                     <div>
                         <label class="block text-gray-700 font-semibold mb-2">Bank Name <span class="text-red-500">*</span></label>
                         <input type="text" name="bank_name" 
-                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="e.g., Dutch-Bangla Bank">
                     </div>
                     <div>
                         <label class="block text-gray-700 font-semibold mb-2">Branch Name</label>
                         <input type="text" name="branch_name" 
-                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="e.g., Gulshan Branch">
                     </div>
                 </div>
@@ -100,20 +100,20 @@
                     <div>
                         <label class="block text-gray-700 font-semibold mb-2">Account Number <span class="text-red-500">*</span></label>
                         <input type="text" name="account_number" 
-                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="Enter account number">
                     </div>
                     <div>
                         <label class="block text-gray-700 font-semibold mb-2">Routing Number</label>
                         <input type="text" name="routing_number" 
-                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                                placeholder="9-digit routing number">
                     </div>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">SWIFT Code (for international)</label>
                     <input type="text" name="swift_code" 
-                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                            placeholder="Enter SWIFT code">
                 </div>
             </div>
@@ -123,7 +123,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">bKash Number <span class="text-red-500">*</span></label>
                     <input type="text" name="bkash_number" 
-                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                            placeholder="01XXXXXXXXX">
                     <p class="text-xs text-gray-500 mt-1">Enter your bKash registered mobile number</p>
                 </div>
@@ -134,7 +134,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">Nagad Number <span class="text-red-500">*</span></label>
                     <input type="text" name="nagad_number" 
-                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                            placeholder="01XXXXXXXXX">
                     <p class="text-xs text-gray-500 mt-1">Enter your Nagad registered mobile number</p>
                 </div>
@@ -144,19 +144,19 @@
             <div class="mb-4">
                 <label class="block text-gray-700 font-semibold mb-2">Additional Details (Optional)</label>
                 <textarea name="additional_details" rows="3" 
-                          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500"
+                          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-600"
                           placeholder="Any additional information..."></textarea>
             </div>
 
             <!-- Set as Default -->
             <div class="mb-6">
                 <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_default" value="1" class="w-5 h-5 text-orange-500 rounded focus:ring-2 focus:ring-orange-500">
+                    <input type="checkbox" name="is_default" value="1" class="w-5 h-5 text-teal-600 rounded focus:ring-2 focus:ring-teal-600">
                     <span class="ml-3 text-gray-700 font-semibold">Set as default payment method</span>
                 </label>
             </div>
 
-            <button type="submit" class="bg-orange-500 text-white px-8 py-3 rounded-lg hover:bg-orange-600 font-semibold shadow-md">
+            <button type="submit" class="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 font-semibold shadow-md">
                 <i class="fas fa-plus mr-2"></i>Add Payment Method
             </button>
         </form>
@@ -185,8 +185,8 @@
                                             <i class="fas fa-mobile-alt text-2xl text-pink-500"></i>
                                         </div>
                                     @elseif($method->type == 'nagad')
-                                        <div class="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-mobile-alt text-2xl text-orange-500"></i>
+                                        <div class="w-16 h-16 bg-teal-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-mobile-alt text-2xl text-teal-600"></i>
                                         </div>
                                     @endif
                                 </div>
@@ -271,7 +271,7 @@ document.querySelectorAll('.payment-type-radio').forEach(radio => {
     radio.addEventListener('change', function() {
         // Update visual selection
         document.querySelectorAll('.payment-type-option').forEach(option => {
-            option.classList.remove('border-blue-500', 'border-pink-500', 'border-orange-500', 'bg-blue-50', 'bg-pink-50', 'bg-orange-50');
+            option.classList.remove('border-blue-500', 'border-pink-500', 'border-teal-600', 'bg-blue-50', 'bg-pink-50', 'bg-teal-50');
             option.classList.add('border-gray-300');
         });
         
@@ -283,7 +283,7 @@ document.querySelectorAll('.payment-type-radio').forEach(radio => {
         } else if (this.value === 'bkash') {
             selectedOption.classList.add('border-pink-500', 'bg-pink-50');
         } else if (this.value === 'nagad') {
-            selectedOption.classList.add('border-orange-500', 'bg-orange-50');
+            selectedOption.classList.add('border-teal-600', 'bg-teal-50');
         }
         
         // Show/hide relevant fields

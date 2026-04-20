@@ -46,10 +46,10 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg">
+    <div class="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-orange-100 text-sm mb-1">Wholesalers</p>
+                <p class="text-teal-100 text-sm mb-1">Wholesalers</p>
                 <h3 class="text-3xl font-bold">{{ $stats['wholesalers'] }}</h3>
             </div>
             <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
@@ -112,7 +112,7 @@
             <button onclick="bulkUpdateStatus('inactive')" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
                 <i class="fas fa-ban"></i> Deactivate
             </button>
-            <button onclick="bulkUpdateStatus('suspended')" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+            <button onclick="bulkUpdateStatus('suspended')" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
                 <i class="fas fa-pause-circle"></i> Suspend
             </button>
             <button onclick="bulkDelete()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
@@ -162,7 +162,7 @@
                         <td class="px-6 py-4">
                             <span class="inline-flex px-3 py-1 rounded-full text-xs font-medium 
                                 {{ $vendor->role === 'retailer' ? 'bg-purple-100 text-purple-700' : '' }}
-                                {{ $vendor->role === 'wholesaler' ? 'bg-orange-100 text-orange-700' : '' }}
+                                {{ $vendor->role === 'wholesaler' ? 'bg-teal-100 text-teal-800' : '' }}
                                 {{ $vendor->role === 'exporter' ? 'bg-blue-100 text-blue-700' : '' }}">
                                 {{ $vendor->role === 'exporter' ? 'Importer' : ucfirst($vendor->role) }}
                             </span>

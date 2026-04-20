@@ -6,7 +6,7 @@
 
 .buy-now-btn {
     flex: 1;
-    background: linear-gradient(to right, #ea580c, #c2410c);
+    background: linear-gradient(to right, #0d5c63, #0a4a50);
     color: white;
     padding: 12px;
     font-weight: 600;
@@ -21,7 +21,7 @@
 }
 
 .buy-now-btn:hover {
-    background: linear-gradient(to right, #c2410c, #9a3412);
+    background: linear-gradient(to right, #0a4a50, #07383d);
 }
 
 .buy-now-btn:disabled {
