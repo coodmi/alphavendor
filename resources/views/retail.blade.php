@@ -57,12 +57,6 @@
 <!-- Shop Section -->
 <section class="shop-section">
     <div class="container">
-        <!-- Mobile Filter Toggle Button -->
-        <button class="mobile-filter-toggle" id="mobileFilterToggle">
-            <i class="fas fa-filter"></i>
-            Filters & Categories
-        </button>
-
         <!-- Filter Sidebar Overlay -->
         <div class="filter-sidebar-overlay" id="filterSidebarOverlay"></div>
 
