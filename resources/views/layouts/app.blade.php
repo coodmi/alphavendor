@@ -392,8 +392,17 @@
             </div>
 
             <div class="chat-footer">
+                @auth
                 <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off"/>
                 <button id="chat-send" class="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+                @else
+                <div id="chat-login-prompt" style="width:100%; text-align:center; padding:8px 0;">
+                    <p style="font-size:13px; color:#666; margin-bottom:8px;">Please login to send a message</p>
+                    <a href="{{ route('login') }}" style="display:inline-block; background:#0d5c63; color:white; padding:9px 28px; border-radius:24px; font-size:14px; font-weight:600; text-decoration:none;">
+                        <i class="fas fa-sign-in-alt" style="margin-right:6px;"></i>Login to Chat
+                    </a>
+                </div>
+                @endauth
             </div>
         </div>
     </div>
@@ -484,6 +493,13 @@
             function sendMsg(text) {
                 text = text.trim();
                 if (!text) return;
+
+                @guest
+                // Redirect to login if not authenticated
+                window.location.href = '{{ route('login') }}';
+                return;
+                @endguest
+
                 input.value = '';
                 appendMsg(text, false);
                 document.getElementById('faq-chips')?.remove();
