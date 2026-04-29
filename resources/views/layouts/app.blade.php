@@ -474,7 +474,9 @@
                 win.classList.toggle('active');
                 if (win.classList.contains('active')) {
                     badge.style.display = 'none';
-                    input.focus();
+                    input?.focus();
+                    // Reset lastMsgId so we load all existing messages fresh
+                    lastMsgId = 0;
                     loadMessages();
                     startPolling();
                 } else {
@@ -541,15 +543,15 @@
                 fetch('/chat/widget/messages', { headers:{'Accept':'application/json'} })
                 .then(r=>r.json()).then(d=>{
                     const msgs = d.messages || [];
-                    // Only add new messages
-                    msgs.forEach(m=>{
-                        if (m.id > lastMsgId) {
-                            lastMsgId = m.id;
-                            // Don't re-add messages already shown from user input
-                            if (m.is_admin) appendMsg(m.message, true);
-                        }
+                    if (msgs.length) {
+                        // Set lastMsgId to the highest ID we've seen
+                        const maxId = Math.max(...msgs.map(m => m.id));
+                        lastMsgId = maxId;
+                    }
+                    // Show only admin messages (user messages already shown on send)
+                    msgs.forEach(m => {
+                        if (m.is_admin) appendMsg(m.message, true);
                     });
-                    if (msgs.length) lastMsgId = Math.max(...msgs.map(m=>m.id));
                 }).catch(()=>{});
             }
 
@@ -560,13 +562,14 @@
                     .then(r=>r.json()).then(d=>{
                         const msgs = d.messages || [];
                         msgs.forEach(m=>{
-                            if (m.id > lastMsgId && m.is_admin) {
+                            if (m.id > lastMsgId) {
                                 lastMsgId = m.id;
-                                appendMsg(m.message, true);
+                                // Only show admin replies (new ones)
+                                if (m.is_admin) appendMsg(m.message, true);
                             }
                         });
                     }).catch(()=>{});
-                }, 5000);
+                }, 3000);
             }
 
             function stopPolling() {
