@@ -163,6 +163,32 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <!-- Developer Name -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fas fa-code text-blue-600 mr-2"></i>Developer/Company Name
+                        </label>
+                        <input type="text" name="developer_name" value="{{ old('developer_name', $settings->developer_name) }}" 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all @error('developer_name') border-red-500 @enderror"
+                            placeholder="e.g. Alphainno">
+                        @error('developer_name')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Developer URL -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fas fa-link text-blue-600 mr-2"></i>Developer Website URL
+                        </label>
+                        <input type="url" name="developer_url" value="{{ old('developer_url', $settings->developer_url) }}" 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all @error('developer_url') border-red-500 @enderror"
+                            placeholder="https://example.com">
+                        @error('developer_url')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 

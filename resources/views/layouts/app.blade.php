@@ -356,7 +356,7 @@
             </div>
             <div class="footer-bottom">
                 <p>{{ $siteSettings->footer_copyright ?: '© ' . date('Y') . ' ' . $siteSettings->site_name . '. All rights reserved.' }}</p>
-                <p>Design & Developed By <a href="https://alphainno.com" target="_blank" rel="noopener noreferrer" style="color: #0d5c63; text-decoration: none;">Alphainno</a></p>
+                <p>Design & Developed By <a href="{{ $siteSettings->developer_url ?: 'https://alphainno.com' }}" target="_blank" rel="noopener noreferrer" style="color: #ffffff; text-decoration: none; font-weight: 600;">{{ $siteSettings->developer_name ?: 'Alphainno' }}</a></p>
             </div>
         </div>
     </footer>
