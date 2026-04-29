@@ -23,10 +23,19 @@ class ChatController extends Controller
 
         // Find or create conversation
         if ($userId) {
-            $conversation = ChatConversation::firstOrCreate(
-                ['user_id' => $userId, 'status' => 'open'],
-                ['subject' => 'Chat Support', 'last_message_at' => now()]
-            );
+            // Find existing conversation (any status) or create new one
+            $conversation = ChatConversation::where('user_id', $userId)
+                ->latest('last_message_at')
+                ->first();
+
+            if (!$conversation) {
+                $conversation = ChatConversation::create([
+                    'user_id'         => $userId,
+                    'subject'         => 'Chat Support',
+                    'status'          => 'open',
+                    'last_message_at' => now(),
+                ]);
+            }
         } else {
             // Guest: use session-based conversation
             $convId = session($sessionKey);
@@ -83,9 +92,16 @@ class ChatController extends Controller
     public function widgetMessages(Request $request)
     {
         $userId = Auth::id();
-        $convId = $userId
-            ? optional(ChatConversation::where('user_id', $userId)->where('status', 'open')->latest()->first())->id
-            : session('chat_conversation_id');
+
+        if ($userId) {
+            // Find the most recent conversation for this user (any status)
+            $conversation = ChatConversation::where('user_id', $userId)
+                ->latest('last_message_at')
+                ->first();
+            $convId = $conversation?->id;
+        } else {
+            $convId = session('chat_conversation_id');
+        }
 
         if (!$convId) return response()->json(['messages' => []]);
 

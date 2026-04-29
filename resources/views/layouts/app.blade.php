@@ -543,15 +543,25 @@
                 fetch('/chat/widget/messages', { headers:{'Accept':'application/json'} })
                 .then(r=>r.json()).then(d=>{
                     const msgs = d.messages || [];
-                    if (msgs.length) {
-                        // Set lastMsgId to the highest ID we've seen
-                        const maxId = Math.max(...msgs.map(m => m.id));
-                        lastMsgId = maxId;
-                    }
-                    // Show only admin messages (user messages already shown on send)
+                    if (!msgs.length) return;
+
+                    const body = document.getElementById('chat-body');
+
+                    // Clear existing messages except welcome message and faq chips
+                    const welcomeMsg = body.querySelector('.bot-message');
+                    const faqChips = document.getElementById('faq-chips');
+                    body.innerHTML = '';
+                    if (welcomeMsg) body.appendChild(welcomeMsg);
+                    if (faqChips) body.appendChild(faqChips);
+
+                    // Show all past messages
                     msgs.forEach(m => {
-                        if (m.is_admin) appendMsg(m.message, true);
+                        appendMsg(m.message, m.is_admin);
                     });
+
+                    // Set lastMsgId to highest
+                    lastMsgId = Math.max(...msgs.map(m => m.id));
+                    body.scrollTop = body.scrollHeight;
                 }).catch(()=>{});
             }
 
@@ -564,7 +574,7 @@
                         msgs.forEach(m=>{
                             if (m.id > lastMsgId) {
                                 lastMsgId = m.id;
-                                // Only show admin replies (new ones)
+                                // Only show new admin replies (user messages already shown on send)
                                 if (m.is_admin) appendMsg(m.message, true);
                             }
                         });
