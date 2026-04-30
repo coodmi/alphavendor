@@ -439,7 +439,20 @@
         .chat-send-btn { width:44px; height:44px; border-radius:50%; background:#0d5c63; border:none; color:white; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; }
         .chat-send-btn:hover { background:#0a4a50; transform:scale(1.05); }
         .typing-indicator p { background:white!important; color:#9ca3af!important; font-style:italic; }
-        @media(max-width:480px){ .chat-window{width:calc(100vw - 40px);height:calc(100vh - 120px);} }
+        @media(max-width:480px){ 
+            .chat-window {
+                width: 100vw !important;
+                height: 100vh !important;
+                bottom: 0 !important;
+                right: 0 !important;
+                border-radius: 0 !important;
+                position: fixed !important;
+            }
+            #chatbot-container {
+                bottom: 0 !important;
+                right: 0 !important;
+            }
+        }
     </style>
 
     <script>
