@@ -547,17 +547,23 @@
 
                     const body = document.getElementById('chat-body');
 
-                    // Clear existing messages except welcome message and faq chips
-                    const welcomeMsg = body.querySelector('.bot-message');
-                    const faqChips = document.getElementById('faq-chips');
-                    body.innerHTML = '';
-                    if (welcomeMsg) body.appendChild(welcomeMsg);
-                    if (faqChips) body.appendChild(faqChips);
+                    // Save welcome message HTML before clearing
+                    const welcomeHTML = body.querySelector('.bot-message') ? body.querySelector('.bot-message').outerHTML : '';
+                    const faqHTML = document.getElementById('faq-chips') ? document.getElementById('faq-chips').outerHTML : '';
 
-                    // Show all past messages
+                    // Clear body
+                    body.innerHTML = '';
+
+                    // Re-add welcome message
+                    if (welcomeHTML) body.innerHTML += welcomeHTML;
+
+                    // Show all past messages from DB
                     msgs.forEach(m => {
                         appendMsg(m.message, m.is_admin);
                     });
+
+                    // Re-add faq chips at end if no messages yet
+                    if (faqHTML && msgs.length === 0) body.innerHTML += faqHTML;
 
                     // Set lastMsgId to highest
                     lastMsgId = Math.max(...msgs.map(m => m.id));
