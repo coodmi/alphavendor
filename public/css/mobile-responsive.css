@@ -857,3 +857,160 @@
         font-size: 10px !important;
     }
 }
+
+
+/* ============================================
+   FEATURED SELLERS SECTION HEADER FIX
+   ============================================ */
+@media (max-width: 768px) {
+
+    .vendors-section {
+        padding: 32px 0 !important;
+    }
+
+    /* Section header - stack vertically, centered */
+    .vendors-section .section-header {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        margin-bottom: 24px !important;
+        padding: 0 16px !important;
+        gap: 8px !important;
+    }
+
+    .vendors-section .section-header h2 {
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        margin: 0 !important;
+        letter-spacing: -0.3px !important;
+        color: #1a1a1a !important;
+    }
+
+    .vendors-section .section-header p {
+        font-size: 13px !important;
+        color: #666 !important;
+        margin: 0 0 12px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* View All Sellers button - compact pill */
+    .vendors-section .view-all-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 9px 20px !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        border-radius: 24px !important;
+        border: 2px solid #0d5c63 !important;
+        color: #0d5c63 !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+    }
+
+    /* Vendors grid - 2 columns on mobile */
+    .vendors-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        padding: 0 16px !important;
+    }
+
+    /* Vendor card */
+    .vendor-card {
+        border-radius: 14px !important;
+        overflow: hidden !important;
+    }
+
+    /* Vendor header area */
+    .vendor-card > div:first-child {
+        padding: 16px 10px 12px !important;
+    }
+
+    /* Avatar */
+    .vendor-card [style*="width: 110px"],
+    .vendor-card [style*="width:110px"] {
+        width: 64px !important;
+        height: 64px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Badge on avatar */
+    .vendor-card [style*="width: 38px"],
+    .vendor-card [style*="width:38px"] {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .vendor-card [style*="width: 38px"] i,
+    .vendor-card [style*="width:38px"] i {
+        font-size: 11px !important;
+    }
+
+    /* Vendor name */
+    .vendor-card h3 {
+        font-size: 13px !important;
+        margin-bottom: 5px !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Role badge */
+    .vendor-card span[style*="border-radius: 20px"],
+    .vendor-card span[style*="border-radius:20px"] {
+        font-size: 9px !important;
+        padding: 3px 8px !important;
+        letter-spacing: 0 !important;
+    }
+
+    /* Rating badge */
+    .vendor-card div[style*="FFD700"] {
+        font-size: 11px !important;
+        padding: 4px 10px !important;
+        gap: 4px !important;
+    }
+
+    /* Stats grid */
+    .vendor-card [style*="grid-template-columns: repeat(3"] {
+        gap: 5px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .vendor-card [style*="grid-template-columns: repeat(3"] > div {
+        padding: 7px 3px !important;
+        border-radius: 8px !important;
+    }
+
+    /* Stats numbers */
+    .vendor-card [style*="font-size: 22px"],
+    .vendor-card [style*="font-size:22px"] {
+        font-size: 15px !important;
+        margin-bottom: 2px !important;
+    }
+
+    /* Stats labels */
+    .vendor-card [style*="font-size: 11px"][style*="uppercase"],
+    .vendor-card [style*="font-size:11px"] {
+        font-size: 8px !important;
+        letter-spacing: 0 !important;
+    }
+
+    /* Visit Store button */
+    .visit-store-btn {
+        padding: 10px 8px !important;
+        font-size: 12px !important;
+        border-radius: 8px !important;
+        gap: 5px !important;
+    }
+
+    /* Vendor stats padding */
+    .vendor-card > div:last-child {
+        padding: 10px !important;
+    }
+}
+
+/* Single column on very small screens */
+@media (max-width: 360px) {
+    .vendors-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
