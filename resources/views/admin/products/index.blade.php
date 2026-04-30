@@ -397,9 +397,14 @@
                         @if($attributes->count() > 0)
                             @foreach($attributes as $attribute)
                             <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                                <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">{{ $attribute->name }}:</label>
+                                <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">
+                                    {{ $attribute->name }}:
+                                    @if($attribute->is_required)
+                                        <span style="color: #ef4444; font-size: 12px;">*</span>
+                                    @endif
+                                </label>
                                 @if($attribute->type === 'select')
-                                    <select name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <select name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
                                         <option value="">Select {{ $attribute->name }}</option>
                                         @if($attribute->options)
                                             @foreach($attribute->options as $option)
@@ -408,11 +413,11 @@
                                         @endif
                                     </select>
                                 @elseif($attribute->type === 'color')
-                                    <input type="color" name="attributes[{{ $attribute->id }}]" style="width: 60px; height: 40px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <input type="color" name="attributes[{{ $attribute->id }}]" value="#000000" style="width: 60px; height: 40px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
                                 @elseif($attribute->type === 'number')
-                                    <input type="number" name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <input type="number" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
                                 @else
-                                    <input type="text" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <input type="text" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
                                 @endif
                             </div>
                             @endforeach

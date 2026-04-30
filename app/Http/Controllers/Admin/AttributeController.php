@@ -110,6 +110,12 @@ class AttributeController extends Controller
 
         $attribute->update($validated);
 
+        // Update slug when name changes
+        if ($request->input('name') !== $attribute->getOriginal('name')) {
+            $attribute->slug = \Illuminate\Support\Str::slug($request->input('name'));
+            $attribute->save();
+        }
+
         return redirect()->route('admin.attributes.index')->with('success', 'Attribute updated successfully.');
     }
 

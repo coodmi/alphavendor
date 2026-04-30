@@ -133,9 +133,22 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        // Handle attributes
+        // Handle attributes - save values with proper type handling
         if ($request->has('attributes')) {
             $attributesData = [];
+            $requiredAttributes = \App\Models\Attribute::where('is_required', true)->get();
+
+            // Validate required attributes
+            foreach ($requiredAttributes as $reqAttr) {
+                $val = $request->input("attributes.{$reqAttr->id}");
+                if (empty($val)) {
+                    $product->delete(); // rollback
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors(["attributes.{$reqAttr->id}" => "The {$reqAttr->name} attribute is required."]);
+                }
+            }
+
             foreach ($request->attributes as $attributeId => $value) {
                 if (!empty($value)) {
                     $attributesData[$attributeId] = ['value' => $value];

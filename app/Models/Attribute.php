@@ -26,7 +26,10 @@ class Attribute extends Model
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
+        // Only auto-generate slug if not already set
+        if (empty($this->attributes['slug'])) {
+            $this->attributes['slug'] = \Illuminate\Support\Str::slug($value);
+        }
     }
 
     public function products()

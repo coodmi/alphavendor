@@ -119,25 +119,31 @@
                 </div>
                 @endif
 
-                @php $productAttributes = $product->attributes()->withPivot('value')->get(); @endphp
+                @php $productAttributes = $product->attributes()->withPivot('value')->orderBy('sort_order')->get(); @endphp
                 @if($productAttributes->count() > 0)
                 <div class="py-5 border-b border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Specifications</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         @foreach($productAttributes as $attr)
-                        <div class="flex items-start gap-3 bg-gray-50 rounded-lg px-4 py-3">
-                            <span class="text-sm font-semibold text-gray-500 min-w-[100px]">{{ $attr->name }}</span>
-                            <span class="text-sm text-gray-800 font-medium">
+                        @if(!empty($attr->pivot->value))
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-3 border border-gray-100">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide min-w-[90px]">{{ $attr->name }}</span>
+                            <span class="text-sm text-gray-800 font-medium flex-1">
                                 @if($attr->type === 'color')
                                     <span class="inline-flex items-center gap-2">
-                                        <span style="width:16px;height:16px;border-radius:50%;background:{{ $attr->pivot->value }};display:inline-block;border:1px solid #e5e7eb;"></span>
-                                        {{ $attr->pivot->value }}
+                                        <span style="width:18px;height:18px;border-radius:50%;background:{{ $attr->pivot->value }};display:inline-block;border:2px solid #e5e7eb;flex-shrink:0;"></span>
+                                        <span>{{ $attr->pivot->value }}</span>
                                     </span>
+                                @elseif($attr->type === 'select')
+                                    <span class="inline-block bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full text-xs font-semibold">{{ $attr->pivot->value }}</span>
+                                @elseif($attr->type === 'number')
+                                    <span class="font-semibold text-gray-900">{{ number_format($attr->pivot->value, 2, '.', '') }}</span>
                                 @else
-                                    {{ $attr->pivot->value ?? '—' }}
+                                    {{ $attr->pivot->value }}
                                 @endif
                             </span>
                         </div>
+                        @endif
                         @endforeach
                     </div>
                 </div>
