@@ -273,25 +273,29 @@ body {
 
 .slider-dots {
     position: absolute;
-    bottom: 30px;
+    bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px;
+    gap: 6px;
+    align-items: center;
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.45);
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
 }
 
 .dot.active,
 .dot:hover {
-    background: var(--white);
+    background: #ffffff;
+    width: 20px;
 }
 
 /* Sections */
