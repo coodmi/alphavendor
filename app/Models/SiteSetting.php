@@ -15,6 +15,8 @@ class SiteSetting extends Model
         'site_description',
         'footer_text',
         'footer_copyright',
+        'footer_developer_name',
+        'footer_developer_url',
         'developer_name',
         'developer_url',
         'facebook_url',
@@ -45,8 +47,8 @@ class SiteSetting extends Model
             $settings = self::create([
                 'site_name' => 'AlphaVendor',
                 'footer_copyright' => '© ' . date('Y') . ' AlphaVendor. All rights reserved.',
-                'developer_name' => 'Alphainno',
-                'developer_url' => 'https://alphainno.com',
+                'footer_developer_name' => 'Alphainno',
+                'footer_developer_url' => 'https://alphainno.com',
             ]);
         }
         
