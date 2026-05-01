@@ -81,7 +81,9 @@ class ProductController extends Controller
             ->where('is_active', true)
             ->get();
         $vendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin'])->get();
-        $attributes = Attribute::orderBy('sort_order')->orderBy('name')->get();
+        $attributes = Attribute::orderBy('sort_order')->orderBy('name')
+            ->whereRaw('LOWER(name) != ?', ['brand'])
+            ->get();
         $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
         $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 

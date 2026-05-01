@@ -402,6 +402,7 @@
                     <div id="attributesContainer" style="border: 1px solid #ddd; border-radius: 6px; padding: 15px; background: #f8f9fa;">
                         @if($attributes->count() > 0)
                             @foreach($attributes as $attribute)
+                            @if(strtolower($attribute->name) === 'brand') @continue @endif
                             <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
                                 <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">
                                     {{ $attribute->name }}:
