@@ -244,6 +244,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
+        // Transactions
+        Route::get('/transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
+
         // Product management
         Route::get('/products', [ProductController::class, 'index'])->name('products');
         Route::get('/products/{product}/show', [ProductController::class, 'showJson'])->name('products.show');

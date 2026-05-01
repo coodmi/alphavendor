@@ -190,7 +190,7 @@
 
     <div class="menu-section">
         <div class="menu-section-title">Payment & Finance</div>
-        <a href="javascript:void(0)" onclick="showSection('transactions')" class="menu-item">
+        <a href="{{ route('admin.transactions.index') }}" class="menu-item {{ request()->routeIs('admin.transactions*') ? 'active' : '' }}">
             <i class="fas fa-exchange-alt"></i>
             <span>Transactions</span>
         </a>
