@@ -106,13 +106,14 @@ class ProductController extends Controller
 
             // Set required defaults
             $data['status']        = 'draft';
-            $data['vendor_id']     = $data['vendor_id'] ?: auth()->id();
-            $data['category_id']   = $data['category_id'] ?: null;
-            $data['price']         = $data['price'] ?: 0;
-            $data['stock']         = $data['stock'] ?: 0;
-            $data['name']          = $data['name'] ?: 'Draft Product ' . now()->format('H:i:s');
+            $data['vendor_id']     = !empty($data['vendor_id']) ? $data['vendor_id'] : auth()->id();
+            $data['category_id']   = !empty($data['category_id']) ? $data['category_id'] : null;
+            $data['price']         = !empty($data['price']) ? $data['price'] : 0;
+            $data['stock']         = !empty($data['stock']) ? $data['stock'] : 0;
+            $data['name']          = !empty($data['name']) ? $data['name'] : 'Draft Product ' . now()->format('H:i:s');
             $data['rating']        = 0;
             $data['reviews_count'] = 0;
+            $data['image']         = null; // no image required for drafts
 
             // Handle image if provided
             if ($request->hasFile('image')) {
@@ -126,6 +127,10 @@ class ProductController extends Controller
                 ->first();
 
             if ($existingDraft) {
+                unset($data['image']); // don't overwrite image on update unless new one provided
+                if ($request->hasFile('image')) {
+                    $data['image'] = $request->file('image')->store('products', 'public');
+                }
                 $existingDraft->update($data);
                 $product = $existingDraft;
             } else {
