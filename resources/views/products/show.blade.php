@@ -56,44 +56,38 @@
                 }
             @endphp
 
-            <div style="display:flex; gap:12px; position:relative;">
+            <div style="display:flex; gap:10px;">
                 <!-- Thumbnails column -->
-                <div style="display:flex; flex-direction:column; gap:8px; width:68px; flex-shrink:0;">
+                <div style="display:flex; flex-direction:column; gap:8px; width:72px; flex-shrink:0;">
                     @foreach($allImages as $i => $imgUrl)
                     <button type="button" onclick="switchImage('{{ $imgUrl }}', this)"
                         class="thumbnail-btn"
-                        style="width:68px;height:68px;border-radius:6px;overflow:hidden;border:2px solid {{ $i===0 ? '#007185' : '#ddd' }};padding:2px;background:#fff;cursor:pointer;transition:border-color .2s;">
-                        <img src="{{ $imgUrl }}" alt="View {{ $i+1 }}" style="width:100%;height:100%;object-fit:contain;border-radius:4px;">
+                        style="width:72px;height:72px;border-radius:6px;overflow:hidden;border:2px solid {{ $i===0 ? '#007185' : '#ddd' }};padding:3px;background:#fff;cursor:pointer;">
+                        <img src="{{ $imgUrl }}" alt="View {{ $i+1 }}" style="width:100%;height:100%;object-fit:contain;">
                     </button>
                     @endforeach
                 </div>
 
-                <!-- Preview panel: small image + zoom panel side by side -->
-                <div style="flex:1; position:relative;">
-                    <!-- Small preview image -->
+                <!-- Main preview image -->
+                <div style="flex:1;">
                     <div id="previewBox"
-                        style="width:100%;aspect-ratio:1/1;max-height:460px;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;position:relative;cursor:crosshair;"
+                        style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;position:relative;cursor:zoom-in;background:#fff;"
                         onmousemove="handleZoom(event)"
-                        onmouseleave="hideZoom()"
-                        onmouseenter="showZoom()">
+                        onmouseleave="hideZoom()">
                         <img id="mainImage" src="{{ $allImages[0] }}" alt="{{ $product->name }}"
-                            style="width:100%;height:100%;object-fit:contain;"
+                            style="width:100%;aspect-ratio:1/1;object-fit:contain;display:block;"
                             onclick="openLightbox(this.src)">
-                        <!-- Zoom lens overlay -->
-                        <div id="zoomLens" style="display:none;position:absolute;width:120px;height:120px;border:2px solid #007185;background:rgba(0,113,133,0.1);pointer-events:none;border-radius:4px;"></div>
+                        <!-- Lens -->
+                        <div id="zoomLens" style="display:none;position:absolute;width:130px;height:130px;border:2px solid #007185;background:rgba(0,113,133,0.08);pointer-events:none;box-sizing:border-box;"></div>
                     </div>
-                    <p style="text-align:center;font-size:13px;color:#007185;margin-top:8px;cursor:pointer;" onclick="openLightbox(document.getElementById('mainImage').src)">
+                    <p style="text-align:center;font-size:13px;color:#007185;margin-top:6px;cursor:pointer;" onclick="openLightbox(document.getElementById('mainImage').src)">
                         <i class="fas fa-search-plus"></i> Click to see full view
                     </p>
-
-                    <!-- Zoom panel (fixed position, floats freely over page) -->
-                    <div id="zoomPanel"
-                        style="display:none;position:fixed;width:420px;height:420px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;z-index:9999;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
-                        <img id="zoomImg" src="{{ $allImages[0] }}" alt="Zoom"
-                            style="position:absolute;top:0;left:0;object-fit:contain;pointer-events:none;">
-                    </div>
                 </div>
             </div>
+
+            <!-- Zoom panel — fixed, outside all layout constraints -->
+            <div id="zoomPanel" style="display:none;position:fixed;width:450px;height:450px;border:1px solid #ccc;border-radius:8px;background-repeat:no-repeat;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.2);pointer-events:none;"></div>
 
             <!-- Lightbox -->
             <div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;align-items:center;justify-content:center;">
@@ -1108,24 +1102,13 @@
 
 <script>
     // Gallery functions
+    let currentZoomSrc = document.getElementById('mainImage')?.src || '';
+
     function switchImage(url, btn) {
         document.getElementById('mainImage').src = url;
-        document.getElementById('zoomImg').src = url;
-        document.querySelectorAll('.thumbnail-btn').forEach(b => {
-            b.style.borderColor = '#ddd';
-        });
+        currentZoomSrc = url;
+        document.querySelectorAll('.thumbnail-btn').forEach(b => b.style.borderColor = '#ddd');
         btn.style.borderColor = '#007185';
-    }
-
-    function showZoom() {
-        if (window.innerWidth < 1024) return;
-        const box = document.getElementById('previewBox');
-        const panel = document.getElementById('zoomPanel');
-        const rect = box.getBoundingClientRect();
-        // Position panel to the right of the preview box
-        panel.style.top = rect.top + 'px';
-        panel.style.left = (rect.right + 12) + 'px';
-        panel.style.display = 'block';
     }
 
     function hideZoom() {
@@ -1135,44 +1118,43 @@
 
     function handleZoom(e) {
         if (window.innerWidth < 1024) return;
-        const box = document.getElementById('previewBox');
-        const lens = document.getElementById('zoomLens');
-        const mainImg = document.getElementById('mainImage');
-        const zoomImg = document.getElementById('zoomImg');
+
+        const box   = document.getElementById('previewBox');
+        const lens  = document.getElementById('zoomLens');
         const panel = document.getElementById('zoomPanel');
+        const rect  = box.getBoundingClientRect();
 
-        const rect = box.getBoundingClientRect();
-        const lensW = 120, lensH = 120;
-        const panelW = panel.offsetWidth;
-        const panelH = panel.offsetHeight;
+        const lensW = 130, lensH = 130;
+        const panelW = 450, panelH = 450;
 
-        // Cursor position relative to box
-        let x = e.clientX - rect.left - lensW / 2;
-        let y = e.clientY - rect.top - lensH / 2;
-        x = Math.max(0, Math.min(x, rect.width - lensW));
-        y = Math.max(0, Math.min(y, rect.height - lensH));
+        let lx = e.clientX - rect.left - lensW / 2;
+        let ly = e.clientY - rect.top  - lensH / 2;
+        lx = Math.max(0, Math.min(lx, rect.width  - lensW));
+        ly = Math.max(0, Math.min(ly, rect.height - lensH));
 
-        // Move lens
         lens.style.display = 'block';
-        lens.style.left = x + 'px';
-        lens.style.top = y + 'px';
+        lens.style.left = lx + 'px';
+        lens.style.top  = ly + 'px';
 
-        // Scale zoom image to fill panel based on lens ratio
+        // Position panel fixed to right of preview box
+        panel.style.display = 'block';
+        panel.style.left   = (rect.right + 12) + 'px';
+        panel.style.top    = rect.top + 'px';
+        panel.style.width  = panelW + 'px';
+        panel.style.height = panelH + 'px';
+
+        // background-image zoom — always renders correctly
         const scaleX = panelW / lensW;
         const scaleY = panelH / lensH;
-        const zoomW = rect.width * scaleX;
-        const zoomH = rect.height * scaleY;
-
-        zoomImg.style.width = zoomW + 'px';
-        zoomImg.style.height = zoomH + 'px';
-        zoomImg.style.left = -(x * scaleX) + 'px';
-        zoomImg.style.top = -(y * scaleY) + 'px';
+        panel.style.backgroundImage    = `url('${currentZoomSrc}')`;
+        panel.style.backgroundSize     = `${rect.width * scaleX}px ${rect.height * scaleY}px`;
+        panel.style.backgroundPosition = `${-(lx * scaleX)}px ${-(ly * scaleY)}px`;
+        panel.style.backgroundRepeat   = 'no-repeat';
     }
 
     function openLightbox(src) {
-        const lb = document.getElementById('lightbox');
         document.getElementById('lightboxImg').src = src;
-        lb.style.display = 'flex';
+        document.getElementById('lightbox').style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
 
@@ -1181,7 +1163,6 @@
         document.body.style.overflow = '';
     }
 
-    // Close lightbox on Escape key
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 
