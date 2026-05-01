@@ -219,8 +219,12 @@ class ProductController extends Controller
             'badge' => 'nullable|string|max:50',
             'brand' => 'nullable|string|max:100',
             'attributes' => 'nullable|array',
-            'attributes.*' => 'exists:attributes,id',
+            'attributes.*' => 'nullable|string|max:255',
         ]);
+
+        // Remove attributes from validated so Product::create doesn't choke on it
+        $attributesInput = $request->input('attributes', []);
+        unset($validated['attributes']);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('products', 'public');
@@ -233,14 +237,14 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        // Handle attributes - save values with proper type handling
-        if ($request->has('attributes')) {
+        // Handle attributes
+        if (!empty($attributesInput)) {
             $attributesData = [];
             $requiredAttributes = \App\Models\Attribute::where('is_required', true)->get();
 
             // Validate required attributes
             foreach ($requiredAttributes as $reqAttr) {
-                $val = $request->input("attributes.{$reqAttr->id}");
+                $val = $attributesInput[$reqAttr->id] ?? null;
                 if (empty($val)) {
                     $product->delete(); // rollback
                     return redirect()->back()
@@ -249,7 +253,7 @@ class ProductController extends Controller
                 }
             }
 
-            foreach ($request->attributes as $attributeId => $value) {
+            foreach ($attributesInput as $attributeId => $value) {
                 if (!empty($value)) {
                     $attributesData[$attributeId] = ['value' => $value];
                 }
