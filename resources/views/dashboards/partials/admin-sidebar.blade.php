@@ -269,7 +269,7 @@
     <a href="{{ route('notifications.page') }}" class="menu-item {{ request()->routeIs('notifications.page') ? 'active' : '' }}">
         <i class="fas fa-bell"></i>
         <span>Notifications</span>
-        @php $unread = auth()->user()->appNotifications()->whereNull('read_at')->count(); @endphp
+        @php $unread = auth()->check() ? auth()->user()->appNotifications()->whereNull('read_at')->count() : 0; @endphp
         @if($unread > 0)
             <span style="margin-left:auto;background:#ef4444;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;">{{ $unread }}</span>
         @endif
