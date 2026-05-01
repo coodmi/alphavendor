@@ -242,9 +242,9 @@ Route::middleware('auth')->group(function () {
 
         // Product management
         Route::get('/products', [ProductController::class, 'index'])->name('products');
-        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
         Route::post('/products/draft', [ProductController::class, 'saveDraft'])->name('products.draft');
         Route::get('/products/draft/{id}', [ProductController::class, 'getDraft'])->name('products.draft.get');
+        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 

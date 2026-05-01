@@ -472,7 +472,7 @@
 <script>
 let isEditMode = false;
 
-// Products data - safely embedded using Blade @json
+// Products data
 const productsMap = {};
 @foreach($products as $p)
 productsMap[{{ $p->id }}] = @json($p);
