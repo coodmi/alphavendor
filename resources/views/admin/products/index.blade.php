@@ -475,7 +475,7 @@ let isEditMode = false;
 // Products data
 const productsMap = {};
 @foreach($products as $p)
-productsMap[{{ $p->id }}] = @json($p);
+productsMap[{{ $p->id }}] = {!! json_encode($p->toArray(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!};
 @endforeach
 
 function editProductById(id) {
