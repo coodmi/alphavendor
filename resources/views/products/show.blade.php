@@ -41,15 +41,44 @@
 
         <!-- Product Detail -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white p-10 rounded-2xl shadow-md mb-10">
-            <!-- Product Gallery -->
-            <div class="flex flex-col gap-5">
-                <div class="w-full aspect-square rounded-2xl overflow-hidden border-2 border-gray-200 group">
-                    @if($product->image)
-                        <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" id="mainImage" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    @else
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" alt="{{ $product->name }}" id="mainImage" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    @endif
+            <!-- Product Gallery (Amazon-style: thumbnails left, main image right) -->
+            @php
+                $product->load('images');
+                $allImages = [];
+                if ($product->image) {
+                    $allImages[] = str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image);
+                }
+                foreach ($product->images as $img) {
+                    $allImages[] = str_starts_with($img->image, 'http') ? $img->image : asset('storage/' . $img->image);
+                }
+                if (empty($allImages)) {
+                    $allImages[] = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop';
+                }
+            @endphp
+            <div class="flex gap-3">
+                <!-- Thumbnails column -->
+                @if(count($allImages) > 1)
+                <div class="flex flex-col gap-2 overflow-y-auto" style="max-height: 480px;">
+                    @foreach($allImages as $i => $imgUrl)
+                    <button type="button" onclick="switchImage('{{ $imgUrl }}', this)"
+                        class="thumbnail-btn flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 {{ $i === 0 ? 'border-teal-500' : 'border-gray-200 hover:border-teal-400' }}"
+                        style="padding:0;">
+                        <img src="{{ $imgUrl }}" alt="Thumbnail {{ $i+1 }}" class="w-full h-full object-cover">
+                    </button>
+                    @endforeach
                 </div>
+                @endif
+                <!-- Main image -->
+                <div class="flex-1 rounded-2xl overflow-hidden border-2 border-gray-200 group" style="aspect-ratio:1/1; max-height:480px;">
+                    <img src="{{ $allImages[0] }}" alt="{{ $product->name }}" id="mainImage"
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        style="cursor:zoom-in;" onclick="openLightbox(this.src)">
+                </div>
+            </div>
+
+            <!-- Lightbox -->
+            <div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;">
+                <img id="lightboxImg" src="" style="max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;">
             </div>
 
             <!-- Product Details -->
@@ -1054,6 +1083,29 @@
         }
 
         return discount;
+    }
+</script>
+
+<script>
+    // Gallery functions
+    function switchImage(url, btn) {
+        document.getElementById('mainImage').src = url;
+        document.querySelectorAll('.thumbnail-btn').forEach(b => {
+            b.classList.remove('border-teal-500');
+            b.classList.add('border-gray-200');
+        });
+        btn.classList.remove('border-gray-200');
+        btn.classList.add('border-teal-500');
+    }
+
+    function openLightbox(src) {
+        const lb = document.getElementById('lightbox');
+        document.getElementById('lightboxImg').src = src;
+        lb.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
     }
 </script>
 

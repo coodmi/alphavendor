@@ -330,14 +330,25 @@
 
                 <!-- Product Image -->
                 <div style="margin-top: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Image <span id="imageRequiredLabel">*</span></label>
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Main Product Image <span id="imageRequiredLabel">*</span></label>
                     <input type="file" name="image" id="productImage" accept="image/*" onchange="previewImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
                     <div id="imagePreview" style="display: none; margin-top: 15px; position: relative;">
-                        <img id="previewImg" src="" alt="Preview" style="max-width: 100%; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #3498db;">
+                        <img id="previewImg" src="" alt="Preview" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 8px; border: 2px solid #3498db;">
                         <button type="button" onclick="cancelImage()" style="position: absolute; top: 10px; right: 10px; width: 35px; height: 35px; border-radius: 50%; background: #e74c3c; color: white; border: none; cursor: pointer;">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                </div>
+
+                <!-- Additional Images -->
+                <div style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">
+                        <i class="fas fa-images" style="color: #667eea;"></i> Additional Images <small style="color: #7f8c8d; font-weight: normal;">(up to 5 more, shown as thumbnails)</small>
+                    </label>
+                    <input type="file" name="additional_images[]" id="additionalImages" accept="image/*" multiple onchange="previewAdditionalImages(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                    <div id="additionalPreviewContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;"></div>
+                    <!-- Existing additional images (edit mode) -->
+                    <div id="existingImagesContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px;"></div>
                 </div>
 
                 <!-- Featured, Free Shipping, Badge -->
@@ -555,6 +566,8 @@ function openAddModal() {
     document.getElementById('formMethod').value = 'POST';
     document.getElementById('productForm').reset();
     document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('additionalPreviewContainer').innerHTML = '';
+    document.getElementById('existingImagesContainer').innerHTML = '';
     document.getElementById('imageRequiredLabel').textContent = '*';
     document.getElementById('productImage').required = true;
 
@@ -658,10 +671,14 @@ function editProduct(product) {
 
     if (product.image) {
         document.getElementById('imagePreview').style.display = 'block';
-        document.getElementById('previewImg').src = `/storage/${product.image}`;
+        document.getElementById('previewImg').src = product.image.startsWith('http') ? product.image : `/storage/${product.image}`;
     } else {
         document.getElementById('imagePreview').style.display = 'none';
     }
+
+    // Load existing additional images
+    document.getElementById('additionalPreviewContainer').innerHTML = '';
+    loadExistingImages(product.images || []);
 
     document.getElementById('productModal').style.display = 'flex';
 }
@@ -684,13 +701,59 @@ function previewImage(event) {
             event.target.value = '';
             return;
         }
-
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('previewImg').src = e.target.result;
             document.getElementById('imagePreview').style.display = 'block';
         };
         reader.readAsDataURL(file);
+    }
+}
+
+function previewAdditionalImages(event) {
+    const files = Array.from(event.target.files).slice(0, 5);
+    const container = document.getElementById('additionalPreviewContainer');
+    container.innerHTML = '';
+    files.forEach((file, i) => {
+        if (file.size > 2097152) { showToast(`Image ${i+1} exceeds 2MB`, 'warning'); return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid #667eea;';
+            wrap.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+            container.appendChild(wrap);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function loadExistingImages(images) {
+    const container = document.getElementById('existingImagesContainer');
+    container.innerHTML = '';
+    if (!images || images.length === 0) return;
+    images.forEach(img => {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid #ddd;';
+        wrap.id = `existing-img-${img.id}`;
+        const url = img.image.startsWith('http') ? img.image : `/storage/${img.image}`;
+        wrap.innerHTML = `
+            <img src="${url}" style="width:100%;height:100%;object-fit:cover;">
+            <button type="button" onclick="removeExistingImage(${img.id})"
+                style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#e74c3c;color:white;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-times"></i>
+            </button>
+            <input type="hidden" name="delete_images[]" id="del-img-${img.id}" value="${img.id}" disabled>
+        `;
+        container.appendChild(wrap);
+    });
+}
+
+function removeExistingImage(id) {
+    const wrap = document.getElementById(`existing-img-${id}`);
+    if (wrap) {
+        wrap.style.opacity = '0.3';
+        wrap.style.border = '2px solid #e74c3c';
+        document.getElementById(`del-img-${id}`).disabled = false;
     }
 }
 

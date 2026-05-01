@@ -187,6 +187,29 @@ class Product extends Model
     }
 
     /**
+     * Get additional images for this product
+     */
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Get all images including the main image
+     */
+    public function getAllImagesAttribute()
+    {
+        $images = [];
+        if ($this->image) {
+            $images[] = str_starts_with($this->image, 'http') ? $this->image : asset('storage/' . $this->image);
+        }
+        foreach ($this->images as $img) {
+            $images[] = str_starts_with($img->image, 'http') ? $img->image : asset('storage/' . $img->image);
+        }
+        return $images;
+    }
+
+    /**
      * Get the wishlist items for this product
      */
     public function wishlists()

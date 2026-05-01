@@ -195,7 +195,7 @@ class ProductController extends Controller
      */
     public function showJson(Product $product)
     {
-        $product->load(['category', 'vendor', 'brand', 'attributes']);
+        $product->load(['category', 'vendor', 'brand', 'attributes', 'images']);
         return response()->json(['success' => true, 'product' => $product]);
     }
 
@@ -231,11 +231,14 @@ class ProductController extends Controller
             'brand' => 'nullable|string|max:100',
             'attributes' => 'nullable|array',
             'attributes.*' => 'nullable|string|max:255',
+            'additional_images' => 'nullable|array',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Remove attributes from validated so Product::create doesn't choke on it
         $attributesInput = $request->input('attributes', []);
         unset($validated['attributes']);
+        unset($validated['additional_images']);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('products', 'public');
@@ -247,6 +250,14 @@ class ProductController extends Controller
         $validated['reviews_count'] = 0;
 
         $product = Product::create($validated);
+
+        // Handle additional images
+        if ($request->hasFile('additional_images')) {
+            foreach ($request->file('additional_images') as $index => $img) {
+                $path = $img->store('products', 'public');
+                $product->images()->create(['image' => $path, 'sort_order' => $index]);
+            }
+        }
 
         // Handle attributes
         if (!empty($attributesInput)) {
@@ -299,7 +310,11 @@ class ProductController extends Controller
             'badge' => 'nullable|string|max:50',
             'brand' => 'nullable|string|max:100',
             'attributes' => 'nullable|array',
-            'attributes.*' => 'exists:attributes,id',
+            'attributes.*' => 'nullable|string|max:255',
+            'additional_images' => 'nullable|array',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'integer',
         ]);
 
         if ($request->hasFile('image')) {
@@ -314,6 +329,25 @@ class ProductController extends Controller
         $validated['free_shipping'] = $request->has('free_shipping');
 
         $product->update($validated);
+
+        // Handle additional images
+        if ($request->hasFile('additional_images')) {
+            foreach ($request->file('additional_images') as $index => $img) {
+                $path = $img->store('products', 'public');
+                $product->images()->create(['image' => $path, 'sort_order' => $product->images()->count() + $index]);
+            }
+        }
+
+        // Delete specific additional images if requested
+        if ($request->filled('delete_images')) {
+            foreach ($request->delete_images as $imageId) {
+                $img = $product->images()->find($imageId);
+                if ($img) {
+                    Storage::disk('public')->delete($img->image);
+                    $img->delete();
+                }
+            }
+        }
 
         // Handle attributes
         if ($request->has('attributes')) {
