@@ -59,4 +59,20 @@ class Order extends Model
     {
         return $this->hasMany(SellerViolation::class);
     }
+
+    /**
+     * Alias accessor for commission_amount
+     */
+    public function getCommissionAttribute()
+    {
+        return $this->commission_amount ?? 0;
+    }
+
+    /**
+     * Total commission (category + COD)
+     */
+    public function getTotalCommissionAttribute()
+    {
+        return ($this->commission_amount ?? 0) + ($this->cod_commission_amount ?? 0);
+    }
 }

@@ -153,12 +153,18 @@
                     </div>
                     <div class="border-t pt-2 flex justify-between text-green-600 font-semibold">
                         <span>Your Earning</span>
-                        <span>${{ number_format($order->vendor_earning, 2) }}</span>
+                        <span>৳{{ number_format($order->vendor_earning, 2) }}</span>
                     </div>
-                    @if($order->commission > 0)
+                    @if(($order->commission_amount ?? 0) > 0)
                         <div class="flex justify-between text-sm text-gray-500">
-                            <span>Commission ({{ $order->commission_rate }}%)</span>
-                            <span>-${{ number_format($order->commission, 2) }}</span>
+                            <span>Platform Commission ({{ $order->commission_rate }}%)</span>
+                            <span class="text-red-500">-৳{{ number_format($order->commission_amount, 2) }}</span>
+                        </div>
+                    @endif
+                    @if(($order->cod_commission_amount ?? 0) > 0)
+                        <div class="flex justify-between text-sm text-gray-500">
+                            <span>COD Commission ({{ $order->cod_commission_rate }}%)</span>
+                            <span class="text-red-500">-৳{{ number_format($order->cod_commission_amount, 2) }}</span>
                         </div>
                     @endif
                 </div>

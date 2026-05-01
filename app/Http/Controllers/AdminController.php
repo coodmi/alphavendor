@@ -463,7 +463,38 @@ class AdminController extends Controller
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
         ]);
 
+        $previousStatus = $order->status;
         $order->update($validated);
+
+        // Credit vendor wallet when order is marked delivered
+        if ($validated['status'] === 'delivered' && $previousStatus !== 'delivered') {
+            $wallet = \App\Models\VendorWallet::firstOrCreate(
+                ['vendor_id' => $order->vendor_id],
+                ['balance' => 0, 'pending_balance' => 0, 'total_earned' => 0, 'total_withdrawn' => 0]
+            );
+
+            // Only move from pending if it was previously added there
+            if ($wallet->pending_balance >= $order->vendor_earning) {
+                $wallet->decrement('pending_balance', $order->vendor_earning);
+            }
+            $wallet->increment('balance', $order->vendor_earning);
+            $wallet->increment('total_earned', $order->vendor_earning);
+
+            \App\Models\Transaction::where('order_id', $order->id)
+                ->where('vendor_id', $order->vendor_id)
+                ->update(['status' => 'completed']);
+        }
+
+        // If cancelled, reverse the pending balance
+        if ($validated['status'] === 'cancelled' && $previousStatus !== 'cancelled') {
+            $wallet = \App\Models\VendorWallet::where('vendor_id', $order->vendor_id)->first();
+            if ($wallet && $wallet->pending_balance >= $order->vendor_earning) {
+                $wallet->decrement('pending_balance', $order->vendor_earning);
+            }
+            \App\Models\Transaction::where('order_id', $order->id)
+                ->where('vendor_id', $order->vendor_id)
+                ->update(['status' => 'cancelled']);
+        }
 
         \App\Services\NotificationService::orderStatusChanged($order->load('user'));
 
