@@ -86,9 +86,9 @@
                         <i class="fas fa-search-plus"></i> Click to see full view
                     </p>
 
-                    <!-- Zoom panel (floats over product details column) -->
+                    <!-- Zoom panel (fixed position, floats freely over page) -->
                     <div id="zoomPanel"
-                        style="display:none;position:absolute;left:calc(100% + 12px);top:0;width:420px;height:420px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+                        style="display:none;position:fixed;width:420px;height:420px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;z-index:9999;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
                         <img id="zoomImg" src="{{ $allImages[0] }}" alt="Zoom"
                             style="position:absolute;top:0;left:0;object-fit:contain;pointer-events:none;">
                     </div>
@@ -1118,8 +1118,14 @@
     }
 
     function showZoom() {
-        if (window.innerWidth < 1024) return; // disable on mobile
-        document.getElementById('zoomPanel').style.display = 'block';
+        if (window.innerWidth < 1024) return;
+        const box = document.getElementById('previewBox');
+        const panel = document.getElementById('zoomPanel');
+        const rect = box.getBoundingClientRect();
+        // Position panel to the right of the preview box
+        panel.style.top = rect.top + 'px';
+        panel.style.left = (rect.right + 12) + 'px';
+        panel.style.display = 'block';
     }
 
     function hideZoom() {
