@@ -474,7 +474,9 @@ let isEditMode = false;
 
 // Products data - safely embedded using Blade @json
 const productsMap = {};
-@json($products->load('attributes')).forEach(p => { productsMap[p.id] = p; });
+@foreach($products as $p)
+productsMap[{{ $p->id }}] = @json($p);
+@endforeach
 
 function editProductById(id) {
     const product = productsMap[id];
