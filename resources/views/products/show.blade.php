@@ -41,7 +41,7 @@
 
         <!-- Product Detail -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white p-10 rounded-2xl shadow-md mb-10">
-            <!-- Product Gallery (Amazon-style: thumbnails left, main image right) -->
+            <!-- Product Gallery (Amazon-style) -->
             @php
                 $product->load('images');
                 $allImages = [];
@@ -55,30 +55,50 @@
                     $allImages[] = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop';
                 }
             @endphp
-            <div class="flex gap-3">
+
+            <div style="display:flex; gap:12px; position:relative;">
                 <!-- Thumbnails column -->
-                @if(count($allImages) > 1)
-                <div class="flex flex-col gap-2 overflow-y-auto" style="max-height: 480px;">
+                <div style="display:flex; flex-direction:column; gap:8px; width:68px; flex-shrink:0;">
                     @foreach($allImages as $i => $imgUrl)
                     <button type="button" onclick="switchImage('{{ $imgUrl }}', this)"
-                        class="thumbnail-btn flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 {{ $i === 0 ? 'border-teal-500' : 'border-gray-200 hover:border-teal-400' }}"
-                        style="padding:0;">
-                        <img src="{{ $imgUrl }}" alt="Thumbnail {{ $i+1 }}" class="w-full h-full object-cover">
+                        class="thumbnail-btn"
+                        style="width:68px;height:68px;border-radius:6px;overflow:hidden;border:2px solid {{ $i===0 ? '#007185' : '#ddd' }};padding:2px;background:#fff;cursor:pointer;transition:border-color .2s;">
+                        <img src="{{ $imgUrl }}" alt="View {{ $i+1 }}" style="width:100%;height:100%;object-fit:contain;border-radius:4px;">
                     </button>
                     @endforeach
                 </div>
-                @endif
-                <!-- Main image -->
-                <div class="flex-1 rounded-2xl overflow-hidden border-2 border-gray-200 group" style="aspect-ratio:1/1; max-height:480px;">
-                    <img src="{{ $allImages[0] }}" alt="{{ $product->name }}" id="mainImage"
-                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        style="cursor:zoom-in;" onclick="openLightbox(this.src)">
+
+                <!-- Preview panel: small image + zoom panel side by side -->
+                <div style="flex:1; position:relative;">
+                    <!-- Small preview image -->
+                    <div id="previewBox"
+                        style="width:100%;aspect-ratio:1/1;max-height:460px;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;position:relative;cursor:crosshair;"
+                        onmousemove="handleZoom(event)"
+                        onmouseleave="hideZoom()"
+                        onmouseenter="showZoom()">
+                        <img id="mainImage" src="{{ $allImages[0] }}" alt="{{ $product->name }}"
+                            style="width:100%;height:100%;object-fit:contain;"
+                            onclick="openLightbox(this.src)">
+                        <!-- Zoom lens overlay -->
+                        <div id="zoomLens" style="display:none;position:absolute;width:120px;height:120px;border:2px solid #007185;background:rgba(0,113,133,0.1);pointer-events:none;border-radius:4px;"></div>
+                    </div>
+                    <p style="text-align:center;font-size:13px;color:#007185;margin-top:8px;cursor:pointer;" onclick="openLightbox(document.getElementById('mainImage').src)">
+                        <i class="fas fa-search-plus"></i> Click to see full view
+                    </p>
+                </div>
+
+                <!-- Zoom panel (appears to the right) -->
+                <div id="zoomPanel"
+                    style="display:none;position:absolute;left:calc(100% + 16px);top:0;width:460px;height:460px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+                    <img id="zoomImg" src="{{ $allImages[0] }}" alt="Zoom"
+                        style="position:absolute;width:200%;height:200%;object-fit:contain;transform-origin:top left;">
                 </div>
             </div>
 
             <!-- Lightbox -->
-            <div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;">
-                <img id="lightboxImg" src="" style="max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;">
+            <div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;align-items:center;justify-content:center;">
+                <img id="lightboxImg" src="" style="max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain;">
+                <button onclick="closeLightbox()" style="position:fixed;top:20px;right:24px;background:none;border:none;color:white;font-size:32px;cursor:pointer;">&times;</button>
             </div>
 
             <!-- Product Details -->
@@ -1090,23 +1110,67 @@
     // Gallery functions
     function switchImage(url, btn) {
         document.getElementById('mainImage').src = url;
+        document.getElementById('zoomImg').src = url;
         document.querySelectorAll('.thumbnail-btn').forEach(b => {
-            b.classList.remove('border-teal-500');
-            b.classList.add('border-gray-200');
+            b.style.borderColor = '#ddd';
         });
-        btn.classList.remove('border-gray-200');
-        btn.classList.add('border-teal-500');
+        btn.style.borderColor = '#007185';
+    }
+
+    function showZoom() {
+        if (window.innerWidth < 1024) return; // disable on mobile
+        document.getElementById('zoomPanel').style.display = 'block';
+    }
+
+    function hideZoom() {
+        document.getElementById('zoomPanel').style.display = 'none';
+        document.getElementById('zoomLens').style.display = 'none';
+    }
+
+    function handleZoom(e) {
+        if (window.innerWidth < 1024) return;
+        const box = document.getElementById('previewBox');
+        const lens = document.getElementById('zoomLens');
+        const zoomImg = document.getElementById('zoomImg');
+        const panel = document.getElementById('zoomPanel');
+
+        const rect = box.getBoundingClientRect();
+        const lensW = lens.offsetWidth;
+        const lensH = lens.offsetHeight;
+
+        let x = e.clientX - rect.left - lensW / 2;
+        let y = e.clientY - rect.top - lensH / 2;
+
+        x = Math.max(0, Math.min(x, rect.width - lensW));
+        y = Math.max(0, Math.min(y, rect.height - lensH));
+
+        lens.style.display = 'block';
+        lens.style.left = x + 'px';
+        lens.style.top = y + 'px';
+
+        const ratioX = panel.offsetWidth / lensW;
+        const ratioY = panel.offsetHeight / lensH;
+
+        zoomImg.style.width = (rect.width * ratioX) + 'px';
+        zoomImg.style.height = (rect.height * ratioY) + 'px';
+        zoomImg.style.left = -(x * ratioX) + 'px';
+        zoomImg.style.top = -(y * ratioY) + 'px';
     }
 
     function openLightbox(src) {
         const lb = document.getElementById('lightbox');
         document.getElementById('lightboxImg').src = src;
         lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
 
     function closeLightbox() {
         document.getElementById('lightbox').style.display = 'none';
+        document.body.style.overflow = '';
     }
+
+    // Close lightbox on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 
 <script>
