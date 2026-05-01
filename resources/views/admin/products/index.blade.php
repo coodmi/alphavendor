@@ -705,16 +705,7 @@ function closeDeleteModal() {
     document.getElementById('deleteModal').style.display = 'none';
 }
 
-// Close modals on outside click — save as draft to SERVER
-document.getElementById('productModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        if (!isEditMode) {
-            saveDraftToServer();
-        } else {
-            closeModal();
-        }
-    }
-});
+// Modal only closes via ✕ button or Save — backdrop click does nothing
 
 async function saveDraftToServer() {
     const name  = document.getElementById('productName')?.value?.trim();
