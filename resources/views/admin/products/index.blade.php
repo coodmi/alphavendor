@@ -98,6 +98,7 @@
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
                     <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                     <option value="out_of_stock" {{ request('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
                 </select>
             </div>
 
@@ -313,6 +314,7 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="out_of_stock">Out of Stock</option>
+                        <option value="draft">Draft</option>
                     </select>
                 </div>
 
