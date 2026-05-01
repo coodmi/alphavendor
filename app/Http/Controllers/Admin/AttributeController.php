@@ -31,32 +31,39 @@ class AttributeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:text,select,color,number',
-            'options' => 'nullable|string',
-            'is_required' => 'nullable|boolean',
-            'is_filterable' => 'nullable|boolean',
-            'sort_order' => 'nullable|integer',
+            'name'          => 'required|string|max:255',
+            'type'          => 'required|in:text,select,color,number',
+            'options'       => 'nullable|string',
+            'is_required'   => 'nullable',
+            'is_filterable' => 'nullable',
+            'sort_order'    => 'nullable|integer',
         ]);
 
-        // Handle boolean fields
-        $validated['is_required'] = $request->has('is_required');
+        $validated['is_required']   = $request->has('is_required');
         $validated['is_filterable'] = $request->has('is_filterable');
-        $validated['sort_order'] = $request->input('sort_order', 0);
+        $validated['sort_order']    = (int) $request->input('sort_order', 0);
 
-        // Handle options
-        if ($request->input('options') && !empty($request->input('options'))) {
-            $validated['options'] = json_decode($request->input('options'), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $validated['options'] = null;
-            }
+        // Parse options JSON
+        $optionsRaw = $request->input('options');
+        if (!empty($optionsRaw)) {
+            $decoded = json_decode($optionsRaw, true);
+            $validated['options'] = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : null;
         } else {
             $validated['options'] = null;
         }
 
+        // Generate unique slug
+        $slug = \Illuminate\Support\Str::slug($validated['name']);
+        $originalSlug = $slug;
+        $count = 1;
+        while (Attribute::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+        $validated['slug'] = $slug;
+
         Attribute::create($validated);
 
-        return redirect()->route('admin.attributes.index')->with('success', 'Attribute created successfully.');
+        return redirect()->route('admin.attributes.index')->with('success', 'Attribute "' . $validated['name'] . '" created successfully.');
     }
 
     /**
@@ -85,38 +92,41 @@ class AttributeController extends Controller
         $attribute = Attribute::findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:text,select,color,number',
-            'options' => 'nullable|string',
-            'is_required' => 'nullable|boolean',
-            'is_filterable' => 'nullable|boolean',
-            'sort_order' => 'nullable|integer',
+            'name'          => 'required|string|max:255',
+            'type'          => 'required|in:text,select,color,number',
+            'options'       => 'nullable|string',
+            'is_required'   => 'nullable',
+            'is_filterable' => 'nullable',
+            'sort_order'    => 'nullable|integer',
         ]);
 
-        // Handle boolean fields
-        $validated['is_required'] = $request->has('is_required');
+        $validated['is_required']   = $request->has('is_required');
         $validated['is_filterable'] = $request->has('is_filterable');
-        $validated['sort_order'] = $request->input('sort_order', 0);
+        $validated['sort_order']    = (int) $request->input('sort_order', 0);
 
-        // Handle options
-        if ($request->input('options') && !empty($request->input('options'))) {
-            $validated['options'] = json_decode($request->input('options'), true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                $validated['options'] = null;
-            }
+        // Parse options JSON
+        $optionsRaw = $request->input('options');
+        if (!empty($optionsRaw)) {
+            $decoded = json_decode($optionsRaw, true);
+            $validated['options'] = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : null;
         } else {
             $validated['options'] = null;
         }
 
-        $attribute->update($validated);
-
-        // Update slug when name changes
-        if ($request->input('name') !== $attribute->getOriginal('name')) {
-            $attribute->slug = \Illuminate\Support\Str::slug($request->input('name'));
-            $attribute->save();
+        // Update slug if name changed
+        if ($validated['name'] !== $attribute->name) {
+            $slug = \Illuminate\Support\Str::slug($validated['name']);
+            $originalSlug = $slug;
+            $count = 1;
+            while (Attribute::where('slug', $slug)->where('id', '!=', $id)->exists()) {
+                $slug = $originalSlug . '-' . $count++;
+            }
+            $validated['slug'] = $slug;
         }
 
-        return redirect()->route('admin.attributes.index')->with('success', 'Attribute updated successfully.');
+        $attribute->update($validated);
+
+        return redirect()->route('admin.attributes.index')->with('success', 'Attribute "' . $validated['name'] . '" updated successfully.');
     }
 
     /**

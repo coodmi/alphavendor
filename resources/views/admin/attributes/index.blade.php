@@ -36,6 +36,17 @@
     </div>
     @endif
 
+    @if($errors->any())
+    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-6">
+        <p class="font-semibold mb-1"><i class="fas fa-exclamation-triangle mr-2"></i>Please fix the following errors:</p>
+        <ul class="list-disc list-inside text-sm space-y-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <!-- Attributes Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         @forelse($attributes as $attribute)

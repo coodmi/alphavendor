@@ -26,8 +26,8 @@ class Attribute extends Model
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        // Only auto-generate slug if not already set
-        if (empty($this->attributes['slug'])) {
+        // Auto-generate slug on new records only
+        if (!$this->exists && empty($this->attributes['slug'])) {
             $this->attributes['slug'] = \Illuminate\Support\Str::slug($value);
         }
     }
