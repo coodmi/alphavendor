@@ -249,6 +249,18 @@ class AdminController extends Controller
         // Fetch retail page content
         $retailPageContent = RetailPageContent::first() ?? new RetailPageContent();
 
+        // Transactions for the transactions section
+        $transactions = \App\Models\Transaction::with(['vendor', 'order'])
+            ->latest()
+            ->take(50)
+            ->get();
+        $transactionStats = [
+            'total_revenue'  => \App\Models\Transaction::where('status', 'completed')->sum('amount'),
+            'completed'      => \App\Models\Transaction::where('status', 'completed')->count(),
+            'pending'        => \App\Models\Transaction::where('status', 'pending')->count(),
+            'cancelled'      => \App\Models\Transaction::where('status', 'cancelled')->count(),
+        ];
+
         // Fetch about page content
         $aboutPageContent = AboutPageContent::first() ?? new AboutPageContent();
 
@@ -282,7 +294,9 @@ class AdminController extends Controller
             'contactPageContent',
             'homePageContent',
             'wholesalePageContent',
-            'importPageContent'
+            'importPageContent',
+            'transactions',
+            'transactionStats'
         ));
     }
 
