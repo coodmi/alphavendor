@@ -202,10 +202,17 @@
                         @endif
                     </td>
                     <td style="padding: 12px; text-align: center;">
-                        <button onclick='editProduct(@json($product))' style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                        <button 
+                            data-product='@json($product->load("attributes"))'
+                            onclick="editProduct(JSON.parse(this.dataset.product))"
+                            style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button onclick="confirmDelete({{ $product->id }}, '{{ $product->name }}')" style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <button 
+                            data-id="{{ $product->id }}"
+                            data-name="{{ addslashes($product->name) }}"
+                            onclick="confirmDelete(this.dataset.id, this.dataset.name)"
+                            style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </td>
