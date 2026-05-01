@@ -191,7 +191,7 @@ class ProductController extends Controller
     /**
      * Return a single product as JSON for the edit modal
      */
-    public function show(Product $product)
+    public function showJson(Product $product)
     {
         $product->load(['category', 'vendor', 'brand', 'attributes']);
         return response()->json(['success' => true, 'product' => $product]);
