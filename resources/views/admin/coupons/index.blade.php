@@ -227,6 +227,32 @@
                 <textarea name="description" id="couponDescription" rows="3" placeholder="Optional description" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"></textarea>
             </div>
 
+            <!-- Product/Category Restriction -->
+            <div class="mt-5 p-4 bg-purple-50 rounded-lg border border-purple-100">
+                <p class="text-sm font-semibold text-purple-700 mb-3"><i class="fas fa-tag mr-1"></i> Restrict to Specific Product or Category (optional)</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Specific Product</label>
+                        <select name="product_id" id="couponProductId" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
+                            <option value="">All Products</option>
+                            @foreach(\App\Models\Product::where('status','active')->orderBy('name')->get() as $prod)
+                                <option value="{{ $prod->id }}">{{ $prod->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Specific Category</label>
+                        <select name="category_id" id="couponCategoryId" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
+                            <option value="">All Categories</option>
+                            @foreach(\App\Models\Category::whereNull('vendor_id')->where('is_active',true)->orderBy('name')->get() as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Leave both empty to apply to all products. If both are set, product takes priority.</p>
+            </div>
+
             <div class="mt-5">
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" name="is_active" id="couponStatus" value="1" checked class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500">

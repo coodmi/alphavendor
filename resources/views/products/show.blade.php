@@ -1014,7 +1014,8 @@
                 },
                 body: JSON.stringify({
                     code: couponCode,
-                    subtotal: subtotal
+                    subtotal: subtotal,
+                    product_id: {{ $product->id }}
                 })
             });
 

@@ -1318,6 +1318,8 @@ class AdminController extends Controller
             'end_date' => 'nullable|date|after:start_date',
             'is_active' => 'boolean',
             'description' => 'nullable|string',
+            'product_id' => 'nullable|exists:products,id',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         Coupon::create($validated);
@@ -1342,6 +1344,8 @@ class AdminController extends Controller
             'end_date' => 'nullable|date|after:start_date',
             'is_active' => 'boolean',
             'description' => 'nullable|string',
+            'product_id' => 'nullable|exists:products,id',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $coupon->update($validated);

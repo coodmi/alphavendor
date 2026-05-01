@@ -170,73 +170,64 @@ class CartController extends Controller
     public function validateCoupon(Request $request)
     {
         $request->validate([
-            'code' => 'required|string',
-            'subtotal' => 'required|numeric|min:0',
+            'code'       => 'required|string',
+            'subtotal'   => 'required|numeric|min:0',
+            'product_id' => 'nullable|integer',
         ]);
 
-        $code = strtoupper($request->code);
-        $subtotal = $request->subtotal;
+        $code      = strtoupper(trim($request->code));
+        $subtotal  = $request->subtotal;
+        $productId = $request->product_id;
 
-        // Find coupon
-        $coupon = Coupon::where('code', $code)->first();
+        $coupon = \App\Models\Coupon::where('code', $code)->first();
 
         if (!$coupon) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid coupon code'
-            ], 404);
+            return response()->json(['success' => false, 'message' => 'Invalid coupon code'], 404);
         }
 
-        // Check if coupon is valid
         if (!$coupon->isValid()) {
             $message = 'This coupon is not valid';
-            
-            if (!$coupon->is_active) {
-                $message = 'This coupon is inactive';
-            } elseif ($coupon->start_date && now()->lt($coupon->start_date)) {
-                $message = 'This coupon is not yet active';
-            } elseif ($coupon->end_date && now()->gt($coupon->end_date)) {
-                $message = 'This coupon has expired';
-            } elseif ($coupon->usage_limit && $coupon->used_count >= $coupon->usage_limit) {
-                $message = 'This coupon has reached its usage limit';
+            if (!$coupon->is_active)                                                       $message = 'This coupon is inactive';
+            elseif ($coupon->start_date && now()->lt($coupon->start_date))                 $message = 'This coupon is not yet active';
+            elseif ($coupon->end_date && now()->gt($coupon->end_date))                     $message = 'This coupon has expired';
+            elseif ($coupon->usage_limit && $coupon->used_count >= $coupon->usage_limit)   $message = 'This coupon has reached its usage limit';
+            return response()->json(['success' => false, 'message' => $message], 400);
+        }
+
+        if ($productId) {
+            $product = \App\Models\Product::find($productId);
+            if (!$coupon->appliesToProduct($productId, $product->category_id ?? null)) {
+                return response()->json(['success' => false, 'message' => 'This coupon is not valid for this product'], 400);
             }
-
-            return response()->json([
-                'success' => false,
-                'message' => $message
-            ], 400);
         }
 
-        // Check if user can use this coupon
         if (auth()->check() && !$coupon->canBeUsedBy(auth()->id())) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You have already used this coupon the maximum number of times'
-            ], 400);
+            return response()->json(['success' => false, 'message' => 'You have already used this coupon the maximum number of times'], 400);
         }
 
-        // Check minimum purchase
         if ($coupon->min_purchase && $subtotal < $coupon->min_purchase) {
             return response()->json([
                 'success' => false,
-                'message' => 'Minimum purchase of $' . number_format($coupon->min_purchase, 2) . ' required for this coupon'
+                'message' => 'Minimum purchase of \u09f3' . number_format($coupon->min_purchase, 2) . ' required'
             ], 400);
         }
 
-        // Calculate discount
         $discount = $coupon->calculateDiscount($subtotal);
 
         return response()->json([
-            'success' => true,
-            'message' => 'Coupon applied successfully',
-            'coupon' => [
-                'code' => $coupon->code,
-                'type' => $coupon->type,
-                'value' => $coupon->value,
+            'success'  => true,
+            'message'  => 'Coupon applied! You save \u09f3' . number_format($discount, 2),
+            'coupon'   => [
+                'id'           => $coupon->id,
+                'code'         => $coupon->code,
+                'type'         => $coupon->type,
+                'value'        => $coupon->value,
                 'min_purchase' => $coupon->min_purchase,
                 'max_discount' => $coupon->max_discount,
+                'product_id'   => $coupon->product_id,
+                'category_id'  => $coupon->category_id,
             ],
-            'discount' => $discount
+            'discount' => $discount,
         ]);
     }
 }

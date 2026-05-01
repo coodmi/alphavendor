@@ -105,7 +105,26 @@ class OrderController extends Controller
                     $codCommission = $commissionData['cod_commission_amount'];
                     $totalCommission = $commissionData['total_commission'];
                     $vendorEarning = $commissionData['vendor_earning'];
-                    $total = $subtotal + $deliveryCharge;
+
+                    // Apply coupon discount if any item in this vendor's order has a coupon
+                    $couponDiscount = 0;
+                    $appliedCouponCode = null;
+                    foreach ($items as $item) {
+                        if (!empty($item['coupon_code']) && !empty($item['discount_amount'])) {
+                            $couponDiscount += floatval($item['discount_amount']);
+                            $appliedCouponCode = $item['coupon_code'];
+                        }
+                    }
+                    // Also check session-level coupon (from checkout page)
+                    if (!$couponDiscount && !empty($request->coupon_code)) {
+                        $sessionCoupon = \App\Models\Coupon::where('code', strtoupper($request->coupon_code))->first();
+                        if ($sessionCoupon && $sessionCoupon->isValid()) {
+                            $couponDiscount = $sessionCoupon->calculateDiscount($subtotal);
+                            $appliedCouponCode = $sessionCoupon->code;
+                        }
+                    }
+
+                    $total = $subtotal + $deliveryCharge - $couponDiscount;
 
                     // Create order
                     $order = Order::create([
@@ -118,7 +137,7 @@ class OrderController extends Controller
                         'cod_commission_amount' => $codCommission,
                         'cod_commission_rate' => $commissionData['cod_commission_rate'],
                         'vendor_earning' => $vendorEarning,
-                        'total' => $total,
+                        'total' => max(0, $total),
                         'delivery_charge' => $deliveryCharge,
                         'status' => 'pending',
                         'payment_status' => 'unpaid',
@@ -130,6 +149,20 @@ class OrderController extends Controller
                         'phone' => $validated['phone'],
                         'notes' => $validated['notes'] ?? ''
                     ]);
+
+                    // Track coupon usage
+                    if ($appliedCouponCode && $couponDiscount > 0) {
+                        $coupon = \App\Models\Coupon::where('code', $appliedCouponCode)->first();
+                        if ($coupon) {
+                            \App\Models\CouponUsage::create([
+                                'coupon_id'       => $coupon->id,
+                                'user_id'         => Auth::id(),
+                                'order_id'        => $order->id,
+                                'discount_amount' => $couponDiscount,
+                            ]);
+                            $coupon->increment('used_count');
+                        }
+                    }
 
                     // Create order items with commission details
                     foreach ($commissionData['items'] as $item) {
