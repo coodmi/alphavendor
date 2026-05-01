@@ -503,44 +503,58 @@ function openAddModal() {
     document.getElementById('imageRequiredLabel').textContent = '*';
     document.getElementById('productImage').required = true;
 
-    // Restore draft if exists
-    const draft = localStorage.getItem('product_draft');
-    if (draft) {
-        try {
-            const d = JSON.parse(draft);
-            if (d.name || d.price) {
-                const restore = confirm(`You have a saved draft from ${d.savedAt || 'earlier'}.\n\nRestore it?`);
+    // Collapse more fields by default
+    document.getElementById('moreFields').style.display = 'none';
+    document.getElementById('seeMoreText').textContent = 'See More';
+    document.getElementById('seeMoreIcon').className = 'fas fa-chevron-down';
+
+    // Check if there's a saved draft ID - fetch LATEST data from server
+    const draftId = localStorage.getItem('product_draft_id');
+    if (draftId) {
+        fetch(`/admin/products/draft/${draftId}`, {
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+            credentials: 'same-origin'
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.product) {
+                const p = data.product;
+                const savedAt = localStorage.getItem('product_draft_time') || 'earlier';
+                const restore = confirm(`You have a draft saved at ${savedAt}:\n"${p.name || 'Untitled'}"\n\nRestore it?`);
                 if (restore) {
-                    if (d.name)        document.getElementById('productName').value        = d.name;
-                    if (d.sku)         document.getElementById('productSku').value         = d.sku;
-                    if (d.category_id) document.getElementById('productCategory').value    = d.category_id;
-                    if (d.brand_id)    document.getElementById('productBrand').value       = d.brand_id;
-                    if (d.vendor_id)   document.getElementById('productVendor').value      = d.vendor_id;
-                    if (d.price)       document.getElementById('productPrice').value       = d.price;
-                    if (d.old_price)   document.getElementById('productOldPrice').value    = d.old_price;
-                    if (d.stock)       document.getElementById('productStock').value       = d.stock;
-                    if (d.status)      document.getElementById('productStatus').value      = d.status;
-                    if (d.description) document.getElementById('productDescription').value = d.description;
-                    if (d.badge)       document.getElementById('productBadge').value       = d.badge;
-                    // Expand more fields to show restored data
+                    if (p.name)        document.getElementById('productName').value        = p.name;
+                    if (p.sku)         document.getElementById('productSku').value         = p.sku;
+                    if (p.category_id) document.getElementById('productCategory').value    = p.category_id;
+                    if (p.brand_id)    document.getElementById('productBrand').value       = p.brand_id;
+                    if (p.vendor_id)   document.getElementById('productVendor').value      = p.vendor_id;
+                    if (p.price)       document.getElementById('productPrice').value       = p.price;
+                    if (p.old_price)   document.getElementById('productOldPrice').value    = p.old_price;
+                    if (p.stock)       document.getElementById('productStock').value       = p.stock;
+                    if (p.description) document.getElementById('productDescription').value = p.description;
+                    if (p.badge)       document.getElementById('productBadge').value       = p.badge;
+                    // Expand more fields
                     document.getElementById('moreFields').style.display = 'block';
                     document.getElementById('seeMoreText').textContent = 'See Less';
                     document.getElementById('seeMoreIcon').className = 'fas fa-chevron-up';
-                    showToast('Draft restored!', 'success');
+                    showToast('Latest draft restored!', 'success');
                 } else {
-                    localStorage.removeItem('product_draft');
+                    // User declined - clear draft
+                    localStorage.removeItem('product_draft_id');
+                    localStorage.removeItem('product_draft_time');
                 }
+            } else {
+                // Draft not found on server - clear localStorage
+                localStorage.removeItem('product_draft_id');
+                localStorage.removeItem('product_draft_time');
             }
-        } catch(e) { localStorage.removeItem('product_draft'); }
+        })
+        .catch(() => {
+            localStorage.removeItem('product_draft_id');
+        });
     }
 
     document.getElementById('productModal').style.display = 'flex';
-
-    // Reset to collapsed state if no draft restored
-    if (!draft) {
-        document.getElementById('moreFields').style.display = 'none';
-        document.getElementById('seeMoreText').textContent = 'See More';
-        document.getElementById('seeMoreIcon').className = 'fas fa-chevron-down';
+}
     }
 }
 

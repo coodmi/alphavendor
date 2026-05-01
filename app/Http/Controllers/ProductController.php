@@ -89,6 +89,23 @@ class ProductController extends Controller
     }
 
     /**
+     * Get a draft product by ID (for restoring in modal)
+     */
+    public function getDraft($id)
+    {
+        $product = \App\Models\Product::where('id', $id)
+            ->where('status', 'draft')
+            ->where('vendor_id', auth()->id())
+            ->first();
+
+        if (!$product) {
+            return response()->json(['success' => false, 'message' => 'Draft not found']);
+        }
+
+        return response()->json(['success' => true, 'product' => $product]);
+    }
+
+    /**
      * Save product as draft (called when user clicks outside modal)
      * Always saves/updates with the latest field values
      */
