@@ -472,12 +472,9 @@
 <script>
 let isEditMode = false;
 
-// Products map for safe JS access (avoids HTML attribute escaping issues)
-const productsMap = {
-    @foreach($products as $p)
-    {{ $p->id }}: {!! json_encode($p->load('attributes')) !!},
-    @endforeach
-};
+// Products data - safely embedded using Blade @json
+const productsMap = {};
+@json($products->load('attributes')).forEach(p => { productsMap[p.id] = p; });
 
 function editProductById(id) {
     const product = productsMap[id];
