@@ -949,12 +949,18 @@
     function buyNow() {
         const form = document.getElementById('addToCartForm');
         const formData = new FormData(form);
-        
-        // Show loading state
-        const buyNowBtn = event.target.closest('button');
-        const originalText = buyNowBtn.innerHTML;
-        buyNowBtn.disabled = true;
-        buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        // Ensure product_id is included
+        if (!formData.get('product_id')) {
+            formData.append('product_id', '{{ $product->id }}');
+        }
+
+        const buyNowBtn = document.querySelector('button[onclick="buyNow()"]');
+        const originalText = buyNowBtn ? buyNowBtn.innerHTML : '';
+        if (buyNowBtn) {
+            buyNowBtn.disabled = true;
+            buyNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        }
 
         fetch('{{ route("cart.buy-now") }}', {
             method: 'POST',
@@ -964,19 +970,23 @@
             },
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('Server error: ' + response.status);
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
-                // Redirect directly to checkout
                 window.location.href = '{{ route("orders.checkout") }}';
             } else {
                 throw new Error(data.message || 'Failed to process');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            buyNowBtn.disabled = false;
-            buyNowBtn.innerHTML = originalText;
+            console.error('Buy Now Error:', error);
+            if (buyNowBtn) {
+                buyNowBtn.disabled = false;
+                buyNowBtn.innerHTML = originalText;
+            }
             showToast('Failed to process. Please try again.', 'error');
         });
     }
