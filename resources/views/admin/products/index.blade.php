@@ -469,14 +469,39 @@
     </div>
 </div>
 
+<script id="products-data" type="application/json">{{ json_encode($products->toArray()) }}</script>
+
 <script>
 let isEditMode = false;
 
-// Products data
+// Products data - loaded via AJAX to avoid JS injection issues
 const productsMap = {};
-@foreach($products as $p)
-productsMap[{{ $p->id }}] = {!! json_encode($p->toArray(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!};
-@endforeach
+
+async function loadProductsMap() {
+    try {
+        const res = await fetch('{{ route("admin.products") }}?format=json', {
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin'
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.products) {
+                data.products.forEach(p => { productsMap[p.id] = p; });
+            }
+        }
+    } catch(e) {}
+}
+
+// Pre-load products data from inline script (safe encoding)
+(function() {
+    const raw = document.getElementById('products-data');
+    if (raw) {
+        try {
+            const arr = JSON.parse(raw.textContent);
+            arr.forEach(p => { productsMap[p.id] = p; });
+        } catch(e) { console.error('Products data parse error:', e); }
+    }
+})();
 
 function editProductById(id) {
     const product = productsMap[id];
