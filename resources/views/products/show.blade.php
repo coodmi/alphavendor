@@ -112,12 +112,14 @@
                     </div>
                 </div>
 
-                @if($product->description)
                 <div class="py-5 border-b border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Product Description</h3>
-                    <p class="text-gray-600 leading-relaxed product-description">{{ $product->description }}</p>
+                    @if($product->description)
+                        <div class="text-gray-600 leading-relaxed product-description prose max-w-none">{!! nl2br(e($product->description)) !!}</div>
+                    @else
+                        <p class="text-gray-400 italic">No description available for this product.</p>
+                    @endif
                 </div>
-                @endif
 
                 @php $productAttributes = $product->attributes()->withPivot('value')->orderBy('sort_order')->get(); @endphp
                 @if($productAttributes->count() > 0)
