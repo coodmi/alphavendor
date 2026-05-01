@@ -291,12 +291,12 @@
                     </div>
 
                     <div>
-                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Price ($) *</label>
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Price (৳) *</label>
                         <input type="number" name="price" id="productPrice" required step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
                     </div>
 
                     <div>
-                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Old Price ($)</label>
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Old Price (৳)</label>
                         <input type="number" name="old_price" id="productOldPrice" step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
                     </div>
 
@@ -466,6 +466,15 @@
 <script>
 let isEditMode = false;
 
+function showToast(message, type = 'success') {
+    const colors = { success: '#27ae60', error: '#e74c3c', info: '#3b82f6', warning: '#f59e0b' };
+    const toast = document.createElement('div');
+    toast.style.cssText = `position:fixed;top:20px;right:20px;background:${colors[type]||colors.success};color:white;padding:14px 22px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:99999;font-size:14px;font-weight:500;max-width:320px;`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+}
+
 // Toggle More Fields
 function toggleMoreFields() {
     const moreFields = document.getElementById('moreFields');
@@ -493,12 +502,46 @@ function openAddModal() {
     document.getElementById('imagePreview').style.display = 'none';
     document.getElementById('imageRequiredLabel').textContent = '*';
     document.getElementById('productImage').required = true;
+
+    // Restore draft if exists
+    const draft = localStorage.getItem('product_draft');
+    if (draft) {
+        try {
+            const d = JSON.parse(draft);
+            if (d.name || d.price) {
+                const restore = confirm(`You have a saved draft from ${d.savedAt || 'earlier'}.\n\nRestore it?`);
+                if (restore) {
+                    if (d.name)        document.getElementById('productName').value        = d.name;
+                    if (d.sku)         document.getElementById('productSku').value         = d.sku;
+                    if (d.category_id) document.getElementById('productCategory').value    = d.category_id;
+                    if (d.brand_id)    document.getElementById('productBrand').value       = d.brand_id;
+                    if (d.vendor_id)   document.getElementById('productVendor').value      = d.vendor_id;
+                    if (d.price)       document.getElementById('productPrice').value       = d.price;
+                    if (d.old_price)   document.getElementById('productOldPrice').value    = d.old_price;
+                    if (d.stock)       document.getElementById('productStock').value       = d.stock;
+                    if (d.status)      document.getElementById('productStatus').value      = d.status;
+                    if (d.description) document.getElementById('productDescription').value = d.description;
+                    if (d.badge)       document.getElementById('productBadge').value       = d.badge;
+                    // Expand more fields to show restored data
+                    document.getElementById('moreFields').style.display = 'block';
+                    document.getElementById('seeMoreText').textContent = 'See Less';
+                    document.getElementById('seeMoreIcon').className = 'fas fa-chevron-up';
+                    showToast('Draft restored!', 'success');
+                } else {
+                    localStorage.removeItem('product_draft');
+                }
+            }
+        } catch(e) { localStorage.removeItem('product_draft'); }
+    }
+
     document.getElementById('productModal').style.display = 'flex';
-    
-    // Reset to collapsed state
-    document.getElementById('moreFields').style.display = 'none';
-    document.getElementById('seeMoreText').textContent = 'See More';
-    document.getElementById('seeMoreIcon').className = 'fas fa-chevron-down';
+
+    // Reset to collapsed state if no draft restored
+    if (!draft) {
+        document.getElementById('moreFields').style.display = 'none';
+        document.getElementById('seeMoreText').textContent = 'See More';
+        document.getElementById('seeMoreIcon').className = 'fas fa-chevron-down';
+    }
 }
 
 function editProduct(product) {
@@ -558,6 +601,8 @@ function editProduct(product) {
 
 function closeModal() {
     document.getElementById('productModal').style.display = 'none';
+    // Clear draft when manually closing (X button or Cancel)
+    if (!isEditMode) localStorage.removeItem('product_draft');
 }
 
 function previewImage(event) {
@@ -598,9 +643,35 @@ function closeDeleteModal() {
     document.getElementById('deleteModal').style.display = 'none';
 }
 
-// Close modals on outside click
+// Close modals on outside click — save as draft
 document.getElementById('productModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
+    if (e.target === this) {
+        // Save current form data as draft in localStorage
+        const form = document.getElementById('productForm');
+        const draft = {
+            name:        document.getElementById('productName')?.value,
+            sku:         document.getElementById('productSku')?.value,
+            category_id: document.getElementById('productCategory')?.value,
+            brand_id:    document.getElementById('productBrand')?.value,
+            vendor_id:   document.getElementById('productVendor')?.value,
+            price:       document.getElementById('productPrice')?.value,
+            old_price:   document.getElementById('productOldPrice')?.value,
+            stock:       document.getElementById('productStock')?.value,
+            status:      document.getElementById('productStatus')?.value,
+            description: document.getElementById('productDescription')?.value,
+            badge:       document.getElementById('productBadge')?.value,
+            savedAt:     new Date().toLocaleTimeString(),
+        };
+
+        // Only save if there's meaningful data
+        const hasData = draft.name || draft.price || draft.description;
+        if (hasData && !isEditMode) {
+            localStorage.setItem('product_draft', JSON.stringify(draft));
+            showToast('Draft saved! Your progress has been saved.', 'info');
+        }
+
+        closeModal();
+    }
 });
 
 document.getElementById('deleteModal').addEventListener('click', function(e) {
