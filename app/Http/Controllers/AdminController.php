@@ -512,11 +512,20 @@ class AdminController extends Controller
         ]);
 
         $user->role        = $validated['role'];
-        $user->permissions = $validated['permissions'] ?? [];
+        // If permissions_submitted is set, save whatever was checked (could be empty array)
+        $user->permissions = $request->has('permissions_submitted')
+            ? ($validated['permissions'] ?? [])
+            : ($user->permissions ?? []);
         $user->save();
 
+        $permCount = count($user->permissions);
+        $msg = "Role updated to " . ucfirst($validated['role']);
+        if ($permCount > 0) {
+            $msg .= " with {$permCount} permission(s)";
+        }
+
         return redirect()->route('admin.user-permissions')
-            ->with('success', "Permissions for {$user->name} updated successfully.");
+            ->with('success', "{$user->name}: {$msg}.");
     }
 
     /**

@@ -48,6 +48,8 @@
 
     <form action="{{ route('admin.user-permissions.update', $user) }}" method="POST">
         @csrf
+        {{-- Hidden field ensures empty permissions array is always sent --}}
+        <input type="hidden" name="permissions_submitted" value="1">
 
         <!-- Role Assignment -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-5">
