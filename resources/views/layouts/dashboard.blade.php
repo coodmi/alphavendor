@@ -100,9 +100,10 @@
         }
 
         .sidebar-header .logo-img {
-            width: 60px;
-            height: auto;
-            margin: 0 auto 12px;
+            width: auto;
+            height: 40px;
+            max-width: 140px;
+            object-fit: contain;
             display: block;
         }
 
@@ -563,7 +564,16 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="{{ route('home') }}" style="display: inline-block; line-height: 0; text-decoration: none;">
-                    <img src="{{ asset('airmarket.png') }}" alt="AlphaVendor Logo" class="logo-img" style="cursor: pointer;">
+                    @if($siteSettings->site_logo)
+                        <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" class="logo-img" style="cursor: pointer;">
+                    @else
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <div style="width:36px;height:36px;background:linear-gradient(135deg,#0d5c63,#0a4a52);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                                <span style="color:white;font-weight:800;font-size:16px;">A</span>
+                            </div>
+                            <span style="color:white;font-weight:700;font-size:16px;">{{ $siteSettings->site_name ?? 'AlphaVendor' }}</span>
+                        </div>
+                    @endif
                 </a>
                 <span class="role-badge">
                     @if(Auth::user()->role === 'exporter')
