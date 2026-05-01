@@ -242,6 +242,7 @@ Route::middleware('auth')->group(function () {
 
         // Product management
         Route::get('/products', [ProductController::class, 'index'])->name('products');
+        Route::get('/products/{product}/show', [ProductController::class, 'show'])->name('products.show');
         Route::post('/products/draft', [ProductController::class, 'saveDraft'])->name('products.draft');
         Route::get('/products/draft/{id}', [ProductController::class, 'getDraft'])->name('products.draft.get');
         Route::post('/products', [ProductController::class, 'store'])->name('products.store');

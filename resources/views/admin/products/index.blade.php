@@ -504,12 +504,20 @@ async function loadProductsMap() {
 })();
 
 function editProductById(id) {
-    const product = productsMap[id];
-    if (!product) {
-        showToast('Product not found', 'error');
-        return;
-    }
-    editProduct(product);
+    // Fetch fresh product data from server to avoid stale/broken inline JSON
+    fetch(`/admin/products/${id}/show`, {
+        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        credentials: 'same-origin'
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.product) {
+            editProduct(data.product);
+        } else {
+            showToast('Product not found', 'error');
+        }
+    })
+    .catch(() => showToast('Failed to load product', 'error'));
 }
 
 function showToast(message, type = 'success') {
