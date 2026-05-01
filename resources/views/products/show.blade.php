@@ -85,13 +85,13 @@
                     <p style="text-align:center;font-size:13px;color:#007185;margin-top:8px;cursor:pointer;" onclick="openLightbox(document.getElementById('mainImage').src)">
                         <i class="fas fa-search-plus"></i> Click to see full view
                     </p>
-                </div>
 
-                <!-- Zoom panel (appears to the right) -->
-                <div id="zoomPanel"
-                    style="display:none;position:absolute;left:calc(100% + 16px);top:0;width:460px;height:460px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
-                    <img id="zoomImg" src="{{ $allImages[0] }}" alt="Zoom"
-                        style="position:absolute;width:200%;height:200%;object-fit:contain;transform-origin:top left;">
+                    <!-- Zoom panel (floats over product details column) -->
+                    <div id="zoomPanel"
+                        style="display:none;position:absolute;left:calc(100% + 12px);top:0;width:420px;height:420px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+                        <img id="zoomImg" src="{{ $allImages[0] }}" alt="Zoom"
+                            style="position:absolute;top:0;left:0;object-fit:contain;pointer-events:none;">
+                    </div>
                 </div>
             </div>
 
@@ -1131,30 +1131,36 @@
         if (window.innerWidth < 1024) return;
         const box = document.getElementById('previewBox');
         const lens = document.getElementById('zoomLens');
+        const mainImg = document.getElementById('mainImage');
         const zoomImg = document.getElementById('zoomImg');
         const panel = document.getElementById('zoomPanel');
 
         const rect = box.getBoundingClientRect();
-        const lensW = lens.offsetWidth;
-        const lensH = lens.offsetHeight;
+        const lensW = 120, lensH = 120;
+        const panelW = panel.offsetWidth;
+        const panelH = panel.offsetHeight;
 
+        // Cursor position relative to box
         let x = e.clientX - rect.left - lensW / 2;
         let y = e.clientY - rect.top - lensH / 2;
-
         x = Math.max(0, Math.min(x, rect.width - lensW));
         y = Math.max(0, Math.min(y, rect.height - lensH));
 
+        // Move lens
         lens.style.display = 'block';
         lens.style.left = x + 'px';
         lens.style.top = y + 'px';
 
-        const ratioX = panel.offsetWidth / lensW;
-        const ratioY = panel.offsetHeight / lensH;
+        // Scale zoom image to fill panel based on lens ratio
+        const scaleX = panelW / lensW;
+        const scaleY = panelH / lensH;
+        const zoomW = rect.width * scaleX;
+        const zoomH = rect.height * scaleY;
 
-        zoomImg.style.width = (rect.width * ratioX) + 'px';
-        zoomImg.style.height = (rect.height * ratioY) + 'px';
-        zoomImg.style.left = -(x * ratioX) + 'px';
-        zoomImg.style.top = -(y * ratioY) + 'px';
+        zoomImg.style.width = zoomW + 'px';
+        zoomImg.style.height = zoomH + 'px';
+        zoomImg.style.left = -(x * scaleX) + 'px';
+        zoomImg.style.top = -(y * scaleY) + 'px';
     }
 
     function openLightbox(src) {
