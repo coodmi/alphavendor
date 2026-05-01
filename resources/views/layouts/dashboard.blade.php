@@ -93,37 +93,42 @@
         }
 
         .sidebar-header {
-            padding: 20px;
-            text-align: center;
+            padding: 16px 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             background: rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
 
         .sidebar-header .logo-img {
             width: auto;
-            height: 40px;
-            max-width: 140px;
+            height: 44px;
+            max-width: 160px;
             object-fit: contain;
             display: block;
         }
 
         .sidebar-header h2 {
             font-size: 22px;
-            margin-bottom: 8px;
+            margin-bottom: 0;
             font-weight: 700;
             color: #ffffff;
         }
 
         .sidebar-header .role-badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 3px 8px;
             background: #0d5c63;
-            border-radius: 12px;
-            font-size: 10px;
+            border-radius: 6px;
+            font-size: 9px;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
             color: #ffffff;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .sidebar-menu {
@@ -563,15 +568,15 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="{{ route('home') }}" style="display: inline-block; line-height: 0; text-decoration: none;">
+                <a href="{{ route('home') }}" style="display:flex;align-items:center;text-decoration:none;flex:1;min-width:0;">
                     @if($siteSettings->site_logo)
-                        <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" class="logo-img" style="cursor: pointer;">
+                        <img src="{{ asset('storage/' . $siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }} Logo" class="logo-img" style="cursor:pointer;">
                     @else
                         <div style="display:flex;align-items:center;gap:8px;">
-                            <div style="width:36px;height:36px;background:linear-gradient(135deg,#0d5c63,#0a4a52);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                            <div style="width:36px;height:36px;background:linear-gradient(135deg,#0d5c63,#0a4a52);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                 <span style="color:white;font-weight:800;font-size:16px;">A</span>
                             </div>
-                            <span style="color:white;font-weight:700;font-size:16px;">{{ $siteSettings->site_name ?? 'AlphaVendor' }}</span>
+                            <span style="color:white;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ $siteSettings->site_name ?? 'AlphaVendor' }}</span>
                         </div>
                     @endif
                 </a>
