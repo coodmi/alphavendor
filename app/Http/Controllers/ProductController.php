@@ -89,6 +89,62 @@ class ProductController extends Controller
     }
 
     /**
+     * Save product as draft (called when user clicks outside modal)
+     */
+    public function saveDraft(Request $request)
+    {
+        try {
+            $data = $request->only([
+                'name', 'sku', 'category_id', 'vendor_id', 'brand_id',
+                'price', 'old_price', 'stock', 'description', 'badge',
+            ]);
+
+            // Need at least a name or price to save
+            if (empty($data['name']) && empty($data['price'])) {
+                return response()->json(['success' => false, 'message' => 'Nothing to save']);
+            }
+
+            // Set required defaults
+            $data['status']        = 'draft';
+            $data['vendor_id']     = $data['vendor_id'] ?: auth()->id();
+            $data['category_id']   = $data['category_id'] ?: null;
+            $data['price']         = $data['price'] ?: 0;
+            $data['stock']         = $data['stock'] ?: 0;
+            $data['name']          = $data['name'] ?: 'Draft Product ' . now()->format('H:i:s');
+            $data['rating']        = 0;
+            $data['reviews_count'] = 0;
+
+            // Handle image if provided
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            // Check if there's already a draft for this user to update
+            $existingDraft = \App\Models\Product::where('vendor_id', auth()->id())
+                ->where('status', 'draft')
+                ->latest()
+                ->first();
+
+            if ($existingDraft) {
+                $existingDraft->update($data);
+                $product = $existingDraft;
+            } else {
+                $product = \App\Models\Product::create($data);
+            }
+
+            return response()->json([
+                'success'    => true,
+                'message'    => 'Draft saved successfully',
+                'product_id' => $product->id,
+                'saved_at'   => now()->format('H:i:s'),
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
      * Store a newly created product
      */
     public function store(Request $request)

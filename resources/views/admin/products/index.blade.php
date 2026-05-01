@@ -601,8 +601,6 @@ function editProduct(product) {
 
 function closeModal() {
     document.getElementById('productModal').style.display = 'none';
-    // Clear draft when manually closing (X button or Cancel)
-    if (!isEditMode) localStorage.removeItem('product_draft');
 }
 
 function previewImage(event) {
@@ -643,36 +641,63 @@ function closeDeleteModal() {
     document.getElementById('deleteModal').style.display = 'none';
 }
 
-// Close modals on outside click — save as draft
+// Close modals on outside click — save as draft to SERVER
 document.getElementById('productModal').addEventListener('click', function(e) {
     if (e.target === this) {
-        // Save current form data as draft in localStorage
-        const form = document.getElementById('productForm');
-        const draft = {
-            name:        document.getElementById('productName')?.value,
-            sku:         document.getElementById('productSku')?.value,
-            category_id: document.getElementById('productCategory')?.value,
-            brand_id:    document.getElementById('productBrand')?.value,
-            vendor_id:   document.getElementById('productVendor')?.value,
-            price:       document.getElementById('productPrice')?.value,
-            old_price:   document.getElementById('productOldPrice')?.value,
-            stock:       document.getElementById('productStock')?.value,
-            status:      document.getElementById('productStatus')?.value,
-            description: document.getElementById('productDescription')?.value,
-            badge:       document.getElementById('productBadge')?.value,
-            savedAt:     new Date().toLocaleTimeString(),
-        };
-
-        // Only save if there's meaningful data
-        const hasData = draft.name || draft.price || draft.description;
-        if (hasData && !isEditMode) {
-            localStorage.setItem('product_draft', JSON.stringify(draft));
-            showToast('Draft saved! Your progress has been saved.', 'info');
+        if (!isEditMode) {
+            saveDraftToServer();
+        } else {
+            closeModal();
         }
-
-        closeModal();
     }
 });
+
+async function saveDraftToServer() {
+    const name  = document.getElementById('productName')?.value?.trim();
+    const price = document.getElementById('productPrice')?.value?.trim();
+    const desc  = document.getElementById('productDescription')?.value?.trim();
+
+    // Only save if there's meaningful data
+    if (!name && !price && !desc) {
+        closeModal();
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+    formData.append('name',        document.getElementById('productName')?.value || '');
+    formData.append('sku',         document.getElementById('productSku')?.value || '');
+    formData.append('category_id', document.getElementById('productCategory')?.value || '');
+    formData.append('brand_id',    document.getElementById('productBrand')?.value || '');
+    formData.append('vendor_id',   document.getElementById('productVendor')?.value || '');
+    formData.append('price',       document.getElementById('productPrice')?.value || '');
+    formData.append('old_price',   document.getElementById('productOldPrice')?.value || '');
+    formData.append('stock',       document.getElementById('productStock')?.value || '');
+    formData.append('description', document.getElementById('productDescription')?.value || '');
+    formData.append('badge',       document.getElementById('productBadge')?.value || '');
+
+    try {
+        const res = await fetch('{{ route("admin.products.draft") }}', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin',
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showToast(`✅ Draft saved at ${data.saved_at}`, 'info');
+            // Store draft product ID for later editing
+            localStorage.setItem('product_draft_id', data.product_id);
+            localStorage.setItem('product_draft_time', data.saved_at);
+        } else {
+            showToast(data.message || 'Could not save draft', 'warning');
+        }
+    } catch(err) {
+        showToast('Draft save failed', 'error');
+    }
+
+    closeModal();
+}
 
 document.getElementById('deleteModal').addEventListener('click', function(e) {
     if (e.target === this) closeDeleteModal();
