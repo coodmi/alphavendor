@@ -194,21 +194,29 @@
             <i class="fas fa-exchange-alt"></i>
             <span>Transactions</span>
         </a>
-        <a href="javascript:void(0)" onclick="showSection('payment-gateway')" class="menu-item">
+        <a href="{{ route('admin.payment-settings.index') }}" class="menu-item">
             <i class="fas fa-credit-card"></i>
             <span>Payment Gateways</span>
         </a>
-        <a href="javascript:void(0)" onclick="showSection('offline-payment')" class="menu-item">
-            <i class="fas fa-money-bill-wave"></i>
-            <span>Offline Payments</span>
+        <a href="{{ route('admin.otp-settings.index') }}" class="menu-item">
+            <i class="fas fa-sms"></i>
+            <span>OTP & API Settings</span>
         </a>
-        <a href="javascript:void(0)" onclick="showSection('tax-settings')" class="menu-item">
-            <i class="fas fa-calculator"></i>
-            <span>Tax Settings</span>
+        <a href="{{ route('admin.manual-payments.index') }}" class="menu-item">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Payment Verification</span>
+            @php $pendingPay = \App\Models\ManualPayment::where('status','pending')->count(); @endphp
+            @if($pendingPay > 0)
+                <span style="margin-left:auto;background:#ef4444;color:white;font-size:11px;padding:2px 7px;border-radius:10px;">{{ $pendingPay }}</span>
+            @endif
         </a>
-        <a href="javascript:void(0)" onclick="showSection('currency')" class="menu-item">
-            <i class="fas fa-dollar-sign"></i>
-            <span>Currency Management</span>
+        <a href="{{ route('admin.cod-orders.index') }}" class="menu-item">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span>Cash on Delivery</span>
+            @php $codPending = \App\Models\Order::where('payment_method','cod')->where('payment_status','pending')->count(); @endphp
+            @if($codPending > 0)
+                <span style="margin-left:auto;background:#0d9488;color:white;font-size:11px;padding:2px 7px;border-radius:10px;">{{ $codPending }}</span>
+            @endif
         </a>
     </div>
 
