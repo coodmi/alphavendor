@@ -203,15 +203,12 @@
                     </td>
                     <td style="padding: 12px; text-align: center;">
                         <button 
-                            data-product='@json($product->load("attributes"))'
-                            onclick="editProduct(JSON.parse(this.dataset.product))"
+                            onclick="editProductById({{ $product->id }})"
                             style="padding: 6px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
                             <i class="fas fa-edit"></i> Edit
                         </button>
                         <button 
-                            data-id="{{ $product->id }}"
-                            data-name="{{ addslashes($product->name) }}"
-                            onclick="confirmDelete(this.dataset.id, this.dataset.name)"
+                            onclick="confirmDelete({{ $product->id }}, {{ Js::from($product->name) }})"
                             style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">
                             <i class="fas fa-trash"></i> Delete
                         </button>
@@ -474,6 +471,22 @@
 
 <script>
 let isEditMode = false;
+
+// Products map for safe JS access (avoids HTML attribute escaping issues)
+const productsMap = {
+    @foreach($products as $p)
+    {{ $p->id }}: {!! json_encode($p->load('attributes')) !!},
+    @endforeach
+};
+
+function editProductById(id) {
+    const product = productsMap[id];
+    if (!product) {
+        showToast('Product not found', 'error');
+        return;
+    }
+    editProduct(product);
+}
 
 function showToast(message, type = 'success') {
     const colors = { success: '#27ae60', error: '#e74c3c', info: '#3b82f6', warning: '#f59e0b' };
