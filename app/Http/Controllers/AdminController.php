@@ -486,17 +486,17 @@ class AdminController extends Controller
      */
     public function editUserPermissions(User $user)
     {
-        $roles = ['user', 'retailer', 'wholesaler', 'exporter', 'importer', 'admin'];
+        $roles = ['user', 'retailer', 'wholesaler', 'exporter', 'employee', 'importer', 'admin'];
         $permissions = [
             'can_create_products' => 'Create Products',
-            'can_edit_products' => 'Edit Products',
+            'can_edit_products'   => 'Edit Products',
             'can_delete_products' => 'Delete Products',
-            'can_manage_orders' => 'Manage Orders',
-            'can_view_analytics' => 'View Analytics',
-            'can_manage_users' => 'Manage Users',
-            'can_access_admin' => 'Access Admin Panel'
+            'can_manage_orders'   => 'Manage Orders',
+            'can_view_analytics'  => 'View Analytics',
+            'can_manage_users'    => 'Manage Users',
+            'can_access_admin'    => 'Access Admin Panel',
         ];
-        
+
         return view('admin.user-permissions.edit', compact('user', 'roles', 'permissions'));
     }
 
@@ -506,16 +506,17 @@ class AdminController extends Controller
     public function updateUserPermissions(Request $request, User $user)
     {
         $validated = $request->validate([
-            'role' => 'required|in:user,retailer,wholesaler,exporter,employee,importer,admin',
-            'permissions' => 'array',
-            'permissions.*' => 'string'
+            'role'          => 'required|in:user,retailer,wholesaler,exporter,employee,importer,admin',
+            'permissions'   => 'nullable|array',
+            'permissions.*' => 'string',
         ]);
 
-        $user->role = $validated['role'];
+        $user->role        = $validated['role'];
         $user->permissions = $validated['permissions'] ?? [];
         $user->save();
 
-        return redirect()->route('admin.user-permissions')->with('success', 'User permissions updated successfully!');
+        return redirect()->route('admin.user-permissions')
+            ->with('success', "Permissions for {$user->name} updated successfully.");
     }
 
     /**

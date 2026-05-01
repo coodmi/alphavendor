@@ -193,6 +193,29 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user has a specific permission.
+     * Admins always have all permissions.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->role === 'admin') return true;
+        $perms = $this->permissions ?? [];
+        return in_array($permission, $perms);
+    }
+
+    /**
+     * Check if user has any of the given permissions.
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        if ($this->role === 'admin') return true;
+        foreach ($permissions as $perm) {
+            if ($this->hasPermission($perm)) return true;
+        }
+        return false;
+    }
+
+    /**
      * Get wishlist items for this user
      */
     public function wishlists()

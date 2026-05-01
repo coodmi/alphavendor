@@ -1,224 +1,130 @@
 @extends('layouts.dashboard')
 
-@section('title', 'User Permissions Management')
-@section('page-title', 'User Permissions Management')
+@section('title', 'User Permissions')
+@section('page-title', 'User Permissions')
 
 @section('sidebar-menu')
     @include('dashboards.partials.admin-sidebar')
 @endsection
 
 @section('content')
-<div class="content-area">
-    <div class="page-header">
-        <h2>User Permissions Management</h2>
-        <p>Manage user roles and permissions</p>
+<div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">User Permissions</h2>
+            <p class="text-sm text-gray-500 mt-1">Manage roles and permissions for all users</p>
+        </div>
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-6">
+        <i class="fas fa-check-circle text-green-500"></i>
+        <span class="font-medium">{{ session('success') }}</span>
+    </div>
     @endif
 
-    <div class="card">
-        <div class="card-header">
-            <h3>All Users</h3>
+    <!-- Search -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-5">
+        <input type="text" id="searchInput" placeholder="Search users by name or email..."
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+            onkeyup="filterUsers()">
+    </div>
+
+    <!-- Users Table -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="font-semibold text-gray-700">All Users ({{ $users->total() }})</h3>
+            <span class="text-xs text-gray-400">Click "Edit" to manage permissions</span>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Current Role</th>
-                            <th>Status</th>
-                            <th>Joined</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($users as $user)
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    @if($user->profile_image)
-                                        <img src="{{ asset('storage/' . $user->profile_image) }}" alt="Profile" class="user-avatar">
-                                    @else
-                                        <div class="user-avatar-placeholder">
-                                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                                        </div>
-                                    @endif
-                                    <span>{{ $user->name }}</span>
-                                </div>
-                            </td>
-                            <td>{{ $user->email }}</td>
-                            <td>
-                                <span class="role-badge role-{{ $user->role }}">
-                                    {{ ucfirst($user->role) }}
+
+        <div class="overflow-x-auto">
+            <table class="w-full" id="usersTable">
+                <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+                    <tr>
+                        <th class="px-6 py-3 text-left">User</th>
+                        <th class="px-6 py-3 text-left">Email</th>
+                        <th class="px-6 py-3 text-left">Role</th>
+                        <th class="px-6 py-3 text-left">Permissions</th>
+                        <th class="px-6 py-3 text-left">Status</th>
+                        <th class="px-6 py-3 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    @foreach($users as $user)
+                    <tr class="hover:bg-gray-50 transition user-row" data-name="{{ strtolower($user->name) }}" data-email="{{ strtolower($user->email) }}">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                @if($user->profile_image)
+                                    <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-9 h-9 rounded-full object-cover">
+                                @else
+                                    <div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                                <span class="font-medium text-gray-800 text-sm">{{ $user->name }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ $user->email }}</td>
+                        <td class="px-6 py-4">
+                            @php
+                                $roleColors = [
+                                    'admin'      => 'bg-red-100 text-red-700',
+                                    'retailer'   => 'bg-purple-100 text-purple-700',
+                                    'wholesaler' => 'bg-green-100 text-green-700',
+                                    'exporter'   => 'bg-orange-100 text-orange-700',
+                                    'user'       => 'bg-blue-100 text-blue-700',
+                                    'employee'   => 'bg-yellow-100 text-yellow-700',
+                                ];
+                                $roleColor = $roleColors[$user->role] ?? 'bg-gray-100 text-gray-700';
+                            @endphp
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold {{ $roleColor }}">
+                                {{ ucfirst($user->role === 'exporter' ? 'Importer' : $user->role) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            @if($user->role === 'admin')
+                                <span class="text-xs text-green-600 font-semibold"><i class="fas fa-shield-alt mr-1"></i>Full Access</span>
+                            @elseif(!empty($user->permissions))
+                                <span class="text-xs text-indigo-600 font-semibold">
+                                    <i class="fas fa-key mr-1"></i>{{ count($user->permissions) }} permission(s)
                                 </span>
-                            </td>
-                            <td>
-                                <span class="status-badge status-active">Active</span>
-                            </td>
-                            <td>{{ $user->created_at->format('M d, Y') }}</td>
-                            <td>
-                                <a href="{{ route('admin.user-permissions.edit', $user) }}" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-edit"></i> Edit Permissions
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="pagination-wrapper">
-                {{ $users->links() }}
-            </div>
+                            @else
+                                <span class="text-xs text-gray-400">No extra permissions</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold {{ $user->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                {{ ucfirst($user->status ?? 'active') }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="{{ route('admin.user-permissions.edit', $user) }}"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="px-6 py-4 border-t border-gray-100">
+            {{ $users->links() }}
         </div>
     </div>
 </div>
 
-<style>
-.page-header {
-    margin-bottom: 30px;
+<script>
+function filterUsers() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.user-row').forEach(row => {
+        const name = row.dataset.name;
+        const email = row.dataset.email;
+        row.style.display = (name.includes(q) || email.includes(q)) ? '' : 'none';
+    });
 }
-
-.page-header h2 {
-    color: #2c3e50;
-    margin: 0 0 5px 0;
-}
-
-.page-header p {
-    color: #7f8c8d;
-    margin: 0;
-}
-
-.card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    overflow: hidden;
-}
-
-.card-header {
-    padding: 20px 25px;
-    border-bottom: 1px solid #eee;
-    background: #f8f9fa;
-}
-
-.card-header h3 {
-    margin: 0;
-    color: #2c3e50;
-}
-
-.card-body {
-    padding: 25px;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th,
-.table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.table th {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-}
-
-.user-avatar-placeholder {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #667eea;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.role-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.role-user { background: #e3f2fd; color: #1976d2; }
-.role-retailer { background: #f3e5f5; color: #7b1fa2; }
-.role-wholesaler { background: #e8f5e8; color: #388e3c; }
-.role-exporter { background: #fff3e0; color: #f57c00; }
-.role-importer { background: #fce4ec; color: #c2185b; }
-.role-admin { background: #ffebee; color: #d32f2f; }
-
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.status-active {
-    background: #d4edda;
-    color: #155724;
-}
-
-.btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn-primary {
-    background: #667eea;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #5a6fd8;
-    color: white;
-    text-decoration: none;
-}
-
-.alert {
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.alert-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-</style>
+</script>
 @endsection
