@@ -29,10 +29,17 @@
 
             <div class="form-group">
                 <label for="mobile_number">Mobile Number</label>
-                <input type="text" id="mobile_number" name="mobile_number" value="{{ old('mobile_number') }}" required autofocus placeholder="Enter your mobile number (e.g., 8801XXXXXXXXX)">
-                <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                    Enter your 11-digit mobile number starting with 880
-                </small>
+                <div style="display:flex; align-items:center; border:1px solid #ddd; border-radius:6px; overflow:hidden; background:white;">
+                    <span style="padding:10px 12px; background:#f3f4f6; color:#374151; font-weight:600; font-size:14px; border-right:1px solid #ddd; white-space:nowrap;">+880</span>
+                    <input type="text" id="mobile_number" name="mobile_number"
+                        value="{{ old('mobile_number') ? ltrim(str_replace('+880','',old('mobile_number')),'0') : '' }}"
+                        placeholder="1XXXXXXXXX"
+                        maxlength="10"
+                        required autofocus
+                        style="border:none; outline:none; padding:10px 12px; flex:1; font-size:14px;"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                </div>
+                <small style="color:#7f8c8d; font-size:12px; margin-top:4px; display:block;">Enter your number after +880 (e.g. 1712345678)</small>
             </div>
 
             <button type="submit" class="btn btn-primary">Send OTP</button>

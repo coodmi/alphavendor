@@ -26,6 +26,12 @@ class PasswordResetController extends Controller
      */
     public function sendResetOtp(Request $request)
     {
+        // Normalize mobile number before validation
+        if ($request->has('mobile_number')) {
+            $normalized = $this->normalizeMobile($request->mobile_number);
+            $request->merge(['mobile_number' => $normalized]);
+        }
+
         $request->validate([
             'mobile_number' => 'required|string|exists:users,mobile_number',
         ]);
@@ -349,5 +355,15 @@ class PasswordResetController extends Controller
                 'message' => 'Failed to send OTP. Please try again.'
             ], 500);
         }
+    }
+
+    private function normalizeMobile(string $number): string
+    {
+        $digits = preg_replace('/[^0-9]/', '', $number);
+        if (strlen($digits) === 13 && str_starts_with($digits, '880')) return '+' . $digits;
+        if (strlen($digits) === 11 && str_starts_with($digits, '0'))   return '+880' . substr($digits, 1);
+        if (strlen($digits) === 10 && str_starts_with($digits, '1'))   return '+880' . $digits;
+        if (str_starts_with($number, '+880')) return $number;
+        return '+880' . $digits;
     }
 }

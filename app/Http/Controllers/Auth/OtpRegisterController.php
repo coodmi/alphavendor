@@ -20,6 +20,13 @@ class OtpRegisterController extends Controller
 
     public function register(Request $request)
     {
+        // Normalize mobile number - prepend +880 if user typed just the local part
+        if ($request->has('mobile_number')) {
+            $request->merge(['mobile_number' => $this->normalizeMobile($request->mobile_number)]);
+        }
+        if ($request->has('phone')) {
+            $request->merge(['phone' => $this->normalizeMobile($request->phone)]);
+        }
         $accountType = $request->input('account_type');
         $rules = [];
         $sessionData = [];
@@ -440,5 +447,36 @@ class OtpRegisterController extends Controller
                 'message' => 'Failed to send verification code. Please try again.'
             ], 500);
         }
+    }
+
+    /**
+     * Normalize mobile number to +880XXXXXXXXXX format
+     * Accepts: 01712345678, 1712345678, 8801712345678, +8801712345678
+     */
+    private function normalizeMobile(string $number): string
+    {
+        $number = trim($number);
+        // Remove all non-digit characters except leading +
+        $digits = preg_replace('/[^0-9]/', '', $number);
+
+        // Already full: 8801XXXXXXXXX (13 digits)
+        if (strlen($digits) === 13 && str_starts_with($digits, '880')) {
+            return '+' . $digits;
+        }
+        // Starts with 0: 01XXXXXXXXX (11 digits)
+        if (strlen($digits) === 11 && str_starts_with($digits, '0')) {
+            return '+880' . substr($digits, 1);
+        }
+        // Just local part: 1XXXXXXXXX (10 digits)
+        if (strlen($digits) === 10 && str_starts_with($digits, '1')) {
+            return '+880' . $digits;
+        }
+        // Already has + prefix stored as string
+        if (str_starts_with($number, '+880')) {
+            return $number;
+        }
+
+        // Fallback: prepend +880
+        return '+880' . $digits;
     }
 }
