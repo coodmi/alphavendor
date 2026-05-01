@@ -589,6 +589,22 @@ class AdminController extends Controller
     }
 
     /**
+     * Store a new employee role (alias for storeEmployeeRole, used by role-settings.create route)
+     */
+    public function createRole(Request $request)
+    {
+        return $this->storeEmployeeRole($request);
+    }
+
+    /**
+     * Delete a role (alias for deleteEmployeeRole, used by role-settings.delete route)
+     */
+    public function deleteRole(\App\Models\EmployeeRole $role)
+    {
+        return $this->deleteEmployeeRole($role);
+    }
+
+    /**
      * Store a new employee role
      */
     public function storeEmployeeRole(Request $request)
