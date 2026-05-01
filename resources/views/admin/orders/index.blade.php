@@ -71,17 +71,33 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <a href="{{ route('admin.orders.show', $order) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                                    <form action="{{ route('admin.orders.update-status', $order) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('PATCH')
-                                        <select name="status" onchange="this.form.submit()" class="text-sm border rounded px-2 py-1">
-                                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                                            <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Shipped</option>
-                                            <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
-                                            <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                        </select>
-                                    </form>
+                                    <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-top:4px;">
+                                        {{-- Order Status --}}
+                                        <form action="{{ route('admin.orders.update-status', $order) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('PATCH')
+                                            <select name="status" onchange="this.form.submit()" class="text-sm border rounded px-2 py-1">
+                                                <option value="pending"    {{ $order->status === 'pending'    ? 'selected' : '' }}>Pending</option>
+                                                <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
+                                                <option value="shipped"    {{ $order->status === 'shipped'    ? 'selected' : '' }}>Shipped</option>
+                                                <option value="delivered"  {{ $order->status === 'delivered'  ? 'selected' : '' }}>Delivered</option>
+                                                <option value="cancelled"  {{ $order->status === 'cancelled'  ? 'selected' : '' }}>Cancelled</option>
+                                            </select>
+                                        </form>
+                                        {{-- Payment Status --}}
+                                        <form action="{{ route('admin.orders.update-payment-status', $order) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('PATCH')
+                                            <select name="payment_status" onchange="this.form.submit()"
+                                                class="text-sm border rounded px-2 py-1"
+                                                style="border-color: {{ $order->payment_status === 'paid' ? '#16a34a' : '#dc2626' }}; color: {{ $order->payment_status === 'paid' ? '#16a34a' : '#dc2626' }};">
+                                                <option value="unpaid"   {{ ($order->payment_status ?? 'unpaid') === 'unpaid'   ? 'selected' : '' }}>Unpaid</option>
+                                                <option value="paid"     {{ ($order->payment_status ?? '') === 'paid'     ? 'selected' : '' }}>Paid</option>
+                                                <option value="pending"  {{ ($order->payment_status ?? '') === 'pending'  ? 'selected' : '' }}>Pending</option>
+                                                <option value="refunded" {{ ($order->payment_status ?? '') === 'refunded' ? 'selected' : '' }}>Refunded</option>
+                                            </select>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

@@ -298,6 +298,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/{order}', [AdminController::class, 'showOrder'])->name('orders.show');
         Route::get('/orders/{order}/invoice', [App\Http\Controllers\OrderController::class, 'invoice'])->name('orders.invoice');
         Route::patch('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.update-status');
+        Route::patch('/orders/{order}/payment-status', [AdminController::class, 'updatePaymentStatus'])->name('orders.update-payment-status');
 
         // Return & Refund Management
         Route::prefix('returns')->name('returns.')->group(function () {

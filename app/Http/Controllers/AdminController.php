@@ -470,6 +470,17 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Order status updated successfully!');
     }
 
+    public function updatePaymentStatus(Request $request, Order $order)
+    {
+        $request->validate([
+            'payment_status' => 'required|in:paid,unpaid,pending,refunded'
+        ]);
+
+        $order->update(['payment_status' => $request->payment_status]);
+
+        return redirect()->back()->with('success', 'Payment status updated successfully!');
+    }
+
     /**
      * Show user permissions management
      */
