@@ -66,14 +66,15 @@
     <div style="background:white; padding:18px 22px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.07); margin-bottom:20px;">
         <form method="GET" action="{{ route('admin.transactions.index') }}" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by transaction #, vendor..."
-                style="flex:1; min-width:200px; padding:10px 14px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;">
-            <select name="status" style="padding:10px 14px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px; background:white;">
+                style="flex:1; min-width:200px; padding:10px 14px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px;"
+                oninput="clearTimeout(window._st); window._st=setTimeout(()=>this.form.submit(),500)">
+            <select name="status" onchange="this.form.submit()" style="padding:10px 14px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px; background:white;">
                 <option value="">All Status</option>
                 <option value="completed" {{ request('status')==='completed' ? 'selected' : '' }}>Completed</option>
                 <option value="pending"   {{ request('status')==='pending'   ? 'selected' : '' }}>Pending</option>
                 <option value="cancelled" {{ request('status')==='cancelled' ? 'selected' : '' }}>Cancelled</option>
             </select>
-            <select name="type" style="padding:10px 14px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px; background:white;">
+            <select name="type" onchange="this.form.submit()" style="padding:10px 14px; border:1px solid #e0e0e0; border-radius:8px; font-size:14px; background:white;">
                 <option value="">All Types</option>
                 <option value="sale"       {{ request('type')==='sale'       ? 'selected' : '' }}>Sale</option>
                 <option value="withdrawal" {{ request('type')==='withdrawal' ? 'selected' : '' }}>Withdrawal</option>
