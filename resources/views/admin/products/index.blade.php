@@ -601,8 +601,6 @@ function openAddModal() {
 
     document.getElementById('productModal').style.display = 'flex';
 }
-    }
-}
 
 function editProduct(product) {
     isEditMode = true;
