@@ -390,7 +390,7 @@ class ProductController extends Controller
         $query = Product::with(['category', 'vendor', 'brand'])
             ->where('status', 'active')
             ->whereHas('vendor', function($q) {
-                $q->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                $q->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin']);
             });
 
         // Category filter - supports ?categories[]=id (sidebar) or ?category=slug (home page links)
@@ -510,19 +510,19 @@ class ProductController extends Controller
                 $productCount = $brand->products()
                     ->where('status', 'active')
                     ->whereHas('vendor', function($query) {
-                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin']);
                     })
                     ->count();
                 $children = Brand::where('parent_brand_id', $brand->id)
                     ->whereHas('vendor', function($query) {
-                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                        $query->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin']);
                     })
                     ->get();
                 foreach($children as $child) {
                     $productCount += $child->products()
                         ->where('status', 'active')
                         ->whereHas('vendor', function($query) {
-                            $query->whereIn('role', ['retailer', 'wholesaler', 'exporter']);
+                            $query->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin']);
                         })
                         ->count();
                 }
@@ -537,7 +537,7 @@ class ProductController extends Controller
         // Get vendor types with counts
         $vendorTypes = User::selectRaw('role, COUNT(DISTINCT products.id) as products_count')
             ->join('products', 'users.id', '=', 'products.vendor_id')
-            ->whereIn('role', ['retailer', 'wholesaler', 'exporter'])
+            ->whereIn('role', ['retailer', 'wholesaler', 'exporter', 'admin'])
             ->where('products.status', 'active')
             ->groupBy('role')
             ->get();
