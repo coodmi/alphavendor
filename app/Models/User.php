@@ -31,7 +31,6 @@ class User extends Authenticatable
         'profile_image',
         'certifications',
         'exporter_rating',
-        'dashboard_modules',
         'permissions',
         'verification_status',
         'verification_submitted_at',
@@ -58,14 +57,13 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'certifications' => 'array',
-            'exporter_rating' => 'decimal:2',
-            'dashboard_modules' => 'array',
-            'permissions' => 'array',
-            'verification_submitted_at' => 'datetime',
-            'verification_reviewed_at' => 'datetime',
+            'email_verified_at'          => 'datetime',
+            'password'                   => 'hashed',
+            'certifications'             => 'array',
+            'exporter_rating'            => 'decimal:2',
+            'permissions'                => 'array',
+            'verification_submitted_at'  => 'datetime',
+            'verification_reviewed_at'   => 'datetime',
         ];
     }
 
