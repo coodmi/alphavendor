@@ -90,6 +90,7 @@ class ProductController extends Controller
 
     /**
      * Save product as draft (called when user clicks outside modal)
+     * Always saves/updates with the latest field values
      */
     public function saveDraft(Request $request)
     {
@@ -100,51 +101,72 @@ class ProductController extends Controller
             ]);
 
             // Need at least a name or price to save
-            if (empty($data['name']) && empty($data['price'])) {
+            if (empty(trim($data['name'] ?? '')) && empty(trim($data['price'] ?? ''))) {
                 return response()->json(['success' => false, 'message' => 'Nothing to save']);
             }
 
-            // Set required defaults
-            $data['status']        = 'draft';
-            $data['vendor_id']     = !empty($data['vendor_id']) ? $data['vendor_id'] : auth()->id();
-            $data['category_id']   = !empty($data['category_id']) ? $data['category_id'] : null;
-            $data['price']         = !empty($data['price']) ? $data['price'] : 0;
-            $data['stock']         = !empty($data['stock']) ? $data['stock'] : 0;
-            $data['name']          = !empty($data['name']) ? $data['name'] : 'Draft Product ' . now()->format('H:i:s');
-            $data['rating']        = 0;
-            $data['reviews_count'] = 0;
-            $data['image']         = null; // no image required for drafts
+            $vendorId = !empty($data['vendor_id']) ? $data['vendor_id'] : auth()->id();
+
+            // Build update data - only include non-empty values
+            $updateData = [
+                'status'        => 'draft',
+                'vendor_id'     => $vendorId,
+                'price'         => is_numeric($data['price'] ?? '') ? $data['price'] : 0,
+                'stock'         => is_numeric($data['stock'] ?? '') ? $data['stock'] : 0,
+                'name'          => !empty($data['name']) ? $data['name'] : ('Draft ' . now()->format('d/m H:i')),
+                'rating'        => 0,
+                'reviews_count' => 0,
+            ];
+
+            // Add optional fields only if they have values
+            if (!empty($data['sku']))         $updateData['sku']         = $data['sku'];
+            if (!empty($data['category_id'])) $updateData['category_id'] = $data['category_id'];
+            if (!empty($data['brand_id']))    $updateData['brand_id']    = $data['brand_id'];
+            if (!empty($data['old_price']))   $updateData['old_price']   = $data['old_price'];
+            if (!empty($data['description'])) $updateData['description'] = $data['description'];
+            if (!empty($data['badge']))       $updateData['badge']       = $data['badge'];
 
             // Handle image if provided
             if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('products', 'public');
+                $updateData['image'] = $request->file('image')->store('products', 'public');
             }
 
-            // Check if there's already a draft for this user to update
-            $existingDraft = \App\Models\Product::where('vendor_id', auth()->id())
-                ->where('status', 'draft')
-                ->latest()
-                ->first();
+            // Check if draft_id was passed (updating existing draft)
+            $draftId = $request->input('draft_id');
+            $product = null;
 
-            if ($existingDraft) {
-                unset($data['image']); // don't overwrite image on update unless new one provided
-                if ($request->hasFile('image')) {
-                    $data['image'] = $request->file('image')->store('products', 'public');
-                }
-                $existingDraft->update($data);
-                $product = $existingDraft;
+            if ($draftId) {
+                $product = \App\Models\Product::where('id', $draftId)
+                    ->where('status', 'draft')
+                    ->first();
+            }
+
+            // If no specific draft, find the latest draft for this vendor
+            if (!$product) {
+                $product = \App\Models\Product::where('vendor_id', $vendorId)
+                    ->where('status', 'draft')
+                    ->latest()
+                    ->first();
+            }
+
+            if ($product) {
+                // UPDATE existing draft with latest values
+                $product->update($updateData);
             } else {
-                $product = \App\Models\Product::create($data);
+                // CREATE new draft
+                $updateData['image'] = $updateData['image'] ?? null;
+                $product = \App\Models\Product::create($updateData);
             }
 
             return response()->json([
                 'success'    => true,
-                'message'    => 'Draft saved successfully',
+                'message'    => 'Draft saved',
                 'product_id' => $product->id,
                 'saved_at'   => now()->format('H:i:s'),
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Draft save error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }

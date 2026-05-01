@@ -603,6 +603,12 @@ function closeModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
+// Clear draft ID when form is actually submitted (published)
+document.getElementById('productForm')?.addEventListener('submit', function() {
+    localStorage.removeItem('product_draft_id');
+    localStorage.removeItem('product_draft_time');
+});
+
 function previewImage(event) {
     const file = event.target.files[0];
     if (file) {
@@ -676,6 +682,10 @@ async function saveDraftToServer() {
     formData.append('description', document.getElementById('productDescription')?.value || '');
     formData.append('badge',       document.getElementById('productBadge')?.value || '');
 
+    // Pass existing draft_id if we have one (to update same draft)
+    const draftId = localStorage.getItem('product_draft_id');
+    if (draftId) formData.append('draft_id', draftId);
+
     try {
         const res = await fetch('{{ route("admin.products.draft") }}', {
             method: 'POST',
@@ -685,12 +695,14 @@ async function saveDraftToServer() {
         const data = await res.json();
 
         if (data.success) {
-            showToast(`✅ Draft saved at ${data.saved_at}`, 'info');
-            // Store draft product ID for later editing
+            // Store draft ID so next save updates the same draft
             localStorage.setItem('product_draft_id', data.product_id);
             localStorage.setItem('product_draft_time', data.saved_at);
+            showToast(`✅ Draft saved at ${data.saved_at}`, 'info');
         } else {
-            showToast(data.message || 'Could not save draft', 'warning');
+            if (data.message !== 'Nothing to save') {
+                showToast(data.message || 'Could not save draft', 'warning');
+            }
         }
     } catch(err) {
         showToast('Draft save failed', 'error');
