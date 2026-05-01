@@ -68,7 +68,11 @@ Route::get('/special-offers', [HomeController::class, 'allOffers'])->name('speci
 Route::get('/special-offers/{slug}', [\App\Http\Controllers\Admin\SpecialOfferController::class, 'show'])->name('special-offers.show');
 Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 Route::get('/chat/faqs', function() {
-    return response()->json(\App\Models\ChatFaq::active()->get(['id','question','answer']));
+    try {
+        return response()->json(\App\Models\ChatFaq::active()->get(['id','question','answer']));
+    } catch (\Exception $e) {
+        return response()->json([]);
+    }
 })->name('chat.faqs.public');
 Route::post('/chat/widget/send', [\App\Http\Controllers\ChatController::class, 'widgetSend'])->name('chat.widget.send');
 Route::get('/chat/widget/messages', [\App\Http\Controllers\ChatController::class, 'widgetMessages'])->name('chat.widget.messages');

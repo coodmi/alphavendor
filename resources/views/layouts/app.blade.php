@@ -610,7 +610,7 @@
             }
         });
     })();
-    </script>    <script src="{{ asset('js/app.js') }}"></script>
+    </script>    <script src="{{ asset('js/app.js') }}" defer></script>
     
     <script>
         // Mobile Menu Toggle
