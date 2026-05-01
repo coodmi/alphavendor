@@ -706,43 +706,99 @@ class AdminController extends Controller
 
 
     /**
-     * Show user activity logs
+     * Show user activity logs - real data from DB
      */
-    public function userActivity()
+    public function userActivity(Request $request)
     {
-        // In a real application, you would have an activity log model
-        // For now, we'll create sample data
-        $activities = collect([
-            [
-                'id' => 1,
-                'user_id' => 1,
-                'user_name' => 'John Doe',
-                'action' => 'Login',
-                'description' => 'User logged into the system',
-                'ip_address' => '192.168.1.1',
-                'created_at' => now()->subMinutes(30)
-            ],
-            [
-                'id' => 2,
-                'user_id' => 2,
-                'user_name' => 'Jane Smith',
-                'action' => 'Product Created',
-                'description' => 'Created new product: Sample Product',
-                'ip_address' => '192.168.1.2',
-                'created_at' => now()->subHours(2)
-            ],
-            [
-                'id' => 3,
-                'user_id' => 3,
-                'user_name' => 'Bob Johnson',
-                'action' => 'Order Placed',
-                'description' => 'Placed order #12345',
-                'ip_address' => '192.168.1.3',
-                'created_at' => now()->subHours(5)
-            ]
-        ]);
+        $actionFilter = $request->get('action', '');
+        $dateFilter   = $request->get('date', '');
+        $searchFilter = $request->get('search', '');
 
-        return view('admin.user-activity.index', compact('activities'));
+        // Build real activity from orders, notifications, and users
+        $activities = collect();
+
+        // Orders → "Order Placed"
+        $orders = \App\Models\Order::with('user')
+            ->latest()
+            ->take(100)
+            ->get()
+            ->map(fn($o) => [
+                'id'          => 'order_' . $o->id,
+                'user_id'     => $o->user_id,
+                'user_name'   => $o->user?->name ?? 'Unknown',
+                'user_email'  => $o->user?->email ?? '',
+                'action'      => 'order_placed',
+                'action_label'=> 'Order Placed',
+                'description' => 'Placed order #' . ($o->order_number ?? $o->id) . ' — ৳' . number_format($o->total_amount ?? 0, 2),
+                'ip_address'  => '—',
+                'created_at'  => $o->created_at,
+            ]);
+
+        // New user registrations
+        $newUsers = User::latest()->take(50)->get()
+            ->map(fn($u) => [
+                'id'          => 'user_' . $u->id,
+                'user_id'     => $u->id,
+                'user_name'   => $u->name,
+                'user_email'  => $u->email,
+                'action'      => 'user_registered',
+                'action_label'=> 'User Registered',
+                'description' => 'New ' . ucfirst($u->role) . ' account registered',
+                'ip_address'  => '—',
+                'created_at'  => $u->created_at,
+            ]);
+
+        // Products created
+        $products = \App\Models\Product::with('vendor')->latest()->take(50)->get()
+            ->map(fn($p) => [
+                'id'          => 'product_' . $p->id,
+                'user_id'     => $p->vendor_id,
+                'user_name'   => $p->vendor?->name ?? 'Unknown',
+                'user_email'  => $p->vendor?->email ?? '',
+                'action'      => 'product_created',
+                'action_label'=> 'Product Created',
+                'description' => 'Created product: ' . $p->name,
+                'ip_address'  => '—',
+                'created_at'  => $p->created_at,
+            ]);
+
+        $activities = $activities
+            ->merge($orders)
+            ->merge($newUsers)
+            ->merge($products)
+            ->sortByDesc('created_at');
+
+        // Apply action filter
+        if ($actionFilter) {
+            $activities = $activities->filter(fn($a) => $a['action'] === $actionFilter);
+        }
+
+        // Apply date filter
+        if ($dateFilter) {
+            $activities = $activities->filter(fn($a) =>
+                $a['created_at'] && $a['created_at']->format('Y-m-d') === $dateFilter
+            );
+        }
+
+        // Apply search filter
+        if ($searchFilter) {
+            $q = strtolower($searchFilter);
+            $activities = $activities->filter(fn($a) =>
+                str_contains(strtolower($a['user_name']), $q) ||
+                str_contains(strtolower($a['description']), $q) ||
+                str_contains(strtolower($a['user_email']), $q)
+            );
+        }
+
+        $activities = $activities->values();
+
+        $stats = [
+            'total'        => $activities->count(),
+            'last_24h'     => $activities->filter(fn($a) => $a['created_at'] >= now()->subDay())->count(),
+            'active_users' => $activities->unique('user_id')->count(),
+        ];
+
+        return view('admin.user-activity.index', compact('activities', 'stats', 'actionFilter', 'dateFilter', 'searchFilter'));
     }
 
     /**
