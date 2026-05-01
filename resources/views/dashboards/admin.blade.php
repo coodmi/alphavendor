@@ -8710,11 +8710,11 @@ function exportVendors() {
 }
 
 function viewVendor(id) {
-    alert('View vendor #' + id + ' details and analytics.');
+    window.location.href = '/admin/vendors/' + id;
 }
 
 function manageVendor(id) {
-    alert('Manage vendor #' + id + ' settings and permissions.');
+    window.location.href = '/admin/vendors/' + id;
 }
 
 // Vendor Payouts Filter Functions
