@@ -69,7 +69,7 @@
         </div>
         <div>
             <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Order Status</label>
-            <select name="status" style="width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+            <select name="status" onchange="this.form.submit()" style="width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
                 <option value="all">All Status</option>
                 <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                 <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
@@ -80,7 +80,7 @@
         </div>
         <div>
             <label style="display: block; font-size: 14px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Payment Status</label>
-            <select name="payment_status" style="width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+            <select name="payment_status" onchange="this.form.submit()" style="width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
                 <option value="all">All Payments</option>
                 <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Unpaid</option>
                 <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
@@ -120,8 +120,9 @@
                         <div style="font-size: 12px; color: #7f8c8d;">{{ $order->orderItems->count() }} items</div>
                     </td>
                     <td style="padding: 16px;">
-                        <div style="font-weight: 500; color: #2c3e50;">{{ $order->customer_name }}</div>
-                        <div style="font-size: 13px; color: #7f8c8d;">{{ $order->customer_phone }}</div>
+                        <div style="font-weight: 500; color: #2c3e50;">{{ $order->user->name ?? 'Guest' }}</div>
+                        <div style="font-size: 13px; color: #7f8c8d;">{{ $order->phone }}</div>
+                        <div style="font-size: 12px; color: #9ca3af;">{{ $order->shipping_city }}</div>
                     </td>
                     <td style="padding: 16px;">
                         <div style="font-weight: 600; color: #2c3e50; font-size: 16px;">৳{{ number_format($order->total, 2) }}</div>
@@ -186,7 +187,7 @@
 
     @if($orders->hasPages())
     <div style="padding: 20px; border-top: 1px solid #e5e7eb;">
-        {{ $orders->links() }}
+        {{ $orders->withQueryString()->links() }}
     </div>
     @endif
 </div>

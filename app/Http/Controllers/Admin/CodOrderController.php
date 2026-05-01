@@ -32,8 +32,9 @@ class CodOrderController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('order_number', 'like', "%{$search}%")
-                  ->orWhere('customer_name', 'like', "%{$search}%")
-                  ->orWhere('customer_phone', 'like', "%{$search}%");
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('shipping_address', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
             });
         }
 
