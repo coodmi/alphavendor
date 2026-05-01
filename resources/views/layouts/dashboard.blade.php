@@ -751,7 +751,17 @@
         
         async function loadHeaderNotifications() {
             try {
-                const response = await fetch('/notifications?status=unread');
+                const response = await fetch('/notifications?status=unread', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+
                 const data = await response.json();
                 const notifications = data.data || [];
                 
@@ -760,28 +770,37 @@
                 if (notifications.length === 0) {
                     container.innerHTML = `
                         <div style="padding: 30px 20px; text-align: center; color: #7f8c8d;">
-                            <i class="fas fa-bell-slash" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px;"></i>
+                            <i class="fas fa-bell-slash" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px; display:block;"></i>
                             <p style="margin: 0; font-size: 14px;">No new notifications</p>
                         </div>
                     `;
                 } else {
-                    container.innerHTML = notifications.slice(0, 5).map(notif => {
+                    container.innerHTML = notifications.slice(0, 8).map(notif => {
                         const typeIcons = {
-                            info: { icon: 'fa-info-circle', color: '#3b82f6' },
-                            success: { icon: 'fa-check-circle', color: '#10b981' },
-                            warning: { icon: 'fa-exclamation-triangle', color: '#1a6b73' },
-                            error: { icon: 'fa-times-circle', color: '#ef4444' }
+                            info:    { icon: 'fa-info-circle',         color: '#3b82f6', bg: '#eff6ff' },
+                            success: { icon: 'fa-check-circle',        color: '#10b981', bg: '#f0fdf4' },
+                            warning: { icon: 'fa-exclamation-triangle', color: '#f59e0b', bg: '#fffbeb' },
+                            error:   { icon: 'fa-times-circle',        color: '#ef4444', bg: '#fef2f2' }
                         };
                         const style = typeIcons[notif.type] || typeIcons.info;
+                        const msg = notif.message.length > 70 ? notif.message.substring(0, 70) + '...' : notif.message;
+                        const url = notif.data?.url || '#';
                         
                         return `
-                            <div style="padding: 12px 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s;" onmouseenter="this.style.background='#f8f9fa'" onmouseleave="this.style.background='white'" onclick="markHeaderNotificationRead(${notif.id})">
-                                <div style="display: flex; gap: 10px;">
-                                    <i class="fas ${style.icon}" style="color: ${style.color}; font-size: 16px; margin-top: 2px;"></i>
-                                    <div style="flex: 1;">
-                                        <h5 style="margin: 0 0 3px 0; color: #2c3e50; font-size: 13px; font-weight: 600;">${notif.title}</h5>
-                                        <p style="margin: 0 0 3px 0; color: #7f8c8d; font-size: 12px; line-height: 1.4;">${notif.message.substring(0, 60)}${notif.message.length > 60 ? '...' : ''}</p>
-                                        <span style="color: #95a5a6; font-size: 11px;">${formatNotificationDate(notif.created_at)}</span>
+                            <div style="padding: 12px 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; background: ${notif.read_at ? 'white' : '#fafbff'};"
+                                 onmouseenter="this.style.background='#f8f9fa'" onmouseleave="this.style.background='${notif.read_at ? 'white' : '#fafbff'}'"
+                                 onclick="handleNotificationClick(${notif.id}, '${url}')">
+                                <div style="display: flex; gap: 10px; align-items: flex-start;">
+                                    <div style="width:32px;height:32px;border-radius:50%;background:${style.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <i class="fas ${style.icon}" style="color: ${style.color}; font-size: 14px;"></i>
+                                    </div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                                            <h5 style="margin: 0 0 2px 0; color: #1f2937; font-size: 13px; font-weight: 600; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${notif.title}</h5>
+                                            ${!notif.read_at ? '<span style="width:7px;height:7px;border-radius:50%;background:#3b82f6;flex-shrink:0;display:inline-block;"></span>' : ''}
+                                        </div>
+                                        <p style="margin: 0 0 3px 0; color: #6b7280; font-size: 12px; line-height: 1.4;">${msg}</p>
+                                        <span style="color: #9ca3af; font-size: 11px;">${formatNotificationDate(notif.created_at)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -790,6 +809,17 @@
                 }
             } catch (error) {
                 console.error('Error loading notifications:', error);
+                const container = document.getElementById('headerNotificationList');
+                if (container) {
+                    container.innerHTML = '<div style="padding:20px;text-align:center;color:#9ca3af;font-size:13px;">Could not load notifications</div>';
+                }
+            }
+        }
+
+        async function handleNotificationClick(id, url) {
+            await markHeaderNotificationRead(id);
+            if (url && url !== '#') {
+                window.location.href = url;
             }
         }
         
@@ -798,8 +828,10 @@
                 await fetch(`/notifications/${id}/read`, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
                 });
                 loadHeaderNotifications();
                 updateNotificationBadge();
@@ -813,8 +845,10 @@
                 await fetch('/notifications/mark-all-read', {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
                 });
                 loadHeaderNotifications();
                 updateNotificationBadge();
@@ -830,14 +864,12 @@
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
                     },
                     credentials: 'same-origin'
                 });
                 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch notification count');
-                }
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 
                 const data = await response.json();
                 const count = data.count || 0;
@@ -853,7 +885,6 @@
                 }
             } catch (error) {
                 console.error('Error updating notification badge:', error);
-                // Silently fail - don't show error to user
             }
         }
         

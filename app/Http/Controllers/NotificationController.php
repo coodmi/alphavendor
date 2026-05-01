@@ -13,14 +13,13 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Auth::user()->notifications();
+        $user = Auth::user();
+        $query = $user->appNotifications();
 
-        // Filter by type
         if ($request->has('type') && $request->type !== 'all') {
             $query->where('type', $request->type);
         }
 
-        // Filter by read status
         if ($request->has('status')) {
             if ($request->status === 'unread') {
                 $query->unread();
@@ -43,11 +42,10 @@ class NotificationController extends Controller
             if (!Auth::check()) {
                 return response()->json(['count' => 0]);
             }
-            
-            $count = Auth::user()->notifications()->unread()->count();
+            $count = Auth::user()->appNotifications()->unread()->count();
             return response()->json(['count' => $count]);
         } catch (\Exception $e) {
-            \Log::error('Error getting unread notification count: ' . $e->getMessage());
+            \Log::error('Notification count error: ' . $e->getMessage());
             return response()->json(['count' => 0]);
         }
     }
@@ -59,18 +57,15 @@ class NotificationController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'type' => 'required|in:info,success,warning,error',
-            'title' => 'required|string|max:255',
+            'type'    => 'required|in:info,success,warning,error',
+            'title'   => 'required|string|max:255',
             'message' => 'required|string',
-            'data' => 'nullable|array',
+            'data'    => 'nullable|array',
         ]);
 
         $notification = Notification::create($validated);
 
-        return response()->json([
-            'success' => true,
-            'notification' => $notification
-        ]);
+        return response()->json(['success' => true, 'notification' => $notification]);
     }
 
     /**
@@ -78,13 +73,10 @@ class NotificationController extends Controller
      */
     public function markAsRead($id)
     {
-        $notification = Auth::user()->notifications()->findOrFail($id);
+        $notification = Auth::user()->appNotifications()->findOrFail($id);
         $notification->markAsRead();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Notification marked as read'
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -92,12 +84,9 @@ class NotificationController extends Controller
      */
     public function markAllAsRead()
     {
-        Auth::user()->notifications()->unread()->update(['read_at' => now()]);
+        Auth::user()->appNotifications()->unread()->update(['read_at' => now()]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'All notifications marked as read'
-        ]);
+        return response()->json(['success' => true, 'message' => 'All notifications marked as read']);
     }
 
     /**
@@ -105,13 +94,10 @@ class NotificationController extends Controller
      */
     public function destroy($id)
     {
-        $notification = Auth::user()->notifications()->findOrFail($id);
+        $notification = Auth::user()->appNotifications()->findOrFail($id);
         $notification->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Notification deleted successfully'
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -119,11 +105,8 @@ class NotificationController extends Controller
      */
     public function deleteAllRead()
     {
-        Auth::user()->notifications()->read()->delete();
+        Auth::user()->appNotifications()->read()->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'All read notifications deleted'
-        ]);
+        return response()->json(['success' => true]);
     }
 }
