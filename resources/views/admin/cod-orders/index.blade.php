@@ -162,12 +162,20 @@
                                 <i class="fas fa-eye"></i>
                             </a>
                             @if($order->payment_status !== 'paid')
-                            <form method="POST" action="{{ route('admin.cod-orders.mark-paid', $order->id) }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" onclick="return confirm('Mark this order as paid?')" style="background: #10b981; color: white; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                                    <i class="fas fa-check"></i> Mark Paid
-                                </button>
-                            </form>
+                            <button type="button"
+                                onclick="openMarkPaidModal(
+                                    '{{ $order->id }}',
+                                    '{{ $order->order_number }}',
+                                    '{{ $order->user->name ?? 'Guest' }}',
+                                    '{{ number_format($order->total, 2) }}'
+                                )"
+                                style="background: #10b981; color: white; padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; display:flex; align-items:center; gap:5px;">
+                                <i class="fas fa-check"></i> Mark Paid
+                            </button>
+                            @else
+                            <span style="background:#d1fae5; color:#065f46; padding:8px 14px; border-radius:6px; font-size:13px; font-weight:500;">
+                                <i class="fas fa-check-circle"></i> Paid
+                            </span>
                             @endif
                         </div>
                     </td>
@@ -191,4 +199,106 @@
     </div>
     @endif
 </div>
+
+{{-- ===== Mark as Paid Modal ===== --}}
+<div id="markPaidModal"
+     style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(15,23,42,0.55); backdrop-filter:blur(4px);
+            align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:20px; width:100%; max-width:440px; margin:16px;
+                box-shadow:0 25px 60px rgba(0,0,0,0.25); overflow:hidden; animation: slideUp .25s ease;">
+
+        {{-- Header --}}
+        <div style="background:linear-gradient(135deg,#10b981,#059669); padding:28px 28px 24px; text-align:center; position:relative;">
+            <button onclick="closeMarkPaidModal()"
+                    style="position:absolute; top:14px; right:16px; background:rgba(255,255,255,0.2); border:none;
+                           color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px;
+                           display:flex; align-items:center; justify-content:center;">
+                <i class="fas fa-times"></i>
+            </button>
+            <div style="width:64px; height:64px; background:rgba(255,255,255,0.2); border-radius:50%;
+                        display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
+                <i class="fas fa-money-bill-wave" style="font-size:28px; color:white;"></i>
+            </div>
+            <h3 style="color:white; font-size:20px; font-weight:700; margin:0 0 4px;">Confirm Payment</h3>
+            <p style="color:rgba(255,255,255,0.85); font-size:14px; margin:0;">Mark this COD order as paid</p>
+        </div>
+
+        {{-- Body --}}
+        <div style="padding:28px;">
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:18px; margin-bottom:24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="font-size:13px; color:#6b7280;">Order Number</span>
+                    <span id="modal-order-number" style="font-weight:700; color:#1e40af; font-size:14px;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="font-size:13px; color:#6b7280;">Customer</span>
+                    <span id="modal-customer" style="font-weight:600; color:#1f2937; font-size:14px;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid #bbf7d0;">
+                    <span style="font-size:13px; color:#6b7280;">Amount to Collect</span>
+                    <span id="modal-amount" style="font-weight:800; color:#059669; font-size:20px;"></span>
+                </div>
+            </div>
+
+            <p style="font-size:14px; color:#6b7280; text-align:center; margin:0 0 24px;">
+                This action will mark the payment as <strong style="color:#059669;">received</strong> and cannot be undone.
+            </p>
+
+            <form id="markPaidForm" method="POST">
+                @csrf
+                <div style="display:flex; gap:12px;">
+                    <button type="button" onclick="closeMarkPaidModal()"
+                            style="flex:1; padding:13px; background:#f3f4f6; color:#374151; border:none; border-radius:10px;
+                                   cursor:pointer; font-size:15px; font-weight:600; transition:background .2s;">
+                        Cancel
+                    </button>
+                    <button type="submit" id="confirmPaidBtn"
+                            style="flex:1; padding:13px; background:linear-gradient(135deg,#10b981,#059669); color:white;
+                                   border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:700;
+                                   display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(16,185,129,0.4);">
+                        <i class="fas fa-check-circle"></i> Confirm Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes slideUp {
+    from { opacity:0; transform:translateY(30px) scale(.97); }
+    to   { opacity:1; transform:translateY(0)    scale(1);   }
+}
+</style>
+
+<script>
+function openMarkPaidModal(orderId, orderNumber, customer, amount) {
+    document.getElementById('modal-order-number').textContent = orderNumber;
+    document.getElementById('modal-customer').textContent     = customer;
+    document.getElementById('modal-amount').textContent       = '৳' + amount;
+    document.getElementById('markPaidForm').action =
+        '{{ url("admin/cod-orders") }}/' + orderId + '/mark-paid';
+
+    const modal = document.getElementById('markPaidModal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMarkPaidModal() {
+    document.getElementById('markPaidModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.getElementById('markPaidModal').addEventListener('click', function(e) {
+    if (e.target === this) closeMarkPaidModal();
+});
+
+// Show spinner on submit
+document.getElementById('markPaidForm').addEventListener('submit', function() {
+    const btn = document.getElementById('confirmPaidBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+});
+</script>
 @endsection
