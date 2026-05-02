@@ -231,41 +231,71 @@
             @if(isset($attributes) && $attributes->count() > 0)
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Product Attributes</label>
-                <div class="space-y-3 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                <div class="space-y-4 border border-gray-200 rounded-xl p-4 bg-gray-50">
                     @foreach($attributes as $attr)
-                    <div class="flex items-center gap-3">
-                        <label class="text-sm font-medium text-gray-600 w-28 flex-shrink-0">
+                    <div class="bg-white rounded-lg border border-gray-100 p-3">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
                             {{ $attr->name }}
-                            @if($attr->is_required)<span class="text-red-500">*</span>@endif
+                            @if($attr->is_required)<span class="text-red-500 ml-0.5">*</span>@endif
                         </label>
+
                         @if($attr->type === 'select' && $attr->options)
-                            <select name="attributes[{{ $attr->id }}]" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
-                                <option value="">— Select —</option>
+                        {{-- Multi-select tag picker --}}
+                        <div id="select-picker-{{ $attr->id }}">
+                            <div class="flex flex-wrap gap-2 mb-2" id="selected-tags-{{ $attr->id }}"></div>
+                            <div class="flex flex-wrap gap-1.5">
                                 @foreach($attr->options as $opt)
-                                    <option value="{{ $opt }}">{{ $opt }}</option>
+                                <button type="button"
+                                        onclick="toggleSelectOption({{ $attr->id }}, '{{ $opt }}')"
+                                        id="opt-{{ $attr->id }}-{{ Str::slug($opt) }}"
+                                        class="px-3 py-1 text-xs font-medium border border-gray-300 rounded-full bg-white hover:border-indigo-500 hover:text-indigo-600 transition-all select-option-btn">
+                                    {{ $opt }}
+                                </button>
                                 @endforeach
-                            </select>
-                        @elseif($attr->type === 'color')
-                            {{-- Multi-color picker --}}
-                            <div class="flex-1" id="color-picker-{{ $attr->id }}">
-                                <div class="flex flex-wrap gap-2 mb-2 color-swatches" id="swatches-{{ $attr->id }}"></div>
-                                <div class="flex items-center gap-2">
-                                    <input type="color" id="colorInput-{{ $attr->id }}" value="#000000"
-                                           class="h-9 w-14 border border-gray-300 rounded-lg cursor-pointer">
-                                    <button type="button"
-                                            onclick="addColor({{ $attr->id }})"
-                                            class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">
-                                        + Add Color
-                                    </button>
-                                </div>
-                                {{-- Hidden field stores comma-separated hex values --}}
-                                <input type="hidden" name="attributes[{{ $attr->id }}]"
-                                       id="colorValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
                             </div>
+                            <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                   id="selectValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                        </div>
+
+                        @elseif($attr->type === 'color')
+                        {{-- Multi-color picker --}}
+                        <div id="color-picker-{{ $attr->id }}">
+                            <div class="flex flex-wrap gap-2 mb-2" id="swatches-{{ $attr->id }}"></div>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="colorInput-{{ $attr->id }}" value="#000000"
+                                       class="h-9 w-12 border border-gray-300 rounded-lg cursor-pointer">
+                                <button type="button" onclick="addColor({{ $attr->id }})"
+                                        class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">
+                                    + Add Color
+                                </button>
+                            </div>
+                            <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                   id="colorValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                        </div>
+
                         @elseif($attr->type === 'number')
-                            <input type="number" name="attributes[{{ $attr->id }}]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
+                        {{-- Single number --}}
+                        <input type="number" name="attributes[{{ $attr->id }}]"
+                               placeholder="Enter {{ $attr->name }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field"
+                               data-attr-id="{{ $attr->id }}"
+                               {{ $attr->is_required ? 'required' : '' }}>
+
                         @else
-                            <input type="text" name="attributes[{{ $attr->id }}]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
+                        {{-- Multi-text tag input --}}
+                        <div id="text-picker-{{ $attr->id }}">
+                            <div class="flex flex-wrap gap-1.5 mb-2" id="text-tags-{{ $attr->id }}"></div>
+                            <div class="flex gap-2">
+                                <input type="text" id="textInput-{{ $attr->id }}"
+                                       placeholder="Type and press Enter or +"
+                                       class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                                       onkeydown="if(event.key==='Enter'){event.preventDefault();addTextTag({{ $attr->id }});}">
+                                <button type="button" onclick="addTextTag({{ $attr->id }})"
+                                        class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">+</button>
+                            </div>
+                            <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                   id="textValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                        </div>
                         @endif
                     </div>
                     @endforeach
@@ -363,11 +393,21 @@ function editProduct(product) {
         const attrData = product.attributes ? product.attributes.find(a => a.id == attrId) : null;
         const val = attrData ? (attrData.pivot ? attrData.pivot.value : '') : '';
 
-        // Color fields: clear swatches then re-init
-        if (field.type === 'hidden' && document.getElementById('swatches-' + attrId)) {
-            document.getElementById('swatches-' + attrId).innerHTML = '';
-            field.value = '';
-            if (val) initColorSwatches(attrId, val);
+        if (field.type === 'hidden') {
+            if (document.getElementById('swatches-' + attrId)) {
+                // Multi-color
+                document.getElementById('swatches-' + attrId).innerHTML = '';
+                field.value = '';
+                if (val) initColorSwatches(attrId, val);
+            } else if (document.getElementById('selectValue-' + attrId) === field) {
+                // Multi-select options
+                initSelectOptions(attrId, val);
+            } else if (document.getElementById('textValue-' + attrId) === field) {
+                // Multi-text tags
+                initTextTags(attrId, val);
+            } else {
+                field.value = val;
+            }
         } else {
             field.value = val;
         }
@@ -547,6 +587,72 @@ function initColorSwatches(attrId, value) {
         if (!hex) return;
         document.getElementById('colorInput-' + attrId).value = hex;
         addColor(attrId);
+    });
+}
+
+// ── Multi-Select Tag Picker ─────────────────────────────────────────────────
+function toggleSelectOption(attrId, value) {
+    const hidden = document.getElementById('selectValue-' + attrId);
+    const btn = document.getElementById('opt-' + attrId + '-' + value.toLowerCase().replace(/[^a-z0-9]/g, '-'));
+    const existing = hidden.value ? hidden.value.split(',') : [];
+
+    if (existing.includes(value)) {
+        // Deselect
+        hidden.value = existing.filter(v => v !== value).join(',');
+        if (btn) { btn.classList.remove('bg-indigo-600','text-white','border-indigo-600'); btn.classList.add('bg-white','border-gray-300'); }
+    } else {
+        // Select
+        existing.push(value);
+        hidden.value = existing.join(',');
+        if (btn) { btn.classList.add('bg-indigo-600','text-white','border-indigo-600'); btn.classList.remove('bg-white','border-gray-300'); }
+    }
+}
+
+function initSelectOptions(attrId, value) {
+    if (!value) return;
+    // Reset all buttons first
+    document.querySelectorAll(`[id^="opt-${attrId}-"]`).forEach(btn => {
+        btn.classList.remove('bg-indigo-600','text-white','border-indigo-600');
+        btn.classList.add('bg-white','border-gray-300');
+    });
+    document.getElementById('selectValue-' + attrId).value = '';
+    value.split(',').forEach(v => { if (v) toggleSelectOption(attrId, v.trim()); });
+}
+
+// ── Multi-Text Tag Input ────────────────────────────────────────────────────
+function addTextTag(attrId) {
+    const input = document.getElementById('textInput-' + attrId);
+    const val = input.value.trim();
+    if (!val) return;
+    const hidden = document.getElementById('textValue-' + attrId);
+    const tags = document.getElementById('text-tags-' + attrId);
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(val)) { input.value = ''; return; }
+    existing.push(val);
+    hidden.value = existing.join(',');
+
+    const tag = document.createElement('span');
+    tag.className = 'inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full';
+    tag.dataset.val = val;
+    tag.innerHTML = `${val} <button type="button" onclick="removeTextTag(${attrId},'${val.replace(/'/g,"\\'")}',this.parentElement)" class="text-indigo-400 hover:text-red-500 font-bold leading-none">×</button>`;
+    tags.appendChild(tag);
+    input.value = '';
+}
+
+function removeTextTag(attrId, val, tagEl) {
+    const hidden = document.getElementById('textValue-' + attrId);
+    hidden.value = hidden.value.split(',').filter(v => v !== val).join(',');
+    tagEl.remove();
+}
+
+function initTextTags(attrId, value) {
+    if (!value) return;
+    document.getElementById('text-tags-' + attrId).innerHTML = '';
+    document.getElementById('textValue-' + attrId).value = '';
+    value.split(',').forEach(v => {
+        if (!v.trim()) return;
+        document.getElementById('textInput-' + attrId).value = v.trim();
+        addTextTag(attrId);
     });
 }
 </script>

@@ -410,45 +410,77 @@
                 <!-- Product Attributes -->
                 <div style="margin-top: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Attributes</label>
-                    <div id="attributesContainer" style="border: 1px solid #ddd; border-radius: 6px; padding: 15px; background: #f8f9fa;">
+                    <div id="attributesContainer" style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; background: #f9fafb; display:flex; flex-direction:column; gap:12px;">
                         @if($attributes->count() > 0)
                             @foreach($attributes as $attribute)
                             @if(strtolower($attribute->name) === 'brand') @continue @endif
-                            <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                                <label style="min-width: 120px; color: #2c3e50; font-weight: 500;">
-                                    {{ $attribute->name }}:
-                                    @if($attribute->is_required)
-                                        <span style="color: #ef4444; font-size: 12px;">*</span>
-                                    @endif
+                            <div style="background:white; border:1px solid #e5e7eb; border-radius:8px; padding:12px;">
+                                <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#6b7280; margin-bottom:8px;">
+                                    {{ $attribute->name }}
+                                    @if($attribute->is_required)<span style="color:#ef4444;margin-left:2px;">*</span>@endif
                                 </label>
-                                @if($attribute->type === 'select')
-                                    <select name="attributes[{{ $attribute->id }}]" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
-                                        <option value="">Select {{ $attribute->name }}</option>
-                                        @if($attribute->options)
-                                            @foreach($attribute->options as $option)
-                                                <option value="{{ $option }}">{{ $option }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                @elseif($attribute->type === 'color')
-                                    {{-- Multi-color picker --}}
-                                    <div id="color-picker-{{ $attribute->id }}" style="flex:1;">
-                                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;" id="swatches-{{ $attribute->id }}"></div>
-                                        <div style="display:flex;align-items:center;gap:8px;">
-                                            <input type="color" id="colorInput-{{ $attribute->id }}" value="#000000"
-                                                   style="width:50px;height:36px;border:1px solid #ddd;border-radius:4px;cursor:pointer;">
-                                            <button type="button" onclick="addColor({{ $attribute->id }})"
-                                                    style="padding:6px 14px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;">
-                                                + Add Color
-                                            </button>
-                                        </div>
-                                        <input type="hidden" name="attributes[{{ $attribute->id }}]"
-                                               id="colorValue-{{ $attribute->id }}" {{ $attribute->is_required ? 'required' : '' }}>
+
+                                @if($attribute->type === 'select' && $attribute->options)
+                                {{-- Multi-select tag picker --}}
+                                <div id="select-picker-{{ $attribute->id }}">
+                                    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                                        @foreach($attribute->options as $option)
+                                        <button type="button"
+                                                onclick="toggleSelectOption({{ $attribute->id }}, '{{ $option }}')"
+                                                id="opt-{{ $attribute->id }}-{{ Str::slug($option) }}"
+                                                style="padding:5px 14px;font-size:12px;font-weight:600;border:2px solid #d1d5db;border-radius:20px;background:white;cursor:pointer;transition:all .15s;">
+                                            {{ $option }}
+                                        </button>
+                                        @endforeach
                                     </div>
+                                    <input type="hidden" name="attributes[{{ $attribute->id }}]"
+                                           id="selectValue-{{ $attribute->id }}"
+                                           class="attr-field" data-attr-id="{{ $attribute->id }}"
+                                           {{ $attribute->is_required ? 'required' : '' }}>
+                                </div>
+
+                                @elseif($attribute->type === 'color')
+                                {{-- Multi-color picker --}}
+                                <div id="color-picker-{{ $attribute->id }}">
+                                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;" id="swatches-{{ $attribute->id }}"></div>
+                                    <div style="display:flex;align-items:center;gap:8px;">
+                                        <input type="color" id="colorInput-{{ $attribute->id }}" value="#000000"
+                                               style="width:44px;height:36px;border:1px solid #ddd;border-radius:6px;cursor:pointer;">
+                                        <button type="button" onclick="addColor({{ $attribute->id }})"
+                                                style="padding:6px 14px;background:#667eea;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">
+                                            + Add Color
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="attributes[{{ $attribute->id }}]"
+                                           id="colorValue-{{ $attribute->id }}"
+                                           class="attr-field" data-attr-id="{{ $attribute->id }}"
+                                           {{ $attribute->is_required ? 'required' : '' }}>
+                                </div>
+
                                 @elseif($attribute->type === 'number')
-                                    <input type="number" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
+                                <input type="number" name="attributes[{{ $attribute->id }}]"
+                                       placeholder="Enter {{ $attribute->name }}"
+                                       class="attr-field" data-attr-id="{{ $attribute->id }}"
+                                       style="width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;"
+                                       {{ $attribute->is_required ? 'required' : '' }}>
+
                                 @else
-                                    <input type="text" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
+                                {{-- Multi-text tag input --}}
+                                <div id="text-picker-{{ $attribute->id }}">
+                                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;" id="text-tags-{{ $attribute->id }}"></div>
+                                    <div style="display:flex;gap:8px;">
+                                        <input type="text" id="textInput-{{ $attribute->id }}"
+                                               placeholder="Type and press Enter"
+                                               style="flex:1;padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;"
+                                               onkeydown="if(event.key==='Enter'){event.preventDefault();addTextTag({{ $attribute->id }});}">
+                                        <button type="button" onclick="addTextTag({{ $attribute->id }})"
+                                                style="padding:8px 14px;background:#667eea;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;">+</button>
+                                    </div>
+                                    <input type="hidden" name="attributes[{{ $attribute->id }}]"
+                                           id="textValue-{{ $attribute->id }}"
+                                           class="attr-field" data-attr-id="{{ $attribute->id }}"
+                                           {{ $attribute->is_required ? 'required' : '' }}>
+                                </div>
                                 @endif
                             </div>
                             @endforeach
@@ -676,15 +708,22 @@ function editProduct(product) {
     if (product.attributes && product.attributes.length > 0) {
         product.attributes.forEach(attr => {
             const input = document.querySelector(`[name="attributes[${attr.id}]"]`);
-            if (input) {
-                // Color multi-picker: clear swatches and re-init
-                if (input.type === 'hidden' && document.getElementById('swatches-' + attr.id)) {
+            if (!input) return;
+            const val = attr.pivot ? attr.pivot.value : '';
+            if (input.type === 'hidden') {
+                if (document.getElementById('swatches-' + attr.id)) {
                     document.getElementById('swatches-' + attr.id).innerHTML = '';
                     input.value = '';
-                    if (attr.pivot.value) initColorSwatches(attr.id, attr.pivot.value);
+                    if (val) initColorSwatches(attr.id, val);
+                } else if (document.getElementById('selectValue-' + attr.id) === input) {
+                    initSelectOptions(attr.id, val);
+                } else if (document.getElementById('textValue-' + attr.id) === input) {
+                    initTextTags(attr.id, val);
                 } else {
-                    input.value = attr.pivot.value;
+                    input.value = val;
                 }
+            } else {
+                input.value = val;
             }
         });
     }
@@ -905,29 +944,73 @@ function addColor(attrId) {
     swatch.style.cssText = 'position:relative;display:inline-block;';
     swatch.dataset.color = hex;
     swatch.innerHTML = `
-        <div style="width:30px;height:30px;border-radius:4px;background:${hex};border:2px solid #ddd;" title="${hex}"></div>
+        <div style="width:30px;height:30px;border-radius:6px;background:${hex};border:2px solid #ddd;" title="${hex}"></div>
         <button type="button" onclick="removeColor(${attrId},'${hex}')"
                 style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e74c3c;color:white;border:none;cursor:pointer;font-size:10px;line-height:1;">×</button>
     `;
     swatches.appendChild(swatch);
 }
-
 function removeColor(attrId, hex) {
     const hidden = document.getElementById('colorValue-' + attrId);
     const swatches = document.getElementById('swatches-' + attrId);
     hidden.value = hidden.value.split(',').filter(c => c !== hex).join(',');
-    swatches.querySelectorAll('[data-color]').forEach(el => {
-        if (el.dataset.color === hex) el.remove();
-    });
+    swatches.querySelectorAll('[data-color]').forEach(el => { if (el.dataset.color === hex) el.remove(); });
 }
-
 function initColorSwatches(attrId, value) {
     if (!value) return;
-    value.split(',').forEach(hex => {
-        if (!hex) return;
-        document.getElementById('colorInput-' + attrId).value = hex;
-        addColor(attrId);
-    });
+    value.split(',').forEach(hex => { if (!hex) return; document.getElementById('colorInput-' + attrId).value = hex; addColor(attrId); });
+}
+
+// ── Multi-Select Tag Picker ─────────────────────────────────────────────────
+function toggleSelectOption(attrId, value) {
+    const hidden = document.getElementById('selectValue-' + attrId);
+    const slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const btn = document.getElementById('opt-' + attrId + '-' + slug);
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(value)) {
+        hidden.value = existing.filter(v => v !== value).join(',');
+        if (btn) { btn.style.background='white'; btn.style.borderColor='#d1d5db'; btn.style.color=''; }
+    } else {
+        existing.push(value);
+        hidden.value = existing.join(',');
+        if (btn) { btn.style.background='#667eea'; btn.style.borderColor='#667eea'; btn.style.color='white'; }
+    }
+}
+function initSelectOptions(attrId, value) {
+    if (!value) return;
+    document.querySelectorAll(`[id^="opt-${attrId}-"]`).forEach(btn => { btn.style.background='white'; btn.style.borderColor='#d1d5db'; btn.style.color=''; });
+    document.getElementById('selectValue-' + attrId).value = '';
+    value.split(',').forEach(v => { if (v.trim()) toggleSelectOption(attrId, v.trim()); });
+}
+
+// ── Multi-Text Tag Input ────────────────────────────────────────────────────
+function addTextTag(attrId) {
+    const input = document.getElementById('textInput-' + attrId);
+    const val = input.value.trim();
+    if (!val) return;
+    const hidden = document.getElementById('textValue-' + attrId);
+    const tags = document.getElementById('text-tags-' + attrId);
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(val)) { input.value = ''; return; }
+    existing.push(val);
+    hidden.value = existing.join(',');
+    const tag = document.createElement('span');
+    tag.dataset.val = val;
+    tag.style.cssText = 'display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#e0e7ff;color:#3730a3;font-size:12px;font-weight:600;border-radius:20px;';
+    tag.innerHTML = `${val} <button type="button" onclick="removeTextTag(${attrId},'${val.replace(/'/g,"\\'")}',this.parentElement)" style="background:none;border:none;cursor:pointer;color:#6366f1;font-weight:bold;font-size:13px;line-height:1;">×</button>`;
+    tags.appendChild(tag);
+    input.value = '';
+}
+function removeTextTag(attrId, val, tagEl) {
+    const hidden = document.getElementById('textValue-' + attrId);
+    hidden.value = hidden.value.split(',').filter(v => v !== val).join(',');
+    tagEl.remove();
+}
+function initTextTags(attrId, value) {
+    if (!value) return;
+    document.getElementById('text-tags-' + attrId).innerHTML = '';
+    document.getElementById('textValue-' + attrId).value = '';
+    value.split(',').forEach(v => { if (!v.trim()) return; document.getElementById('textInput-' + attrId).value = v.trim(); addTextTag(attrId); });
 }
 </script>
 @endsection
