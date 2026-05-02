@@ -66,11 +66,12 @@ class Coupon extends Model
 
         $now = Carbon::now();
 
-        if ($this->start_date && $now->lt($this->start_date)) {
+        // Use copy() to avoid mutating the Carbon instances
+        if ($this->start_date && $now->copy()->startOfDay()->lt($this->start_date->copy()->startOfDay())) {
             return false;
         }
 
-        if ($this->end_date && $now->gt($this->end_date)) {
+        if ($this->end_date && $now->copy()->endOfDay()->gt($this->end_date->copy()->endOfDay())) {
             return false;
         }
 

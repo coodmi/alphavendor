@@ -1315,12 +1315,21 @@ class AdminController extends Controller
             'usage_limit' => 'nullable|integer|min:1',
             'per_user_limit' => 'nullable|integer|min:1',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date',
+            'end_date' => 'nullable|date',
             'is_active' => 'boolean',
             'description' => 'nullable|string',
             'product_id' => 'nullable|exists:products,id',
             'category_id' => 'nullable|exists:categories,id',
         ]);
+
+        $validated['code'] = strtoupper($validated['code']);
+        // Normalize dates: start = beginning of day, end = end of day
+        if (!empty($validated['start_date'])) {
+            $validated['start_date'] = \Carbon\Carbon::parse($validated['start_date'])->startOfDay();
+        }
+        if (!empty($validated['end_date'])) {
+            $validated['end_date'] = \Carbon\Carbon::parse($validated['end_date'])->endOfDay();
+        }
 
         Coupon::create($validated);
 
@@ -1347,6 +1356,15 @@ class AdminController extends Controller
             'product_id' => 'nullable|exists:products,id',
             'category_id' => 'nullable|exists:categories,id',
         ]);
+
+        $validated['code'] = strtoupper($validated['code']);
+        // Normalize dates: start = beginning of day, end = end of day
+        if (!empty($validated['start_date'])) {
+            $validated['start_date'] = \Carbon\Carbon::parse($validated['start_date'])->startOfDay();
+        }
+        if (!empty($validated['end_date'])) {
+            $validated['end_date'] = \Carbon\Carbon::parse($validated['end_date'])->endOfDay();
+        }
 
         $coupon->update($validated);
 
