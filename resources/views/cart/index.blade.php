@@ -40,7 +40,7 @@
                                             <i class="fas fa-ticket-alt"></i>
                                             <span class="font-semibold">{{ $item['coupon_code'] }}</span>
                                         </span>
-                                        <span class="text-green-600 text-sm font-semibold">-{{ currency(($item['discount_amount'], 2) }}</span>
+                                        <span class="text-green-600 text-sm font-semibold">-{{ currency($item['discount_amount']) }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -61,7 +61,7 @@
                             </div>
 
                             <div class="text-right font-bold" data-item-total="{{ $productId }}">
-                                {{ currency(($item['price'] * $item['quantity'], 2) }}
+                                {{ currency($item['price'] * $item['quantity']) }}
                             </div>
                         </div>
                     @endforeach

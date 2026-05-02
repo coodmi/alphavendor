@@ -83,7 +83,7 @@
                                 {{ $withdrawal->withdrawal_number }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                                {{ currency(($withdrawal->amount, 2) }}
+                                {{ currency($withdrawal->amount) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                 @if($withdrawal->withdrawalMethod)

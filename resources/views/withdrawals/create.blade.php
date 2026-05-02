@@ -86,7 +86,7 @@
                            class="w-full border border-gray-300 rounded px-4 py-3 focus:ring-2 focus:ring-teal-600"
                            placeholder="Enter amount">
                     @error('amount')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-                    <p class="text-sm text-gray-600 mt-1">Maximum: {{ currency(($wallet->balance ?? 0, 2) }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Maximum: {{ currency($wallet->balance ?? 0) }}</p>
                 </div>
 
                 <div class="mb-6">

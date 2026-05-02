@@ -139,9 +139,9 @@
                                 @else text-green-600
                                 @endif">
                                 @if($transaction->type === 'withdrawal' || $transaction->type === 'refund')
-                                    -{{ currency(($transaction->amount, 2) }}
+                                    -{{ currency($transaction->amount) }}
                                 @else
-                                    +{{ currency(($transaction->amount, 2) }}
+                                    +{{ currency($transaction->amount) }}
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

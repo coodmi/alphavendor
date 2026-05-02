@@ -240,7 +240,7 @@
                                     @endif
                                     <div class="flex-1">
                                         <p class="font-medium">{{ $item->product_name }}</p>
-                                        <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }} × {{ currency(($item->price, 2) }}</p>
+                                        <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }} × {{ currency($item->price) }}</p>
                                     </div>
                                     <div class="text-right">
                                         <p class="font-semibold"> {{ currency($item->subtotal) }}</p>

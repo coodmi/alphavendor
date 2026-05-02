@@ -202,7 +202,7 @@
                             <span style="font-size: 16px; font-weight: 600; color: #2c3e50;"> {{ currency($order->total) }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 16px; font-weight: 600; color: #e74c3c;">-{{ currency(($order->commission_amount ?? 0, 2) }}</span>
+                            <span style="font-size: 16px; font-weight: 600; color: #e74c3c;">-{{ currency($order->commission_amount ?? 0) }}</span>
                             @if($order->commission_rate)
                                 <div style="font-size: 11px; color: #7f8c8d;">({{ $order->commission_rate }}%)</div>
                             @endif
