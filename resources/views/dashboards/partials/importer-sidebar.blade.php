@@ -38,6 +38,10 @@
         <i class="fas fa-shopping-cart"></i>
         <span>Import Orders</span>
     </a>
+    <a href="{{ route('invoices.my') }}" class="menu-item {{ request()->routeIs('invoices.my') ? 'active' : '' }}">
+        <i class="fas fa-file-invoice"></i>
+        <span>Invoices</span>
+    </a>
 </div>
 
 <div class="menu-section">

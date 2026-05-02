@@ -169,6 +169,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/advance-payments', [App\Http\Controllers\AdvancePaymentController::class, 'store'])->name('advance-payments.store');
     Route::get('/my-advance-payments', [App\Http\Controllers\AdvancePaymentController::class, 'userPayments'])->name('advance-payments.user');
 
+    // My Invoices (customer + vendor)
+    Route::get('/my-invoices', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices.my');
+
     // Admin routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

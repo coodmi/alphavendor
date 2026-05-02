@@ -14,6 +14,10 @@
             <span class="badge">{{ $pendingOrders }}</span>
         @endif
     </a>
+    <a href="{{ route('invoices.my') }}" class="menu-item {{ request()->routeIs('invoices.my') ? 'active' : '' }}">
+        <i class="fas fa-file-invoice"></i>
+        <span>Invoices</span>
+    </a>
     <a href="{{ route('vendor.returns.index') }}" class="menu-item {{ request()->routeIs('vendor.returns*') ? 'active' : '' }}">
         <i class="fas fa-undo"></i>
         <span>Returns & Refunds</span>
