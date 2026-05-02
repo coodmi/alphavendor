@@ -172,6 +172,9 @@ Route::middleware('auth')->group(function () {
     // My Invoices (customer + vendor)
     Route::get('/my-invoices', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices.my');
 
+    // Generic order invoice route — works for all roles (customer, vendor, admin)
+    Route::get('/orders/{order}/invoice', [\App\Http\Controllers\OrderController::class, 'invoice'])->name('orders.invoice');
+
     // Admin routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
