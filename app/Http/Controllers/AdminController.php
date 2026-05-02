@@ -407,7 +407,7 @@ class AdminController extends Controller
     public function updateOrderStatus(Request $request, Order $order)
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+            'status' => 'required|in:pending_advance_payment,advance_paid,order_confirmed,pending,processing,shipped,delivered,cancelled,refunded,exchange,returned'
         ]);
 
         $previousStatus = $order->status;

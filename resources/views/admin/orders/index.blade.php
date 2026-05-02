@@ -51,14 +51,7 @@
                                     <span class="text-sm font-semibold text-gray-900"> {{ currency($order->total) }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                        {{ $order->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
-                                        {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $order->status === 'shipped' ? 'bg-purple-100 text-purple-800' : '' }}
-                                        {{ $order->status === 'delivered' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $order->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}">
-                                        {{ ucfirst($order->status) }}
-                                    </span>
+                                    @include('partials.order-status-badge', ['status' => $order->status])
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -77,11 +70,9 @@
                                             @csrf
                                             @method('PATCH')
                                             <select name="status" onchange="this.form.submit()" class="text-sm border rounded px-2 py-1">
-                                                <option value="pending"    {{ $order->status === 'pending'    ? 'selected' : '' }}>Pending</option>
-                                                <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                                                <option value="shipped"    {{ $order->status === 'shipped'    ? 'selected' : '' }}>Shipped</option>
-                                                <option value="delivered"  {{ $order->status === 'delivered'  ? 'selected' : '' }}>Delivered</option>
-                                                <option value="cancelled"  {{ $order->status === 'cancelled'  ? 'selected' : '' }}>Cancelled</option>
+                                                @foreach(\App\Helpers\OrderStatus::all() as $val => $cfg)
+                                                <option value="{{ $val }}" {{ $order->status === $val ? 'selected' : '' }}>{{ $cfg['label'] }}</option>
+                                                @endforeach
                                             </select>
                                         </form>
                                         {{-- Payment Status --}}

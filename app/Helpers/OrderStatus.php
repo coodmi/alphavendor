@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Helpers;
+
+class OrderStatus
+{
+    /**
+     * All statuses with display config.
+     */
+    public static function all(): array
+    {
+        return [
+            'pending_advance_payment' => [
+                'label'  => 'Pending Advance Payment',
+                'color'  => 'bg-orange-100 text-orange-700',
+                'icon'   => 'fa-clock',
+                'hex'    => '#f97316',
+            ],
+            'advance_paid' => [
+                'label'  => 'Advance Paid',
+                'color'  => 'bg-blue-100 text-blue-700',
+                'icon'   => 'fa-money-bill-wave',
+                'hex'    => '#3b82f6',
+            ],
+            'order_confirmed' => [
+                'label'  => 'Order Confirmed',
+                'color'  => 'bg-indigo-100 text-indigo-700',
+                'icon'   => 'fa-check-circle',
+                'hex'    => '#6366f1',
+            ],
+            'pending' => [
+                'label'  => 'Pending',
+                'color'  => 'bg-yellow-100 text-yellow-700',
+                'icon'   => 'fa-hourglass-half',
+                'hex'    => '#eab308',
+            ],
+            'processing' => [
+                'label'  => 'Processing',
+                'color'  => 'bg-cyan-100 text-cyan-700',
+                'icon'   => 'fa-cog',
+                'hex'    => '#06b6d4',
+            ],
+            'shipped' => [
+                'label'  => 'Shipped',
+                'color'  => 'bg-purple-100 text-purple-700',
+                'icon'   => 'fa-shipping-fast',
+                'hex'    => '#a855f7',
+            ],
+            'delivered' => [
+                'label'  => 'Delivered',
+                'color'  => 'bg-green-100 text-green-700',
+                'icon'   => 'fa-check-double',
+                'hex'    => '#22c55e',
+            ],
+            'cancelled' => [
+                'label'  => 'Cancelled',
+                'color'  => 'bg-red-100 text-red-700',
+                'icon'   => 'fa-times-circle',
+                'hex'    => '#ef4444',
+            ],
+            'refunded' => [
+                'label'  => 'Refunded',
+                'color'  => 'bg-pink-100 text-pink-700',
+                'icon'   => 'fa-undo-alt',
+                'hex'    => '#ec4899',
+            ],
+            'exchange' => [
+                'label'  => 'Exchange',
+                'color'  => 'bg-teal-100 text-teal-700',
+                'icon'   => 'fa-exchange-alt',
+                'hex'    => '#14b8a6',
+            ],
+            'returned' => [
+                'label'  => 'Returned',
+                'color'  => 'bg-gray-100 text-gray-700',
+                'icon'   => 'fa-reply',
+                'hex'    => '#6b7280',
+            ],
+        ];
+    }
+
+    public static function label(string $status): string
+    {
+        return self::all()[$status]['label'] ?? ucfirst(str_replace('_', ' ', $status));
+    }
+
+    public static function color(string $status): string
+    {
+        return self::all()[$status]['color'] ?? 'bg-gray-100 text-gray-600';
+    }
+
+    public static function icon(string $status): string
+    {
+        return self::all()[$status]['icon'] ?? 'fa-circle';
+    }
+
+    /**
+     * Statuses admin can set.
+     */
+    public static function adminStatuses(): array
+    {
+        return array_keys(self::all());
+    }
+
+    /**
+     * Statuses a vendor (wholesaler/importer/retailer) can set.
+     * Rule: vendor can ONLY mark as shipped.
+     */
+    public static function vendorStatuses(): array
+    {
+        return ['shipped'];
+    }
+
+    /**
+     * Determine initial status when order is placed.
+     * Wholesale/Importer with advance payment setting → pending_advance_payment
+     * Otherwise → pending
+     */
+    public static function initialStatus(string $vendorRole, bool $advanceMandatory = false): string
+    {
+        if (in_array($vendorRole, ['wholesaler', 'exporter', 'importer']) && $advanceMandatory) {
+            return 'pending_advance_payment';
+        }
+        return 'pending';
+    }
+}

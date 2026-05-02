@@ -204,15 +204,7 @@
                             <p class="text-sm text-gray-600">Vendor: {{ $order->vendor->name }}</p>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block px-3 py-1 rounded text-sm font-semibold
-                                @if($order->status === 'pending') bg-teal-100 text-teal-800
-                                @elseif($order->status === 'processing') bg-blue-100 text-blue-800
-                                @elseif($order->status === 'shipped') bg-purple-100 text-purple-800
-                                @elseif($order->status === 'delivered') bg-green-100 text-green-800
-                                @elseif($order->status === 'cancelled') bg-red-100 text-red-800
-                                @endif">
-                                {{ ucfirst($order->status) }}
-                            </span>
+                            @include('partials.order-status-badge', ['status' => $order->status])
                             
                             @if($order->payment_status === 'pending_verification')
                                 <span class="inline-block px-3 py-1 rounded text-sm font-semibold bg-teal-100 text-teal-900 ml-2">

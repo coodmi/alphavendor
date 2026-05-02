@@ -127,6 +127,14 @@ class OrderController extends Controller
                     $total = $subtotal + $deliveryCharge - $couponDiscount;
 
                     // Create order
+                    // Determine initial status based on vendor role and advance payment settings
+                    $vendor = \App\Models\User::find($vendorId);
+                    $advanceSettings = \App\Models\AdvancePaymentSetting::getSettings();
+                    $initialStatus = \App\Helpers\OrderStatus::initialStatus(
+                        $vendor->role ?? 'retailer',
+                        $advanceSettings->is_mandatory
+                    );
+
                     $order = Order::create([
                         'order_number' => 'ORD-' . time() . '-' . rand(1000, 9999),
                         'user_id' => Auth::id(),
@@ -139,7 +147,7 @@ class OrderController extends Controller
                         'vendor_earning' => $vendorEarning,
                         'total' => max(0, $total),
                         'delivery_charge' => $deliveryCharge,
-                        'status' => 'pending',
+                        'status' => $initialStatus,
                         'payment_status' => 'unpaid',
                         'payment_method' => $validated['payment_method'],
                         'shipping_address' => $validated['shipping_address'],
