@@ -300,27 +300,17 @@ class OrderController extends Controller
         $order = Order::where('vendor_id', Auth::id())->findOrFail($id);
 
         $validated = $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled,refunded'
+            'status' => 'required|in:shipped'
+            // Vendors (wholesaler/importer) can ONLY mark as shipped
         ]);
 
-        $order->update(['status' => $validated['status']]);
-
-        // If order is delivered, move from pending to available balance
-        if ($validated['status'] === 'delivered') {
-            $wallet = VendorWallet::where('vendor_id', $order->vendor_id)->first();
-
-            if ($wallet) {
-                $wallet->decrement('pending_balance', $order->vendor_earning);
-                $wallet->increment('balance', $order->vendor_earning);
-                $wallet->increment('total_earned', $order->vendor_earning);
-
-                // Update transaction status
-                Transaction::where('order_id', $order->id)
-                    ->where('vendor_id', $order->vendor_id)
-                    ->update(['status' => 'completed']);
-            }
+        // Only allow changing to shipped — and only if current status allows it
+        if (!in_array($order->status, ['pending', 'processing'])) {
+            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Pending or Processing.');
         }
 
-        return redirect()->back()->with('success', 'Order status updated!');
+        $order->update(['status' => 'shipped']);
+
+        return redirect()->back()->with('success', 'Order marked as Shipped!');
     }
 }

@@ -103,24 +103,25 @@ class RetailerDashboardController extends Controller
     }
 
     /**
-     * Update order status
+     * Update order status — Retailer can ONLY mark as Shipped
      */
     public function updateOrderStatus(Request $request, Order $order)
     {
         $vendorId = Auth::id();
 
-        // Make sure retailer can only update their own orders
         if ($order->vendor_id !== $vendorId) {
             abort(403, 'Unauthorized action.');
         }
 
         $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+            'status' => 'required|in:shipped'
         ]);
 
-        $order->update([
-            'status' => $request->status
-        ]);
+        if (!in_array($order->status, ['pending', 'processing'])) {
+            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Pending or Processing.');
+        }
 
-        return redirect()->back()->with('success', 'Order status updated successfully!');
+        $order->update(['status' => 'shipped']);
+
+        return redirect()->back()->with('success', 'Order marked as Shipped!');
     }}

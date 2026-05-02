@@ -172,21 +172,32 @@
 
             <!-- Update Order Status -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="font-semibold text-lg mb-4">Update Order Status</h3>
+                <h3 class="font-semibold text-lg mb-4">Order Status</h3>
+                @if(in_array($order->status, ['pending', 'processing']))
+                <p class="text-sm text-gray-500 mb-4">
+                    You can only mark this order as <strong>Shipped</strong> once it has been dispatched.
+                </p>
                 <form action="{{ route('retailer.orders.update-status', $order) }}" method="POST">
                     @csrf
                     @method('PATCH')
-                    <select name="status" class="w-full border rounded px-3 py-2 mb-3">
-                        <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                        <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Shipped</option>
-                        <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
-                        <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                    </select>
-                    <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                        Update Status
+                    <input type="hidden" name="status" value="shipped">
+                    <button type="submit"
+                            onclick="return confirm('Confirm: Mark this order as Shipped?')"
+                            class="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition">
+                        <i class="fas fa-shipping-fast"></i> Mark as Shipped
                     </button>
                 </form>
+                @else
+                <div class="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                    @php
+                        $sc = ['shipped'=>'text-purple-600','delivered'=>'text-green-600','cancelled'=>'text-red-600'];
+                    @endphp
+                    <i class="fas fa-info-circle {{ $sc[$order->status] ?? 'text-gray-400' }}"></i>
+                    <span class="text-sm text-gray-600">
+                        This order is <strong>{{ ucfirst($order->status) }}</strong>. No further status changes are available for vendors.
+                    </span>
+                </div>
+                @endif
             </div>
         </div>
     </div>

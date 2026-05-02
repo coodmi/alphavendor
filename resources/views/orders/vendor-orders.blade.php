@@ -59,24 +59,32 @@
                             {{ currency(($order->vendor_earning, 2) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <form action="{{ route('vendor.orders.update-status', $order->id) }}" method="POST">
+                            {{-- Status badge --}}
+                            @php
+                                $sc = [
+                                    'pending'    => 'bg-yellow-100 text-yellow-800',
+                                    'processing' => 'bg-blue-100 text-blue-800',
+                                    'shipped'    => 'bg-purple-100 text-purple-800',
+                                    'delivered'  => 'bg-green-100 text-green-800',
+                                    'cancelled'  => 'bg-red-100 text-red-800',
+                                ];
+                            @endphp
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $sc[$order->status] ?? 'bg-gray-100 text-gray-700' }}">
+                                {{ ucfirst($order->status) }}
+                            </span>
+                            {{-- Only show Mark Shipped button when eligible --}}
+                            @if(in_array($order->status, ['pending', 'processing']))
+                            <form action="{{ route('vendor.orders.update-status', $order->id) }}" method="POST" class="mt-1.5">
                                 @csrf
                                 @method('PATCH')
-                                <select name="status" onchange="this.form.submit()"
-                                        class="text-sm rounded px-2 py-1
-                                        @if($order->status === 'pending') bg-teal-100 text-teal-800
-                                        @elseif($order->status === 'processing') bg-blue-100 text-blue-800
-                                        @elseif($order->status === 'shipped') bg-purple-100 text-purple-800
-                                        @elseif($order->status === 'delivered') bg-green-100 text-green-800
-                                        @elseif($order->status === 'cancelled') bg-red-100 text-red-800
-                                        @endif">
-                                    <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                                    <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Shipped</option>
-                                    <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
-                                    <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                </select>
+                                <input type="hidden" name="status" value="shipped">
+                                <button type="submit"
+                                        onclick="return confirm('Mark this order as Shipped?')"
+                                        class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition">
+                                    <i class="fas fa-shipping-fast"></i> Mark Shipped
+                                </button>
                             </form>
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $order->created_at->format('M d, Y') }}

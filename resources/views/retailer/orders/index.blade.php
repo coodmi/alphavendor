@@ -77,17 +77,20 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <a href="{{ route('retailer.orders.show', $order) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
+                                    @if(in_array($order->status, ['pending', 'processing']))
                                     <form action="{{ route('retailer.orders.update-status', $order) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="status" onchange="this.form.submit()" class="text-sm border rounded px-2 py-1">
-                                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                                            <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Shipped</option>
-                                            <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
-                                            <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                        </select>
+                                        <input type="hidden" name="status" value="shipped">
+                                        <button type="submit"
+                                                onclick="return confirm('Mark this order as Shipped?')"
+                                                class="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition">
+                                            <i class="fas fa-shipping-fast"></i> Mark Shipped
+                                        </button>
                                     </form>
+                                    @else
+                                    <span class="text-xs text-gray-400 italic">No action available</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
