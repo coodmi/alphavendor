@@ -25,187 +25,120 @@ class AdminController extends Controller
     /**
      * Show analytics and reports page
      */
-    public function analytics()
+    public function analytics(Request $request)
     {
-        $today = now()->startOfDay();
+        // ── Date range ──────────────────────────────────────────────────────
+        $from = $request->filled('from')
+            ? \Carbon\Carbon::parse($request->from)->startOfDay()
+            : now()->startOfDay();
+
+        $to = $request->filled('to')
+            ? \Carbon\Carbon::parse($request->to)->endOfDay()
+            : now()->endOfDay();
+
+        $today     = now()->startOfDay();
         $yesterday = now()->subDay()->startOfDay();
-        
-        // Get vendor IDs by role
-        $retailerIds = User::where('role', 'retailer')->pluck('id');
+
+        // ── Vendor ID buckets ────────────────────────────────────────────────
+        $retailerIds   = User::where('role', 'retailer')->pluck('id');
         $wholesalerIds = User::where('role', 'wholesaler')->pluck('id');
-        $importerIds = User::where('role', 'exporter')->pluck('id'); // exporter is used as importer
-        
-        // TODAY'S STATISTICS
+        $importerIds   = User::where('role', 'exporter')->pluck('id');
+
+        // ── Helper: orders in date range ─────────────────────────────────────
+        $ordersInRange = fn($ids) => Order::whereIn('vendor_id', $ids)
+            ->whereBetween('created_at', [$from, $to]);
+
+        $statusInRange = fn($status) => Order::whereBetween('updated_at', [$from, $to])
+            ->where('status', $status);
+
+        // ── SELECTED DATE RANGE STATS ────────────────────────────────────────
+        $rangeStats = [
+            // Orders by type
+            'retailer_orders'   => $ordersInRange($retailerIds)->count(),
+            'wholesaler_orders' => $ordersInRange($wholesalerIds)->count(),
+            'importer_orders'   => $ordersInRange($importerIds)->count(),
+            'total_orders'      => Order::whereBetween('created_at', [$from, $to])->count(),
+
+            // New users
+            'new_users'         => User::where('role', 'user')->whereBetween('created_at', [$from, $to])->count(),
+            'new_retailers'     => User::where('role', 'retailer')->whereBetween('created_at', [$from, $to])->count(),
+            'new_wholesalers'   => User::where('role', 'wholesaler')->whereBetween('created_at', [$from, $to])->count(),
+            'new_importers'     => User::where('role', 'exporter')->whereBetween('created_at', [$from, $to])->count(),
+
+            // Order statuses
+            'returns'           => $statusInRange('returned')->count(),
+            'refunds'           => $statusInRange('refunded')->count(),
+            'cancelled'         => $statusInRange('cancelled')->count(),
+            'exchange'          => $statusInRange('exchange')->count(),
+
+            // Revenue
+            'retailer_revenue'   => $ordersInRange($retailerIds)->whereIn('status', ['delivered','completed'])->sum('total'),
+            'wholesaler_revenue' => $ordersInRange($wholesalerIds)->whereIn('status', ['delivered','completed'])->sum('total'),
+            'importer_revenue'   => $ordersInRange($importerIds)->whereIn('status', ['delivered','completed'])->sum('total'),
+        ];
+
+        // ── TODAY ────────────────────────────────────────────────────────────
         $todayStats = [
-            // Retailer orders today
-            'retailer_orders_today' => Order::whereIn('vendor_id', $retailerIds)
-                ->whereDate('created_at', $today)
-                ->count(),
-            'retailer_sales_today' => Order::whereIn('vendor_id', $retailerIds)
-                ->whereDate('created_at', $today)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total'),
-            
-            // Wholesaler orders today
-            'wholesaler_orders_today' => Order::whereIn('vendor_id', $wholesalerIds)
-                ->whereDate('created_at', $today)
-                ->count(),
-            'wholesaler_sales_today' => Order::whereIn('vendor_id', $wholesalerIds)
-                ->whereDate('created_at', $today)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total'),
-            
-            // Importer orders today
-            'importer_orders_today' => Order::whereIn('vendor_id', $importerIds)
-                ->whereDate('created_at', $today)
-                ->count(),
-            'importer_sales_today' => Order::whereIn('vendor_id', $importerIds)
-                ->whereDate('created_at', $today)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total'),
-            
-            // Returns & Refunds today
-            'returns_today' => Order::whereDate('updated_at', $today)
-                ->where('status', 'returned')
-                ->count(),
-            'refunds_today' => Order::whereDate('updated_at', $today)
-                ->where('status', 'refunded')
-                ->count(),
-            
-            // Cancelled orders today
-            'cancelled_today' => Order::whereDate('updated_at', $today)
-                ->where('status', 'cancelled')
-                ->count(),
+            'retailer_orders'   => Order::whereIn('vendor_id', $retailerIds)->whereDate('created_at', $today)->count(),
+            'wholesaler_orders' => Order::whereIn('vendor_id', $wholesalerIds)->whereDate('created_at', $today)->count(),
+            'importer_orders'   => Order::whereIn('vendor_id', $importerIds)->whereDate('created_at', $today)->count(),
+            'new_users'         => User::where('role', 'user')->whereDate('created_at', $today)->count(),
+            'new_retailers'     => User::where('role', 'retailer')->whereDate('created_at', $today)->count(),
+            'new_wholesalers'   => User::where('role', 'wholesaler')->whereDate('created_at', $today)->count(),
+            'new_importers'     => User::where('role', 'exporter')->whereDate('created_at', $today)->count(),
+            'returns'           => Order::whereDate('updated_at', $today)->where('status', 'returned')->count(),
+            'refunds'           => Order::whereDate('updated_at', $today)->where('status', 'refunded')->count(),
+            'cancelled'         => Order::whereDate('updated_at', $today)->where('status', 'cancelled')->count(),
+            'exchange'          => Order::whereDate('updated_at', $today)->where('status', 'exchange')->count(),
         ];
-        
-        // YESTERDAY'S STATISTICS
+
+        // ── YESTERDAY ────────────────────────────────────────────────────────
         $yesterdayStats = [
-            // Retailer orders yesterday
-            'retailer_orders_yesterday' => Order::whereIn('vendor_id', $retailerIds)
-                ->whereDate('created_at', $yesterday)
-                ->count(),
-            'retailer_sales_yesterday' => Order::whereIn('vendor_id', $retailerIds)
-                ->whereDate('created_at', $yesterday)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total'),
-            
-            // Wholesaler orders yesterday
-            'wholesaler_orders_yesterday' => Order::whereIn('vendor_id', $wholesalerIds)
-                ->whereDate('created_at', $yesterday)
-                ->count(),
-            'wholesaler_sales_yesterday' => Order::whereIn('vendor_id', $wholesalerIds)
-                ->whereDate('created_at', $yesterday)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total'),
-            
-            // Importer orders yesterday
-            'importer_orders_yesterday' => Order::whereIn('vendor_id', $importerIds)
-                ->whereDate('created_at', $yesterday)
-                ->count(),
-            'importer_sales_yesterday' => Order::whereIn('vendor_id', $importerIds)
-                ->whereDate('created_at', $yesterday)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total'),
-            
-            // Returns & Refunds yesterday
-            'returns_yesterday' => Order::whereDate('updated_at', $yesterday)
-                ->where('status', 'returned')
-                ->count(),
-            'refunds_yesterday' => Order::whereDate('updated_at', $yesterday)
-                ->where('status', 'refunded')
-                ->count(),
-            
-            // Cancelled orders yesterday
-            'cancelled_yesterday' => Order::whereDate('updated_at', $yesterday)
-                ->where('status', 'cancelled')
-                ->count(),
+            'retailer_orders'   => Order::whereIn('vendor_id', $retailerIds)->whereDate('created_at', $yesterday)->count(),
+            'wholesaler_orders' => Order::whereIn('vendor_id', $wholesalerIds)->whereDate('created_at', $yesterday)->count(),
+            'importer_orders'   => Order::whereIn('vendor_id', $importerIds)->whereDate('created_at', $yesterday)->count(),
+            'new_users'         => User::where('role', 'user')->whereDate('created_at', $yesterday)->count(),
+            'new_retailers'     => User::where('role', 'retailer')->whereDate('created_at', $yesterday)->count(),
+            'new_wholesalers'   => User::where('role', 'wholesaler')->whereDate('created_at', $yesterday)->count(),
+            'new_importers'     => User::where('role', 'exporter')->whereDate('created_at', $yesterday)->count(),
+            'returns'           => Order::whereDate('updated_at', $yesterday)->where('status', 'returned')->count(),
+            'refunds'           => Order::whereDate('updated_at', $yesterday)->where('status', 'refunded')->count(),
+            'cancelled'         => Order::whereDate('updated_at', $yesterday)->where('status', 'cancelled')->count(),
+            'exchange'          => Order::whereDate('updated_at', $yesterday)->where('status', 'exchange')->count(),
         ];
-        
-        // OVERALL STATISTICS
-        $overallStats = [
-            'total_orders' => Order::count(),
-            'total_sales' => Order::whereIn('status', ['delivered', 'completed'])->sum('total'),
-            'total_returns' => Order::where('status', 'returned')->count(),
-            'total_refunds' => Order::where('status', 'refunded')->count(),
-            'total_cancelled' => Order::where('status', 'cancelled')->count(),
-            'total_pending' => Order::where('status', 'pending')->count(),
-            'total_processing' => Order::where('status', 'processing')->count(),
-            'total_shipped' => Order::where('status', 'shipped')->count(),
-            'total_delivered' => Order::whereIn('status', ['delivered', 'completed'])->count(),
-            
-            // Vendor statistics
-            'total_retailers' => User::where('role', 'retailer')->where('status', 'active')->count(),
-            'total_wholesalers' => User::where('role', 'wholesaler')->where('status', 'active')->count(),
-            'total_importers' => User::where('role', 'exporter')->where('status', 'active')->count(),
-            
-            // Product statistics
-            'total_products' => Product::count(),
-            'active_products' => Product::where('status', 'active')->count(),
-            'out_of_stock' => Product::where('status', 'out_of_stock')->count(),
-            
-            // Customer statistics
-            'total_customers' => User::where('role', 'customer')->count(),
-            'new_customers_today' => User::where('role', 'customer')->whereDate('created_at', $today)->count(),
+
+        // ── ALL TIME TOTALS ──────────────────────────────────────────────────
+        $allTime = [
+            'total_orders'      => Order::count(),
+            'total_returns'     => Order::where('status', 'returned')->count(),
+            'total_refunds'     => Order::where('status', 'refunded')->count(),
+            'total_cancelled'   => Order::where('status', 'cancelled')->count(),
+            'total_exchange'    => Order::where('status', 'exchange')->count(),
+            'total_retailers'   => User::where('role', 'retailer')->count(),
+            'total_wholesalers' => User::where('role', 'wholesaler')->count(),
+            'total_importers'   => User::where('role', 'exporter')->count(),
+            'total_users'       => User::where('role', 'user')->count(),
         ];
-        
-        // CHART DATA - Last 7 days
-        $last7Days = [];
-        $salesData = [];
-        $ordersData = [];
-        
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->startOfDay();
-            $last7Days[] = $date->format('M d');
-            
-            $salesData[] = Order::whereDate('created_at', $date)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->sum('total');
-            
-            $ordersData[] = Order::whereDate('created_at', $date)->count();
+
+        // ── CHART: daily orders for selected range (max 60 days) ─────────────
+        $diffDays = min((int) $from->diffInDays($to) + 1, 60);
+        $chartLabels = [];
+        $chartRetailer = [];
+        $chartWholesaler = [];
+        $chartImporter = [];
+
+        for ($i = $diffDays - 1; $i >= 0; $i--) {
+            $day = $to->copy()->subDays($i)->startOfDay();
+            $chartLabels[]     = $day->format('M d');
+            $chartRetailer[]   = Order::whereIn('vendor_id', $retailerIds)->whereDate('created_at', $day)->count();
+            $chartWholesaler[] = Order::whereIn('vendor_id', $wholesalerIds)->whereDate('created_at', $day)->count();
+            $chartImporter[]   = Order::whereIn('vendor_id', $importerIds)->whereDate('created_at', $day)->count();
         }
-        
-        // TOP PERFORMING VENDORS
-        $topVendors = User::whereIn('role', ['retailer', 'wholesaler', 'exporter'])
-            ->where('users.status', 'active')
-            ->withCount(['orders as total_orders'])
-            ->withSum(['orders as total_sales' => function($query) {
-                $query->whereIn('orders.status', ['delivered', 'completed']);
-            }], 'total')
-            ->orderByDesc('total_sales')
-            ->take(6)
-            ->get();
-        
-        // TOP SELLING PRODUCTS
-        $topProducts = Product::withCount(['orderItems as total_sold' => function($query) {
-            $query->whereHas('order', function($q) {
-                $q->whereIn('status', ['delivered', 'completed']);
-            });
-        }])
-        ->withSum(['orderItems as total_revenue' => function($query) {
-            $query->whereHas('order', function($q) {
-                $q->whereIn('status', ['delivered', 'completed']);
-            });
-        }], 'price')
-        ->orderByDesc('total_sold')
-        ->take(6)
-        ->get();
-        
-        // RECENT ORDERS
-        $recentOrders = Order::with(['user', 'vendor', 'items'])
-            ->latest()
-            ->take(10)
-            ->get();
-        
+
         return view('admin.analytics', compact(
-            'todayStats',
-            'yesterdayStats',
-            'overallStats',
-            'last7Days',
-            'salesData',
-            'ordersData',
-            'topVendors',
-            'topProducts',
-            'recentOrders'
+            'rangeStats', 'todayStats', 'yesterdayStats', 'allTime',
+            'chartLabels', 'chartRetailer', 'chartWholesaler', 'chartImporter',
+            'from', 'to'
         ));
     }
     /**
