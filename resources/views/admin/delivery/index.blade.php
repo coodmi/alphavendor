@@ -99,7 +99,7 @@
 
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form method="GET" action="{{ route('admin.delivery.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form method="GET" action="{{ route('admin.delivery.index') }}" id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Search</label>
                 <input type="text" 
@@ -111,7 +111,7 @@
 
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Delivery Status</label>
-                <select name="delivery_status" class="w-full px-4 py-2 border rounded-lg">
+                <select name="delivery_status" onchange="document.getElementById('filterForm').submit()" class="w-full px-4 py-2 border rounded-lg">
                     <option value="">All Status</option>
                     <option value="pending" {{ request('delivery_status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="picked" {{ request('delivery_status') == 'picked' ? 'selected' : '' }}>Picked</option>
@@ -124,7 +124,7 @@
 
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Order Status</label>
-                <select name="status" class="w-full px-4 py-2 border rounded-lg">
+                <select name="status" onchange="document.getElementById('filterForm').submit()" class="w-full px-4 py-2 border rounded-lg">
                     <option value="">All Orders</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
@@ -133,10 +133,13 @@
                 </select>
             </div>
 
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            <div class="flex items-end gap-2">
+                <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
                     <i class="fas fa-search mr-2"></i>Filter
                 </button>
+                <a href="{{ route('admin.delivery.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg">
+                    <i class="fas fa-redo"></i>
+                </a>
             </div>
         </form>
     </div>
@@ -199,26 +202,25 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 @if(!$order->paperfly_tracking_number)
-                                    <form action="{{ route('admin.delivery.create', $order->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" class="text-green-600 hover:text-green-900 mr-3" title="Create Delivery">
-                                            <i class="fas fa-shipping-fast"></i> Create
-                                        </button>
-                                    </form>
+                                    <button type="button"
+                                            onclick="createDelivery({{ $order->id }}, this)"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded-lg transition">
+                                        <i class="fas fa-shipping-fast"></i> Create
+                                    </button>
                                 @else
                                     <form action="{{ route('admin.delivery.track', $order->id) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="text-blue-600 hover:text-blue-900 mr-3" title="Track">
+                                        <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition">
                                             <i class="fas fa-sync"></i> Track
                                         </button>
                                     </form>
                                     
                                     @if($order->delivery_status != 'delivered' && $order->delivery_status != 'cancelled')
-                                        <form action="{{ route('admin.delivery.cancel', $order->id) }}" method="POST" class="inline" 
+                                        <form action="{{ route('admin.delivery.cancel', $order->id) }}" method="POST" class="inline ml-1" 
                                               onsubmit="return confirm('Are you sure you want to cancel this delivery?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900" title="Cancel">
+                                            <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition">
                                                 <i class="fas fa-times"></i> Cancel
                                             </button>
                                         </form>
@@ -243,4 +245,25 @@
         </div>
     </div>
 </div>
+
+<script>
+function createDelivery(orderId, btn) {
+    if (!confirm('Create a Paperfly delivery order for this shipment?')) return;
+
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/admin/delivery/' + orderId + '/create';
+    const csrf = document.createElement('input');
+    csrf.type = 'hidden';
+    csrf.name = '_token';
+    csrf.value = document.querySelector('meta[name="csrf-token"]').content;
+    form.appendChild(csrf);
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>
 @endsection
