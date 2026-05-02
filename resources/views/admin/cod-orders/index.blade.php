@@ -130,16 +130,18 @@
                     <td style="padding: 16px;">
                         @php
                             $statusColors = [
-                                'pending' => 'background: #fef3c7; color: #92400e;',
-                                'processing' => 'background: #dbeafe; color: #1e40af;',
-                                'shipped' => 'background: #e0e7ff; color: #3730a3;',
-                                'delivered' => 'background: #d1fae5; color: #065f46;',
-                                'cancelled' => 'background: #fee2e2; color: #991b1b;',
+                                'pending'    => 'background:#fef3c7; color:#92400e;',
+                                'processing' => 'background:#dbeafe; color:#1e40af;',
+                                'shipped'    => 'background:#e0e7ff; color:#3730a3;',
+                                'delivered'  => 'background:#d1fae5; color:#065f46;',
+                                'cancelled'  => 'background:#fee2e2; color:#991b1b;',
                             ];
                         @endphp
-                        <span style="padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; {{ $statusColors[$order->status] ?? '' }}">
-                            {{ ucfirst($order->status) }}
-                        </span>
+                        <button type="button"
+                            onclick="openStatusModal('{{ $order->id }}','{{ $order->order_number }}','{{ $order->status }}')"
+                            style="padding:6px 12px; border-radius:12px; font-size:12px; font-weight:600; border:none; cursor:pointer; {{ $statusColors[$order->status] ?? '' }}">
+                            {{ ucfirst($order->status) }} <i class="fas fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                        </button>
                     </td>
                     <td style="padding: 16px;">
                         @if($order->payment_status === 'paid')
@@ -299,6 +301,144 @@ document.getElementById('markPaidForm').addEventListener('submit', function() {
     const btn = document.getElementById('confirmPaidBtn');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+});
+</script>
+
+{{-- ===== Change Status Modal ===== --}}
+<div id="statusModal"
+     style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(15,23,42,0.55); backdrop-filter:blur(4px);
+            align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:20px; width:100%; max-width:420px; margin:16px;
+                box-shadow:0 25px 60px rgba(0,0,0,0.25); overflow:hidden; animation: slideUp .25s ease;">
+
+        {{-- Header --}}
+        <div style="background:linear-gradient(135deg,#667eea,#764ba2); padding:26px 28px 22px; position:relative;">
+            <button onclick="closeStatusModal()"
+                    style="position:absolute; top:14px; right:16px; background:rgba(255,255,255,0.2); border:none;
+                           color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px;
+                           display:flex; align-items:center; justify-content:center;">
+                <i class="fas fa-times"></i>
+            </button>
+            <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:48px; height:48px; background:rgba(255,255,255,0.2); border-radius:12px;
+                            display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-exchange-alt" style="font-size:20px; color:white;"></i>
+                </div>
+                <div>
+                    <h3 style="color:white; font-size:18px; font-weight:700; margin:0 0 2px;">Update Order Status</h3>
+                    <p id="status-modal-order" style="color:rgba(255,255,255,0.8); font-size:13px; margin:0;"></p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Body --}}
+        <div style="padding:28px;">
+            <p style="font-size:13px; color:#6b7280; margin:0 0 18px;">Select the new status for this order:</p>
+
+            <div id="statusOptions" style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+                @foreach([
+                    ['value'=>'pending',    'label'=>'Pending',    'icon'=>'fa-clock',         'bg'=>'#fef3c7','color'=>'#92400e','border'=>'#fcd34d'],
+                    ['value'=>'processing', 'label'=>'Processing', 'icon'=>'fa-cog',            'bg'=>'#dbeafe','color'=>'#1e40af','border'=>'#93c5fd'],
+                    ['value'=>'shipped',    'label'=>'Shipped',    'icon'=>'fa-shipping-fast',  'bg'=>'#e0e7ff','color'=>'#3730a3','border'=>'#a5b4fc'],
+                    ['value'=>'delivered',  'label'=>'Delivered',  'icon'=>'fa-check-circle',   'bg'=>'#d1fae5','color'=>'#065f46','border'=>'#6ee7b7'],
+                    ['value'=>'cancelled',  'label'=>'Cancelled',  'icon'=>'fa-times-circle',   'bg'=>'#fee2e2','color'=>'#991b1b','border'=>'#fca5a5'],
+                ] as $s)
+                <label style="display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:10px;
+                              border:2px solid transparent; cursor:pointer; transition:all .15s;"
+                       class="status-option"
+                       data-bg="{{ $s['bg'] }}" data-border="{{ $s['border'] }}" data-color="{{ $s['color'] }}">
+                    <input type="radio" name="status_choice" value="{{ $s['value'] }}"
+                           style="display:none;" onchange="highlightStatus(this)">
+                    <div style="width:36px; height:36px; border-radius:8px; background:{{ $s['bg'] }};
+                                display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i class="fas {{ $s['icon'] }}" style="color:{{ $s['color'] }};"></i>
+                    </div>
+                    <span style="font-weight:600; color:{{ $s['color'] }}; font-size:14px;">{{ $s['label'] }}</span>
+                    <i class="fas fa-check-circle status-check" style="margin-left:auto; color:{{ $s['color'] }}; display:none;"></i>
+                </label>
+                @endforeach
+            </div>
+
+            <form id="statusForm" method="POST">
+                @csrf
+                <input type="hidden" name="status" id="statusInput">
+                <div style="display:flex; gap:12px;">
+                    <button type="button" onclick="closeStatusModal()"
+                            style="flex:1; padding:13px; background:#f3f4f6; color:#374151; border:none; border-radius:10px;
+                                   cursor:pointer; font-size:15px; font-weight:600;">
+                        Cancel
+                    </button>
+                    <button type="submit" id="confirmStatusBtn" disabled
+                            style="flex:1; padding:13px; background:linear-gradient(135deg,#667eea,#764ba2); color:white;
+                                   border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:700;
+                                   display:flex; align-items:center; justify-content:center; gap:8px;
+                                   box-shadow:0 4px 14px rgba(102,126,234,0.4); opacity:.5; transition:opacity .2s;">
+                        <i class="fas fa-save"></i> Update Status
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// ---- Status Modal ----
+function openStatusModal(orderId, orderNumber, currentStatus) {
+    document.getElementById('status-modal-order').textContent = orderNumber;
+    document.getElementById('statusForm').action =
+        '{{ url("admin/cod-orders") }}/' + orderId + '/update-status';
+
+    // Reset all options
+    document.querySelectorAll('.status-option').forEach(el => {
+        el.style.background    = 'white';
+        el.style.borderColor   = '#e5e7eb';
+        el.querySelector('.status-check').style.display = 'none';
+        el.querySelector('input').checked = false;
+    });
+
+    // Pre-select current status
+    const current = document.querySelector(`input[value="${currentStatus}"]`);
+    if (current) {
+        current.checked = true;
+        highlightStatus(current);
+    }
+
+    document.getElementById('statusModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeStatusModal() {
+    document.getElementById('statusModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function highlightStatus(radio) {
+    // Reset all
+    document.querySelectorAll('.status-option').forEach(el => {
+        el.style.background  = 'white';
+        el.style.borderColor = '#e5e7eb';
+        el.querySelector('.status-check').style.display = 'none';
+    });
+    // Highlight selected
+    const label = radio.closest('.status-option');
+    label.style.background  = label.dataset.bg;
+    label.style.borderColor = label.dataset.border;
+    label.querySelector('.status-check').style.display = 'block';
+
+    document.getElementById('statusInput').value = radio.value;
+    const btn = document.getElementById('confirmStatusBtn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+}
+
+document.getElementById('statusModal').addEventListener('click', function(e) {
+    if (e.target === this) closeStatusModal();
+});
+
+document.getElementById('statusForm').addEventListener('submit', function() {
+    const btn = document.getElementById('confirmStatusBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
 });
 </script>
 @endsection
