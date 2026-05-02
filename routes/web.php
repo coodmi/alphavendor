@@ -287,6 +287,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/page-contents/privacy', [\App\Http\Controllers\Admin\PageContentController::class, 'updatePrivacy'])->name('page-contents.privacy.update');
         Route::get('/page-contents/shipping', [\App\Http\Controllers\Admin\PageContentController::class, 'shipping'])->name('page-contents.shipping');
         Route::post('/page-contents/shipping', [\App\Http\Controllers\Admin\PageContentController::class, 'updateShipping'])->name('page-contents.shipping.update');
+        Route::get('/page-contents/exchange', [\App\Http\Controllers\Admin\PageContentController::class, 'exchange'])->name('page-contents.exchange');
+        Route::post('/page-contents/exchange', [\App\Http\Controllers\Admin\PageContentController::class, 'updateExchange'])->name('page-contents.exchange.update');
+        Route::get('/page-contents/return-refund', [\App\Http\Controllers\Admin\PageContentController::class, 'returnRefund'])->name('page-contents.return-refund');
+        Route::post('/page-contents/return-refund', [\App\Http\Controllers\Admin\PageContentController::class, 'updateReturnRefund'])->name('page-contents.return-refund.update');
 
         // Contact Page Management
         Route::get('/contact-page', [\App\Http\Controllers\Admin\ContactPageContentController::class, 'index'])->name('contact-page.index');

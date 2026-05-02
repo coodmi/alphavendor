@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', $page->title ?? 'Terms & Conditions')
+@section('title', $page->meta_title ?: ($page->title ?? 'Terms & Conditions'))
+@section('meta_title', $page->meta_title ?: ($page->title ?? 'Terms & Conditions'))
+@section('meta_description', $page->meta_description ?? '')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-teal-50 via-teal-50 to-teal-50">

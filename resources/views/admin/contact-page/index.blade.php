@@ -76,6 +76,9 @@
         <form action="{{ route('admin.contact-page.update') }}" method="POST">
             @csrf
 
+            {{-- SEO Meta --}}
+            @include('admin.partials.seo-meta-fields', ['meta' => $content])
+
             <!-- Hero Section -->
             <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">
                 <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">

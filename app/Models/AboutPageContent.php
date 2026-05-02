@@ -10,6 +10,9 @@ class AboutPageContent extends Model
     use HasFactory;
 
     protected $fillable = [
+        'meta_title',
+        'meta_description',
+        'logo',
         'hero_title',
         'hero_subtitle',
         'hero_cta_primary_text',

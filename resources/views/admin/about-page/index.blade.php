@@ -73,8 +73,38 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.about-page.update') }}" method="POST">
+        <form action="{{ route('admin.about-page.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
+            {{-- SEO Meta --}}
+            @include('admin.partials.seo-meta-fields', ['meta' => $content])
+
+            {{-- Logo Upload --}}
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-4">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-image"></i> About Page Logo
+                    </h2>
+                </div>
+                <div class="p-6 flex items-center gap-6">
+                    @if($content->logo)
+                    <div class="flex-shrink-0">
+                        <img src="{{ asset('storage/' . $content->logo) }}" alt="Logo"
+                             class="h-20 w-auto object-contain border border-gray-200 rounded-lg p-2 bg-gray-50">
+                    </div>
+                    @endif
+                    <div class="flex-1">
+                        <label class="block text-sm font-bold text-gray-700 mb-1.5">
+                            Upload Logo <span class="text-xs font-normal text-gray-400">(PNG, JPG, SVG, WebP — max 2MB)</span>
+                        </label>
+                        <input type="file" name="logo" accept="image/*"
+                               class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                        @if($content->logo)
+                        <p class="text-xs text-gray-400 mt-1">Upload a new file to replace the current logo</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
 
             <!-- Hero Section -->
             <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">

@@ -18,6 +18,9 @@ class AboutPageContentController extends Controller
     {
         try {
             $request->validate([
+                'meta_title'       => 'nullable|string|max:255',
+                'meta_description' => 'nullable|string|max:500',
+                'logo'             => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                 'hero_title' => 'required|string|max:255',
                 'hero_subtitle' => 'nullable|string',
                 'hero_cta_primary_text' => 'nullable|string|max:100',
@@ -45,7 +48,18 @@ class AboutPageContentController extends Controller
             ]);
 
             $content = AboutPageContent::getContent();
-            $content->update($request->all());
+            $data = $request->except('logo');
+
+            // Handle logo upload
+            if ($request->hasFile('logo')) {
+                // Delete old logo
+                if ($content->logo && \Storage::disk('public')->exists($content->logo)) {
+                    \Storage::disk('public')->delete($content->logo);
+                }
+                $data['logo'] = $request->file('logo')->store('about', 'public');
+            }
+
+            $content->update($data);
 
             return redirect()->route('admin.about-page.index')
                 ->with('success', 'About page content updated successfully!');

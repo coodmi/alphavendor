@@ -18,6 +18,8 @@ class ContactPageContentController extends Controller
     {
         try {
             $request->validate([
+                'meta_title'       => 'nullable|string|max:255',
+                'meta_description' => 'nullable|string|max:500',
                 'hero_title' => 'required|string|max:255',
                 'hero_subtitle' => 'nullable|string',
                 'address_title' => 'required|string|max:255',

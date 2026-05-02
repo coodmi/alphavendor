@@ -10,6 +10,8 @@ class ContactPageContent extends Model
     use HasFactory;
 
     protected $fillable = [
+        'meta_title',
+        'meta_description',
         'hero_title',
         'hero_subtitle',
         'address_title',

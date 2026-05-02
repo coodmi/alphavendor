@@ -185,9 +185,17 @@
         <i class="fas fa-file-contract"></i>
         <span>Terms & Conditions</span>
     </a>
+    <a href="{{ route('admin.page-contents.exchange') }}" class="menu-item {{ request()->routeIs('admin.page-contents.exchange*') ? 'active' : '' }}">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Exchange Policy</span>
+    </a>
     <a href="{{ route('admin.page-contents.privacy') }}" class="menu-item {{ request()->routeIs('admin.page-contents.privacy*') ? 'active' : '' }}">
         <i class="fas fa-shield-alt"></i>
         <span>Privacy Policy</span>
+    </a>
+    <a href="{{ route('admin.page-contents.return-refund') }}" class="menu-item {{ request()->routeIs('admin.page-contents.return-refund*') ? 'active' : '' }}">
+        <i class="fas fa-undo-alt"></i>
+        <span>Return & Refund</span>
     </a>
     <a href="{{ route('admin.page-contents.shipping') }}" class="menu-item {{ request()->routeIs('admin.page-contents.shipping*') ? 'active' : '' }}">
         <i class="fas fa-shipping-fast"></i>
