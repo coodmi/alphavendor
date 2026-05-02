@@ -1006,7 +1006,7 @@
         }
 
         try {
-            const response = await fetch('/api/validate-coupon', {
+            const response = await fetch('{{ route('api.validate-coupon') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
