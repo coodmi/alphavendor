@@ -47,7 +47,7 @@ class CodOrderController extends Controller
             'processing' => Order::where('payment_method', 'cod')->where('status', 'processing')->count(),
             'delivered' => Order::where('payment_method', 'cod')->where('status', 'delivered')->count(),
             'paid' => Order::where('payment_method', 'cod')->where('payment_status', 'paid')->count(),
-            'unpaid' => Order::where('payment_method', 'cod')->where('payment_status', 'pending')->count(),
+            'unpaid' => Order::where('payment_method', 'cod')->where('payment_status', 'unpaid')->count(),
             'total_amount' => Order::where('payment_method', 'cod')->sum('total'),
         ];
 
