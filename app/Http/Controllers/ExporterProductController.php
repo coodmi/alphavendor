@@ -19,12 +19,16 @@ class ExporterProductController extends Controller
             ->latest()
             ->get();
 
-        // Get only categories and brands belonging to the authenticated exporter
-        $categories = Category::where('vendor_id', Auth::id())
+        // Get categories and brands belonging to the authenticated exporter or created by admin (vendor_id = null)
+        $categories = Category::where(function($q) {
+                $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
+            })
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
-        $brands = Brand::where('vendor_id', Auth::id())
+        $brands = Brand::where(function($q) {
+                $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
+            })
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
@@ -70,9 +74,9 @@ class ExporterProductController extends Controller
             'exporter_rating' => 'nullable|numeric|min:0|max:5'
         ]);
 
-        // Verify category belongs to this exporter
+        // Verify category belongs to this exporter or is admin-created
         $category = Category::where('id', $validated['category_id'])
-            ->where('vendor_id', Auth::id())
+            ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
             ->first();
         if (!$category) {
             return response()->json([
@@ -81,10 +85,10 @@ class ExporterProductController extends Controller
             ], 422);
         }
 
-        // Verify brand belongs to this exporter (if provided)
+        // Verify brand belongs to this exporter or is admin-created (if provided)
         if (!empty($validated['brand_id'])) {
             $brand = Brand::where('id', $validated['brand_id'])
-                ->where('vendor_id', Auth::id())
+                ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
                 ->first();
             if (!$brand) {
                 return response()->json([
@@ -155,9 +159,9 @@ class ExporterProductController extends Controller
             'exporter_rating' => 'nullable|numeric|min:0|max:5'
         ]);
 
-        // Verify category belongs to this exporter
+        // Verify category belongs to this exporter or is admin-created
         $category = Category::where('id', $validated['category_id'])
-            ->where('vendor_id', Auth::id())
+            ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
             ->first();
         if (!$category) {
             return response()->json([
@@ -166,10 +170,10 @@ class ExporterProductController extends Controller
             ], 422);
         }
 
-        // Verify brand belongs to this exporter (if provided)
+        // Verify brand belongs to this exporter or is admin-created (if provided)
         if (!empty($validated['brand_id'])) {
             $brand = Brand::where('id', $validated['brand_id'])
-                ->where('vendor_id', Auth::id())
+                ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
                 ->first();
             if (!$brand) {
                 return response()->json([
