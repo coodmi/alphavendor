@@ -763,7 +763,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Vendor order routes
-    Route::middleware('role:retailer,wholesaler,exporter')->group(function () {
+    Route::middleware('role:retailer,wholesaler,exporter,importer')->group(function () {
         Route::get('/vendor/orders', [OrderController::class, 'vendorOrders'])->name('vendor.orders');
         Route::patch('/vendor/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('vendor.orders.update-status');
         
