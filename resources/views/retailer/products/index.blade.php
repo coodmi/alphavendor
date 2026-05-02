@@ -246,7 +246,22 @@
                                 @endforeach
                             </select>
                         @elseif($attr->type === 'color')
-                            <input type="color" name="attributes[{{ $attr->id }}]" class="h-9 w-20 border border-gray-300 rounded-lg cursor-pointer attr-field" data-attr-id="{{ $attr->id }}">
+                            {{-- Multi-color picker --}}
+                            <div class="flex-1" id="color-picker-{{ $attr->id }}">
+                                <div class="flex flex-wrap gap-2 mb-2 color-swatches" id="swatches-{{ $attr->id }}"></div>
+                                <div class="flex items-center gap-2">
+                                    <input type="color" id="colorInput-{{ $attr->id }}" value="#000000"
+                                           class="h-9 w-14 border border-gray-300 rounded-lg cursor-pointer">
+                                    <button type="button"
+                                            onclick="addColor({{ $attr->id }})"
+                                            class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">
+                                        + Add Color
+                                    </button>
+                                </div>
+                                {{-- Hidden field stores comma-separated hex values --}}
+                                <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                       id="colorValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                            </div>
                         @elseif($attr->type === 'number')
                             <input type="number" name="attributes[{{ $attr->id }}]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field" data-attr-id="{{ $attr->id }}">
                         @else
@@ -346,7 +361,16 @@ function editProduct(product) {
     document.querySelectorAll('.attr-field').forEach(field => {
         const attrId = field.dataset.attrId;
         const attrData = product.attributes ? product.attributes.find(a => a.id == attrId) : null;
-        field.value = attrData ? (attrData.pivot ? attrData.pivot.value : '') : '';
+        const val = attrData ? (attrData.pivot ? attrData.pivot.value : '') : '';
+
+        // Color fields: clear swatches then re-init
+        if (field.type === 'hidden' && document.getElementById('swatches-' + attrId)) {
+            document.getElementById('swatches-' + attrId).innerHTML = '';
+            field.value = '';
+            if (val) initColorSwatches(attrId, val);
+        } else {
+            field.value = val;
+        }
     });
 
     // Show current image if exists
@@ -482,6 +506,48 @@ window.onclick = function(event) {
     if (event.target.id === 'deleteModal') {
         closeDeleteModal();
     }
+}
+
+// ── Multi-Color Picker ──────────────────────────────────────────────────────
+function addColor(attrId) {
+    const hex = document.getElementById('colorInput-' + attrId).value;
+    const hidden = document.getElementById('colorValue-' + attrId);
+    const swatches = document.getElementById('swatches-' + attrId);
+
+    // Avoid duplicates
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(hex)) return;
+    existing.push(hex);
+    hidden.value = existing.join(',');
+
+    // Render swatch
+    const swatch = document.createElement('div');
+    swatch.className = 'relative group';
+    swatch.innerHTML = `
+        <div style="width:32px;height:32px;border-radius:6px;background:${hex};border:2px solid #e5e7eb;cursor:default;" title="${hex}"></div>
+        <button type="button" onclick="removeColor(${attrId},'${hex}')"
+                style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#ef4444;color:white;border:none;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+    `;
+    swatch.dataset.color = hex;
+    swatches.appendChild(swatch);
+}
+
+function removeColor(attrId, hex) {
+    const hidden = document.getElementById('colorValue-' + attrId);
+    const swatches = document.getElementById('swatches-' + attrId);
+    hidden.value = hidden.value.split(',').filter(c => c !== hex).join(',');
+    swatches.querySelectorAll('[data-color]').forEach(el => {
+        if (el.dataset.color === hex) el.remove();
+    });
+}
+
+function initColorSwatches(attrId, value) {
+    if (!value) return;
+    value.split(',').forEach(hex => {
+        if (!hex) return;
+        document.getElementById('colorInput-' + attrId).value = hex;
+        addColor(attrId);
+    });
 }
 </script>
 @endsection

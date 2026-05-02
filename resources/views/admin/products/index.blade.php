@@ -431,7 +431,20 @@
                                         @endif
                                     </select>
                                 @elseif($attribute->type === 'color')
-                                    <input type="color" name="attributes[{{ $attribute->id }}]" value="#000000" style="width: 60px; height: 40px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
+                                    {{-- Multi-color picker --}}
+                                    <div id="color-picker-{{ $attribute->id }}" style="flex:1;">
+                                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;" id="swatches-{{ $attribute->id }}"></div>
+                                        <div style="display:flex;align-items:center;gap:8px;">
+                                            <input type="color" id="colorInput-{{ $attribute->id }}" value="#000000"
+                                                   style="width:50px;height:36px;border:1px solid #ddd;border-radius:4px;cursor:pointer;">
+                                            <button type="button" onclick="addColor({{ $attribute->id }})"
+                                                    style="padding:6px 14px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;">
+                                                + Add Color
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="attributes[{{ $attribute->id }}]"
+                                               id="colorValue-{{ $attribute->id }}" {{ $attribute->is_required ? 'required' : '' }}>
+                                    </div>
                                 @elseif($attribute->type === 'number')
                                     <input type="number" name="attributes[{{ $attribute->id }}]" placeholder="Enter {{ $attribute->name }}" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" {{ $attribute->is_required ? 'required' : '' }}>
                                 @else
@@ -664,7 +677,14 @@ function editProduct(product) {
         product.attributes.forEach(attr => {
             const input = document.querySelector(`[name="attributes[${attr.id}]"]`);
             if (input) {
-                input.value = attr.pivot.value;
+                // Color multi-picker: clear swatches and re-init
+                if (input.type === 'hidden' && document.getElementById('swatches-' + attr.id)) {
+                    document.getElementById('swatches-' + attr.id).innerHTML = '';
+                    input.value = '';
+                    if (attr.pivot.value) initColorSwatches(attr.id, attr.pivot.value);
+                } else {
+                    input.value = attr.pivot.value;
+                }
             }
         });
     }
@@ -870,6 +890,44 @@ function toggleFilters() {
         filterIcon.className = 'fas fa-chevron-down';
         filterText.textContent = 'Show Filters';
     }
+}
+
+// ── Multi-Color Picker ──────────────────────────────────────────────────────
+function addColor(attrId) {
+    const hex = document.getElementById('colorInput-' + attrId).value;
+    const hidden = document.getElementById('colorValue-' + attrId);
+    const swatches = document.getElementById('swatches-' + attrId);
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(hex)) return;
+    existing.push(hex);
+    hidden.value = existing.join(',');
+    const swatch = document.createElement('div');
+    swatch.style.cssText = 'position:relative;display:inline-block;';
+    swatch.dataset.color = hex;
+    swatch.innerHTML = `
+        <div style="width:30px;height:30px;border-radius:4px;background:${hex};border:2px solid #ddd;" title="${hex}"></div>
+        <button type="button" onclick="removeColor(${attrId},'${hex}')"
+                style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e74c3c;color:white;border:none;cursor:pointer;font-size:10px;line-height:1;">×</button>
+    `;
+    swatches.appendChild(swatch);
+}
+
+function removeColor(attrId, hex) {
+    const hidden = document.getElementById('colorValue-' + attrId);
+    const swatches = document.getElementById('swatches-' + attrId);
+    hidden.value = hidden.value.split(',').filter(c => c !== hex).join(',');
+    swatches.querySelectorAll('[data-color]').forEach(el => {
+        if (el.dataset.color === hex) el.remove();
+    });
+}
+
+function initColorSwatches(attrId, value) {
+    if (!value) return;
+    value.split(',').forEach(hex => {
+        if (!hex) return;
+        document.getElementById('colorInput-' + attrId).value = hex;
+        addColor(attrId);
+    });
 }
 </script>
 @endsection
