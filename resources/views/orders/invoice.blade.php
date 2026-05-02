@@ -45,7 +45,7 @@
         .text-right { text-align: right; }
         .text-center { text-align: center; }
 
-        .totals { margin-left: auto; width: 280px; }
+        .totals { margin-left: auto; width: 320px; }
         .totals-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; color: #475569; border-bottom: 1px solid #f1f5f9; }
         .totals-row.total { font-size: 16px; font-weight: 700; color: #1e293b; border-bottom: none; padding-top: 12px; }
 
@@ -148,27 +148,69 @@
     </table>
 
     <!-- Totals -->
+    @php
+        $subtotal      = (float) ($order->subtotal ?? $order->total ?? 0);
+        $delivery      = (float) ($order->delivery_charge ?? 0);
+        $totalAmount   = (float) ($order->total ?? $order->total_amount ?? 0);
+
+        // Advance payment for this order
+        $advance = \App\Models\AdvancePayment::where('user_id', $order->user_id)
+            ->whereHas('product', function($q) use ($order) {
+                $q->whereIn('id', $order->items->pluck('product_id'));
+            })
+            ->whereIn('status', ['approved','paid','completed'])
+            ->first();
+
+        $advancePaid    = $advance ? (float) $advance->advance_amount : 0;
+        $remainingDue   = $totalAmount - $advancePaid;
+    @endphp
+
     <div class="totals">
+        {{-- Subtotal --}}
         <div class="totals-row">
             <span>Subtotal</span>
-            <span>৳{{ number_format($order->subtotal ?? $order->total, 2) }}</span>
+            <span>৳{{ number_format($subtotal, 2) }}</span>
         </div>
-        @if($order->delivery_charge)
+
+        {{-- Delivery Charge --}}
         <div class="totals-row">
-            <span>Delivery</span>
-            <span>৳{{ number_format($order->delivery_charge, 2) }}</span>
+            <span>Delivery Charge</span>
+            <span>{{ $delivery > 0 ? '৳' . number_format($delivery, 2) : 'Free' }}</span>
+        </div>
+
+        {{-- Total Order Amount --}}
+        <div class="totals-row" style="font-weight:600; color:#1e293b; border-bottom:2px solid #e2e8f0; padding-bottom:10px; margin-bottom:4px;">
+            <span>Total Order Amount</span>
+            <span>৳{{ number_format($totalAmount, 2) }}</span>
+        </div>
+
+        {{-- Advance Payment Paid --}}
+        @if($advancePaid > 0)
+        <div class="totals-row" style="color:#16a34a;">
+            <span>
+                Advance Payment Paid
+                @if($advance)
+                    <span style="font-size:11px; background:#dcfce7; color:#16a34a; padding:2px 7px; border-radius:10px; margin-left:4px;">
+                        {{ $advance->advance_percentage }}%
+                    </span>
+                @endif
+            </span>
+            <span style="font-weight:600;">− ৳{{ number_format($advancePaid, 2) }}</span>
         </div>
         @endif
-        @if($order->commission_amount)
-        <div class="totals-row">
-            <span>Commission</span>
-            <span>৳{{ number_format($order->commission_amount, 2) }}</span>
+
+        {{-- Remaining Due --}}
+        @if($advancePaid > 0)
+        <div class="totals-row total" style="color:{{ $remainingDue > 0 ? '#dc2626' : '#16a34a' }}; border-top:2px solid #f1f5f9; margin-top:4px;">
+            <span>Remaining Due Amount</span>
+            <span>৳{{ number_format(max(0, $remainingDue), 2) }}</span>
         </div>
-        @endif
+        @else
         <div class="totals-row total">
-            <span>Total</span>
-            <span>৳{{ number_format($order->total ?? $order->total_amount, 2) }}</span>
+            <span>Amount Due</span>
+            <span>৳{{ number_format($totalAmount, 2) }}</span>
         </div>
+        @endif
     </div>
 
     <!-- Footer -->
