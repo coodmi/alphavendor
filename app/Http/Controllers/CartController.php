@@ -176,7 +176,7 @@ class CartController extends Controller
         ]);
 
         $code      = strtoupper(trim($request->code));
-        $subtotal  = $request->subtotal;
+        $subtotal  = (float) $request->subtotal;
         $productId = $request->product_id;
 
         $coupon = \App\Models\Coupon::where('code', $code)->first();
@@ -212,18 +212,18 @@ class CartController extends Controller
             ], 400);
         }
 
-        $discount = $coupon->calculateDiscount($subtotal);
+        $discount = (float) $coupon->calculateDiscount($subtotal);
 
         return response()->json([
             'success'  => true,
-            'message'  => 'Coupon applied! You save \u09f3' . number_format($discount, 2),
+            'message'  => 'Coupon applied! You save ৳' . number_format($discount, 2),
             'coupon'   => [
                 'id'           => $coupon->id,
                 'code'         => $coupon->code,
                 'type'         => $coupon->type,
-                'value'        => $coupon->value,
-                'min_purchase' => $coupon->min_purchase,
-                'max_discount' => $coupon->max_discount,
+                'value'        => (float) $coupon->value,
+                'min_purchase' => (float) $coupon->min_purchase,
+                'max_discount' => (float) $coupon->max_discount,
                 'product_id'   => $coupon->product_id,
                 'category_id'  => $coupon->category_id,
             ],
