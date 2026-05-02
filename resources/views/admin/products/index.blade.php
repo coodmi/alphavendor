@@ -182,9 +182,9 @@
                         {{ $product->vendor->name ?? 'N/A' }}
                     </td>
                     <td style="padding: 12px;">
-                        <strong style="color: #27ae60;">${{ number_format($product->price, 2) }}</strong>
+                        <strong style="color: #27ae60;"> {{ currency($product->price) }}</strong>
                         @if($product->old_price)
-                            <br><small style="text-decoration: line-through; color: #95a5a6;">${{ number_format($product->old_price, 2) }}</small>
+                            <br><small style="text-decoration: line-through; color: #95a5a6;"> {{ currency($product->old_price) }}</small>
                         @endif
                     </td>
                     <td style="padding: 12px;">

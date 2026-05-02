@@ -54,7 +54,7 @@
                     <i class="fas fa-dollar-sign"></i>
                 </div>
                 <div class="stat-info">
-                    <h3>${{ number_format($stats['total_revenue'] ?? 0, 2) }}</h3>
+                    <h3> {{ currency($stats['total_revenue'] ?? 0) }}</h3>
                     <p>Total Revenue</p>
                 </div>
             </div>

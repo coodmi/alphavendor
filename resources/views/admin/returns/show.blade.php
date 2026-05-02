@@ -53,7 +53,7 @@
                             <h4 class="font-semibold text-gray-900">{{ $return->product->name }}</h4>
                             <p class="text-sm text-gray-600">Order: {{ $return->order->order_number }}</p>
                             <p class="text-sm text-gray-600">Quantity: {{ $return->quantity }}</p>
-                            <p class="text-sm font-semibold text-gray-900">Amount: ${{ number_format($return->amount, 2) }}</p>
+                            <p class="text-sm font-semibold text-gray-900">Amount: {{ currency(($return->amount, 2) }}</p>
                         </div>
                         <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $return->getTypeBadgeClass() }}">
                             {{ ucfirst($return->type) }}

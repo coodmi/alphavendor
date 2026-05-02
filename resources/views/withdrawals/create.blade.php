@@ -35,7 +35,7 @@
     <!-- Wallet Balance -->
     <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6 mb-6">
         <h3 class="text-sm opacity-90 mb-2">Available Balance</h3>
-        <p class="text-4xl font-bold">${{ number_format($wallet->balance ?? 0, 2) }}</p>
+        <p class="text-4xl font-bold"> {{ currency($wallet->balance ?? 0) }}</p>
         <p class="text-sm opacity-75 mt-2">Minimum withdrawal: $10.00</p>
     </div>
 
@@ -86,7 +86,7 @@
                            class="w-full border border-gray-300 rounded px-4 py-3 focus:ring-2 focus:ring-teal-600"
                            placeholder="Enter amount">
                     @error('amount')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-                    <p class="text-sm text-gray-600 mt-1">Maximum: ${{ number_format($wallet->balance ?? 0, 2) }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Maximum: {{ currency(($wallet->balance ?? 0, 2) }}</p>
                 </div>
 
                 <div class="mb-6">

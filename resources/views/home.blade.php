@@ -788,10 +788,10 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-3">
-                                            <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-xl font-bold text-teal-700"> {{ currency($product->price) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
-                                                    class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                                    class="text-sm text-gray-400 line-through"> {{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
                                     </div>
@@ -880,10 +880,10 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-xl font-bold text-teal-700"> {{ currency($product->price) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
-                                                    class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                                    class="text-sm text-gray-400 line-through"> {{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
                                         @if($product->supplier_location)
@@ -976,10 +976,10 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <span class="text-xl font-bold text-teal-700">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-xl font-bold text-teal-700"> {{ currency($product->price) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
                                                 <span
-                                                    class="text-sm text-gray-400 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                                    class="text-sm text-gray-400 line-through"> {{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
                                         @if($product->supplier_location)

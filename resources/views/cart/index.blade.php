@@ -33,14 +33,14 @@
                             <div class="flex-1">
                                 <h3 class="font-semibold text-lg">{{ $item['name'] }}</h3>
                                 <p class="text-gray-600 text-sm">Vendor: {{ $item['vendor_name'] }}</p>
-                                <p class="text-teal-600 font-bold mt-2" data-unit-price="{{ $item['price'] }}">${{ number_format($item['price'], 2) }}</p>
+                                <p class="text-teal-600 font-bold mt-2" data-unit-price="{{ $item['price'] }}"> {{ currency($item['price']) }}</p>
                                 @if(isset($item['coupon_code']) && isset($item['discount_amount']))
                                     <div class="mt-2 flex items-center gap-2">
                                         <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded">
                                             <i class="fas fa-ticket-alt"></i>
                                             <span class="font-semibold">{{ $item['coupon_code'] }}</span>
                                         </span>
-                                        <span class="text-green-600 text-sm font-semibold">-${{ number_format($item['discount_amount'], 2) }}</span>
+                                        <span class="text-green-600 text-sm font-semibold">-{{ currency(($item['discount_amount'], 2) }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -61,7 +61,7 @@
                             </div>
 
                             <div class="text-right font-bold" data-item-total="{{ $productId }}">
-                                ${{ number_format($item['price'] * $item['quantity'], 2) }}
+                                {{ currency(($item['price'] * $item['quantity'], 2) }}
                             </div>
                         </div>
                     @endforeach
@@ -88,7 +88,7 @@
                     <div class="space-y-2 mb-4">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Subtotal</span>
-                            <span class="font-semibold" id="subtotal">${{ number_format($total, 2) }}</span>
+                            <span class="font-semibold" id="subtotal"> {{ currency($total) }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Shipping</span>
@@ -99,7 +99,7 @@
                     <div class="border-t pt-4 mb-6">
                         <div class="flex justify-between text-lg font-bold">
                             <span>Total</span>
-                            <span class="text-teal-600" id="total">${{ number_format($total, 2) }}</span>
+                            <span class="text-teal-600" id="total"> {{ currency($total) }}</span>
                         </div>
                     </div>
 
@@ -204,12 +204,12 @@ function updateCartDisplay(productId, quantity) {
     const itemTotalElement = itemRow.querySelector(`[data-item-total="${productId}"]`);
     console.log('itemTotalElement:', itemTotalElement);
 
-    itemTotalElement.textContent = '$' + itemTotal.toFixed(2);
+    itemTotalElement.textContent = '৳' + itemTotal.toFixed(2);
 
     // Calculate new cart total
     let cartTotal = 0;
     document.querySelectorAll('[data-item-total]').forEach(element => {
-        const total = parseFloat(element.textContent.replace('$', ''));
+        const total = parseFloat(element.textContent.replace('৳', ''));
         cartTotal += total;
         console.log('Adding to cart total:', total, 'New cart total:', cartTotal);
     });
@@ -217,8 +217,8 @@ function updateCartDisplay(productId, quantity) {
     console.log('Final cart total:', cartTotal);
 
     // Update totals
-    document.getElementById('subtotal').textContent = '$' + cartTotal.toFixed(2);
-    document.getElementById('total').textContent = '$' + cartTotal.toFixed(2);
+    document.getElementById('subtotal').textContent = '৳' + cartTotal.toFixed(2);
+    document.getElementById('total').textContent = '৳' + cartTotal.toFixed(2);
 
     console.log('Cart display updated successfully');
 }
@@ -256,12 +256,12 @@ function confirmDelete() {
             // Recalculate totals
             let cartTotal = 0;
             document.querySelectorAll('[data-item-total]').forEach(element => {
-                const total = parseFloat(element.textContent.replace('$', ''));
+                const total = parseFloat(element.textContent.replace('৳', ''));
                 cartTotal += total;
             });
 
-            document.getElementById('subtotal').textContent = '$' + cartTotal.toFixed(2);
-            document.getElementById('total').textContent = '$' + cartTotal.toFixed(2);
+            document.getElementById('subtotal').textContent = '৳' + cartTotal.toFixed(2);
+            document.getElementById('total').textContent = '৳' + cartTotal.toFixed(2);
 
             // Reload if cart is empty
             if (document.querySelectorAll('[data-product-id]').length === 0) {

@@ -172,7 +172,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-semibold text-gray-900">${{ number_format($return->amount, 2) }}</span>
+                                <span class="font-semibold text-gray-900"> {{ currency($return->amount) }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $return->getStatusBadgeClass() }}">

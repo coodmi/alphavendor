@@ -93,9 +93,9 @@
                                         <span class="font-medium">{{ $item->product_name }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">${{ number_format($item->price, 2) }}</td>
+                                <td class="px-6 py-4"> {{ currency($item->price) }}</td>
                                 <td class="px-6 py-4">{{ $item->quantity }}</td>
-                                <td class="px-6 py-4 text-right font-semibold">${{ number_format($item->subtotal, 2) }}</td>
+                                <td class="px-6 py-4 text-right font-semibold"> {{ currency($item->subtotal) }}</td>
                                 <td class="px-6 py-4 text-center">
                                     @if(in_array($order->status, ['delivered']) && !$item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
                                         <a href="{{ route('customer.returns.create', ['order_item_id' => $item->id]) }}" 
@@ -120,7 +120,7 @@
                 <div class="bg-gray-50 p-6 rounded">
                     <div class="flex justify-between mb-2">
                         <span class="text-gray-700">Subtotal:</span>
-                        <span class="font-semibold">${{ number_format($order->subtotal, 2) }}</span>
+                        <span class="font-semibold"> {{ currency($order->subtotal) }}</span>
                     </div>
                     <div class="flex justify-between mb-2">
                         <span class="text-gray-700">Shipping:</span>
@@ -129,7 +129,7 @@
                     <div class="border-t pt-2 mt-2">
                         <div class="flex justify-between text-lg">
                             <span class="font-bold">Total:</span>
-                            <span class="font-bold text-teal-600">${{ number_format($order->total, 2) }}</span>
+                            <span class="font-bold text-teal-600"> {{ currency($order->total) }}</span>
                         </div>
                     </div>
                 </div>

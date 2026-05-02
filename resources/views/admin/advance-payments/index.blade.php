@@ -74,7 +74,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-teal-100 text-sm mb-1">Total Amount</p>
-                <h3 class="text-2xl font-bold">${{ number_format($stats['total_amount'], 2) }}</h3>
+                <h3 class="text-2xl font-bold"> {{ currency($stats['total_amount']) }}</h3>
             </div>
             <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
                 <i class="fas fa-dollar-sign text-2xl"></i>
@@ -148,11 +148,11 @@
                             <span class="text-gray-700">{{ $payment->vendor->name }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="font-semibold text-gray-800">${{ number_format($payment->total_amount, 2) }}</span>
+                            <span class="font-semibold text-gray-800"> {{ currency($payment->total_amount) }}</span>
                         </td>
                         <td class="px-6 py-4">
                             <div>
-                                <div class="font-semibold text-green-600">${{ number_format($payment->advance_amount, 2) }}</div>
+                                <div class="font-semibold text-green-600"> {{ currency($payment->advance_amount) }}</div>
                                 <div class="text-xs text-gray-500">{{ $payment->advance_percentage }}%</div>
                             </div>
                         </td>

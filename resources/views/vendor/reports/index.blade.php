@@ -126,7 +126,7 @@
 <!-- Quick Stats Overview -->
 <div class="stats-overview">
     <div class="stat-box">
-        <div class="stat-value" style="color: #2ecc71;">${{ number_format($stats['total_sales'], 2) }}</div>
+        <div class="stat-value" style="color: #2ecc71;"> {{ currency($stats['total_sales']) }}</div>
         <div class="stat-label">Total Sales</div>
     </div>
     <div class="stat-box">
@@ -138,7 +138,7 @@
         <div class="stat-label">Total Products</div>
     </div>
     <div class="stat-box">
-        <div class="stat-value" style="color: #e67e22;">${{ number_format($stats['total_commission'], 2) }}</div>
+        <div class="stat-value" style="color: #e67e22;"> {{ currency($stats['total_commission']) }}</div>
         <div class="stat-label">Total Earnings</div>
     </div>
 </div>

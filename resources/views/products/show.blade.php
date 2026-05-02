@@ -231,7 +231,7 @@
                                         <span class="text-sm font-medium text-gray-700">Coupon Applied: <span id="appliedCouponCode" class="font-bold text-purple-600"></span></span>
                                     </div>
                                     <div class="flex items-center gap-3">
-                                        <span class="text-sm font-bold text-green-600">-<span id="discountAmount">$0.00</span></span>
+                                        <span class="text-sm font-bold text-green-600">-<span id="discountAmount">৳0.00</span></span>
                                         <button type="button" onclick="removeCoupon()" class="text-red-500 hover:text-red-700 text-sm">
                                             <i class="fas fa-times"></i>
                                         </button>
@@ -349,9 +349,9 @@
                             <div class="text-gray-500 text-xs mb-1">{{ $relatedProduct->category->name ?? 'Uncategorized' }}</div>
                             <h4 class="text-base font-semibold text-gray-800 mb-2.5 line-clamp-2">{{ $relatedProduct->name }}</h4>
                             <div class="flex items-center gap-2.5">
-                                <span class="text-xl font-bold text-teal-600">${{ number_format($relatedProduct->price, 2) }}</span>
+                                <span class="text-xl font-bold text-teal-600"> {{ currency($relatedProduct->price) }}</span>
                                 @if($relatedProduct->old_price)
-                                    <span class="text-sm text-gray-400 line-through">${{ number_format($relatedProduct->old_price, 2) }}</span>
+                                    <span class="text-sm text-gray-400 line-through"> {{ currency($relatedProduct->old_price) }}</span>
                                 @endif
                             </div>
                         </div>
@@ -1035,7 +1035,7 @@
 
                 // Update UI
                 document.getElementById('appliedCouponCode').textContent = couponCode;
-                document.getElementById('discountAmount').textContent = '$' + discount.toFixed(2);
+                document.getElementById('discountAmount').textContent = '৳' + discount.toFixed(2);
                 document.getElementById('appliedCoupon').value = couponCode;
                 document.getElementById('hiddenDiscountAmount').value = discount;
                 document.getElementById('couponDiscount').classList.remove('hidden');
@@ -1043,9 +1043,9 @@
 
                 // Update total price
                 const newTotal = subtotal - discount;
-                document.getElementById('totalPrice').textContent = '$' + newTotal.toFixed(2);
+                document.getElementById('totalPrice').textContent = '৳' + newTotal.toFixed(2);
 
-                showCouponMessage('Coupon applied successfully! You saved $' + discount.toFixed(2), 'success');
+                showCouponMessage('Coupon applied successfully! You saved ৳' + discount.toFixed(2), 'success');
             } else {
                 showCouponMessage(data.message || 'Invalid coupon code', 'error');
             }
@@ -1092,12 +1092,12 @@
         const appliedCoupon = document.getElementById('appliedCoupon').value;
         if (appliedCoupon && appliedCouponData) {
             const discount = calculateDiscount(total, appliedCouponData);
-            document.getElementById('discountAmount').textContent = '$' + discount.toFixed(2);
+            document.getElementById('discountAmount').textContent = '৳' + discount.toFixed(2);
             document.getElementById('hiddenDiscountAmount').value = discount;
             total -= discount;
         }
 
-        document.getElementById('totalPrice').textContent = '$' + total.toFixed(2);
+        document.getElementById('totalPrice').textContent = '৳' + total.toFixed(2);
     };
 
     function calculateDiscount(subtotal, coupon) {
@@ -1246,21 +1246,21 @@
                         <input type="radio" name="advance_percentage" value="25" class="w-5 h-5 text-blue-600" checked onchange="updateAdvanceAmount()">
                         <span class="ml-3 flex-1">
                             <span class="font-semibold text-gray-800">25% Advance</span>
-                            <span class="block text-sm text-gray-500" id="advance25">$0.00</span>
+                            <span class="block text-sm text-gray-500" id="advance25">৳0.00</span>
                         </span>
                     </label>
                     <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
                         <input type="radio" name="advance_percentage" value="50" class="w-5 h-5 text-blue-600" onchange="updateAdvanceAmount()">
                         <span class="ml-3 flex-1">
                             <span class="font-semibold text-gray-800">50% Advance</span>
-                            <span class="block text-sm text-gray-500" id="advance50">$0.00</span>
+                            <span class="block text-sm text-gray-500" id="advance50">৳0.00</span>
                         </span>
                     </label>
                     <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
                         <input type="radio" name="advance_percentage" value="75" class="w-5 h-5 text-blue-600" onchange="updateAdvanceAmount()">
                         <span class="ml-3 flex-1">
                             <span class="font-semibold text-gray-800">75% Advance</span>
-                            <span class="block text-sm text-gray-500" id="advance75">$0.00</span>
+                            <span class="block text-sm text-gray-500" id="advance75">৳0.00</span>
                         </span>
                     </label>
                 </div>

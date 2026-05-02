@@ -62,10 +62,10 @@
                                 <div class="flex-1">
                                     <h4 class="font-semibold text-gray-900">{{ $item->product_name }}</h4>
                                     <p class="text-sm text-gray-500">Quantity: {{ $item->quantity }}</p>
-                                    <p class="text-sm text-gray-500">Unit Price: ${{ number_format($item->price, 2) }}</p>
+                                    <p class="text-sm text-gray-500">Unit Price: {{ currency($item->price, 2) }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-semibold text-gray-900">${{ number_format($item->subtotal, 2) }}</p>
+                                    <p class="font-semibold text-gray-900"> {{ currency($item->subtotal) }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -133,23 +133,23 @@
                 <div class="space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-600">Subtotal</span>
-                        <span class="font-medium">${{ number_format($order->subtotal, 2) }}</span>
+                        <span class="font-medium"> {{ currency($order->subtotal) }}</span>
                     </div>
                     @if($order->tax > 0)
                         <div class="flex justify-between">
                             <span class="text-gray-600">Tax</span>
-                            <span class="font-medium">${{ number_format($order->tax, 2) }}</span>
+                            <span class="font-medium"> {{ currency($order->tax) }}</span>
                         </div>
                     @endif
                     @if($order->shipping_cost > 0)
                         <div class="flex justify-between">
                             <span class="text-gray-600">Shipping</span>
-                            <span class="font-medium">${{ number_format($order->shipping_cost, 2) }}</span>
+                            <span class="font-medium"> {{ currency($order->shipping_cost) }}</span>
                         </div>
                     @endif
                     <div class="border-t pt-2 flex justify-between font-bold text-lg">
                         <span>Total</span>
-                        <span>${{ number_format($order->total, 2) }}</span>
+                        <span> {{ currency($order->total) }}</span>
                     </div>
                     <div class="border-t pt-2 flex justify-between text-green-600 font-semibold">
                         <span>Your Earning</span>

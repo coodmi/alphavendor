@@ -27,7 +27,7 @@
                 <h3 class="text-sm font-medium opacity-90">Available Balance</h3>
                 <i class="fas fa-wallet text-2xl opacity-75"></i>
             </div>
-            <p class="text-3xl font-bold">${{ number_format($wallet->balance, 2) }}</p>
+            <p class="text-3xl font-bold"> {{ currency($wallet->balance) }}</p>
             <p class="text-xs opacity-75 mt-1">Ready to withdraw</p>
         </div>
 
@@ -36,7 +36,7 @@
                 <h3 class="text-sm font-medium opacity-90">Pending Balance</h3>
                 <i class="fas fa-clock text-2xl opacity-75"></i>
             </div>
-            <p class="text-3xl font-bold">${{ number_format($wallet->pending_balance, 2) }}</p>
+            <p class="text-3xl font-bold"> {{ currency($wallet->pending_balance) }}</p>
             <p class="text-xs opacity-75 mt-1">{{ $pendingOrders }} pending orders</p>
         </div>
 
@@ -45,7 +45,7 @@
                 <h3 class="text-sm font-medium opacity-90">Total Earned</h3>
                 <i class="fas fa-chart-line text-2xl opacity-75"></i>
             </div>
-            <p class="text-3xl font-bold">${{ number_format($wallet->total_earned, 2) }}</p>
+            <p class="text-3xl font-bold"> {{ currency($wallet->total_earned) }}</p>
             <p class="text-xs opacity-75 mt-1">Lifetime earnings</p>
         </div>
 
@@ -54,7 +54,7 @@
                 <h3 class="text-sm font-medium opacity-90">Total Withdrawn</h3>
                 <i class="fas fa-money-bill-wave text-2xl opacity-75"></i>
             </div>
-            <p class="text-3xl font-bold">${{ number_format($wallet->total_withdrawn, 2) }}</p>
+            <p class="text-3xl font-bold"> {{ currency($wallet->total_withdrawn) }}</p>
             <p class="text-xs opacity-75 mt-1">All time</p>
         </div>
     </div>
@@ -67,14 +67,14 @@
                 <div class="flex justify-between items-center p-4 bg-green-50 rounded">
                     <div>
                         <p class="text-sm text-gray-600">This Month</p>
-                        <p class="text-2xl font-bold text-green-600">${{ number_format($thisMonthEarnings, 2) }}</p>
+                        <p class="text-2xl font-bold text-green-600"> {{ currency($thisMonthEarnings) }}</p>
                     </div>
                     <i class="fas fa-arrow-up text-green-500 text-2xl"></i>
                 </div>
                 <div class="flex justify-between items-center p-4 bg-gray-50 rounded">
                     <div>
                         <p class="text-sm text-gray-600">Last Month</p>
-                        <p class="text-2xl font-bold text-gray-700">${{ number_format($lastMonthEarnings, 2) }}</p>
+                        <p class="text-2xl font-bold text-gray-700"> {{ currency($lastMonthEarnings) }}</p>
                     </div>
                     <i class="fas fa-calendar text-gray-400 text-2xl"></i>
                 </div>
@@ -139,9 +139,9 @@
                                 @else text-green-600
                                 @endif">
                                 @if($transaction->type === 'withdrawal' || $transaction->type === 'refund')
-                                    -${{ number_format($transaction->amount, 2) }}
+                                    -{{ currency(($transaction->amount, 2) }}
                                 @else
-                                    +${{ number_format($transaction->amount, 2) }}
+                                    +{{ currency(($transaction->amount, 2) }}
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

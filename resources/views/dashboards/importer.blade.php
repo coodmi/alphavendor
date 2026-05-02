@@ -101,14 +101,14 @@
         <div class="stat-card">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->total_earned, 2) }}</h3>
+                <h3> {{ currency($wallet->total_earned) }}</h3>
                 <p>Total Earnings</p>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">💵</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->balance, 2) }}</h3>
+                <h3> {{ currency($wallet->balance) }}</h3>
                 <p>Available Balance</p>
             </div>
         </div>
@@ -120,8 +120,8 @@
                     <input type="range" min="0" max="10000" value="10000" class="range-max" id="priceMax">
                 </div>
                 <div class="price-display">
-                    <span id="minPrice">$0</span>
-                    <span id="maxPrice">$10,000+</span>
+                    <span id="minPrice">৳0</span>
+                    <span id="maxPrice">৳10,000+</span>
                 </div>
             </div>
         </div>
@@ -582,8 +582,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Update display
-        minPrice.textContent = '$' + min.toLocaleString();
-        maxPrice.textContent = max >= 10000 ? '$10,000+' : '$' + max.toLocaleString();
+        minPrice.textContent = '৳' + min.toLocaleString();
+        maxPrice.textContent = max >= 10000 ? '৳10,000+' : '৳' + max.toLocaleString();
 
         // Update slider background gradient
         const percent1 = (min / 10000) * 100;

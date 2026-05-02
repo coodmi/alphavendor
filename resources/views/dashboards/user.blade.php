@@ -124,7 +124,7 @@
             <i class="fas fa-dollar-sign"></i>
         </div>
         <div class="stat-info">
-            <h3>${{ number_format($totalSpent, 2) }}</h3>
+            <h3> {{ currency($totalSpent) }}</h3>
             <p>Total Spent</p>
         </div>
     </div>
@@ -226,7 +226,7 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                     <div>
                         <p style="margin: 0 0 5px 0; opacity: 0.8; font-size: 12px;">Total Amount</p>
-                        <p style="margin: 0; font-size: 20px; font-weight: 700;">${{ number_format($trackingOrder->total, 2) }}</p>
+                        <p style="margin: 0; font-size: 20px; font-weight: 700;"> {{ currency($trackingOrder->total) }}</p>
                     </div>
                     <div>
                         <p style="margin: 0 0 5px 0; opacity: 0.8; font-size: 12px;">Items</p>
@@ -278,7 +278,7 @@
                             <td style="padding: 12px; font-size: 14px; color: #2c3e50; font-weight: 600;">#{{ $order->order_number }}</td>
                             <td style="padding: 12px; font-size: 14px; color: #6c757d;">{{ $order->created_at->format('M d, Y') }}</td>
                             <td style="padding: 12px; font-size: 14px; color: #6c757d;">{{ $order->items->count() }} item(s)</td>
-                            <td style="padding: 12px; font-size: 14px; color: #2c3e50; font-weight: 600;">${{ number_format($order->total, 2) }}</td>
+                            <td style="padding: 12px; font-size: 14px; color: #2c3e50; font-weight: 600;"> {{ currency($order->total) }}</td>
                             <td style="padding: 12px;">
                                 @php
                                     $statusColors = [

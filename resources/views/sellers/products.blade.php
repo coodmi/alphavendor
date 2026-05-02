@@ -222,7 +222,7 @@
 
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                         <span style="font-size: 20px; font-weight: 700; color: #0d5c63;">
-                                            ${{ number_format($price, 2) }}
+                                            {{ currency(($price, 2) }}
                                         </span>
                                         @if($minOrder > 1)
                                             <span style="font-size: 12px; color: #666; background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">

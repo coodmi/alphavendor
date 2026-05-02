@@ -53,10 +53,10 @@
                             {{ $order->items->count() }} items
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            ${{ number_format($order->total, 2) }}
+                            {{ currency(($order->total, 2) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
-                            ${{ number_format($order->vendor_earning, 2) }}
+                            {{ currency(($order->vendor_earning, 2) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <form action="{{ route('vendor.orders.update-status', $order->id) }}" method="POST">

@@ -120,14 +120,14 @@
                             <div>
                                 @if($wishlist->product->discount_price)
                                     <span class="text-xl font-bold text-teal-700">
-                                        ${{ number_format($wishlist->product->discount_price, 2) }}
+                                        {{ currency(($wishlist->product->discount_price, 2) }}
                                     </span>
                                     <span class="text-sm text-gray-500 line-through ml-2">
-                                        ${{ number_format($wishlist->product->price, 2) }}
+                                        {{ currency(($wishlist->product->price, 2) }}
                                     </span>
                                 @else
                                     <span class="text-xl font-bold text-gray-900">
-                                        ${{ number_format($wishlist->product->price, 2) }}
+                                        {{ currency(($wishlist->product->price, 2) }}
                                     </span>
                                 @endif
                             </div>

@@ -154,7 +154,7 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div>
                                 <p class="text-xs opacity-80 mb-1">Total Amount</p>
-                                <p class="text-2xl font-bold">${{ number_format($trackingOrder->total, 2) }}</p>
+                                <p class="text-2xl font-bold"> {{ currency($trackingOrder->total) }}</p>
                             </div>
                             <div>
                                 <p class="text-xs opacity-80 mb-1">Items</p>
@@ -228,7 +228,7 @@
                                 </span>
                             @endif
                             
-                            <p class="text-lg font-bold text-gray-900 mt-2">${{ number_format($order->total, 2) }}</p>
+                            <p class="text-lg font-bold text-gray-900 mt-2"> {{ currency($order->total) }}</p>
                         </div>
                     </div>
 
@@ -248,10 +248,10 @@
                                     @endif
                                     <div class="flex-1">
                                         <p class="font-medium">{{ $item->product_name }}</p>
-                                        <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }} × ${{ number_format($item->price, 2) }}</p>
+                                        <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }} × {{ currency(($item->price, 2) }}</p>
                                     </div>
                                     <div class="text-right">
-                                        <p class="font-semibold">${{ number_format($item->subtotal, 2) }}</p>
+                                        <p class="font-semibold"> {{ currency($item->subtotal) }}</p>
                                     </div>
                                 </div>
                             @endforeach

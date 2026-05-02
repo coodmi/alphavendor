@@ -65,9 +65,9 @@
                         {{ $product->brand->name ?? 'No Brand' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="font-semibold text-gray-900">${{ number_format($product->price, 2) }}</div>
+                        <div class="font-semibold text-gray-900"> {{ currency($product->price) }}</div>
                         @if($product->old_price)
-                            <div class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</div>
+                            <div class="text-sm text-gray-500 line-through"> {{ currency($product->old_price) }}</div>
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">

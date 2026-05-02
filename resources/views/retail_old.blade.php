@@ -226,7 +226,7 @@
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
                     <span class="filter-tag">
-                        Price: $50 - $200
+                        Price: ৳50 - ৳200
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
                 </div>
@@ -275,8 +275,8 @@
                                 <span>({{ $product['rating'] }}) {{ $product['reviews'] }} reviews</span>
                             </div>
                             <div class="price">
-                                <span class="current-price">${{ $product['price'] }}</span>
-                                <span class="old-price">${{ $product['old_price'] }}</span>
+                                <span class="current-price">{{ currency($product['price']) }}</span>
+                                <span class="old-price">{{ currency($product['old_price']) }}</span>
                                 <span class="discount">-{{ round((($product['old_price'] - $product['price']) / $product['old_price']) * 100) }}%</span>
                             </div>
                         </div>

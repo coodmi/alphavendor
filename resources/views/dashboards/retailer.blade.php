@@ -141,21 +141,21 @@
         <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->total_earned, 2) }}</h3>
+                <h3> {{ currency($wallet->total_earned) }}</h3>
                 <p>Total Earnings</p>
             </div>
         </div>
         <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
             <div class="stat-icon">💵</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->balance, 2) }}</h3>
+                <h3> {{ currency($wallet->balance) }}</h3>
                 <p>Available Balance</p>
             </div>
         </div>
         <div class="stat-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
             <div class="stat-icon">⏸️</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->pending_balance, 2) }}</h3>
+                <h3> {{ currency($wallet->pending_balance) }}</h3>
                 <p>Pending Balance</p>
             </div>
         </div>
@@ -220,15 +220,15 @@
                 <div style="display: grid; gap: 15px; margin-top: 20px;">
                     <div style="padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">
                         <div style="font-size: 14px; opacity: 0.9;">This Month Sales</div>
-                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;">${{ number_format($thisMonthSales, 2) }}</div>
+                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;"> {{ currency($thisMonthSales) }}</div>
                     </div>
                     <div style="padding: 15px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 10px; color: white;">
                         <div style="font-size: 14px; opacity: 0.9;">Last Month Sales</div>
-                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;">${{ number_format($lastMonthSales, 2) }}</div>
+                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;"> {{ currency($lastMonthSales) }}</div>
                     </div>
                     <div style="padding: 15px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 10px; color: white;">
                         <div style="font-size: 14px; opacity: 0.9;">Average Order Value</div>
-                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;">${{ number_format($avgOrderValue, 2) }}</div>
+                        <div style="font-size: 28px; font-weight: bold; margin-top: 5px;"> {{ currency($avgOrderValue) }}</div>
                     </div>
                 </div>
             </div>
@@ -263,8 +263,8 @@
                                     </td>
                                     <td style="padding: 12px;">{{ $order->user->name }}</td>
                                     <td style="padding: 12px;">{{ $order->items->count() }} items</td>
-                                    <td style="padding: 12px; font-weight: 600;">${{ number_format($order->total, 2) }}</td>
-                                    <td style="padding: 12px; color: #27ae60; font-weight: 600;">${{ number_format($order->vendor_earning, 2) }}</td>
+                                    <td style="padding: 12px; font-weight: 600;"> {{ currency($order->total) }}</td>
+                                    <td style="padding: 12px; color: #27ae60; font-weight: 600;"> {{ currency($order->vendor_earning) }}</td>
                                     <td style="padding: 12px;">
                                         @php
                                             $statusColors = [

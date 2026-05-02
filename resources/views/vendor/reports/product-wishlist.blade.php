@@ -128,7 +128,7 @@
                             </span>
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 18px; font-weight: 700; color: #2c3e50;">${{ number_format($product->price, 2) }}</span>
+                            <span style="font-size: 18px; font-weight: 700; color: #2c3e50;"> {{ currency($product->price) }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: center;">
                             <span style="font-weight: 600; color: {{ $product->stock > 10 ? '#2ecc71' : ($product->stock > 0 ? '#f39c12' : '#e74c3c') }};">

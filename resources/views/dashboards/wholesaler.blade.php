@@ -101,14 +101,14 @@
         <div class="stat-card">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->total_earned, 2) }}</h3>
+                <h3> {{ currency($wallet->total_earned) }}</h3>
                 <p>Total Earnings</p>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">💵</div>
             <div class="stat-info">
-                <h3>${{ number_format($wallet->balance, 2) }}</h3>
+                <h3> {{ currency($wallet->balance) }}</h3>
                 <p>Available Balance</p>
             </div>
         </div>

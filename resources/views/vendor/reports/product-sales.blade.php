@@ -165,7 +165,7 @@
                                 @endif
                                 <div>
                                     <div style="font-weight: 600; color: #2c3e50;">{{ Str::limit($product->name, 40) }}</div>
-                                    <div style="font-size: 12px; color: #7f8c8d;">${{ number_format($product->retail_price ?? 0, 2) }}</div>
+                                    <div style="font-size: 12px; color: #7f8c8d;"> {{ currency($product->retail_price ?? 0) }}</div>
                                 </div>
                             </div>
                         </td>
@@ -176,7 +176,7 @@
                             <span style="font-size: 20px; font-weight: 700; color: #667eea;">{{ $product->total_sold ?? 0 }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 18px; font-weight: 700; color: #2ecc71;">${{ number_format($product->total_revenue ?? 0, 2) }}</span>
+                            <span style="font-size: 18px; font-weight: 700; color: #2ecc71;"> {{ currency($product->total_revenue ?? 0) }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: center;">
                             <span style="font-weight: 600; color: {{ $product->stock > 10 ? '#2ecc71' : ($product->stock > 0 ? '#f39c12' : '#e74c3c') }};">

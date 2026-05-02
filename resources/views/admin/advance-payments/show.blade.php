@@ -39,15 +39,15 @@
                     </div>
                     <div>
                         <label class="text-sm text-gray-500">Total Amount</label>
-                        <p class="font-semibold text-gray-800">${{ number_format($advancePayment->total_amount, 2) }}</p>
+                        <p class="font-semibold text-gray-800"> {{ currency($advancePayment->total_amount) }}</p>
                     </div>
                     <div>
                         <label class="text-sm text-gray-500">Advance Amount ({{ $advancePayment->advance_percentage }}%)</label>
-                        <p class="font-semibold text-green-600">${{ number_format($advancePayment->advance_amount, 2) }}</p>
+                        <p class="font-semibold text-green-600"> {{ currency($advancePayment->advance_amount) }}</p>
                     </div>
                     <div>
                         <label class="text-sm text-gray-500">Remaining Amount</label>
-                        <p class="font-semibold text-teal-700">${{ number_format($advancePayment->remaining_amount, 2) }}</p>
+                        <p class="font-semibold text-teal-700"> {{ currency($advancePayment->remaining_amount) }}</p>
                     </div>
                     <div>
                         <label class="text-sm text-gray-500">Payment Method</label>
@@ -130,7 +130,7 @@
                         <div class="grid grid-cols-2 gap-2 text-sm">
                             <div>
                                 <span class="text-gray-500">Unit Price:</span>
-                                <span class="font-semibold text-gray-800">${{ number_format($advancePayment->product->price, 2) }}</span>
+                                <span class="font-semibold text-gray-800"> {{ currency($advancePayment->product->price) }}</span>
                             </div>
                             <div>
                                 <span class="text-gray-500">Quantity:</span>

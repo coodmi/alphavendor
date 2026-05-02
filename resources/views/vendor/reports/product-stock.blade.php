@@ -165,7 +165,7 @@
                             <span style="color: #7f8c8d;">{{ $product->minimum_order ?? 1 }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 18px; font-weight: 700; color: #2c3e50;">${{ number_format($product->price, 2) }}</span>
+                            <span style="font-size: 18px; font-weight: 700; color: #2c3e50;"> {{ currency($product->price) }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: center;">
                             @if($product->stock == 0)

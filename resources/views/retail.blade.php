@@ -242,7 +242,7 @@
                     @endif
                     @if(request('min_price') || request('max_price'))
                         <span class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm">
-                            Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
+                            Price: {{ currency_symbol() }}{{ request('min_price', 0) }} - {{ currency_symbol() }}{{ request('max_price', 10000) }}
                             <a href="{{ request()->fullUrlWithoutQuery(['min_price', 'max_price']) }}" class="hover:text-teal-900">
                                 <i class="fas fa-times"></i>
                             </a>
@@ -320,9 +320,9 @@
                                 <span class="text-xs text-gray-600">({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap">
-                                <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                <span class="text-lg font-bold text-gray-900"> {{ currency($product->price) }}</span>
                                 @if($product->old_price)
-                                    <span class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="text-sm text-gray-500 line-through"> {{ currency($product->old_price) }}</span>
                                     <span class="text-xs font-semibold text-red-500">-{{ $product->discount_percentage }}%</span>
                                 @endif
                             </div>

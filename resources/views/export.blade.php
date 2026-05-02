@@ -324,9 +324,9 @@
                                 <span>MOQ: {{ $product->minimum_order ?? 1 }} units</span>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap mb-2">
-                                <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                <span class="text-lg font-bold text-gray-900"> {{ currency($product->price) }}</span>
                                 @if($product->old_price)
-                                    <span class="text-sm text-gray-500 line-through">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="text-sm text-gray-500 line-through"> {{ currency($product->old_price) }}</span>
                                     <span class="text-xs font-semibold text-red-500">-{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%</span>
                                 @endif
                             </div>

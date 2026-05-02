@@ -36,15 +36,15 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
             <h3 class="text-sm text-gray-600 mb-2">Available Balance</h3>
-            <p class="text-3xl font-bold text-green-600">${{ number_format($wallet->balance ?? 0, 2) }}</p>
+            <p class="text-3xl font-bold text-green-600"> {{ currency($wallet->balance ?? 0) }}</p>
         </div>
         <div class="bg-teal-50 border-2 border-teal-200 rounded-lg p-6">
             <h3 class="text-sm text-gray-600 mb-2">Pending Balance</h3>
-            <p class="text-3xl font-bold text-teal-700">${{ number_format($wallet->pending_balance ?? 0, 2) }}</p>
+            <p class="text-3xl font-bold text-teal-700"> {{ currency($wallet->pending_balance ?? 0) }}</p>
         </div>
         <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
             <h3 class="text-sm text-gray-600 mb-2">Total Withdrawn</h3>
-            <p class="text-3xl font-bold text-blue-600">${{ number_format($wallet->total_withdrawn ?? 0, 2) }}</p>
+            <p class="text-3xl font-bold text-blue-600"> {{ currency($wallet->total_withdrawn ?? 0) }}</p>
         </div>
     </div>
 
@@ -83,7 +83,7 @@
                                 {{ $withdrawal->withdrawal_number }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                                ${{ number_format($withdrawal->amount, 2) }}
+                                {{ currency(($withdrawal->amount, 2) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                 @if($withdrawal->withdrawalMethod)

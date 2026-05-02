@@ -267,7 +267,7 @@
         <div class="stat-icon" style="background: #e8f5e9; color: #2e7d32;">
             <i class="fas fa-dollar-sign"></i>
         </div>
-        <div class="stat-value" style="color: #27ae60; font-size: 24px;">${{ number_format($stats['total_amount'], 2) }}</div>
+        <div class="stat-value" style="color: #27ae60; font-size: 24px;"> {{ currency($stats['total_amount']) }}</div>
         <div class="stat-label">Total Refund Amount</div>
     </div>
 </div>
@@ -404,7 +404,7 @@
                             </span>
                         </td>
                         <td style="padding: 15px 20px;">
-                            <span style="font-weight: 700; color: #2c3e50; font-size: 16px;">${{ number_format($return->refund_amount ?? 0, 2) }}</span>
+                            <span style="font-weight: 700; color: #2c3e50; font-size: 16px;"> {{ currency($return->refund_amount ?? 0) }}</span>
                         </td>
                         <td style="padding: 15px 20px;">
                             <span class="status-badge badge-{{ $return->status }}">

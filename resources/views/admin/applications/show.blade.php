@@ -145,7 +145,7 @@
             @if($application->estimated_monthly_sales)
             <div class="detail-item">
                 <strong>Estimated Monthly Sales:</strong>
-                <span>${{ number_format($application->estimated_monthly_sales, 2) }}</span>
+                <span> {{ currency($application->estimated_monthly_sales) }}</span>
             </div>
             @endif
         </div>

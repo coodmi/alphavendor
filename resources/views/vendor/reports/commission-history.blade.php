@@ -129,15 +129,15 @@
     </div>
     <div class="stat-card">
         <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Total Sales</div>
-        <div style="font-size: 32px; font-weight: 700; color: #2ecc71;">${{ number_format($totalSales, 2) }}</div>
+        <div style="font-size: 32px; font-weight: 700; color: #2ecc71;"> {{ currency($totalSales) }}</div>
     </div>
     <div class="stat-card">
         <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Total Commission</div>
-        <div style="font-size: 32px; font-weight: 700; color: #e74c3c;">${{ number_format($totalCommission, 2) }}</div>
+        <div style="font-size: 32px; font-weight: 700; color: #e74c3c;"> {{ currency($totalCommission) }}</div>
     </div>
     <div class="stat-card">
         <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">Your Earnings</div>
-        <div style="font-size: 32px; font-weight: 700; color: #f39c12;">${{ number_format($totalEarnings, 2) }}</div>
+        <div style="font-size: 32px; font-weight: 700; color: #f39c12;"> {{ currency($totalEarnings) }}</div>
     </div>
 </div>
 
@@ -199,16 +199,16 @@
                             <div style="font-size: 12px; color: #7f8c8d;">{{ $order->created_at->format('h:i A') }}</div>
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 16px; font-weight: 600; color: #2c3e50;">${{ number_format($order->total, 2) }}</span>
+                            <span style="font-size: 16px; font-weight: 600; color: #2c3e50;"> {{ currency($order->total) }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 16px; font-weight: 600; color: #e74c3c;">-${{ number_format($order->commission_amount ?? 0, 2) }}</span>
+                            <span style="font-size: 16px; font-weight: 600; color: #e74c3c;">-{{ currency(($order->commission_amount ?? 0, 2) }}</span>
                             @if($order->commission_rate)
                                 <div style="font-size: 11px; color: #7f8c8d;">({{ $order->commission_rate }}%)</div>
                             @endif
                         </td>
                         <td style="padding: 15px 20px; text-align: right;">
-                            <span style="font-size: 18px; font-weight: 700; color: #2ecc71;">${{ number_format($order->vendor_earning ?? 0, 2) }}</span>
+                            <span style="font-size: 18px; font-weight: 700; color: #2ecc71;"> {{ currency($order->vendor_earning ?? 0) }}</span>
                         </td>
                         <td style="padding: 15px 20px; text-align: center;">
                             @php

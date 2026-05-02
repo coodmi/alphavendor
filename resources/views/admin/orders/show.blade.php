@@ -62,10 +62,10 @@
                                 <div class="flex-1">
                                     <h4 class="font-semibold text-gray-800">{{ $item->product_name }}</h4>
                                     <p class="text-sm text-gray-600">Quantity: {{ $item->quantity }}</p>
-                                    <p class="text-sm text-gray-600">Price: ${{ number_format($item->price, 2) }}</p>
+                                    <p class="text-sm text-gray-600">Price: {{ currency($item->price, 2) }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-bold text-teal-600">${{ number_format($item->subtotal, 2) }}</p>
+                                    <p class="font-bold text-teal-600"> {{ currency($item->subtotal) }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -99,19 +99,19 @@
                 <div class="space-y-2">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Subtotal</span>
-                        <span class="font-semibold">${{ number_format($order->subtotal, 2) }}</span>
+                        <span class="font-semibold"> {{ currency($order->subtotal) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Commission</span>
-                        <span class="font-semibold">${{ number_format($order->commission_amount, 2) }}</span>
+                        <span class="font-semibold"> {{ currency($order->commission_amount) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Vendor Earning</span>
-                        <span class="font-semibold">${{ number_format($order->vendor_earning, 2) }}</span>
+                        <span class="font-semibold"> {{ currency($order->vendor_earning) }}</span>
                     </div>
                     <div class="border-t pt-2 flex justify-between font-bold text-lg">
                         <span>Total</span>
-                        <span class="text-teal-600">${{ number_format($order->total, 2) }}</span>
+                        <span class="text-teal-600"> {{ currency($order->total) }}</span>
                     </div>
                 </div>
             </div>

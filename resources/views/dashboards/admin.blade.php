@@ -1038,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <p style="margin: 0; opacity: 0.9; font-size: 14px;">Total Sales</p>
-                    <h3 style="margin: 10px 0 0 0; font-size: 32px;">${{ number_format($stats['total_sales'] ?? 0, 0) }}</h3>
+                    <h3 style="margin: 10px 0 0 0; font-size: 32px;"> {{ currency($stats['total_sales'] ?? 0, 0) }}</h3>
                 </div>
                 <i class="fas fa-dollar-sign" style="font-size: 40px; opacity: 0.3;"></i>
             </div>
@@ -1159,7 +1159,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </span>
                         </td>
                         <td style="padding: 12px;">
-                            <strong style="color: #2c3e50;">$0.00</strong>
+                            <strong style="color: #2c3e50;">৳0.00</strong>
                         </td>
                         <td style="padding: 12px;">
                             <div style="display: flex; align-items: center; gap: 5px;">
@@ -3625,7 +3625,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </td>
                         <td style="padding: 12px;">{{ $order->items_count ?? 0 }} item(s)</td>
                         <td style="padding: 12px;">
-                            <strong style="color: #2c3e50;">${{ number_format($order->total_amount ?? 0, 2) }}</strong>
+                            <strong style="color: #2c3e50;"> {{ currency($order->total_amount ?? 0) }}</strong>
                         </td>
                         <td style="padding: 12px;">
                             @php
@@ -3768,7 +3768,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         </td>
                         <td style="padding: 12px;">
-                            <strong style="color: #2c3e50;">${{ number_format($order->total_amount ?? 0, 2) }}</strong>
+                            <strong style="color: #2c3e50;"> {{ currency($order->total_amount ?? 0) }}</strong>
                         </td>
                         <td style="padding: 12px;">
                             @php
@@ -4189,9 +4189,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             {{ $product->vendor->name ?? 'N/A' }}
                         </td>
                         <td style="padding: 12px;">
-                            <strong style="color: #27ae60;">${{ number_format($product->price, 2) }}</strong>
+                            <strong style="color: #27ae60;"> {{ currency($product->price) }}</strong>
                             @if($product->old_price)
-                                <br><small style="text-decoration: line-through; color: #95a5a6;">${{ number_format($product->old_price, 2) }}</small>
+                                <br><small style="text-decoration: line-through; color: #95a5a6;"> {{ currency($product->old_price) }}</small>
                             @endif
                         </td>
                         <td style="padding: 12px;">
@@ -6194,7 +6194,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <p style="margin: 0 0 5px 0; opacity: 0.9; font-size: 13px;">Total Cost</p>
-                    <h3 style="margin: 0; font-size: 28px; font-weight: 700;" id="totalCost">$0</h3>
+                    <h3 style="margin: 0; font-size: 28px; font-weight: 700;" id="totalCost">৳0</h3>
                 </div>
                 <i class="fas fa-dollar-sign" style="font-size: 32px; opacity: 0.3;"></i>
             </div>
@@ -6869,7 +6869,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <i class="fas fa-crown" style="font-size: 36px; color: white;"></i>
                 </div>
                 <h4 style="margin: 0 0 5px 0; color: #2c3e50;">VIP Customer</h4>
-                <p style="margin: 0 0 10px 0; font-size: 13px; color: #7f8c8d;">Spend over $1000</p>
+                <p style="margin: 0 0 10px 0; font-size: 13px; color: #7f8c8d;">Spend over ৳1000</p>
                 <span style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 12px; font-size: 12px;">34 earned</span>
                 <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
                     <button onclick="editBadge(3)" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">
@@ -9896,8 +9896,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const platformEl = document.getElementById('platformCommission');
         const vendorEl = document.getElementById('vendorReceives');
         
-        if (platformEl) platformEl.textContent = '$' + platformCommission;
-        if (vendorEl) vendorEl.textContent = '$' + vendorReceives;
+        if (platformEl) platformEl.textContent = '৳' + platformCommission;
+        if (vendorEl) vendorEl.textContent = '৳' + vendorReceives;
     }
     
     if (saleAmountInput) {
@@ -10809,7 +10809,7 @@ async function loadSmsStats() {
         document.getElementById('totalSms').textContent = stats.total_sent || 0;
         document.getElementById('verifiedOtp').textContent = stats.otp_verified || 0;
         document.getElementById('failedSms').textContent = stats.failed || 0;
-        document.getElementById('totalCost').textContent = '$' + (stats.total_cost || 0).toFixed(2);
+        document.getElementById('totalCost').textContent = '৳' + (stats.total_cost || 0).toFixed(2);
     } catch (error) {
         console.error('Error loading SMS stats:', error);
     }

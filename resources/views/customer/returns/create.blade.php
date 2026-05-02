@@ -24,7 +24,7 @@
                         <h3 class="font-semibold text-gray-900">{{ $orderItem->product->name }}</h3>
                         <p class="text-sm text-gray-600">Order: {{ $orderItem->order->order_number }}</p>
                         <p class="text-sm text-gray-600">Quantity: {{ $orderItem->quantity }}</p>
-                        <p class="text-sm font-semibold text-gray-900">Price: ${{ number_format($orderItem->price, 2) }}</p>
+                        <p class="text-sm font-semibold text-gray-900">Price: {{ currency($orderItem->price, 2) }}</p>
                     </div>
                 </div>
             </div>

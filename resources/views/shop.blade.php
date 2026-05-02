@@ -239,7 +239,7 @@
 
                     @if(request('min_price') || request('max_price'))
                     <span class="filter-tag">
-                        Price: ${{ request('min_price', 0) }} - ${{ request('max_price', 10000) }}
+                        Price: {{ currency_symbol() }}{{ request('min_price', 0) }} - {{ currency_symbol() }}{{ request('max_price', 10000) }}
                         <button class="remove-filter"><i class="fas fa-times"></i></button>
                     </span>
                     @endif
@@ -305,9 +305,9 @@
                                     <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                                 </div>
                                 <div class="price">
-                                    <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                    <span class="current-price"> {{ currency($product->price) }}</span>
                                     @if($product->old_price)
-                                        <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
+                                        <span class="old-price"> {{ currency($product->old_price) }}</span>
                                         <span class="discount">-{{ $product->discount_percentage }}%</span>
                                     @endif
                                 </div>

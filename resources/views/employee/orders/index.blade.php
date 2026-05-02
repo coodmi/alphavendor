@@ -107,7 +107,7 @@
                                 {{ $order->items->count() }} item(s)
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-bold text-teal-600">${{ number_format($order->total, 2) }}</div>
+                                <div class="text-sm font-bold text-teal-600"> {{ currency($order->total) }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full
