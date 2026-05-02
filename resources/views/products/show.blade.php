@@ -1019,7 +1019,15 @@
                 })
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                const text = await response.text().catch(() => 'no body');
+                console.error('Non-JSON response (' + response.status + '):', text.substring(0, 500));
+                showCouponMessage('Server error (' + response.status + '). Check console for details.', 'error');
+                return;
+            }
 
             if (data.success) {
                 appliedCouponData = data.coupon;
@@ -1042,8 +1050,8 @@
                 showCouponMessage(data.message || 'Invalid coupon code', 'error');
             }
         } catch (error) {
-            console.error('Error:', error);
-            showCouponMessage('Failed to apply coupon. Please try again.', 'error');
+            console.error('Coupon fetch error:', error);
+            showCouponMessage('Failed to apply coupon: ' + error.message, 'error');
         }
     }
 

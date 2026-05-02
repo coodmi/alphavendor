@@ -100,7 +100,7 @@ Route::patch('/cart/update/{productId}', [CartController::class, 'update'])->nam
 Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
 
 // Coupon validation API
-Route::post('/api/validate-coupon', [CartController::class, 'validateCoupon'])->name('api.validate-coupon');
+Route::post('/coupon/validate', [CartController::class, 'validateCoupon'])->name('api.validate-coupon');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 // Authentication routes
