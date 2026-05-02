@@ -104,6 +104,12 @@ Route::post('/coupon/validate', [CartController::class, 'validateCoupon'])->name
 
 // Newsletter subscribe
 Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+// Advance payment settings (public read for product page)
+Route::get('/advance-payment-settings', function () {
+    $s = \App\Models\AdvancePaymentSetting::getSettings();
+    return response()->json(['percentage' => (float) $s->advance_percentage, 'is_mandatory' => $s->is_mandatory, 'description' => $s->description]);
+})->name('advance-payment-settings.public');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 // Authentication routes
@@ -477,6 +483,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/tickets/{ticket}', [App\Http\Controllers\Admin\TicketController::class, 'destroy'])->name('tickets.destroy');
 
         // Advance Payments Management
+        Route::get('/advance-payments/settings', [\App\Http\Controllers\Admin\AdvancePaymentSettingController::class, 'index'])->name('advance-payments.settings');
+        Route::post('/advance-payments/settings', [\App\Http\Controllers\Admin\AdvancePaymentSettingController::class, 'update'])->name('advance-payments.settings.update');
         Route::get('/advance-payments', [App\Http\Controllers\Admin\AdvancePaymentController::class, 'index'])->name('advance-payments.index');
         Route::get('/advance-payments/{advancePayment}', [App\Http\Controllers\Admin\AdvancePaymentController::class, 'show'])->name('advance-payments.show');
         Route::patch('/advance-payments/{advancePayment}/status', [App\Http\Controllers\Admin\AdvancePaymentController::class, 'updateStatus'])->name('advance-payments.update-status');

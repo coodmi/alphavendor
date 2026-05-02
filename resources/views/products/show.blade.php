@@ -1216,60 +1216,52 @@
                 </button>
             </div>
         </div>
-        
+
         <form id="advancePaymentForm" class="p-6">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
-            
+            <input type="hidden" name="advance_percentage" id="hiddenAdvancePct" value="20">
+
+            {{-- Customer message from admin --}}
+            <div id="advanceDescription" class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700 hidden">
+                <i class="fas fa-info-circle mr-1"></i>
+                <span id="advanceDescriptionText"></span>
+            </div>
+
             <!-- Product Summary -->
-            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h4 class="font-semibold text-gray-800 mb-2">{{ $product->name }}</h4>
-                <div class="flex items-center justify-between text-sm">
-                    <span class="text-gray-600">Unit Price:</span>
-                    <span class="font-semibold">{{ currency($product->price) }}</span>
-                </div>
-                <div class="flex items-center justify-between text-sm mt-1">
-                    <span class="text-gray-600">Quantity:</span>
-                    <span class="font-semibold" id="modalQuantity">1</span>
-                </div>
-                <div class="flex items-center justify-between text-sm mt-1 pt-2 border-t border-gray-200">
-                    <span class="text-gray-600">Total Amount:</span>
-                    <span class="font-bold text-lg text-teal-600" id="modalTotalPrice">{{ currency($product->price) }}</span>
+            <div class="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <h4 class="font-semibold text-gray-800 mb-3">{{ $product->name }}</h4>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Unit Price</span>
+                        <span class="font-semibold">{{ currency($product->price) }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Quantity</span>
+                        <span class="font-semibold" id="modalQuantity">1</span>
+                    </div>
+                    <div class="flex justify-between pt-2 border-t border-gray-200">
+                        <span class="text-gray-600 font-medium">Total Order Amount</span>
+                        <span class="font-bold text-lg text-gray-800" id="modalTotalPrice">{{ currency($product->price) }}</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Advance Payment Options -->
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Select Advance Payment Amount</label>
-                <div class="space-y-3">
-                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
-                        <input type="radio" name="advance_percentage" value="25" class="w-5 h-5 text-blue-600" checked onchange="updateAdvanceAmount()">
-                        <span class="ml-3 flex-1">
-                            <span class="font-semibold text-gray-800">25% Advance</span>
-                            <span class="block text-sm text-gray-500" id="advance25">৳0.00</span>
-                        </span>
-                    </label>
-                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
-                        <input type="radio" name="advance_percentage" value="50" class="w-5 h-5 text-blue-600" onchange="updateAdvanceAmount()">
-                        <span class="ml-3 flex-1">
-                            <span class="font-semibold text-gray-800">50% Advance</span>
-                            <span class="block text-sm text-gray-500" id="advance50">৳0.00</span>
-                        </span>
-                    </label>
-                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-all">
-                        <input type="radio" name="advance_percentage" value="75" class="w-5 h-5 text-blue-600" onchange="updateAdvanceAmount()">
-                        <span class="ml-3 flex-1">
-                            <span class="font-semibold text-gray-800">75% Advance</span>
-                            <span class="block text-sm text-gray-500" id="advance75">৳0.00</span>
-                        </span>
-                    </label>
+            <!-- Advance Amount Display (amount only, no percentage shown) -->
+            <div class="mb-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-5 text-white">
+                <p class="text-blue-100 text-sm mb-1">Advance Payment Required</p>
+                <p class="text-3xl font-black" id="advanceAmountDisplay">৳0.00</p>
+                <div class="mt-3 pt-3 border-t border-white/20 flex justify-between text-sm">
+                    <span class="text-blue-100">Remaining Due After Delivery</span>
+                    <span class="font-bold" id="dueAmountDisplay">৳0.00</span>
                 </div>
             </div>
 
             <!-- Payment Method -->
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Payment Method</label>
-                <select name="payment_method" id="paymentMethodSelect" onchange="toggleTransactionField()" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Method</label>
+                <select name="payment_method" id="paymentMethodSelect" onchange="toggleTransactionField()"
+                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <option value="bkash">bKash</option>
                     <option value="nagad">Nagad</option>
                     <option value="rocket">Rocket</option>
@@ -1277,68 +1269,73 @@
                 </select>
             </div>
 
-            <!-- Transaction ID (for bKash/Nagad/Rocket) -->
-            <div class="mb-6" id="transactionIdField">
+            <!-- Transaction ID (bKash/Nagad/Rocket) -->
+            <div class="mb-5" id="transactionIdField">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Transaction ID</label>
-                <input type="text" name="transaction_id" id="transactionIdInput" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your transaction ID">
+                <input type="text" name="transaction_id" id="transactionIdInput"
+                       class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       placeholder="Enter your transaction ID">
                 <p class="text-xs text-gray-500 mt-1">Send payment to the number provided and enter the transaction ID here.</p>
             </div>
 
-            <!-- Bank Transfer Info -->
-            <!-- Bank Transfer - User Input Fields -->
-            <div class="mb-6" id="bankInfoField" style="display:none;">
+            <!-- Bank Transfer Fields -->
+            <div class="mb-5" id="bankInfoField" style="display:none;">
                 <div class="rounded-xl border border-blue-200 overflow-hidden mb-3">
                     <div class="bg-blue-600 px-4 py-3 flex items-center gap-2">
                         <i class="fas fa-university text-white"></i>
-                        <span class="text-white font-semibold text-sm">Your Bank Transfer Info</span>
+                        <span class="text-white font-semibold text-sm">Bank Transfer Details</span>
                     </div>
                     <div class="bg-blue-50 px-4 py-3 text-xs text-blue-700">
                         <i class="fas fa-info-circle mr-1"></i>
-                        Please transfer <strong id="bankAmountDisplay">৳0.00</strong> and fill in your sender details below for verification.
+                        Please transfer <strong id="bankAmountDisplay">৳0.00</strong> and fill in your sender details below.
                     </div>
                 </div>
-                <div class="space-y-4">
+                <div class="space-y-3">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Your Bank Name</label>
-                        <input type="text" name="bank_name" id="bankNameInput"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="e.g. Dutch-Bangla Bank">
+                        <input type="text" name="bank_name"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="e.g. Dutch-Bangla Bank">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Account Holder Name</label>
                         <input type="text" name="bank_account_holder"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Name on your bank account">
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="Name on your bank account">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Your Account Number</label>
                         <input type="text" name="bank_account_number"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Your bank account number">
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="Your bank account number">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Transaction / Reference ID</label>
                         <input type="text" name="transaction_id" id="bankTxInput"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Transaction or reference number">
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                               placeholder="Transaction or reference number">
                     </div>
                 </div>
             </div>
 
-            <!-- Contact Information -->
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Number</label>
-                <input type="tel" name="contact_number" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your phone number">
+            <!-- Contact -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Number <span class="text-red-500">*</span></label>
+                <input type="tel" name="contact_number" required
+                       class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                       placeholder="Enter your phone number">
             </div>
 
             <!-- Notes -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Additional Notes (Optional)</label>
-                <textarea name="notes" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Any special requirements or notes..."></textarea>
+                <textarea name="notes" rows="2"
+                          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          placeholder="Any special requirements..."></textarea>
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center gap-2">
+            <button type="submit"
+                    class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-check-circle"></i>
                 Confirm Advance Payment
             </button>
@@ -1347,10 +1344,61 @@
 </div>
 
 <script>
+    // ── Advance Payment Settings (loaded from admin) ──────────────────────
+    let advancePct = 20; // default, overridden on modal open
+
+    async function openAdvancePaymentModal() {
+        const modal = document.getElementById('advancePaymentModal');
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const totalPrice = unitPrice * quantity;
+
+        // Load admin-configured percentage
+        try {
+            const res = await fetch('{{ route("advance-payment-settings.public") }}');
+            const cfg = await res.json();
+            advancePct = cfg.percentage;
+
+            // Show description if set
+            if (cfg.description) {
+                document.getElementById('advanceDescriptionText').textContent = cfg.description;
+                document.getElementById('advanceDescription').classList.remove('hidden');
+            }
+        } catch(e) { /* use default */ }
+
+        document.getElementById('hiddenAdvancePct').value = advancePct;
+        document.getElementById('modalQuantity').textContent = quantity;
+        document.getElementById('modalTotalPrice').textContent = '৳' + totalPrice.toFixed(2);
+
+        recalcAdvance(totalPrice);
+
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function recalcAdvance(totalPrice) {
+        const advance = totalPrice * advancePct / 100;
+        const due     = totalPrice - advance;
+        document.getElementById('advanceAmountDisplay').textContent = '৳' + advance.toFixed(2);
+        document.getElementById('dueAmountDisplay').textContent     = '৳' + due.toFixed(2);
+        document.getElementById('bankAmountDisplay').textContent    = '৳' + advance.toFixed(2);
+    }
+
+    function closeAdvancePaymentModal() {
+        document.getElementById('advancePaymentModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    // Recalc when quantity changes (called from existing updateTotalPrice)
+    function updateAdvanceAmount() {
+        const quantity   = parseInt(document.getElementById('quantity').value);
+        const totalPrice = unitPrice * quantity;
+        recalcAdvance(totalPrice);
+    }
+
     function toggleTransactionField() {
-        const method = document.getElementById('paymentMethodSelect').value;
-        const txField = document.getElementById('transactionIdField');
-        const txInput = document.getElementById('transactionIdInput');
+        const method   = document.getElementById('paymentMethodSelect').value;
+        const txField  = document.getElementById('transactionIdField');
+        const txInput  = document.getElementById('transactionIdInput');
         const bankField = document.getElementById('bankInfoField');
         const bankInputs = bankField.querySelectorAll('input');
 
@@ -1359,7 +1407,6 @@
             txInput.removeAttribute('required');
             bankField.style.display = 'block';
             bankInputs.forEach(i => i.setAttribute('required', 'required'));
-            updateBankAmount();
         } else {
             txField.style.display = 'block';
             txInput.setAttribute('required', 'required');
@@ -1368,62 +1415,19 @@
         }
     }
 
-    function updateBankAmount() {
-        const quantity = parseInt(document.getElementById('quantity').value);
-        const totalPrice = unitPrice * quantity;
-        const pct = document.querySelector('input[name="advance_percentage"]:checked');
-        const amount = pct ? totalPrice * (parseInt(pct.value) / 100) : 0;
-        const el = document.getElementById('bankAmountDisplay');
-        if (el) el.textContent = '৳' + amount.toFixed(2);
-    }
-
-    function openAdvancePaymentModal() {
-        const modal = document.getElementById('advancePaymentModal');
-        const quantity = parseInt(document.getElementById('quantity').value);
-        const totalPrice = unitPrice * quantity;
-        
-        // Update modal with current quantity and price
-        document.getElementById('modalQuantity').textContent = quantity;
-        document.getElementById('modalTotalPrice').textContent = '৳' + totalPrice.toFixed(2);
-        
-        // Calculate advance amounts
-        updateAdvanceAmount();
-        
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeAdvancePaymentModal() {
-        const modal = document.getElementById('advancePaymentModal');
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-    }
-
-    function updateAdvanceAmount() {
-        const quantity = parseInt(document.getElementById('quantity').value);
-        const totalPrice = unitPrice * quantity;
-        
-        document.getElementById('advance25').textContent = '৳' + (totalPrice * 0.25).toFixed(2);
-        document.getElementById('advance50').textContent = '৳' + (totalPrice * 0.50).toFixed(2);
-        document.getElementById('advance75').textContent = '৳' + (totalPrice * 0.75).toFixed(2);
-        updateBankAmount();
-    }
-
     // Handle advance payment form submission
     document.getElementById('advancePaymentForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const formData = new FormData(this);
         const quantity = parseInt(document.getElementById('quantity').value);
         formData.append('quantity', quantity);
-        
-        // Show loading state
+
         const submitBtn = this.querySelector('button[type="submit"]');
         const originalContent = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        
-        // Submit to API
+
         fetch('{{ route("advance-payments.store") }}', {
             method: 'POST',
             body: formData,
@@ -1432,7 +1436,7 @@
                 'Accept': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(r => r.json())
         .then(data => {
             if (data.success) {
                 closeAdvancePaymentModal();
@@ -1443,20 +1447,12 @@
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             showToast(error.message || 'Failed to submit advance payment request', 'error');
         })
         .finally(() => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalContent;
         });
-    });
-
-    // Close modal on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeAdvancePaymentModal();
-        }
     });
 </script>
 

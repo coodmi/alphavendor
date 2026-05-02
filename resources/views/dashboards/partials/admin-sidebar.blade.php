@@ -270,9 +270,13 @@
 
 <div class="menu-section">
     <div class="menu-section-title">Payments</div>
-    <a href="{{ route('admin.advance-payments.index') }}" class="menu-item {{ request()->routeIs('admin.advance-payments*') ? 'active' : '' }}">
+    <a href="{{ route('admin.advance-payments.index') }}" class="menu-item {{ request()->routeIs('admin.advance-payments.index') || request()->routeIs('admin.advance-payments.show') ? 'active' : '' }}">
         <i class="fas fa-hand-holding-usd"></i>
         <span>Advance Payments</span>
+    </a>
+    <a href="{{ route('admin.advance-payments.settings') }}" class="menu-item {{ request()->routeIs('admin.advance-payments.settings') ? 'active' : '' }}">
+        <i class="fas fa-percentage"></i>
+        <span>Advance % Settings</span>
     </a>
 </div>
 
