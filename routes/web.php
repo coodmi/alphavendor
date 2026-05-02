@@ -101,6 +101,9 @@ Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->na
 
 // Coupon validation API
 Route::post('/coupon/validate', [CartController::class, 'validateCoupon'])->name('api.validate-coupon');
+
+// Newsletter subscribe
+Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 // Authentication routes
@@ -300,6 +303,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/shipping-methods', [\App\Http\Controllers\Admin\ShippingMethodController::class, 'index'])->name('shipping-methods.index');
         Route::post('/shipping-methods', [\App\Http\Controllers\Admin\ShippingMethodController::class, 'store'])->name('shipping-methods.store');
         Route::put('/shipping-methods/{shippingMethod}', [\App\Http\Controllers\Admin\ShippingMethodController::class, 'update'])->name('shipping-methods.update');
+
+        // Newsletter Subscribers
+        Route::get('/newsletter', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'index'])->name('newsletter.index');
+        Route::delete('/newsletter/{subscriber}', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'destroy'])->name('newsletter.destroy');
+        Route::patch('/newsletter/{subscriber}/toggle', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'toggleStatus'])->name('newsletter.toggle');
+        Route::get('/newsletter/export', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'export'])->name('newsletter.export');
         Route::delete('/shipping-methods/{shippingMethod}', [\App\Http\Controllers\Admin\ShippingMethodController::class, 'destroy'])->name('shipping-methods.destroy');
 
         // Order management

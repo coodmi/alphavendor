@@ -181,6 +181,10 @@
         <i class="fas fa-info-circle"></i>
         <span>About</span>
     </a>
+    <a href="{{ route('admin.newsletter.index') }}" class="menu-item {{ request()->routeIs('admin.newsletter*') ? 'active' : '' }}">
+        <i class="fas fa-envelope-open-text"></i>
+        <span>Newsletter</span>
+    </a>
     <a href="{{ route('admin.page-contents.terms') }}" class="menu-item {{ request()->routeIs('admin.page-contents.terms*') ? 'active' : '' }}">
         <i class="fas fa-file-contract"></i>
         <span>Terms & Conditions</span>

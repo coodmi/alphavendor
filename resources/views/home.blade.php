@@ -1237,12 +1237,60 @@
                             <p>Get the latest deals and updates delivered to your inbox</p>
                         </div>
                         <div class="newsletter-form">
-                            <input type="email" placeholder="Enter your email address">
-                            <button type="submit" class="btn-subscribe">Subscribe</button>
+                            <input type="email" id="newsletter-email" placeholder="Enter your email address">
+                            <button type="button" onclick="subscribeNewsletter()" class="btn-subscribe">Subscribe</button>
                         </div>
+                        <div id="newsletter-msg" class="mt-2 text-sm hidden"></div>
                     </div>
                 </div>
             </section>
+
+<script>
+function subscribeNewsletter() {
+    const email = document.getElementById('newsletter-email').value.trim();
+    const msg   = document.getElementById('newsletter-msg');
+    const btn   = document.querySelector('.btn-subscribe');
+
+    if (!email) {
+        msg.textContent = 'Please enter your email address.';
+        msg.className = 'mt-2 text-sm text-red-300';
+        msg.classList.remove('hidden');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+
+    fetch('{{ route("newsletter.subscribe") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+        body: JSON.stringify({ email })
+    })
+    .then(r => r.json())
+    .then(data => {
+        msg.textContent = data.message;
+        msg.className = 'mt-2 text-sm ' + (data.success ? 'text-green-300' : 'text-red-300');
+        msg.classList.remove('hidden');
+        if (data.success) {
+            document.getElementById('newsletter-email').value = '';
+            btn.textContent = '✓ Subscribed!';
+        } else {
+            btn.disabled = false;
+            btn.textContent = 'Subscribe';
+        }
+    })
+    .catch(() => {
+        msg.textContent = 'Something went wrong. Please try again.';
+        msg.className = 'mt-2 text-sm text-red-300';
+        msg.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+    });
+}
+</script>
 @endsection
 
 
