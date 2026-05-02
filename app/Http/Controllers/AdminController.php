@@ -1099,6 +1099,48 @@ class AdminController extends Controller
     }
 
     /**
+     * Show create vendor form
+     */
+    public function createVendor()
+    {
+        $badges = \App\Models\VendorBadge::active()->ordered()->get();
+        return view('admin.vendors.create', compact('badges'));
+    }
+
+    /**
+     * Store a new vendor
+     */
+    public function storeVendor(Request $request)
+    {
+        $validated = $request->validate([
+            'name'              => 'required|string|max:255',
+            'email'             => 'required|email|max:255|unique:users,email',
+            'mobile_number'     => 'nullable|string|max:20',
+            'password'          => 'required|string|min:8|confirmed',
+            'role'              => 'required|in:retailer,wholesaler,exporter',
+            'status'            => 'required|in:active,inactive,pending,suspended',
+            'vendor_badge_id'   => 'nullable|exists:vendor_badges,id',
+            'notes'             => 'nullable|string|max:1000',
+            'verification_status' => 'nullable|in:unverified,pending,verified,rejected',
+        ]);
+
+        $vendor = User::create([
+            'name'                => $validated['name'],
+            'email'               => $validated['email'],
+            'mobile_number'       => $validated['mobile_number'] ?? null,
+            'password'            => Hash::make($validated['password']),
+            'role'                => $validated['role'],
+            'status'              => $validated['status'],
+            'vendor_badge_id'     => $validated['vendor_badge_id'] ?? null,
+            'notes'               => $validated['notes'] ?? null,
+            'verification_status' => $validated['verification_status'] ?? 'verified',
+        ]);
+
+        return redirect()->route('admin.vendors.show', $vendor)
+            ->with('success', 'Vendor "' . $vendor->name . '" created successfully!');
+    }
+
+    /**
      * Show vendor details
      */
     public function showVendor(User $user)

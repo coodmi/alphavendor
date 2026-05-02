@@ -216,6 +216,8 @@ Route::middleware('auth')->group(function () {
 
         // Vendor Management
         Route::get('/vendors', [AdminController::class, 'vendors'])->name('vendors');
+        Route::get('/vendors/create', [AdminController::class, 'createVendor'])->name('vendors.create');
+        Route::post('/vendors', [AdminController::class, 'storeVendor'])->name('vendors.store');
         Route::get('/vendors/{user}', [AdminController::class, 'showVendor'])->name('vendors.show');
         Route::patch('/vendors/{user}/status', [AdminController::class, 'updateVendorStatus'])->name('vendors.update-status');
         Route::patch('/vendors/{user}/commission', [AdminController::class, 'updateVendorCommission'])->name('vendors.update-commission');

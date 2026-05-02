@@ -79,6 +79,10 @@
             <p class="text-gray-500 mt-1">Manage all vendors and their activities</p>
         </div>
         <div class="flex gap-3">
+            <a href="{{ route('admin.vendors.create') }}"
+               class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg text-sm font-semibold transition shadow-sm">
+                <i class="fas fa-user-plus"></i> Add Vendor
+            </a>
             <select id="roleFilter" onchange="filterByRole()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 <option value="">All Roles</option>
                 <option value="retailer">Retailers</option>
