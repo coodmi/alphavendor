@@ -133,6 +133,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+// GET fallback for logout — handles 419 CSRF expiry on shared hosting (cPanel)
+Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 // Public review routes (anyone can view reviews)
 Route::get('/products/{product}/reviews', [App\Http\Controllers\ReviewController::class, 'productReviews'])->name('product.reviews');
