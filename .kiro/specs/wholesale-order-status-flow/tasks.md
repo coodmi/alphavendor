@@ -97,7 +97,7 @@ Centralise all order status transition logic in `App\Helpers\OrderStatus::allowe
     - Test: retailer cannot update another vendor's order (403)
     - _Requirements: 3.2, 3.3, 3.5_
 
-- [~] 7. Update `resources/views/admin/orders/index.blade.php` — contextual status dropdown
+- [ ] 7. Update `resources/views/admin/orders/index.blade.php` — contextual status dropdown
   - Replace the `@foreach(\App\Helpers\OrderStatus::all() ...)` full-list `<select>` with a contextual dropdown driven by `\App\Helpers\OrderStatus::allowedTransitions($order->status, 'admin')`
   - When `$allowed` is empty (terminal status), render a read-only `@include('partials.order-status-badge', ['status' => $order->status])` instead of a form
   - When `$allowed` is non-empty, render the `<select>` with the current status as a disabled selected option followed by the allowed next statuses using `OrderStatus::label()` for display text
@@ -109,14 +109,14 @@ Centralise all order status transition logic in `App\Helpers\OrderStatus::allowe
     - **Property 7: Admin dropdown options match allowed transitions**
     - **Validates: Requirements 4.1, 4.2, 4.3**
 
-- [~] 8. Update `resources/views/employee/orders/index.blade.php` — contextual status dropdown
+- [ ] 8. Update `resources/views/employee/orders/index.blade.php` — contextual status dropdown
   - Replace the static modal `<select>` (which hard-codes 5 statuses) with a per-row contextual dropdown using `allowedTransitions($order->status, 'employee')`
   - When `$allowed` is empty, render a read-only status badge instead of the edit button/modal trigger
   - When `$allowed` is non-empty, render an inline `<select onchange="this.form.submit()">` (matching the admin view pattern) or keep the modal approach but populate it dynamically with only the allowed options passed via a `data-allowed` attribute
   - Use `OrderStatus::label()` and `OrderStatus::color()` for all status display
   - _Requirements: 5.1, 5.3, 5.4_
 
-- [~] 9. Update `resources/views/retailer/orders/index.blade.php` — conditional "Mark as Shipped" button
+- [ ] 9. Update `resources/views/retailer/orders/index.blade.php` — conditional "Mark as Shipped" button
   - Change the condition from `in_array($order->status, ['pending', 'processing'])` to `$order->status === 'processing'`
   - Remove the `@else` branch that shows "No action available" for non-processing orders (or keep it — it is harmless, but the button must not appear for non-processing orders)
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
@@ -126,7 +126,7 @@ Centralise all order status transition logic in `App\Helpers\OrderStatus::allowe
     - **Property 8: Vendor "Mark as Shipped" button visibility**
     - **Validates: Requirements 6.1, 6.2, 6.3**
 
-- [~] 10. Update `resources/views/orders/vendor-orders.blade.php` — conditional "Mark as Shipped" button
+- [ ] 10. Update `resources/views/orders/vendor-orders.blade.php` — conditional "Mark as Shipped" button
   - Change the condition from `in_array($order->status, ['pending', 'processing'])` to `$order->status === 'processing'`
   - Replace the inline `$sc` color map with `@include('partials.order-status-badge', ['status' => $order->status])` for consistency with other views
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
@@ -136,7 +136,7 @@ Centralise all order status transition logic in `App\Helpers\OrderStatus::allowe
     - **Property 8: Vendor "Mark as Shipped" button visibility**
     - **Validates: Requirements 6.1, 6.2, 6.3**
 
-- [~] 11. Checkpoint — Ensure all tests pass
+- [ ] 11. Checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 12. Create `resources/views/partials/order-status-timeline.blade.php` (new file)
