@@ -13,7 +13,6 @@
     font-size: 15px;
     cursor: pointer;
     margin-bottom: 20px;
-    display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
@@ -59,7 +58,7 @@
         transition: left 0.3s ease;
         padding: 20px;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-        display: block;
+        display: block !important;
         max-width: 90vw;
     }
 
