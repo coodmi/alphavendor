@@ -39,16 +39,16 @@
                 </div>
                 <div class="form-group">
                     <label for="mobile_number">Mobile Number</label>
-                    <div style="display:flex; align-items:center; border:1px solid #ddd; border-radius:6px; overflow:hidden; background:white;">
-                        <span style="padding:10px 12px; background:#f3f4f6; color:#374151; font-weight:600; font-size:14px; border-right:1px solid #ddd; white-space:nowrap;">+880</span>
+                    <div class="phone-input-wrapper">
+                        <span class="phone-prefix">+880</span>
                         <input type="text" id="mobile_number" name="mobile_number"
                             value="{{ old('mobile_number') ? ltrim(str_replace('+880','',old('mobile_number')),'0') : '' }}"
                             placeholder="1XXXXXXXXX"
                             maxlength="10"
-                            style="border:none; outline:none; padding:10px 12px; flex:1; font-size:14px;"
+                            class="phone-input"
                             oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                     </div>
-                    <small style="color:#7f8c8d; font-size:12px; margin-top:4px; display:block;">Enter your number after +880 (e.g. 1712345678)</small>
+                    <small class="phone-hint">Enter your number after +880 (e.g. 1712345678)</small>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -93,16 +93,16 @@
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone</label>
-                    <div style="display:flex; align-items:center; border:1px solid #ddd; border-radius:6px; overflow:hidden; background:white;">
-                        <span style="padding:10px 12px; background:#f3f4f6; color:#374151; font-weight:600; font-size:14px; border-right:1px solid #ddd; white-space:nowrap;">+880</span>
+                    <div class="phone-input-wrapper">
+                        <span class="phone-prefix">+880</span>
                         <input type="text" id="phone" name="phone"
                             value="{{ old('phone') ? ltrim(str_replace('+880','',old('phone')),'0') : '' }}"
                             placeholder="1XXXXXXXXX"
                             maxlength="10"
-                            style="border:none; outline:none; padding:10px 12px; flex:1; font-size:14px;"
+                            class="phone-input"
                             oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                     </div>
-                    <small style="color:#7f8c8d; font-size:12px; margin-top:4px; display:block;">Enter your number after +880 (e.g. 1712345678)</small>
+                    <small class="phone-hint">Enter your number after +880 (e.g. 1712345678)</small>
                 </div>
                 <div class="form-group">
                     <label for="address">Address</label>
@@ -349,6 +349,48 @@
 /* Animated fields */
 .animated-fields {
     transition: opacity 0.2s;
+}
+
+/* Phone input with +880 prefix */
+.phone-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+.phone-input-wrapper:focus-within {
+    border-color: #0d5c63;
+    box-shadow: 0 0 0 3px rgba(13, 92, 99, 0.08);
+}
+.phone-prefix {
+    padding: 11px 14px;
+    background: #f0f4f8;
+    color: #1a2e3b;
+    font-weight: 700;
+    font-size: 15px;
+    border-right: 1.5px solid #ddd;
+    white-space: nowrap;
+    user-select: none;
+    letter-spacing: 0.5px;
+}
+.phone-input {
+    border: none !important;
+    outline: none !important;
+    padding: 11px 12px;
+    flex: 1;
+    font-size: 14px;
+    background: transparent;
+    width: 100%;
+    box-shadow: none !important;
+}
+.phone-hint {
+    color: #7f8c8d;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
 }
 
 </style>
