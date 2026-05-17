@@ -862,13 +862,13 @@
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
                                             class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-shopping-cart"></i> Quick Add
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
                                         </button>
-                                        <button
-                                            onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-teal-700 to-teal-800 text-white font-semibold hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-bolt"></i> Buy Now
-                                        </button>
+                                        <a href="{{ route('product.show', $product->id) }}#advance"
+                                            onclick="event.stopPropagation();"
+                                            class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2">
+                                            <i class="fas fa-money-check-alt"></i> Pay Advance
+                                        </a>
                                     </div>
                                     <div class="p-4">
                                         <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
@@ -958,13 +958,13 @@
                                         <button
                                             onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
                                             class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-shopping-cart"></i> Quick Add
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
                                         </button>
-                                        <button
-                                            onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-teal-700 to-teal-800 text-white font-semibold hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-bolt"></i> Buy Now
-                                        </button>
+                                        <a href="{{ route('product.show', $product->id) }}#advance"
+                                            onclick="event.stopPropagation();"
+                                            class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2">
+                                            <i class="fas fa-money-check-alt"></i> Pay Advance
+                                        </a>
                                     </div>
                                     <div class="p-4">
                                         <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
