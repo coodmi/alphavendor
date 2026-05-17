@@ -831,8 +831,8 @@
                     @if($wholesalerProducts->count() > 0)
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             @foreach($wholesalerProducts as $product)
-                                <a href="{{ route('product.show', $product->id) }}"
-                                    class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100 block">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col">
+                                    <a href="{{ route('product.show', $product->id) }}" class="block">
                                     <div class="relative overflow-hidden">
                                         @php
                                             $imageUrl = $product->image
@@ -846,53 +846,40 @@
                                                 Min: {{ $product->minimum_order }} pcs
                                             </span>
                                         @endif
-                                        <div
-                                            class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
-                                                <i class="far fa-heart text-sm"></i>
-                                            </span>
-                                            <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
-                                                <i class="far fa-eye text-sm"></i>
-                                            </span>
-                                        </div>
                                     </div>
-                                    <div class="flex gap-1">
-                                        <button
-                                            onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                                        </button>
-                                        <a href="{{ route('product.show', $product->id) }}#advance"
-                                            onclick="event.stopPropagation();"
-                                            class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-money-check-alt"></i> Pay Advance
-                                        </a>
-                                    </div>
-                                    <div class="p-4">
+                                    <div class="p-4 flex-1">
                                         <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
-                                                <i
-                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
+                                                <i class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <span class="text-xl font-bold text-teal-700"> {{ currency($product->price) }}</span>
+                                            <span class="text-xl font-bold text-teal-700">{{ currency($product->price) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
-                                                <span
-                                                    class="text-sm text-gray-400 line-through"> {{ currency($product->old_price) }}</span>
+                                                <span class="text-sm text-gray-400 line-through">{{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
                                         @if($product->supplier_location)
-                                            <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                                            <p class="text-xs text-gray-500 flex items-center gap-1">
                                                 <i class="fas fa-map-marker-alt"></i> {{ $product->supplier_location }}
                                             </p>
                                         @endif
                                     </div>
-                                </a>
+                                    </a>
+                                    <div class="flex gap-1 mt-auto">
+                                        <button
+                                            onclick="quickAddToCart({{ $product->id }}, this);"
+                                            class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2 text-sm">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </button>
+                                        <a href="{{ route('product.show', $product->id) }}#advance"
+                                            class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 text-sm text-center">
+                                            <i class="fas fa-money-check-alt"></i> Pay Advance
+                                        </a>
+                                    </div>
+                                </div>
                             @endforeach
                         </div>
                     @else
@@ -928,8 +915,8 @@
                     @if($exporterProducts->count() > 0)
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             @foreach($exporterProducts as $product)
-                                <a href="{{ route('product.show', $product->id) }}"
-                                    class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100 block">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col">
+                                    <a href="{{ route('product.show', $product->id) }}" class="block">
                                     <div class="relative overflow-hidden">
                                         @php
                                             $imageUrl = $product->image
@@ -938,57 +925,43 @@
                                         @endphp
                                         <img src="{{ $imageUrl }}" alt="{{ $product->name }}"
                                             class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500">
-                                        <span
-                                            class="absolute top-3 left-3 bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+                                        <span class="absolute top-3 left-3 bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
                                             <i class="fas fa-globe-americas"></i> Import Ready
                                         </span>
-                                        <div
-                                            class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
-                                                <i class="far fa-heart text-sm"></i>
-                                            </span>
-                                            <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
-                                                <i class="far fa-eye text-sm"></i>
-                                            </span>
-                                        </div>
                                     </div>
-                                    <div class="flex gap-1">
-                                        <button
-                                            onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                            class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                                        </button>
-                                        <a href="{{ route('product.show', $product->id) }}#advance"
-                                            onclick="event.stopPropagation();"
-                                            class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2">
-                                            <i class="fas fa-money-check-alt"></i> Pay Advance
-                                        </a>
-                                    </div>
-                                    <div class="p-4">
+                                    <div class="p-4 flex-1">
                                         <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
                                         <div class="flex items-center gap-1 mb-2">
                                             @for($i = 1; $i <= 5; $i++)
-                                                <i
-                                                    class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
+                                                <i class="fas fa-star text-xs {{ $i <= ($product->rating ?? 4) ? 'text-teal-500' : 'text-gray-300' }}"></i>
                                             @endfor
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <span class="text-xl font-bold text-teal-700"> {{ currency($product->price) }}</span>
+                                            <span class="text-xl font-bold text-teal-700">{{ currency($product->price) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
-                                                <span
-                                                    class="text-sm text-gray-400 line-through"> {{ currency($product->old_price) }}</span>
+                                                <span class="text-sm text-gray-400 line-through">{{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
                                         @if($product->supplier_location)
-                                            <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
+                                            <p class="text-xs text-gray-500 flex items-center gap-1">
                                                 <i class="fas fa-shipping-fast"></i> Ships from {{ $product->supplier_location }}
                                             </p>
                                         @endif
                                     </div>
-                                </a>
+                                    </a>
+                                    <div class="flex gap-1 mt-auto">
+                                        <button
+                                            onclick="quickAddToCart({{ $product->id }}, this);"
+                                            class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2 text-sm">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </button>
+                                        <a href="{{ route('product.show', $product->id) }}#advance"
+                                            class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 text-sm text-center">
+                                            <i class="fas fa-money-check-alt"></i> Pay Advance
+                                        </a>
+                                    </div>
+                                </div>
                             @endforeach
                         </div>
                     @else
