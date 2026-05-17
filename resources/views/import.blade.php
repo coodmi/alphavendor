@@ -304,13 +304,10 @@
                             </div>
                         </div>
                         <div class="flex gap-1">
-                            <button class="flex-1 bg-teal-600 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="quickAddToCart({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
-                                <i class="fas fa-shopping-cart"></i>
-                                Quick Add
-                            </button>
-                            <button class="flex-1 bg-teal-700 text-white py-3 font-semibold flex items-center justify-center gap-2" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this); event.preventDefault(); event.stopPropagation();">
-                                <i class="fas fa-bolt"></i>
-                                Buy Now
+                            <button class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 font-semibold flex items-center justify-center gap-2"
+                                onclick="window.location.href='{{ route('product.show', $product->id) }}'; event.preventDefault(); event.stopPropagation();">
+                                <i class="fas fa-money-check-alt"></i>
+                                Pay Advance
                             </button>
                         </div>
                         <div class="p-4">
