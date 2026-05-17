@@ -13,7 +13,7 @@
             <p class="text-gray-500 mt-1">Manage all products</p>
         </div>
         @if(auth()->user()->hasPermission('products.add'))
-        <a href="{{ route('admin.products.create') }}"
+        <a href="{{ route('admin.products') }}"
            class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors">
             <i class="fas fa-plus"></i> Add Product
         </a>
@@ -75,7 +75,7 @@
                         <td class="px-6 py-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 @if(auth()->user()->hasPermission('products.edit'))
-                                <a href="{{ route('admin.products.edit', $product) }}"
+                                <a href="{{ route('admin.products') }}?edit={{ $product->id }}"
                                    class="p-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
