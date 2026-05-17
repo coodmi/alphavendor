@@ -60,6 +60,8 @@ class EmployeeDashboardController extends Controller
      */
     public function products()
     {
+        $this->authorizePermission(['products.view', 'products.add', 'products.edit', 'products.delete', 'products.approve']);
+
         $products = Product::with(['vendor', 'category', 'brand'])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
@@ -72,6 +74,8 @@ class EmployeeDashboardController extends Controller
      */
     public function orders()
     {
+        $this->authorizePermission(['orders.view', 'orders.update_status', 'orders.cancel', 'orders.approve']);
+
         $orders = Order::with(['user', 'items.product'])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
@@ -84,8 +88,10 @@ class EmployeeDashboardController extends Controller
      */
     public function showOrder(Order $order)
     {
+        $this->authorizePermission(['orders.view', 'orders.update_status', 'orders.cancel', 'orders.approve']);
+
         $order->load(['user', 'items.product']);
-        
+
         return view('employee.orders.show', compact('order'));
     }
 
@@ -94,6 +100,8 @@ class EmployeeDashboardController extends Controller
      */
     public function updateOrderStatus(Request $request, Order $order)
     {
+        $this->authorizePermission(['orders.update_status']);
+
         $request->validate([
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
         ]);
@@ -120,6 +128,8 @@ class EmployeeDashboardController extends Controller
      */
     public function applications()
     {
+        $this->authorizePermission(['user_permissions.view', 'user_permissions.edit']);
+
         $applications = RoleApplication::with('user')
             ->orderBy('created_at', 'desc')
             ->paginate(20);
@@ -132,8 +142,10 @@ class EmployeeDashboardController extends Controller
      */
     public function showApplication(RoleApplication $application)
     {
+        $this->authorizePermission(['user_permissions.view', 'user_permissions.edit']);
+
         $application->load('user');
-        
+
         return view('employee.applications.show', compact('application'));
     }
 
@@ -142,6 +154,8 @@ class EmployeeDashboardController extends Controller
      */
     public function approveApplication(RoleApplication $application)
     {
+        $this->authorizePermission(['user_permissions.edit']);
+
         $application->update([
             'status' => 'approved',
             'reviewed_by' => auth()->id(),
@@ -169,6 +183,8 @@ class EmployeeDashboardController extends Controller
      */
     public function rejectApplication(Request $request, RoleApplication $application)
     {
+        $this->authorizePermission(['user_permissions.edit']);
+
         $request->validate([
             'rejection_reason' => 'nullable|string|max:500'
         ]);
@@ -184,7 +200,7 @@ class EmployeeDashboardController extends Controller
         Notification::create([
             'user_id' => $application->user_id,
             'title' => 'Role Application Rejected',
-            'message' => "Your application for {$application->requested_role} role has been rejected." . 
+            'message' => "Your application for {$application->requested_role} role has been rejected." .
                         ($request->rejection_reason ? " Reason: {$request->rejection_reason}" : ''),
             'type' => 'error'
         ]);
@@ -197,8 +213,10 @@ class EmployeeDashboardController extends Controller
      */
     public function users()
     {
+        $this->authorizePermission(['users.view', 'users.edit', 'users.block', 'users.add']);
+
         $users = User::where('role', '!=', 'admin')
-            ->where('id', '!=', auth()->id()) // Don't show current employee
+            ->where('id', '!=', auth()->id())
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
@@ -210,6 +228,8 @@ class EmployeeDashboardController extends Controller
      */
     public function updateUserStatus(Request $request, User $user)
     {
+        $this->authorizePermission(['users.block']);
+
         // Prevent employees from managing admins or other employees
         if ($user->role === 'admin' || ($user->role === 'employee' && $user->id !== auth()->id())) {
             abort(403, 'Unauthorized access.');
@@ -224,5 +244,17 @@ class EmployeeDashboardController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'User status updated successfully.');
+    }
+
+    /**
+     * Check if the current employee has any of the given permissions.
+     * Aborts with 403 if none match.
+     */
+    private function authorizePermission(array $permissions): void
+    {
+        $user = auth()->user();
+        if (!$user->hasAnyPermission($permissions)) {
+            abort(403, 'You do not have permission to access this page.');
+        }
     }
 }
