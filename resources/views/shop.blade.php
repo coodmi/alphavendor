@@ -1,355 +1,204 @@
 @extends('layouts.app')
 
-@section('title', 'Shop - AlphaVendor Multi Vendor Marketplace')
+@section('title', 'Shop - ' . ($siteSettings->site_name ?? 'AlphaVendor'))
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/shop-mobile.css') }}">
-<link rel="stylesheet" href="{{ asset('css/buy-now-button.css') }}">
+<link rel="stylesheet" href="{{ asset('css/shop.css') }}">
 @endpush
 
 @section('content')
-<!-- Breadcrumb -->
-{{-- <section class="breadcrumb-section">
-    <div class="container">
-        <nav class="breadcrumb">
-            <a href="{{ route('home') }}">Home</a>
-            <span class="separator">/</span>
-            <span>Shop</span>
-        </nav>
-    </div>
-</section> --}}
-
-<!-- Shop Section -->
 <section class="shop-section">
     <div class="container">
-        <!-- Mobile Filter Toggle Button -->
+        <!-- Mobile Filter Toggle -->
         <button class="mobile-filter-toggle" id="mobileFilterToggle">
-            <i class="fas fa-filter"></i>
-            Filters & Categories
+            <i class="fas fa-sliders-h"></i> Filters & Categories
         </button>
 
-        <!-- Filter Sidebar Overlay -->
-        <div class="filter-sidebar-overlay" id="filterSidebarOverlay"></div>
+        <!-- Filter Overlay -->
+        <div class="filter-sidebar-overlay" id="filterOverlay"></div>
 
         <div class="shop-wrapper">
-            <!-- Sidebar Filters -->
+            <!-- Sidebar -->
             <aside class="shop-sidebar" id="shopSidebar">
-                <!-- Mobile Filter Header -->
-                <div class="filter-sidebar-header" style="display: none;">
+                <div class="filter-sidebar-header">
                     <h3>Filters</h3>
-                    <button class="filter-close-btn" id="filterCloseBtn">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <button class="filter-close-btn" id="filterCloseBtn">&times;</button>
                 </div>
 
-                <!-- Categories Filter -->
+                <!-- Categories -->
                 <div class="filter-box">
                     <h3 class="filter-title">Categories</h3>
                     <ul class="filter-list">
-                        @forelse($categories as $category)
+                        @foreach($categories as $category)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="checkbox" class="category-checkbox" value="{{ $category->id }}"
-                                    {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}>
-                                <span>{{ $category->name }}</span>
+                                <div style="display:flex;align-items:center;">
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                        {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}>
+                                    <span>{{ $category->name }}</span>
+                                </div>
                                 <span class="count">({{ $category->products_count }})</span>
                             </label>
                         </li>
-                        @empty
-                        <li style="padding: 10px; color: #7f8c8d;">No categories available</li>
-                        @endforelse
+                        @endforeach
                     </ul>
                 </div>
 
-                <!-- Price Range Filter -->
+                <!-- Price Range -->
                 <div class="filter-box">
                     <h3 class="filter-title">Price Range</h3>
                     <div class="price-range-slider">
-                        <input type="range" min="0" max="10000" value="{{ request('min_price', 0) }}" class="range-min">
-                        <input type="range" min="0" max="10000" value="{{ request('max_price', 10000) }}" class="range-max">
+                        <input type="range" id="priceMin" min="0" max="10000" value="{{ request('min_price', 0) }}">
+                        <input type="range" id="priceMax" min="0" max="10000" value="{{ request('max_price', 10000) }}">
                     </div>
                     <div class="price-inputs">
                         <div class="price-input">
                             <label>Min</label>
-                            <input type="number" class="min-price-input" value="{{ request('min_price', 0) }}" min="0" max="10000">
+                            <input type="number" id="minPriceInput" name="min_price" value="{{ request('min_price', 0) }}">
                         </div>
                         <div class="price-input">
                             <label>Max</label>
-                            <input type="number" class="max-price-input" value="{{ request('max_price', 10000) }}" min="0" max="10000">
+                            <input type="number" id="maxPriceInput" name="max_price" value="{{ request('max_price', 10000) }}">
                         </div>
                     </div>
-                    <button type="button" class="btn-apply-filter">Apply Filter</button>
+                    <button class="btn-apply-filter" id="applyPriceFilter">Apply Filter</button>
                 </div>
 
-                <!-- Brands Filter -->
+                <!-- Brands -->
                 <div class="filter-box">
                     <h3 class="filter-title">Brands</h3>
                     <div class="search-filter">
-                        <input type="text" placeholder="Search brands..." class="brand-search-input">
+                        <input type="text" id="brandSearch" placeholder="Search brands...">
                     </div>
-                    <ul class="filter-list brand-filter-list">
-                        @forelse($brands ?? [] as $brand)
-                        <li style="{{ $loop->index >= 5 ? 'display: none;' : '' }}" class="brand-filter-item" data-brand-name="{{ strtolower($brand->name) }}">
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="brand-checkbox" value="{{ $brand->id }}"
-                                    {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
-                                <span>{{ $brand->name }}</span>
-                            </label>
-                        </li>
-                        @empty
-                        <li style="padding: 10px; color: #7f8c8d;">No brands available</li>
-                        @endforelse
-                    </ul>
-                    @if(isset($brands) && $brands->count() > 5)
-                    <button class="show-more-btn">Show More +</button>
-                    @endif
-                </div>
-
-                <!-- Rating Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Rating</h3>
-                    <ul class="filter-list rating-filter">
+                    @if($brands->count() > 0)
+                    <ul class="filter-list" id="brandList">
+                        @foreach($brands as $brand)
                         <li>
                             <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="5"
-                                    {{ request('min_rating') == 5 ? 'checked' : '' }}>
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="4"
-                                    {{ request('min_rating') == 4 ? 'checked' : '' }}>
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                <span>& Up</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="radio" name="rating" class="rating-checkbox" value="3"
-                                    {{ request('min_rating') == 3 ? 'checked' : '' }}>
-                                <span class="rating-stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                <span>& Up</span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Vendor Type Filter -->
-                <div class="filter-box">
-                    <h3 class="filter-title">Vendor Type</h3>
-                    <ul class="filter-list">
-                        @php
-                            $vendorTypeLabels = ['retailer' => 'Retail', 'wholesaler' => 'Wholesale', 'exporter' => 'Import'];
-                        @endphp
-                        @foreach(['retailer', 'wholesaler', 'exporter'] as $type)
-                        @php
-                            $vendorType = isset($vendorTypes) ? $vendorTypes->firstWhere('role', $type) : null;
-                            $count = $vendorType ? $vendorType->products_count : 0;
-                        @endphp
-                        <li>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="vendor-type-checkbox" value="{{ $type }}"
-                                    {{ in_array($type, request('vendor_types', [])) ? 'checked' : '' }}>
-                                <span>{{ $vendorTypeLabels[$type] }}</span>
-                                <span class="count">({{ $count }})</span>
+                                <div style="display:flex;align-items:center;">
+                                    <input type="checkbox" name="brands[]" value="{{ $brand->id }}"
+                                        {{ in_array($brand->id, request('brands', [])) ? 'checked' : '' }}>
+                                    <span>{{ $brand->name }}</span>
+                                </div>
+                                <span class="count">({{ $brand->products_count }})</span>
                             </label>
                         </li>
                         @endforeach
                     </ul>
+                    @else
+                    <p style="font-size:13px;color:#9ca3af;">No brands available</p>
+                    @endif
                 </div>
 
-                <!-- Clear All Filters -->
-                <button class="btn-clear-filters">
+                <!-- Rating -->
+                <div class="filter-box">
+                    <h3 class="filter-title">Rating</h3>
+                    <ul class="filter-list rating-filter">
+                        @for($i = 5; $i >= 1; $i--)
+                        <li>
+                            <label class="filter-checkbox">
+                                <div style="display:flex;align-items:center;">
+                                    <input type="radio" name="min_rating" value="{{ $i }}"
+                                        {{ request('min_rating') == $i ? 'checked' : '' }}
+                                        style="margin-right:10px;width:16px;height:16px;accent-color:var(--primary-color,#0d5c63);">
+                                    <span class="rating-stars">
+                                        @for($s = 1; $s <= 5; $s++)
+                                            <i class="fa{{ $s <= $i ? 's' : 'r' }} fa-star"></i>
+                                        @endfor
+                                        & Up
+                                    </span>
+                                </div>
+                            </label>
+                        </li>
+                        @endfor
+                    </ul>
+                </div>
+
+                <!-- Clear Filters -->
+                <a href="{{ route('shop') }}" class="btn-clear-filters">
                     <i class="fas fa-times"></i> Clear All Filters
-                </button>
+                </a>
             </aside>
 
-            <!-- Products Area -->
+            <!-- Main Content -->
             <div class="shop-content">
                 <!-- Toolbar -->
                 <div class="shop-toolbar">
                     <div class="toolbar-left">
-                        <p class="results-count">Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> results</p>
+                        <p class="results-count">
+                            Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> products
+                        </p>
                     </div>
                     <div class="toolbar-right">
                         <div class="view-mode">
-                            <button class="view-btn active" data-view="grid">
-                                <i class="fas fa-th"></i>
-                            </button>
-                            <button class="view-btn" data-view="list">
-                                <i class="fas fa-list"></i>
-                            </button>
+                            <button class="view-btn active" data-view="grid" title="Grid View"><i class="fas fa-th"></i></button>
+                            <button class="view-btn" data-view="list" title="List View"><i class="fas fa-list"></i></button>
                         </div>
                         <div class="sort-dropdown">
-                            <select>
-                                <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Sort by: Default</option>
+                            <select id="sortSelect">
+                                <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Default</option>
+                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest</option>
                                 <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                                 <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
-                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Best Rating</option>
-                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
+                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Top Rated</option>
+                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Popular</option>
                             </select>
                         </div>
                         <div class="per-page-dropdown">
-                            <select>
-                                <option value="16" {{ request('per_page', 16) == 16 ? 'selected' : '' }}>Show: 16</option>
-                                <option value="24" {{ request('per_page', 16) == 24 ? 'selected' : '' }}>Show: 24</option>
-                                <option value="36" {{ request('per_page', 16) == 36 ? 'selected' : '' }}>Show: 36</option>
-                                <option value="48" {{ request('per_page', 16) == 48 ? 'selected' : '' }}>Show: 48</option>
+                            <select id="perPageSelect">
+                                <option value="12" {{ request('per_page') == 12 ? 'selected' : '' }}>12</option>
+                                <option value="24" {{ request('per_page') == 24 ? 'selected' : '' }}>24</option>
+                                <option value="48" {{ request('per_page') == 48 ? 'selected' : '' }}>48</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Active Filters Tags -->
-                @if(request()->hasAny(['categories', 'brands', 'min_price', 'max_price', 'min_rating', 'vendor_types']))
-                <div class="active-filters">
-                    @if(request('categories'))
-                        @foreach(request('categories') as $categoryId)
-                            @php
-                                $category = $categories->firstWhere('id', $categoryId);
-                            @endphp
-                            @if($category)
-                            <span class="filter-tag" data-filter-type="category" data-filter-value="{{ $categoryId }}">
-                                {{ $category->name }}
-                                <button class="remove-filter"><i class="fas fa-times"></i></button>
-                            </span>
-                            @endif
-                        @endforeach
-                    @endif
-
-                    @if(request('min_price') || request('max_price'))
-                    <span class="filter-tag">
-                        Price: {{ currency_symbol() }}{{ request('min_price', 0) }} - {{ currency_symbol() }}{{ request('max_price', 10000) }}
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
-                    @endif
-
-                    @if(request('brands'))
-                        @foreach(request('brands') as $brand)
-                        <span class="filter-tag" data-filter-type="brand" data-filter-value="{{ $brand }}">
-                            {{ $brand }}
-                            <button class="remove-filter"><i class="fas fa-times"></i></button>
-                        </span>
-                        @endforeach
-                    @endif
-
-                    @if(request('min_rating'))
-                    <span class="filter-tag">
-                        {{ request('min_rating') }}+ Stars
-                        <button class="remove-filter"><i class="fas fa-times"></i></button>
-                    </span>
-                    @endif
-
-                    @if(request('vendor_types'))
-                        @foreach(request('vendor_types') as $type)
-                        <span class="filter-tag" data-filter-type="vendor_type" data-filter-value="{{ $type }}">
-                            {{ ucfirst($type) }}
-                            <button class="remove-filter"><i class="fas fa-times"></i></button>
-                        </span>
-                        @endforeach
-                    @endif
-                </div>
-                @endif
-
                 <!-- Products Grid -->
-                <div class="products-grid-view">
+                <div class="products-grid-view" id="productsGrid">
                     @forelse($products as $product)
                     <div class="product-card">
-                        <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ route('product.show', $product->id) }}" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;">
                             <div class="product-image">
-                                @if($product->image)
-                                    <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
-                                @else
-                                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="{{ $product->name }}">
-                                @endif
+                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/placeholder.png') }}" alt="{{ $product->name }}" loading="lazy">
                                 @if($product->badge)
                                 <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
+                                @elseif($product->old_price && $product->old_price > $product->price)
+                                <span class="badge sale">
+                                    -{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%
+                                </span>
                                 @endif
                             </div>
                             <div class="product-info">
-                                <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                                <span class="product-category">{{ $product->category->name ?? '' }}</span>
                                 <h4>{{ $product->name }}</h4>
                                 <div class="vendor-name">
-                                    <i class="fas fa-store"></i> {{ $product->vendor->name ?? 'AlphaVendor' }}
+                                    <i class="fas fa-store"></i>
+                                    {{ $product->vendor->name ?? 'Unknown' }}
                                 </div>
                                 <div class="rating">
-                                    @for($i = 0; $i < 5; $i++)
-                                        @if($i < floor($product->rating))
-                                            <i class="fas fa-star"></i>
-                                        @elseif($i < $product->rating)
-                                            <i class="fas fa-star-half-alt"></i>
-                                        @else
-                                            <i class="far fa-star"></i>
-                                        @endif
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="fa{{ $i <= round($product->rating) ? 's' : 'r' }} fa-star"></i>
                                     @endfor
                                     <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                                 </div>
                                 <div class="price">
-                                    <span class="current-price"> {{ currency($product->price) }}</span>
-                                    @if($product->old_price)
-                                        <span class="old-price"> {{ currency($product->old_price) }}</span>
-                                        <span class="discount">-{{ $product->discount_percentage }}%</span>
+                                    <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                    @if($product->old_price && $product->old_price > $product->price)
+                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
                                     @endif
                                 </div>
                             </div>
                         </a>
-                        <div style="display: flex; gap: 8px; padding: 0 15px 15px;">
-                            @if(in_array($product->vendor->role ?? '', ['wholesaler', 'exporter']))
-                                {{-- Wholesaler / Importer: Add to Cart + Pay Advance --}}
-                                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="quick-add-form" style="flex: 1;">
-                                    @csrf
-                                    <input type="hidden" name="quantity" value="{{ $product->minimum_order ?? 1 }}">
-                                    <button type="submit" class="quick-add-btn" style="width:100%; position:static; transform:none; background:#0d9488;">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        Add to Cart
-                                    </button>
-                                </form>
-                                <a href="{{ route('product.show', $product->id) }}" class="buy-now-btn" style="flex:1; display:flex; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg,#3b82f6,#6366f1); color:#fff; font-weight:600; text-decoration:none; padding:10px; border-radius:4px; font-size:13px;">
-                                    <i class="fas fa-money-check-alt"></i>
-                                    Pay Advance
-                                </a>
-                            @else
-                                {{-- Retailer: Quick Add (hover) + Buy Now --}}
-                                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="quick-add-form" style="flex: 1;">
-                                    @csrf
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="quick-add-btn" style="width: 100%;">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        Quick Add
-                                    </button>
-                                </form>
-                                <button class="buy-now-btn" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this);" style="flex: 1;">
-                                    <i class="fas fa-bolt"></i>
-                                    Buy Now
-                                </button>
-                            @endif
-                        </div>
+                        <button class="quick-add-btn" onclick="event.preventDefault(); addToCart({{ $product->id }})">
+                            <i class="fas fa-cart-plus"></i> Buy Now
+                        </button>
                     </div>
                     @empty
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                        <i class="fas fa-box-open" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
-                        <h3 style="color: #2c3e50; margin-bottom: 10px;">No Products Found</h3>
-                        <p style="color: #7f8c8d;">Check back later for new products!</p>
+                    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+                        <i class="fas fa-box-open" style="font-size:48px;color:#d1d5db;margin-bottom:16px;"></i>
+                        <h3 style="font-size:18px;color:#6b7280;margin-bottom:8px;">No products found</h3>
+                        <p style="color:#9ca3af;">Try adjusting your filters or search criteria.</p>
                     </div>
                     @endforelse
                 </div>
@@ -357,7 +206,35 @@
                 <!-- Pagination -->
                 @if($products->hasPages())
                 <div class="pagination-wrapper">
-                    {{ $products->links('vendor.pagination.custom') }}
+                    <div class="pagination-container">
+                        <p class="pagination-info">
+                            Showing <strong>{{ $products->firstItem() }}</strong> to <strong>{{ $products->lastItem() }}</strong> of <strong>{{ $products->total() }}</strong> results
+                        </p>
+                        <ul class="pagination-list">
+                            {{-- Previous --}}
+                            <li class="pagination-item">
+                                @if($products->onFirstPage())
+                                <span class="pagination-link disabled">&laquo;</span>
+                                @else
+                                <a href="{{ $products->previousPageUrl() }}" class="pagination-link">&laquo;</a>
+                                @endif
+                            </li>
+                            {{-- Pages --}}
+                            @foreach($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                            <li class="pagination-item">
+                                <a href="{{ $url }}" class="pagination-link {{ $page == $products->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                            </li>
+                            @endforeach
+                            {{-- Next --}}
+                            <li class="pagination-item">
+                                @if($products->hasMorePages())
+                                <a href="{{ $products->nextPageUrl() }}" class="pagination-link">&raquo;</a>
+                                @else
+                                <span class="pagination-link disabled">&raquo;</span>
+                                @endif
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 @endif
             </div>
@@ -368,507 +245,135 @@
 
 @push('scripts')
 <script>
-// Price Range Slider - Immediate Execution
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - Initializing price range');
+    const sidebar = document.getElementById('shopSidebar');
+    const overlay = document.getElementById('filterOverlay');
+    const toggleBtn = document.getElementById('mobileFilterToggle');
+    const closeBtn = document.getElementById('filterCloseBtn');
 
-    const rangeMin = document.querySelector(".range-min");
-    const rangeMax = document.querySelector(".range-max");
-    const minPriceInput = document.querySelector('.min-price-input');
-    const maxPriceInput = document.querySelector('.max-price-input');
-
-    console.log('Elements:', {rangeMin, rangeMax, minPriceInput, maxPriceInput});
-
-    if (!rangeMin || !rangeMax || !minPriceInput || !maxPriceInput) {
-        console.error('Price range elements not found!');
-        return;
-    }
-
-    console.log('All price range elements found successfully');
-
-    // Update min slider
-    rangeMin.addEventListener('input', function() {
-        let min = parseInt(this.value);
-        let max = parseInt(rangeMax.value);
-
-        console.log('Min slider moved:', min);
-
-        if (min > max - 100) {
-            min = max - 100;
-            this.value = min;
-        }
-
-        minPriceInput.value = min;
-        console.log('Updated min input to:', minPriceInput.value);
-    });
-
-    // Update max slider
-    rangeMax.addEventListener('input', function() {
-        let min = parseInt(rangeMin.value);
-        let max = parseInt(this.value);
-
-        console.log('Max slider moved:', max);
-
-        if (max < min + 100) {
-            max = min + 100;
-            this.value = max;
-        }
-
-        maxPriceInput.value = max;
-        console.log('Updated max input to:', maxPriceInput.value);
-    });
-
-    // Update min input
-    minPriceInput.addEventListener('input', function() {
-        let min = parseInt(this.value) || 0;
-        let max = parseInt(maxPriceInput.value) || 10000;
-
-        console.log('Min input changed:', min);
-
-        if (min < 0) {
-            min = 0;
-            this.value = min;
-        }
-        if (min > max - 100) {
-            min = max - 100;
-            this.value = min;
-        }
-
-        rangeMin.value = min;
-        console.log('Updated min slider to:', rangeMin.value);
-    });
-
-    // Update max input
-    maxPriceInput.addEventListener('input', function() {
-        let min = parseInt(minPriceInput.value) || 0;
-        let max = parseInt(this.value) || 10000;
-
-        console.log('Max input changed:', max);
-
-        if (max > 10000) {
-            max = 10000;
-            this.value = max;
-        }
-        if (max < min + 100) {
-            max = min + 100;
-            this.value = max;
-        }
-
-        rangeMax.value = max;
-        console.log('Updated max slider to:', rangeMax.value);
-    });
-
-    console.log('Price range event listeners attached successfully');
-
-    // Filter application function
-    function triggerFilterApplication() {
-        const params = new URLSearchParams(window.location.search);
-
-        const minVal = parseInt(minPriceInput.value) || 0;
-        const maxVal = parseInt(maxPriceInput.value) || 10000;
-
-        params.delete('min_price');
-        params.delete('max_price');
-
-        if (minVal > 0) {
-            params.set('min_price', minVal);
-        }
-        if (maxVal < 10000) {
-            params.set('max_price', maxVal);
-        }
-
-        const newUrl = window.location.pathname + '?' + params.toString();
-        console.log('Navigating to:', newUrl);
-        window.location.href = newUrl;
-    }
-
-    // Apply Filter Button Handler
-    function attachApplyFilterHandler() {
-        const btn = document.querySelector('.btn-apply-filter');
-        if (btn) {
-            console.log('Apply Filter button found');
-            btn.onclick = function(e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                console.log('Apply Filter clicked! Min:', minPriceInput.value, 'Max:', maxPriceInput.value);
-                triggerFilterApplication();
-                return false;
-            };
-            console.log('Apply Filter handler attached');
-        } else {
-            console.error('Apply Filter button NOT found!');
-        }
-    }
-
-    // Attach handler immediately and after short delay
-    attachApplyFilterHandler();
-    setTimeout(attachApplyFilterHandler, 500);
-
-    // Quick Add to Cart functionality
-    document.querySelectorAll('.quick-add-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const button = this.querySelector('.quick-add-btn');
-            const originalContent = button.innerHTML;
-
-            // Disable button and show loading
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
-
-            const formData = new FormData(this);
-
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success state
-                    button.innerHTML = '<i class="fas fa-check"></i> Added!';
-                    button.style.background = '#27ae60';
-
-                    // Show notification
-                    showNotification('Product added to cart!', 'success');
-
-                    // Update cart badge
-                    updateCartBadge(data.cartCount);
-
-                    // Reset button after 2 seconds
-                    setTimeout(() => {
-                        button.disabled = false;
-                        button.innerHTML = originalContent;
-                        button.style.background = '';
-                    }, 2000);
-                } else {
-                    throw new Error(data.message || 'Failed to add product');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                button.disabled = false;
-                button.innerHTML = originalContent;
-                showNotification('Failed to add product to cart', 'error');
-            });
-        });
-    });
-
-    // Update cart badge
-    function updateCartBadge(count) {
-        const badge = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement.querySelector('span');
-        if (count > 0) {
-            if (badge) {
-                badge.textContent = count;
-            } else {
-                const cartLink = document.querySelector('.action-link .fas.fa-shopping-bag').parentElement;
-                const newBadge = document.createElement('span');
-                newBadge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #0d5c63; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
-                newBadge.textContent = count;
-                cartLink.appendChild(newBadge);
-            }
-        }
-    }
-
-    // Notification function
-    function showNotification(message, type = 'success') {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
-            color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 10000;
-            font-weight: 600;
-            animation: slideIn 0.3s ease;
-        `;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
-
-    // Add animation styles
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-});
-
-// Wishlist functionality - Define in global scope
-window.toggleWishlist = function(productId, button) {
-    console.log('toggleWishlist called with productId:', productId);
-    
-    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-    
-    if (!isAuthenticated) {
-        console.log('User not authenticated, redirecting to login');
-        window.location.href = '{{ route("login") }}';
-        return;
-    }
-
-    const icon = button.querySelector('i');
-    const originalClass = icon.className;
-    
-    console.log('Starting wishlist toggle...');
-    
-    // Show loading state
-    button.disabled = true;
-    icon.className = 'fas fa-spinner fa-spin';
-
-    fetch('/wishlist/toggle/' + productId, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        return response.json();
-    })
-    .then(data => {
-        console.log('Response data:', data);
-        
-        if (data.success) {
-            // Update icon based on wishlist status
-            if (data.inWishlist) {
-                icon.className = 'fas fa-heart';
-                button.style.color = '#e74c3c';
-            } else {
-                icon.className = 'far fa-heart';
-                button.style.color = '';
-            }
-            
-            // Update wishlist count in header if element exists
-            updateWishlistCount(data.wishlistCount);
-            
-            // Show toast notification
-            showToast(data.message, 'success');
-        } else {
-            icon.className = originalClass;
-            showToast(data.message || 'Failed to update wishlist', 'error');
-        }
-        button.disabled = false;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        icon.className = originalClass;
-        button.disabled = false;
-        showToast('Failed to update wishlist', 'error');
-    });
-};
-
-window.updateWishlistCount = function(count) {
-    console.log('Updating wishlist count to:', count);
-    // Update count in header
-    const headerWishlist = document.querySelector('.header-actions a[href*="wishlist"]');
-    if (headerWishlist) {
-        let badge = headerWishlist.querySelector('span');
-        if (count > 0) {
-            if (!badge) {
-                badge = document.createElement('span');
-                badge.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;';
-                headerWishlist.appendChild(badge);
-            }
-            badge.textContent = count;
-        } else if (badge) {
-            badge.remove();
-        }
-    }
-};
-
-window.showToast = function(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'};
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        animation: slideIn 0.3s ease-out;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 14px;
-        font-weight: 500;
-    `;
-    
-    const icon = type === 'success' 
-        ? '<i class="fas fa-check-circle" style="font-size: 20px;"></i>'
-        : '<i class="fas fa-exclamation-circle" style="font-size: 20px;"></i>';
-    
-    toast.innerHTML = `${icon}<span>${message}</span>`;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease-in';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-};
-
-console.log('Wishlist functions loaded');
-
-// Check wishlist status on page load for authenticated users
-@if(auth()->check())
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Checking wishlist status for products...');
-    const wishlistButtons = document.querySelectorAll('.wishlist-btn');
-    console.log('Found wishlist buttons:', wishlistButtons.length);
-    
-    wishlistButtons.forEach(button => {
-        const productId = button.dataset.productId;
-        if (productId) {
-            fetch('/wishlist/check/' + productId, {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.inWishlist) {
-                    const icon = button.querySelector('i');
-                    icon.className = 'fas fa-heart';
-                    button.style.color = '#e74c3c';
-                }
-            })
-            .catch(error => console.error('Error checking wishlist:', error));
-        }
-    });
-});
-@endif
-</script>
-
-<script>
-// Mobile Filter Toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
-    const shopSidebar = document.getElementById('shopSidebar');
-    const filterSidebarOverlay = document.getElementById('filterSidebarOverlay');
-    const filterCloseBtn = document.getElementById('filterCloseBtn');
-    const filterHeader = document.querySelector('.filter-sidebar-header');
-
-    // Show filter header on mobile
-    function updateFilterHeader() {
-        if (window.innerWidth <= 1024 && filterHeader) {
-            filterHeader.style.display = 'flex';
-        } else if (filterHeader) {
-            filterHeader.style.display = 'none';
-        }
-    }
-
-    updateFilterHeader();
-    window.addEventListener('resize', updateFilterHeader);
-
-    function openFilters() {
-        shopSidebar.classList.add('active');
-        filterSidebarOverlay.style.display = 'block';
-        setTimeout(() => filterSidebarOverlay.classList.add('active'), 10);
+    // Open/Close sidebar
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
-
-    function closeFilters() {
-        shopSidebar.classList.remove('active');
-        filterSidebarOverlay.classList.remove('active');
-        setTimeout(() => {
-            filterSidebarOverlay.style.display = 'none';
-        }, 300);
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
         document.body.style.overflow = '';
     }
 
-    if (mobileFilterToggle) {
-        mobileFilterToggle.addEventListener('click', openFilters);
+    if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (overlay) overlay.addEventListener('click', closeSidebar);
+
+    // Sort & Per Page
+    const sortSelect = document.getElementById('sortSelect');
+    const perPageSelect = document.getElementById('perPageSelect');
+
+    function updateURL(key, value) {
+        const url = new URL(window.location);
+        url.searchParams.set(key, value);
+        url.searchParams.delete('page');
+        window.location = url;
     }
 
-    if (filterCloseBtn) {
-        filterCloseBtn.addEventListener('click', closeFilters);
+    if (sortSelect) sortSelect.addEventListener('change', () => updateURL('sort', sortSelect.value));
+    if (perPageSelect) perPageSelect.addEventListener('change', () => updateURL('per_page', perPageSelect.value));
+
+    // Category & Brand checkboxes
+    document.querySelectorAll('input[name="categories[]"], input[name="brands[]"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+            const url = new URL(window.location);
+            const name = this.name;
+            url.searchParams.delete(name);
+            document.querySelectorAll(`input[name="${name}"]:checked`).forEach(checked => {
+                url.searchParams.append(name, checked.value);
+            });
+            url.searchParams.delete('page');
+            window.location = url;
+        });
+    });
+
+    // Rating radio
+    document.querySelectorAll('input[name="min_rating"]').forEach(r => {
+        r.addEventListener('change', function() {
+            updateURL('min_rating', this.value);
+        });
+    });
+
+    // Price filter
+    const applyPriceBtn = document.getElementById('applyPriceFilter');
+    if (applyPriceBtn) {
+        applyPriceBtn.addEventListener('click', function() {
+            const url = new URL(window.location);
+            url.searchParams.set('min_price', document.getElementById('minPriceInput').value);
+            url.searchParams.set('max_price', document.getElementById('maxPriceInput').value);
+            url.searchParams.delete('page');
+            window.location = url;
+        });
     }
 
-    if (filterSidebarOverlay) {
-        filterSidebarOverlay.addEventListener('click', closeFilters);
+    // Sync range sliders with inputs
+    const priceMin = document.getElementById('priceMin');
+    const priceMax = document.getElementById('priceMax');
+    const minInput = document.getElementById('minPriceInput');
+    const maxInput = document.getElementById('maxPriceInput');
+
+    if (priceMin && minInput) {
+        priceMin.addEventListener('input', () => minInput.value = priceMin.value);
+        minInput.addEventListener('input', () => priceMin.value = minInput.value);
+    }
+    if (priceMax && maxInput) {
+        priceMax.addEventListener('input', () => maxInput.value = priceMax.value);
+        maxInput.addEventListener('input', () => priceMax.value = maxInput.value);
     }
 
-    // Close filters when applying filter
-    const applyFilterBtn = document.querySelector('.btn-apply-filter');
-    if (applyFilterBtn) {
-        applyFilterBtn.addEventListener('click', function() {
-            if (window.innerWidth <= 1024) {
-                setTimeout(closeFilters, 300);
+    // View mode toggle
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const grid = document.getElementById('productsGrid');
+            if (this.dataset.view === 'list') {
+                grid.classList.add('list-view');
+            } else {
+                grid.classList.remove('list-view');
             }
+        });
+    });
+
+    // Brand search
+    const brandSearch = document.getElementById('brandSearch');
+    if (brandSearch) {
+        brandSearch.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('#brandList li').forEach(li => {
+                const text = li.textContent.toLowerCase();
+                li.style.display = text.includes(query) ? '' : 'none';
+            });
         });
     }
 });
 
-// Buy Now function
-function buyNow(productId, button) {
-    const originalContent = button.innerHTML;
-    button.disabled = true;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-    fetch('/cart/buy-now', {
+function addToCart(productId) {
+    fetch('/cart/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
-        body: JSON.stringify({ 
-            product_id: productId,
-            quantity: 1 
-        })
+        body: JSON.stringify({ product_id: productId, quantity: 1 })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-        if (data.success) {
-            window.location.href = '/checkout';
-        } else {
-            throw new Error(data.message || 'Failed to process');
+        if (data.success || data.message) {
+            window.location.href = '/cart';
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        button.disabled = false;
-        button.innerHTML = originalContent;
-        showNotification('Failed to process order', 'error');
+    .catch(() => {
+        window.location.href = '/product/' + productId;
     });
 }
 </script>
-
-<script src="{{ asset('js/shop.js') }}"></script>
 @endpush
