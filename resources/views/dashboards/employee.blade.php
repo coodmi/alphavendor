@@ -17,6 +17,13 @@
         </div>
     </div>
 
+    @if(session('error'))
+    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-3">
+        <i class="fas fa-lock text-red-500 text-lg"></i>
+        <span>{{ session('error') }}</span>
+    </div>
+    @endif
+
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-lg shadow-md p-6">

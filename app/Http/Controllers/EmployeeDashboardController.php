@@ -248,13 +248,14 @@ class EmployeeDashboardController extends Controller
 
     /**
      * Check if the current employee has any of the given permissions.
-     * Aborts with 403 if none match.
+     * Redirects to dashboard with error message if none match.
      */
     private function authorizePermission(array $permissions): void
     {
         $user = auth()->user();
         if (!$user->hasAnyPermission($permissions)) {
-            abort(403, 'You do not have permission to access this page.');
+            abort(redirect()->route('employee.dashboard')
+                ->with('error', 'You do not have permission to access this page.'));
         }
     }
 }
