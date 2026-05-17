@@ -198,34 +198,36 @@
                 <div class="flex flex-col gap-4 py-5">
 
                     @if(in_array($product->vendor->role ?? '', ['wholesaler', 'exporter']))
-                    {{-- ── Wholesaler / Importer: Only Pay Advance ── --}}
-                    <div class="flex items-center gap-2.5 mb-4">
-                        <label class="font-semibold text-gray-800">Quantity:</label>
-                        <div class="flex items-center border-2 border-gray-200 rounded-lg overflow-hidden">
-                            <button type="button" onclick="decreaseQuantity()" class="w-10 h-10 bg-gray-50 hover:bg-teal-600 hover:text-white transition-all duration-300 text-lg">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <input type="number" name="quantity" id="quantity" value="{{ request('quantity', $product->minimum_order ?? 1) }}" min="{{ $product->minimum_order ?? 1 }}" max="{{ $product->stock }}" readonly class="w-16 h-10 text-center border-none font-semibold text-base">
-                            <button type="button" onclick="increaseQuantity({{ $product->stock }})" class="w-10 h-10 bg-gray-50 hover:bg-teal-600 hover:text-white transition-all duration-300 text-lg">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
-                        <div class="flex items-center gap-3 mb-3">
-                            <i class="fas fa-hand-holding-usd text-blue-600 text-2xl"></i>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Advance Payment Required</h4>
-                                <p class="text-sm text-gray-600">এই পণ্যটি অর্ডার করতে হলে আগে অ্যাডভান্স পেমেন্ট করতে হবে।</p>
+                    {{-- ── Wholesaler / Importer: Add to Cart + Pay Advance (no Buy Now) ── --}}
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
+                        @csrf
+                        <div class="flex items-center gap-2.5 mb-4">
+                            <label class="font-semibold text-gray-800">Quantity:</label>
+                            <div class="flex items-center border-2 border-gray-200 rounded-lg overflow-hidden">
+                                <button type="button" onclick="decreaseQuantity()" class="w-10 h-10 bg-gray-50 hover:bg-teal-600 hover:text-white transition-all duration-300 text-lg">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" name="quantity" id="quantity" value="{{ request('quantity', $product->minimum_order ?? 1) }}" min="{{ $product->minimum_order ?? 1 }}" max="{{ $product->stock }}" readonly class="w-16 h-10 text-center border-none font-semibold text-base">
+                                <button type="button" onclick="increaseQuantity({{ $product->stock }})" class="w-10 h-10 bg-gray-50 hover:bg-teal-600 hover:text-white transition-all duration-300 text-lg">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
                         </div>
-                        <button type="button" onclick="openAdvancePaymentModal()"
-                            class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
-                            <i class="fas fa-money-check-alt"></i>
-                            Pay Advance to Order
-                        </button>
-                    </div>
+
+                        <div class="flex gap-4">
+                            <button type="submit" class="flex-1 px-8 py-4 bg-teal-600 text-white rounded-lg text-base font-semibold hover:bg-teal-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                            <button type="button" onclick="openAdvancePaymentModal()" class="flex-1 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg text-base font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2.5">
+                                <i class="fas fa-money-check-alt"></i>
+                                Pay Advance
+                            </button>
+                            <button type="button" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </form>
 
                     @else
                     {{-- ── Regular (Retailer) Product: Normal Buy Flow ── --}}
