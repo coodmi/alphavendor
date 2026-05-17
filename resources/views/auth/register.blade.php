@@ -93,7 +93,16 @@
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone</label>
-                    <input type="text" id="phone" name="phone" value="{{ old('phone') }}">
+                    <div style="display:flex; align-items:center; border:1px solid #ddd; border-radius:6px; overflow:hidden; background:white;">
+                        <span style="padding:10px 12px; background:#f3f4f6; color:#374151; font-weight:600; font-size:14px; border-right:1px solid #ddd; white-space:nowrap;">+880</span>
+                        <input type="text" id="phone" name="phone"
+                            value="{{ old('phone') ? ltrim(str_replace('+880','',old('phone')),'0') : '' }}"
+                            placeholder="1XXXXXXXXX"
+                            maxlength="10"
+                            style="border:none; outline:none; padding:10px 12px; flex:1; font-size:14px;"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                    </div>
+                    <small style="color:#7f8c8d; font-size:12px; margin-top:4px; display:block;">Enter your number after +880 (e.g. 1712345678)</small>
                 </div>
                 <div class="form-group">
                     <label for="address">Address</label>
