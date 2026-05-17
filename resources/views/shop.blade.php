@@ -203,7 +203,7 @@
                     <div class="product-card">
                         <a href="{{ route('product.show', $product->id) }}" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;">
                             <div class="product-image">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/placeholder.png') }}" alt="{{ $product->name }}" loading="lazy">
+                                <img src="{{ $product->image ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image)) : asset('images/placeholder.png') }}" alt="{{ $product->name }}" loading="lazy">
                                 <span class="feed-type-badge {{ $feedTypeClass }}">{{ $feedTypeLabel }}</span>
                                 @if($product->badge)
                                 <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
@@ -227,16 +227,29 @@
                                     <span>({{ number_format($product->rating, 1) }}) {{ $product->reviews_count }} reviews</span>
                                 </div>
                                 <div class="price">
-                                    <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                    <span class="current-price">{{ currency($product->price) }}</span>
                                     @if($product->old_price && $product->old_price > $product->price)
-                                    <span class="old-price">${{ number_format($product->old_price, 2) }}</span>
+                                    <span class="old-price">{{ currency($product->old_price) }}</span>
                                     @endif
                                 </div>
                             </div>
                         </a>
+                        @if(in_array($vendorRole, ['wholesaler', 'exporter']))
+                        {{-- Wholesale / Import: Add to Cart + Pay Advance --}}
+                        <div class="quick-add-btn-group" style="display:flex;gap:6px;padding:10px 12px 12px;">
+                            <button class="quick-add-btn" style="flex:1;font-size:12px;padding:9px 6px;" onclick="event.preventDefault(); addToCart({{ $product->id }})">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                            <a href="{{ route('product.show', $product->id) }}#advance" class="quick-add-btn" style="flex:1;font-size:12px;padding:9px 6px;background:linear-gradient(135deg,#3b82f6,#6366f1);text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;border-radius:8px;color:#fff;font-weight:600;">
+                                <i class="fas fa-money-check-alt"></i> Pay Advance
+                            </a>
+                        </div>
+                        @else
+                        {{-- Retail: Buy Now --}}
                         <button class="quick-add-btn" onclick="event.preventDefault(); addToCart({{ $product->id }})">
                             <i class="fas fa-cart-plus"></i> Buy Now
                         </button>
+                        @endif
                     </div>
                     @empty
                     <div style="grid-column:1/-1;text-align:center;padding:60px 20px;">

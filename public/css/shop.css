@@ -582,6 +582,17 @@
     opacity: 0.9;
 }
 
+/* Wholesale/Import dual button group */
+.quick-add-btn-group {
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+}
+
+.quick-add-btn-group .quick-add-btn {
+    border-radius: 8px;
+    width: auto;
+}
+
 /* Pagination */
 .pagination-wrapper {
     margin-top: 40px;

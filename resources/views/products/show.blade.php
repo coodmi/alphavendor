@@ -814,6 +814,15 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOMContentLoaded fired, loading reviews...');
         loadReviews();
+
+        // Auto-open advance payment modal if #advance hash is present
+        if (window.location.hash === '#advance') {
+            setTimeout(function() {
+                if (typeof openAdvancePaymentModal === 'function') {
+                    openAdvancePaymentModal();
+                }
+            }, 500);
+        }
         
         // Add event listeners for star rating
         const starButtons = document.querySelectorAll('.star-rating-btn');
