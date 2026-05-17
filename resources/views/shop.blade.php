@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Shop - ' . ($siteSettings->site_name ?? 'AlphaVendor'))
+@section('title', 'Product News Feed - ' . ($siteSettings->site_name ?? 'AlphaVendor'))
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/shop.css') }}">
@@ -23,6 +23,33 @@
                 <div class="filter-sidebar-header">
                     <h3>Filters</h3>
                     <button class="filter-close-btn" id="filterCloseBtn">&times;</button>
+                </div>
+
+                <!-- Categories -->
+                <div class="filter-box">
+                    <h3 class="filter-title">Product Type</h3>
+                    <ul class="filter-list">
+                        @foreach($vendorTypes as $vendorType)
+                        @php
+                            $typeLabel = match($vendorType->role) {
+                                'retailer' => 'Retail',
+                                'wholesaler' => 'Wholesale',
+                                'exporter' => 'Import',
+                                default => ucfirst($vendorType->role),
+                            };
+                        @endphp
+                        <li>
+                            <label class="filter-checkbox">
+                                <div style="display:flex;align-items:center;">
+                                    <input type="checkbox" name="vendor_types[]" value="{{ $vendorType->role }}"
+                                        {{ in_array($vendorType->role, request('vendor_types', [])) ? 'checked' : '' }}>
+                                    <span>{{ $typeLabel }}</span>
+                                </div>
+                                <span class="count">({{ $vendorType->products_count }})</span>
+                            </label>
+                        </li>
+                        @endforeach
+                    </ul>
                 </div>
 
                 <!-- Categories -->
@@ -125,8 +152,9 @@
                 <!-- Toolbar -->
                 <div class="shop-toolbar">
                     <div class="toolbar-left">
+                        <h1 class="feed-title">Product News Feed</h1>
                         <p class="results-count">
-                            Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> products
+                            Showing <strong>{{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }}</strong> of <strong>{{ $products->total() }}</strong> retail, wholesale and import products
                         </p>
                     </div>
                     <div class="toolbar-right">
@@ -157,10 +185,26 @@
                 <!-- Products Grid -->
                 <div class="products-grid-view" id="productsGrid">
                     @forelse($products as $product)
+                    @php
+                        $vendorRole = $product->vendor->role ?? 'retailer';
+                        $feedTypeLabel = match($vendorRole) {
+                            'retailer' => 'Retail',
+                            'wholesaler' => 'Wholesale',
+                            'exporter' => 'Import',
+                            default => 'Retail',
+                        };
+                        $feedTypeClass = match($vendorRole) {
+                            'retailer' => 'retail',
+                            'wholesaler' => 'wholesale',
+                            'exporter' => 'import',
+                            default => 'retail',
+                        };
+                    @endphp
                     <div class="product-card">
                         <a href="{{ route('product.show', $product->id) }}" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;">
                             <div class="product-image">
                                 <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/placeholder.png') }}" alt="{{ $product->name }}" loading="lazy">
+                                <span class="feed-type-badge {{ $feedTypeClass }}">{{ $feedTypeLabel }}</span>
                                 @if($product->badge)
                                 <span class="badge {{ strtolower($product->badge) }}">{{ $product->badge }}</span>
                                 @elseif($product->old_price && $product->old_price > $product->price)
@@ -170,7 +214,7 @@
                                 @endif
                             </div>
                             <div class="product-info">
-                                <span class="product-category">{{ $product->category->name ?? '' }}</span>
+                                <span class="product-category">{{ $feedTypeLabel }} @if($product->category) / {{ $product->category->name }} @endif</span>
                                 <h4>{{ $product->name }}</h4>
                                 <div class="vendor-name">
                                     <i class="fas fa-store"></i>
@@ -281,8 +325,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sortSelect) sortSelect.addEventListener('change', () => updateURL('sort', sortSelect.value));
     if (perPageSelect) perPageSelect.addEventListener('change', () => updateURL('per_page', perPageSelect.value));
 
-    // Category & Brand checkboxes
-    document.querySelectorAll('input[name="categories[]"], input[name="brands[]"]').forEach(cb => {
+    // Type, Category & Brand checkboxes
+    document.querySelectorAll('input[name="vendor_types[]"], input[name="categories[]"], input[name="brands[]"]').forEach(cb => {
         cb.addEventListener('change', function() {
             const url = new URL(window.location);
             const name = this.name;
