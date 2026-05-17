@@ -314,18 +314,35 @@
                             </div>
                         </a>
                         <div style="display: flex; gap: 8px; padding: 0 15px 15px;">
-                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="quick-add-form" style="flex: 1;">
-                                @csrf
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="quick-add-btn" style="width: 100%;">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    Quick Add
+                            @if(in_array($product->vendor->role ?? '', ['wholesaler', 'exporter']))
+                                {{-- Wholesaler / Importer: Add to Cart + Pay Advance --}}
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="quick-add-form" style="flex: 1;">
+                                    @csrf
+                                    <input type="hidden" name="quantity" value="{{ $product->minimum_order ?? 1 }}">
+                                    <button type="submit" class="quick-add-btn" style="width:100%; position:static; transform:none; background:#0d9488;">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Add to Cart
+                                    </button>
+                                </form>
+                                <a href="{{ route('product.show', $product->id) }}" class="buy-now-btn" style="flex:1; display:flex; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg,#3b82f6,#6366f1); color:#fff; font-weight:600; text-decoration:none; padding:10px; border-radius:4px; font-size:13px;">
+                                    <i class="fas fa-money-check-alt"></i>
+                                    Pay Advance
+                                </a>
+                            @else
+                                {{-- Retailer: Quick Add (hover) + Buy Now --}}
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="quick-add-form" style="flex: 1;">
+                                    @csrf
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="quick-add-btn" style="width: 100%;">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Quick Add
+                                    </button>
+                                </form>
+                                <button class="buy-now-btn" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this);" style="flex: 1;">
+                                    <i class="fas fa-bolt"></i>
+                                    Buy Now
                                 </button>
-                            </form>
-                            <button class="buy-now-btn" data-product-id="{{ $product->id }}" onclick="buyNow({{ $product->id }}, this);" style="flex: 1;">
-                                <i class="fas fa-bolt"></i>
-                                Buy Now
-                            </button>
+                            @endif
                         </div>
                     </div>
                     @empty

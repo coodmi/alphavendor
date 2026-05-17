@@ -511,6 +511,14 @@
     transform: translateY(0);
 }
 
+/* Wholesaler/Importer cards: buttons always visible, no hover slide */
+.quick-add-btn[style*="position:static"],
+.quick-add-btn[style*="position: static"] {
+    position: static !important;
+    transform: none !important;
+    transition: none !important;
+}
+
 .product-info {
     padding: 18px;
 }
