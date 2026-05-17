@@ -157,6 +157,11 @@ class EmployeeDashboardController extends Controller
             'from', 'to'
         ));
     }
+
+    /**
+     * Display products management for employees
+     */
+    public function products()
     {
         if (!auth()->user()->hasAnyPermission(['products.view', 'products.add', 'products.edit', 'products.delete', 'products.approve'])) {
             return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view products.');
