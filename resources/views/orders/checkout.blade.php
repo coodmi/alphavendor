@@ -14,6 +14,50 @@
 <div class="container mx-auto px-4 py-12">
     <h1 class="text-3xl font-bold mb-8">Checkout</h1>
 
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-red-50 border border-red-300 rounded-lg flex items-start gap-3">
+            <i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5"></i>
+            <div>
+                <p class="font-semibold text-red-700">অর্ডার সম্পন্ন হয়নি</p>
+                <p class="text-red-600 text-sm mt-1">{{ session('error') }}</p>
+            </div>
+        </div>
+    @endif
+
+    {{-- Advance Payment Required Warning --}}
+    @if(!empty($hasAdvanceRequired) && $hasAdvanceRequired)
+    <div class="mb-6 p-5 bg-amber-50 border-2 border-amber-400 rounded-xl">
+        <div class="flex items-start gap-3">
+            <i class="fas fa-exclamation-triangle text-amber-500 text-2xl mt-0.5"></i>
+            <div class="flex-1">
+                <h3 class="font-bold text-amber-800 text-lg">অ্যাডভান্স পেমেন্ট প্রয়োজন</h3>
+                <p class="text-amber-700 text-sm mt-1">
+                    আপনার কার্টে Wholesaler / Importer পণ্য রয়েছে। এই পণ্যগুলো অর্ডার করতে হলে আগে <strong>অ্যাডভান্স পেমেন্ট</strong> করতে হবে।
+                    অ্যাডভান্স পেমেন্ট ছাড়া অর্ডার সম্পন্ন হবে না।
+                </p>
+                <div class="mt-3 space-y-2">
+                    @foreach($advanceRequiredItems as $item)
+                    <div class="flex items-center justify-between bg-white border border-amber-200 rounded-lg px-4 py-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-box text-amber-500"></i>
+                            <span class="text-sm font-medium text-gray-800">{{ $item['name'] }}</span>
+                        </div>
+                        <a href="{{ route('products.show', $item['id']) }}"
+                           class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-money-check-alt mr-1"></i> Pay Advance
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+                <p class="text-xs text-amber-600 mt-3">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    অ্যাডভান্স পেমেন্ট অনুমোদিত হলে আপনি অর্ডার দিতে পারবেন। অ্যাডভান্স পেমেন্টের পরিমাণ: মোট অর্ডারের <strong>{{ $advanceSettings->advance_percentage }}%</strong>।
+                </p>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <form action="{{ route('orders.store') }}" method="POST">
         @csrf
 
@@ -418,8 +462,14 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-teal-600 text-white py-3 rounded hover:bg-teal-700 font-semibold transition-all duration-300 hover:shadow-lg">
-                        Place Order
+                    <button type="submit" class="w-full bg-teal-600 text-white py-3 rounded hover:bg-teal-700 font-semibold transition-all duration-300 hover:shadow-lg
+                        @if(!empty($hasAdvanceRequired) && $hasAdvanceRequired) opacity-50 cursor-not-allowed @endif"
+                        @if(!empty($hasAdvanceRequired) && $hasAdvanceRequired) disabled title="অ্যাডভান্স পেমেন্ট করুন তারপর অর্ডার দিন" @endif>
+                        @if(!empty($hasAdvanceRequired) && $hasAdvanceRequired)
+                            <i class="fas fa-lock mr-2"></i> অ্যাডভান্স পেমেন্ট প্রয়োজন
+                        @else
+                            Place Order
+                        @endif
                     </button>
 
                     <a href="{{ route('cart.index') }}" class="block text-center mt-4 text-gray-600 hover:text-gray-800">

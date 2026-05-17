@@ -24,10 +24,28 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
         }
 
+        // Check if cart has wholesaler/importer products
+        $advanceSettings = \App\Models\AdvancePaymentSetting::getSettings();
+        $hasAdvanceRequired = false;
+        $advanceRequiredItems = [];
+
+        foreach ($cart as $item) {
+            $vendorRole = $item['vendor_role'] ?? null;
+            // If vendor_role not in cart (old session), fetch from DB
+            if (!$vendorRole) {
+                $vendor = \App\Models\User::find($item['vendor_id']);
+                $vendorRole = $vendor->role ?? 'retailer';
+            }
+            if (in_array($vendorRole, ['wholesaler', 'exporter', 'importer']) && $advanceSettings->is_mandatory) {
+                $hasAdvanceRequired = true;
+                $advanceRequiredItems[] = $item;
+            }
+        }
+
         // Get user's saved addresses
         $addresses = auth()->check() ? auth()->user()->addresses()->orderBy('is_default', 'desc')->get() : collect();
 
-        return view('orders.checkout', compact('cart', 'addresses'));
+        return view('orders.checkout', compact('cart', 'addresses', 'hasAdvanceRequired', 'advanceRequiredItems', 'advanceSettings'));
     }
     public function invoice(Order $order)
         {
@@ -69,6 +87,35 @@ class OrderController extends Controller
             if (empty($cart)) {
                 return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
             }
+
+            // ── Advance Payment Enforcement ──────────────────────────────────────
+            // Block order if cart has wholesaler/importer products and advance is mandatory
+            $advanceSettings = \App\Models\AdvancePaymentSetting::getSettings();
+            if ($advanceSettings->is_mandatory) {
+                foreach ($cart as $item) {
+                    $vendorRole = $item['vendor_role'] ?? null;
+                    if (!$vendorRole) {
+                        $vendor = \App\Models\User::find($item['vendor_id']);
+                        $vendorRole = $vendor->role ?? 'retailer';
+                    }
+                    if (in_array($vendorRole, ['wholesaler', 'exporter', 'importer'])) {
+                        // Check if user has an approved/paid advance payment for this product
+                        $hasAdvance = \App\Models\AdvancePayment::where('user_id', Auth::id())
+                            ->where('product_id', $item['id'])
+                            ->whereIn('status', ['approved', 'paid', 'completed'])
+                            ->exists();
+
+                        if (!$hasAdvance) {
+                            return redirect()->back()->with(
+                                'error',
+                                'অর্ডার দেওয়ার আগে "' . $item['name'] . '" পণ্যের জন্য অ্যাডভান্স পেমেন্ট করতে হবে। পণ্যের পেজে গিয়ে "Pay Advance" বাটনে ক্লিক করুন।'
+                            );
+                        }
+                        break;
+                    }
+                }
+            }
+            // ────────────────────────────────────────────────────────────────────
 
             $deliveryCharge = $validated['delivery_charge'] ?? 0;
             $commissionService = new \App\Services\CommissionService();

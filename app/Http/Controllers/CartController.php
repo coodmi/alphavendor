@@ -43,6 +43,7 @@ class CartController extends Controller
                 'quantity' => $quantity,
                 'vendor_id' => $product->vendor_id,
                 'vendor_name' => $product->vendor->name ?? 'Unknown',
+                'vendor_role' => $product->vendor->role ?? 'retailer',
                 'category_id' => $product->category_id
             ];
         }
@@ -147,6 +148,7 @@ class CartController extends Controller
             'quantity' => $quantity,
             'vendor_id' => $product->vendor_id,
             'vendor_name' => $product->vendor->name ?? 'Unknown',
+            'vendor_role' => $product->vendor->role ?? 'retailer',
             'category_id' => $product->category_id
         ];
 
