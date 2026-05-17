@@ -60,7 +60,9 @@ class EmployeeDashboardController extends Controller
      */
     public function products()
     {
-        $this->authorizePermission(['products.view', 'products.add', 'products.edit', 'products.delete', 'products.approve']);
+        if (!auth()->user()->hasAnyPermission(['products.view', 'products.add', 'products.edit', 'products.delete', 'products.approve'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view products.');
+        }
 
         $products = Product::with(['vendor', 'category', 'brand'])
             ->orderBy('created_at', 'desc')
@@ -74,7 +76,9 @@ class EmployeeDashboardController extends Controller
      */
     public function orders()
     {
-        $this->authorizePermission(['orders.view', 'orders.update_status', 'orders.cancel', 'orders.approve']);
+        if (!auth()->user()->hasAnyPermission(['orders.view', 'orders.update_status', 'orders.cancel', 'orders.approve'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view orders.');
+        }
 
         $orders = Order::with(['user', 'items.product'])
             ->orderBy('created_at', 'desc')
@@ -88,7 +92,9 @@ class EmployeeDashboardController extends Controller
      */
     public function showOrder(Order $order)
     {
-        $this->authorizePermission(['orders.view', 'orders.update_status', 'orders.cancel', 'orders.approve']);
+        if (!auth()->user()->hasAnyPermission(['orders.view', 'orders.update_status', 'orders.cancel', 'orders.approve'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view orders.');
+        }
 
         $order->load(['user', 'items.product']);
 
@@ -100,23 +106,22 @@ class EmployeeDashboardController extends Controller
      */
     public function updateOrderStatus(Request $request, Order $order)
     {
-        $this->authorizePermission(['orders.update_status']);
+        if (!auth()->user()->hasPermission('orders.update_status')) {
+            return redirect()->back()->with('error', 'You do not have permission to update order status.');
+        }
 
         $request->validate([
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
         ]);
 
-        $order->update([
-            'status' => $request->status
-        ]);
+        $order->update(['status' => $request->status]);
 
-        // Create notification for customer
         if ($order->user) {
             Notification::create([
                 'user_id' => $order->user->id,
-                'title' => 'Order Status Updated',
+                'title'   => 'Order Status Updated',
                 'message' => "Your order #{$order->id} status has been updated to " . ucfirst($request->status),
-                'type' => 'info'
+                'type'    => 'info'
             ]);
         }
 
@@ -128,7 +133,9 @@ class EmployeeDashboardController extends Controller
      */
     public function applications()
     {
-        $this->authorizePermission(['user_permissions.view', 'user_permissions.edit']);
+        if (!auth()->user()->hasAnyPermission(['user_permissions.view', 'user_permissions.edit'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view applications.');
+        }
 
         $applications = RoleApplication::with('user')
             ->orderBy('created_at', 'desc')
@@ -142,7 +149,9 @@ class EmployeeDashboardController extends Controller
      */
     public function showApplication(RoleApplication $application)
     {
-        $this->authorizePermission(['user_permissions.view', 'user_permissions.edit']);
+        if (!auth()->user()->hasAnyPermission(['user_permissions.view', 'user_permissions.edit'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view applications.');
+        }
 
         $application->load('user');
 
@@ -150,29 +159,27 @@ class EmployeeDashboardController extends Controller
     }
 
     /**
-     * Approve role application (employee can approve applications)
+     * Approve role application
      */
     public function approveApplication(RoleApplication $application)
     {
-        $this->authorizePermission(['user_permissions.edit']);
+        if (!auth()->user()->hasPermission('user_permissions.edit')) {
+            return redirect()->back()->with('error', 'You do not have permission to approve applications.');
+        }
 
         $application->update([
-            'status' => 'approved',
+            'status'      => 'approved',
             'reviewed_by' => auth()->id(),
             'reviewed_at' => now(),
         ]);
 
-        // Update user role
-        $application->user->update([
-            'role' => $application->requested_role
-        ]);
+        $application->user->update(['role' => $application->requested_role]);
 
-        // Create notification
         Notification::create([
             'user_id' => $application->user_id,
-            'title' => 'Role Application Approved',
+            'title'   => 'Role Application Approved',
             'message' => "Your application for {$application->requested_role} role has been approved!",
-            'type' => 'success'
+            'type'    => 'success'
         ]);
 
         return redirect()->back()->with('success', 'Application approved successfully.');
@@ -183,26 +190,25 @@ class EmployeeDashboardController extends Controller
      */
     public function rejectApplication(Request $request, RoleApplication $application)
     {
-        $this->authorizePermission(['user_permissions.edit']);
+        if (!auth()->user()->hasPermission('user_permissions.edit')) {
+            return redirect()->back()->with('error', 'You do not have permission to reject applications.');
+        }
 
-        $request->validate([
-            'rejection_reason' => 'nullable|string|max:500'
-        ]);
+        $request->validate(['rejection_reason' => 'nullable|string|max:500']);
 
         $application->update([
-            'status' => 'rejected',
-            'reviewed_by' => auth()->id(),
-            'reviewed_at' => now(),
+            'status'           => 'rejected',
+            'reviewed_by'      => auth()->id(),
+            'reviewed_at'      => now(),
             'rejection_reason' => $request->rejection_reason,
         ]);
 
-        // Create notification
         Notification::create([
             'user_id' => $application->user_id,
-            'title' => 'Role Application Rejected',
+            'title'   => 'Role Application Rejected',
             'message' => "Your application for {$application->requested_role} role has been rejected." .
-                        ($request->rejection_reason ? " Reason: {$request->rejection_reason}" : ''),
-            'type' => 'error'
+                         ($request->rejection_reason ? " Reason: {$request->rejection_reason}" : ''),
+            'type'    => 'error'
         ]);
 
         return redirect()->back()->with('success', 'Application rejected.');
@@ -213,7 +219,9 @@ class EmployeeDashboardController extends Controller
      */
     public function users()
     {
-        $this->authorizePermission(['users.view', 'users.edit', 'users.block', 'users.add']);
+        if (!auth()->user()->hasAnyPermission(['users.view', 'users.edit', 'users.block', 'users.add'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view users.');
+        }
 
         $users = User::where('role', '!=', 'admin')
             ->where('id', '!=', auth()->id())
@@ -224,38 +232,22 @@ class EmployeeDashboardController extends Controller
     }
 
     /**
-     * Update user status (employee can manage user status)
+     * Update user status
      */
     public function updateUserStatus(Request $request, User $user)
     {
-        $this->authorizePermission(['users.block']);
-
-        // Prevent employees from managing admins or other employees
-        if ($user->role === 'admin' || ($user->role === 'employee' && $user->id !== auth()->id())) {
-            abort(403, 'Unauthorized access.');
+        if (!auth()->user()->hasPermission('users.block')) {
+            return redirect()->back()->with('error', 'You do not have permission to update user status.');
         }
 
-        $request->validate([
-            'status' => 'required|in:active,inactive,pending'
-        ]);
+        if ($user->role === 'admin' || ($user->role === 'employee' && $user->id !== auth()->id())) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
 
-        $user->update([
-            'status' => $request->status
-        ]);
+        $request->validate(['status' => 'required|in:active,inactive,pending']);
+
+        $user->update(['status' => $request->status]);
 
         return redirect()->back()->with('success', 'User status updated successfully.');
-    }
-
-    /**
-     * Check if the current employee has any of the given permissions.
-     * Redirects to dashboard with error message if none match.
-     */
-    private function authorizePermission(array $permissions): void
-    {
-        $user = auth()->user();
-        if (!$user->hasAnyPermission($permissions)) {
-            abort(redirect()->route('employee.dashboard')
-                ->with('error', 'You do not have permission to access this page.'));
-        }
     }
 }
