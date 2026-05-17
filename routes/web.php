@@ -650,21 +650,24 @@ Route::middleware('auth')->group(function () {
     // Employee routes (moderator role)
     Route::middleware('role:employee')->prefix('employee')->name('employee.')->group(function () {
         Route::get('/dashboard', [EmployeeDashboardController::class, 'index'])->name('dashboard');
-        
+
         // Product management
         Route::get('/products', [EmployeeDashboardController::class, 'products'])->name('products');
-        
+
+        // Analytics
+        Route::get('/analytics', [EmployeeDashboardController::class, 'analytics'])->name('analytics');
+
         // Order management
         Route::get('/orders', [EmployeeDashboardController::class, 'orders'])->name('orders');
         Route::get('/orders/{order}', [EmployeeDashboardController::class, 'showOrder'])->name('orders.show');
         Route::patch('/orders/{order}/status', [EmployeeDashboardController::class, 'updateOrderStatus'])->name('orders.update-status');
-        
+
         // Application management
         Route::get('/applications', [EmployeeDashboardController::class, 'applications'])->name('applications');
         Route::get('/applications/{application}', [EmployeeDashboardController::class, 'showApplication'])->name('applications.show');
         Route::post('/applications/{application}/approve', [EmployeeDashboardController::class, 'approveApplication'])->name('applications.approve');
         Route::post('/applications/{application}/reject', [EmployeeDashboardController::class, 'rejectApplication'])->name('applications.reject');
-        
+
         // User management
         Route::get('/users', [EmployeeDashboardController::class, 'users'])->name('users');
         Route::patch('/users/{user}/status', [EmployeeDashboardController::class, 'updateUserStatus'])->name('users.update-status');

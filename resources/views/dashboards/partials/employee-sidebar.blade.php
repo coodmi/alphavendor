@@ -222,7 +222,7 @@
 @if($u->hasAnyPermission(['analytics.view','analytics.export']))
 <div class="menu-section">
     <div class="menu-section-title">Analytics</div>
-    <a href="{{ route('admin.analytics') }}" class="menu-item {{ request()->routeIs('admin.analytics*') ? 'active' : '' }}">
+    <a href="{{ route('employee.analytics') }}" class="menu-item {{ request()->routeIs('employee.analytics*') ? 'active' : '' }}">
         <i class="fas fa-chart-bar"></i>
         <span>Analytics & Reports</span>
     </a>

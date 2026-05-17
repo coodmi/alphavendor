@@ -56,9 +56,107 @@ class EmployeeDashboardController extends Controller
     }
 
     /**
-     * Display products management for employees
+     * Display analytics for employees
      */
-    public function products()
+    public function analytics(Request $request)
+    {
+        if (!auth()->user()->hasAnyPermission(['analytics.view', 'analytics.export'])) {
+            return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view analytics.');
+        }
+
+        $from = $request->filled('from')
+            ? \Carbon\Carbon::parse($request->from)->startOfDay()
+            : now()->startOfDay();
+
+        $to = $request->filled('to')
+            ? \Carbon\Carbon::parse($request->to)->endOfDay()
+            : now()->endOfDay();
+
+        $today     = now()->startOfDay();
+        $yesterday = now()->subDay()->startOfDay();
+
+        $retailerIds   = User::where('role', 'retailer')->pluck('id');
+        $wholesalerIds = User::where('role', 'wholesaler')->pluck('id');
+        $importerIds   = User::where('role', 'exporter')->pluck('id');
+
+        $ordersInRange = fn($ids) => Order::whereIn('vendor_id', $ids)->whereBetween('created_at', [$from, $to]);
+        $statusInRange = fn($status) => Order::whereBetween('updated_at', [$from, $to])->where('status', $status);
+
+        $rangeStats = [
+            'retailer_orders'    => $ordersInRange($retailerIds)->count(),
+            'wholesaler_orders'  => $ordersInRange($wholesalerIds)->count(),
+            'importer_orders'    => $ordersInRange($importerIds)->count(),
+            'total_orders'       => Order::whereBetween('created_at', [$from, $to])->count(),
+            'new_users'          => User::where('role', 'user')->whereBetween('created_at', [$from, $to])->count(),
+            'new_retailers'      => User::where('role', 'retailer')->whereBetween('created_at', [$from, $to])->count(),
+            'new_wholesalers'    => User::where('role', 'wholesaler')->whereBetween('created_at', [$from, $to])->count(),
+            'new_importers'      => User::where('role', 'exporter')->whereBetween('created_at', [$from, $to])->count(),
+            'returns'            => $statusInRange('returned')->count(),
+            'refunds'            => $statusInRange('refunded')->count(),
+            'cancelled'          => $statusInRange('cancelled')->count(),
+            'exchange'           => $statusInRange('exchange')->count(),
+            'retailer_revenue'   => $ordersInRange($retailerIds)->whereIn('status', ['delivered','completed'])->sum('total'),
+            'wholesaler_revenue' => $ordersInRange($wholesalerIds)->whereIn('status', ['delivered','completed'])->sum('total'),
+            'importer_revenue'   => $ordersInRange($importerIds)->whereIn('status', ['delivered','completed'])->sum('total'),
+        ];
+
+        $todayStats = [
+            'retailer_orders'   => Order::whereIn('vendor_id', $retailerIds)->whereDate('created_at', $today)->count(),
+            'wholesaler_orders' => Order::whereIn('vendor_id', $wholesalerIds)->whereDate('created_at', $today)->count(),
+            'importer_orders'   => Order::whereIn('vendor_id', $importerIds)->whereDate('created_at', $today)->count(),
+            'new_users'         => User::where('role', 'user')->whereDate('created_at', $today)->count(),
+            'new_retailers'     => User::where('role', 'retailer')->whereDate('created_at', $today)->count(),
+            'new_wholesalers'   => User::where('role', 'wholesaler')->whereDate('created_at', $today)->count(),
+            'new_importers'     => User::where('role', 'exporter')->whereDate('created_at', $today)->count(),
+            'returns'           => Order::whereDate('updated_at', $today)->where('status', 'returned')->count(),
+            'refunds'           => Order::whereDate('updated_at', $today)->where('status', 'refunded')->count(),
+            'cancelled'         => Order::whereDate('updated_at', $today)->where('status', 'cancelled')->count(),
+            'exchange'          => Order::whereDate('updated_at', $today)->where('status', 'exchange')->count(),
+        ];
+
+        $yesterdayStats = [
+            'retailer_orders'   => Order::whereIn('vendor_id', $retailerIds)->whereDate('created_at', $yesterday)->count(),
+            'wholesaler_orders' => Order::whereIn('vendor_id', $wholesalerIds)->whereDate('created_at', $yesterday)->count(),
+            'importer_orders'   => Order::whereIn('vendor_id', $importerIds)->whereDate('created_at', $yesterday)->count(),
+            'new_users'         => User::where('role', 'user')->whereDate('created_at', $yesterday)->count(),
+            'new_retailers'     => User::where('role', 'retailer')->whereDate('created_at', $yesterday)->count(),
+            'new_wholesalers'   => User::where('role', 'wholesaler')->whereDate('created_at', $yesterday)->count(),
+            'new_importers'     => User::where('role', 'exporter')->whereDate('created_at', $yesterday)->count(),
+            'returns'           => Order::whereDate('updated_at', $yesterday)->where('status', 'returned')->count(),
+            'refunds'           => Order::whereDate('updated_at', $yesterday)->where('status', 'refunded')->count(),
+            'cancelled'         => Order::whereDate('updated_at', $yesterday)->where('status', 'cancelled')->count(),
+            'exchange'          => Order::whereDate('updated_at', $yesterday)->where('status', 'exchange')->count(),
+        ];
+
+        $allTime = [
+            'total_orders'      => Order::count(),
+            'total_returns'     => Order::where('status', 'returned')->count(),
+            'total_refunds'     => Order::where('status', 'refunded')->count(),
+            'total_cancelled'   => Order::where('status', 'cancelled')->count(),
+            'total_exchange'    => Order::where('status', 'exchange')->count(),
+            'total_retailers'   => User::where('role', 'retailer')->count(),
+            'total_wholesalers' => User::where('role', 'wholesaler')->count(),
+            'total_importers'   => User::where('role', 'exporter')->count(),
+            'total_users'       => User::where('role', 'user')->count(),
+        ];
+
+        $diffDays = min((int) $from->diffInDays($to) + 1, 60);
+        $chartLabels = $chartRetailer = $chartWholesaler = $chartImporter = [];
+
+        for ($i = $diffDays - 1; $i >= 0; $i--) {
+            $day = $to->copy()->subDays($i)->startOfDay();
+            $chartLabels[]     = $day->format('M d');
+            $chartRetailer[]   = Order::whereIn('vendor_id', $retailerIds)->whereDate('created_at', $day)->count();
+            $chartWholesaler[] = Order::whereIn('vendor_id', $wholesalerIds)->whereDate('created_at', $day)->count();
+            $chartImporter[]   = Order::whereIn('vendor_id', $importerIds)->whereDate('created_at', $day)->count();
+        }
+
+        return view('admin.analytics', compact(
+            'rangeStats', 'todayStats', 'yesterdayStats', 'allTime',
+            'chartLabels', 'chartRetailer', 'chartWholesaler', 'chartImporter',
+            'from', 'to'
+        ));
+    }
     {
         if (!auth()->user()->hasAnyPermission(['products.view', 'products.add', 'products.edit', 'products.delete', 'products.approve'])) {
             return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view products.');
