@@ -229,7 +229,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/employees/{user}', [AdminController::class, 'updateEmployee'])->name('employees.update');
         Route::delete('/employees/{user}', [AdminController::class, 'deleteEmployee'])->name('employees.delete');
         Route::get('/employee-permissions', [AdminController::class, 'employeePermissions'])->name('employee-permissions');
+        Route::get('/employee-permissions/{user}/edit', [AdminController::class, 'editEmployeePermissions'])->name('employee-permissions.edit');
         Route::post('/employee-permissions/{user}', [AdminController::class, 'updateEmployeePermissions'])->name('employee-permissions.update');
+        Route::post('/employee-permissions/copy', [AdminController::class, 'copyEmployeePermissions'])->name('employee-permissions.copy');
 
         // Vendor Management
         Route::get('/vendors', [AdminController::class, 'vendors'])->name('vendors');

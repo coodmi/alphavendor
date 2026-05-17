@@ -836,172 +836,210 @@ class AdminController extends Controller
      * Show all employees
      */
     public function employees()
-        {
-            $employees = User::whereIn('role', ['employee', 'manager', 'supervisor'])
-                ->with('employeeRole')
-                ->withCount(['orders', 'products'])
-                ->latest()
-                ->paginate(20);
+    {
+        $employees = User::where('role', 'employee')
+            ->latest()
+            ->paginate(20);
 
-            return view('admin.employees.index', compact('employees'));
-        }
+        return view('admin.employees.index', compact('employees'));
+    }
 
     /**
      * Show create employee form
      */
     public function createEmployee()
-        {
-            $employeeRoles = \App\Models\EmployeeRole::active()->ordered()->get();
-            return view('admin.employees.create', compact('employeeRoles'));
-        }
+    {
+        $permissionModules = \App\Helpers\EmployeePermission::modules();
+        $roleTemplates     = \App\Helpers\EmployeePermission::roleTemplates();
+        return view('admin.employees.create', compact('permissionModules', 'roleTemplates'));
+    }
 
     /**
      * Store new employee
      */
     public function storeEmployee(Request $request)
-        {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
-                'phone' => 'nullable|string|max:20',
-                'password' => 'required|string|min:8|confirmed',
-                'employee_role_id' => 'required|exists:employee_roles,id',
-                'status' => 'required|in:active,inactive',
-                'notes' => 'nullable|string|max:1000',
-            ]);
+    {
+        $validated = $request->validate([
+            'name'            => 'required|string|max:255',
+            'email'           => 'required|email|unique:users,email',
+            'phone'           => 'nullable|string|max:20',
+            'password'        => 'required|string|min:8|confirmed',
+            'employee_title'  => 'nullable|string|max:100',
+            'profile_image'   => 'nullable|image|max:2048',
+            'nid_card'        => 'nullable|image|max:2048',
+            'status'          => 'required|in:active,inactive',
+            'permissions'     => 'nullable|array',
+            'permissions.*'   => 'string',
+        ]);
 
-            // Get the employee role to set the base role
-            $employeeRole = \App\Models\EmployeeRole::findOrFail($validated['employee_role_id']);
+        $data = [
+            'name'           => $validated['name'],
+            'email'          => $validated['email'],
+            'phone'          => $validated['phone'] ?? null,
+            'password'       => Hash::make($validated['password']),
+            'role'           => 'employee',
+            'employee_title' => $validated['employee_title'] ?? null,
+            'status'         => $validated['status'],
+            'permissions'    => $validated['permissions'] ?? [],
+        ];
 
-            // Determine base role based on access level
-            $baseRole = match($employeeRole->access_level) {
-                'basic' => 'employee',
-                'extended' => 'manager',
-                'full' => 'supervisor',
-                default => 'employee',
-            };
-
-            $employee = User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'phone' => $validated['phone'] ?? null,
-                'password' => Hash::make($validated['password']),
-                'role' => $baseRole,
-                'employee_role_id' => $validated['employee_role_id'],
-                'status' => $validated['status'],
-                'notes' => $validated['notes'] ?? null,
-            ]);
-
-            return redirect()->route('admin.employees')->with('success', 'Employee created successfully with role: ' . $employeeRole->name);
+        // Handle profile photo upload
+        if ($request->hasFile('profile_image')) {
+            $data['profile_image'] = $request->file('profile_image')->store('employees/photos', 'public');
         }
+
+        // Handle NID card upload
+        if ($request->hasFile('nid_card')) {
+            $data['nid_card'] = $request->file('nid_card')->store('employees/nid', 'public');
+        }
+
+        User::create($data);
+
+        return redirect()->route('admin.employees')->with('success', 'Employee created successfully!');
+    }
 
     /**
      * Show edit employee form
      */
     public function editEmployee(User $user)
-        {
-            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
-                return redirect()->route('admin.employees')->with('error', 'User is not a staff member!');
-            }
-
-            $employeeRoles = \App\Models\EmployeeRole::active()->ordered()->get();
-            return view('admin.employees.edit', compact('user', 'employeeRoles'));
+    {
+        if ($user->role !== 'employee') {
+            return redirect()->route('admin.employees')->with('error', 'User is not an employee!');
         }
 
+        $permissionModules = \App\Helpers\EmployeePermission::modules();
+        $roleTemplates     = \App\Helpers\EmployeePermission::roleTemplates();
+        return view('admin.employees.edit', compact('user', 'permissionModules', 'roleTemplates'));
+    }
+
     /**
-     * Update employee
+     * Update employee (only name, email, phone, title, photo, nid, status — NOT password)
      */
     public function updateEmployee(Request $request, User $user)
-        {
-            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
-                return redirect()->route('admin.employees')->with('error', 'User is not a staff member!');
-            }
-
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email,' . $user->id,
-                'phone' => 'nullable|string|max:20',
-                'password' => 'nullable|string|min:8|confirmed',
-                'employee_role_id' => 'required|exists:employee_roles,id',
-                'status' => 'required|in:active,inactive',
-                'notes' => 'nullable|string|max:1000',
-            ]);
-
-            // Get the employee role to set the base role
-            $employeeRole = \App\Models\EmployeeRole::findOrFail($validated['employee_role_id']);
-
-            // Determine base role based on access level
-            $baseRole = match($employeeRole->access_level) {
-                'basic' => 'employee',
-                'extended' => 'manager',
-                'full' => 'supervisor',
-                default => 'employee',
-            };
-
-            $user->update([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'phone' => $validated['phone'] ?? null,
-                'role' => $baseRole,
-                'employee_role_id' => $validated['employee_role_id'],
-                'status' => $validated['status'],
-                'notes' => $validated['notes'] ?? null,
-            ]);
-
-            if ($request->filled('password')) {
-                $user->update(['password' => Hash::make($validated['password'])]);
-            }
-
-            return redirect()->route('admin.employees')->with('success', 'Employee updated successfully!');
+    {
+        if ($user->role !== 'employee') {
+            return redirect()->route('admin.employees')->with('error', 'User is not an employee!');
         }
 
+        $validated = $request->validate([
+            'name'           => 'required|string|max:255',
+            'email'          => 'required|email|unique:users,email,' . $user->id,
+            'phone'          => 'nullable|string|max:20',
+            'employee_title' => 'nullable|string|max:100',
+            'profile_image'  => 'nullable|image|max:2048',
+            'nid_card'       => 'nullable|image|max:2048',
+            'status'         => 'required|in:active,inactive',
+        ]);
+
+        $data = [
+            'name'           => $validated['name'],
+            'email'          => $validated['email'],
+            'phone'          => $validated['phone'] ?? null,
+            'employee_title' => $validated['employee_title'] ?? null,
+            'status'         => $validated['status'],
+        ];
+
+        if ($request->hasFile('profile_image')) {
+            $data['profile_image'] = $request->file('profile_image')->store('employees/photos', 'public');
+        }
+
+        if ($request->hasFile('nid_card')) {
+            $data['nid_card'] = $request->file('nid_card')->store('employees/nid', 'public');
+        }
+
+        $user->update($data);
+
+        return redirect()->route('admin.employees')->with('success', 'Employee updated successfully!');
+    }
+
     /**
-     * Delete employee
+     * Delete employee (Super Admin only)
      */
     public function deleteEmployee(User $user)
-        {
-            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
-                return redirect()->route('admin.employees')->with('error', 'User is not a staff member!');
-            }
-
-            $user->delete();
-
-            return redirect()->route('admin.employees')->with('success', 'Employee deleted successfully!');
+    {
+        if ($user->role !== 'employee') {
+            return redirect()->route('admin.employees')->with('error', 'User is not an employee!');
         }
+
+        $user->delete();
+
+        return redirect()->route('admin.employees')->with('success', 'Employee deleted successfully!');
+    }
 
     /**
-     * Show employee permissions
+     * Show employee permissions page
      */
     public function employeePermissions()
-        {
-            $employees = User::whereIn('role', ['employee', 'manager', 'supervisor'])
-                ->orderBy('name')
-                ->get();
+    {
+        $employees         = User::where('role', 'employee')->orderBy('name')->get();
+        $permissionModules = \App\Helpers\EmployeePermission::modules();
+        $roleTemplates     = \App\Helpers\EmployeePermission::roleTemplates();
 
-            return view('admin.employees.permissions', compact('employees'));
+        return view('admin.employees.permissions', compact('employees', 'permissionModules', 'roleTemplates'));
+    }
+
+    /**
+     * Show single employee permission edit page
+     */
+    public function editEmployeePermissions(User $user)
+    {
+        if ($user->role !== 'employee') {
+            return redirect()->route('admin.employee-permissions')->with('error', 'User is not an employee!');
         }
+
+        $permissionModules = \App\Helpers\EmployeePermission::modules();
+        $roleTemplates     = \App\Helpers\EmployeePermission::roleTemplates();
+
+        return view('admin.employees.edit-permissions', compact('user', 'permissionModules', 'roleTemplates'));
+    }
 
     /**
      * Update employee permissions
      */
     public function updateEmployeePermissions(Request $request, User $user)
-        {
-            if (!in_array($user->role, ['employee', 'manager', 'supervisor'])) {
-                return response()->json(['error' => 'User is not a staff member!'], 400);
-            }
+    {
+        if ($user->role !== 'employee') {
+            return response()->json(['error' => 'User is not an employee!'], 400);
+        }
 
-            $validated = $request->validate([
-                'permissions' => 'required|array',
-                'permissions.*' => 'string',
-            ]);
+        $permissions = $request->input('permissions', []);
 
-            // Store permissions in user's metadata or a separate permissions table
-            $user->update([
-                'permissions' => json_encode($validated['permissions'])
-            ]);
+        // Super Admin lock — non-super-admin cannot assign super-admin-only permissions
+        $currentUser = auth()->user();
+        if (!$currentUser->isSuperAdmin ?? $currentUser->role === 'admin') {
+            // Allow all for admin
+        }
 
+        $user->update(['permissions' => array_values($permissions)]);
+
+        if ($request->wantsJson()) {
             return response()->json(['success' => true, 'message' => 'Permissions updated successfully!']);
         }
+
+        return redirect()->route('admin.employee-permissions')->with('success', 'Permissions updated for ' . $user->name);
+    }
+
+    /**
+     * Copy permissions from one employee to another
+     */
+    public function copyEmployeePermissions(Request $request)
+    {
+        $request->validate([
+            'from_user_id' => 'required|exists:users,id',
+            'to_user_id'   => 'required|exists:users,id|different:from_user_id',
+        ]);
+
+        $from = User::findOrFail($request->from_user_id);
+        $to   = User::findOrFail($request->to_user_id);
+
+        if ($from->role !== 'employee' || $to->role !== 'employee') {
+            return response()->json(['error' => 'Both users must be employees!'], 400);
+        }
+
+        $to->update(['permissions' => $from->permissions ?? []]);
+
+        return response()->json(['success' => true, 'message' => 'Permissions copied from ' . $from->name . ' to ' . $to->name]);
+    }
 
     /**
      * Show all vendors

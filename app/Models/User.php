@@ -32,6 +32,8 @@ class User extends Authenticatable
         'certifications',
         'exporter_rating',
         'permissions',
+        'employee_title',
+        'nid_card',
         'verification_status',
         'verification_submitted_at',
         'verification_reviewed_at',
