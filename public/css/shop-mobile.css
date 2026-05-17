@@ -59,6 +59,8 @@
         transition: left 0.3s ease;
         padding: 20px;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        display: block;
+        max-width: 90vw;
     }
 
     .shop-sidebar.active {
@@ -92,10 +94,17 @@
 
     .shop-wrapper {
         flex-direction: column;
+        gap: 20px;
     }
 
     .shop-content {
         width: 100%;
+        min-width: 0;
+    }
+
+    .products-grid-view {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
     }
 }
 
@@ -121,6 +130,7 @@
     .toolbar-right {
         width: 100%;
         flex-wrap: wrap;
+        gap: 10px;
     }
 
     .view-mode {
@@ -169,7 +179,7 @@
 
     /* Products Grid Mobile */
     .products-grid-view {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
     }
 
@@ -193,6 +203,11 @@
     .product-info h4 {
         font-size: 14px;
         margin-bottom: 6px;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
     .vendor-name {
@@ -203,6 +218,12 @@
     .rating {
         font-size: 12px;
         margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+
+    .rating span {
+        margin-left: 0;
+        width: 100%;
     }
 
     .current-price {
@@ -234,6 +255,8 @@
         padding: 10px;
         font-size: 13px;
         gap: 6px;
+        position: static;
+        transform: none;
     }
 
     /* Badge Mobile */
@@ -329,7 +352,7 @@
 
     /* Products Grid - Keep 2 columns but smaller */
     .products-grid-view {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
     }
 
@@ -343,6 +366,19 @@
 
     .product-info h4 {
         font-size: 13px;
+    }
+
+    .products-grid-view .product-card > div[style*="display: flex"] {
+        flex-direction: column;
+        padding: 0 10px 10px !important;
+    }
+
+    .products-grid-view .buy-now-btn,
+    .products-grid-view .quick-add-btn {
+        width: 100% !important;
+        min-height: 36px;
+        font-size: 12px !important;
+        padding: 8px !important;
     }
 
     .current-price {
@@ -395,7 +431,7 @@
     }
 
     .products-grid-view {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
