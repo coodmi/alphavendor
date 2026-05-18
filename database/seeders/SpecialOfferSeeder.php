@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\SpecialOffer;
-use Illuminate\Support\Str;
 
 class SpecialOfferSeeder extends Seeder
 {
@@ -53,8 +52,22 @@ class SpecialOfferSeeder extends Seeder
             ],
         ];
 
+        SpecialOffer::updateOrCreate(
+            ['slug' => 'demo-offer'],
+            [
+                'name' => 'Demo Offer — 20% Off',
+                'description' => 'Demo special offer for testing product assignment.',
+                'badge_text' => '20% OFF',
+                'badge_color' => '#4F46E5',
+                'start_date' => now()->subDay()->toDateString(),
+                'end_date' => now()->addYear()->toDateString(),
+                'is_active' => true,
+                'sort_order' => 0,
+            ]
+        );
+
         foreach ($offers as $offer) {
-            SpecialOffer::create($offer);
+            SpecialOffer::updateOrCreate(['slug' => $offer['slug']], $offer);
         }
     }
 }

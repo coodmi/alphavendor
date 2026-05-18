@@ -14,7 +14,7 @@ class RetailerProductController extends Controller
     public function index()
     {
         // Get only products belonging to the authenticated retailer
-        $products = Product::with(['category', 'brand'])
+        $products = Product::with(['category', 'brand', 'attributes', 'specialOffer'])
             ->where('vendor_id', Auth::id())
             ->latest()
             ->get();
@@ -68,33 +68,13 @@ class RetailerProductController extends Controller
             'meta_keywords'  => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
         ]);
 
-        // Verify category belongs to this retailer or is admin-created
-        $category = Category::where('id', $validated['category_id'])
-            ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
-            ->first();
-        if (!$category) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid category selected!'
-            ], 422);
+        if (! $this->verifyCategoryAndBrand($validated)) {
+            return response()->json(['success' => false, 'message' => 'Invalid category or brand selected!'], 422);
         }
 
-        // Verify brand belongs to this retailer or is admin-created (if provided)
-        if (!empty($validated['brand_id'])) {
-            $brand = Brand::where('id', $validated['brand_id'])
-                ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
-                ->first();
-            if (!$brand) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid brand selected!'
-                ], 422);
-            }
-        }
-
-        // Handle image upload or URL
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('products', 'public');
         } elseif ($request->filled('image_url')) {
@@ -154,30 +134,11 @@ class RetailerProductController extends Controller
             'meta_keywords'  => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
         ]);
 
-        // Verify category belongs to this retailer or is admin-created
-        $category = Category::where('id', $validated['category_id'])
-            ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
-            ->first();
-        if (!$category) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid category selected!'
-            ], 422);
-        }
-
-        // Verify brand belongs to this retailer or is admin-created (if provided)
-        if (!empty($validated['brand_id'])) {
-            $brand = Brand::where('id', $validated['brand_id'])
-                ->where(function($q) { $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id()); })
-                ->first();
-            if (!$brand) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid brand selected!'
-                ], 422);
-            }
+        if (! $this->verifyCategoryAndBrand($validated)) {
+            return response()->json(['success' => false, 'message' => 'Invalid category or brand selected!'], 422);
         }
 
         // Handle image update
@@ -239,5 +200,32 @@ class RetailerProductController extends Controller
             'success' => true,
             'message' => 'Product deleted successfully!'
         ]);
+    }
+
+    private function verifyCategoryAndBrand(array $validated): bool
+    {
+        $category = Category::where('id', $validated['category_id'])
+            ->where(function ($q) {
+                $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
+            })
+            ->first();
+
+        if (! $category) {
+            return false;
+        }
+
+        if (! empty($validated['brand_id'])) {
+            $brand = Brand::where('id', $validated['brand_id'])
+                ->where(function ($q) {
+                    $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
+                })
+                ->first();
+
+            if (! $brand) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

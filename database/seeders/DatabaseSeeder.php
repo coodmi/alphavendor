@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ExporterProductSeeder::class,    // Exporter products
             CertificationSeeder::class,      // Exporter certifications
             BannerSeeder::class,             // Homepage banners
+            SpecialOfferSeeder::class,       // Special offers (incl. demo)
         ]);
     }
 }
