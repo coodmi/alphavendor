@@ -10,17 +10,25 @@ use Illuminate\Validation\ValidationException;
 
 trait SyncsProductGallery
 {
-    protected int $minGalleryImages = 2;
+    protected int $minGalleryImages = 1;
+
+    protected int $maxGalleryImages = 4;
 
     protected function validateGalleryImages(Request $request, bool $isUpdate, Product $product = null): void
     {
         $min = $this->minGalleryImages;
+        $max = $this->maxGalleryImages;
         $newCount = $request->hasFile('gallery_images') ? count($request->file('gallery_images')) : 0;
 
         if (! $isUpdate) {
             if ($newCount < $min) {
                 throw ValidationException::withMessages([
-                    'gallery_images' => "Please upload at least {$min} product images.",
+                    'gallery_images' => "Please upload at least {$min} product image(s).",
+                ]);
+            }
+            if ($newCount > $max) {
+                throw ValidationException::withMessages([
+                    'gallery_images' => "You can upload a maximum of {$max} product images.",
                 ]);
             }
 
@@ -33,11 +41,16 @@ trait SyncsProductGallery
 
         $removeIds = array_map('intval', (array) $request->input('remove_gallery_ids', []));
         $remaining = $product->images()->whereNotIn('id', $removeIds)->count();
-        $mainExtra = ($product->image && ! $product->images()->where('image', $product->image)->exists()) ? 1 : 0;
+        $total = $remaining + $newCount;
 
-        if ($remaining + $mainExtra + $newCount < $min) {
+        if ($total < $min) {
             throw ValidationException::withMessages([
-                'gallery_images' => "Product must have at least {$min} images in total.",
+                'gallery_images' => "Product must have at least {$min} gallery image(s).",
+            ]);
+        }
+        if ($total > $max) {
+            throw ValidationException::withMessages([
+                'gallery_images' => "Product can have at most {$max} gallery images.",
             ]);
         }
     }
@@ -81,8 +94,9 @@ trait SyncsProductGallery
         }
 
         $sortStart = (int) $product->images()->max('sort_order') + 1;
+        $slotsLeft = max(0, $this->maxGalleryImages - $product->images()->count());
 
-        foreach ($request->file('gallery_images') as $index => $file) {
+        foreach (array_slice($request->file('gallery_images'), 0, $slotsLeft) as $index => $file) {
             $path = $file->store('products/gallery', 'public');
             $product->images()->create([
                 'image' => $path,
