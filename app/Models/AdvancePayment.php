@@ -13,6 +13,7 @@ class AdvancePayment extends Model
         'user_id',
         'product_id',
         'vendor_id',
+        'order_id',
         'quantity',
         'total_amount',
         'advance_percentage',
@@ -49,6 +50,11 @@ class AdvancePayment extends Model
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 
     public function getStatusBadgeAttribute()

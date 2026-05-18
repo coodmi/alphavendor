@@ -273,6 +273,13 @@ class OrderController extends Controller
                     // Add order to created orders list
                     $createdOrders[] = $order->id;
 
+                    // Link any pending advance payment for this user+vendor to this order
+                    \App\Models\AdvancePayment::where('user_id', Auth::id())
+                        ->where('vendor_id', $vendorId)
+                        ->whereIn('status', ['pending', 'approved', 'paid'])
+                        ->whereNull('order_id')
+                        ->update(['order_id' => $order->id]);
+
                     // Send notifications
                     \App\Services\NotificationService::orderPlaced($order->load('user'));
                 }

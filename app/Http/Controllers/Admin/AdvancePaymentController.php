@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdvancePayment;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class AdvancePaymentController extends Controller
@@ -84,6 +85,35 @@ class AdvancePaymentController extends Controller
         }
 
         $advancePayment->update($data);
+
+        // ── When advance payment is approved/paid → update linked order status ──
+        if (in_array($validated['status'], ['approved', 'paid', 'completed'])) {
+            $order = null;
+
+            // 1. Try direct order_id link
+            if ($advancePayment->order_id) {
+                $order = \App\Models\Order::with('vendor')->find($advancePayment->order_id);
+            }
+
+            // 2. Fallback: find the most recent matching order for this user + product
+            if (!$order) {
+                $order = \App\Models\Order::with('vendor')
+                    ->where('user_id', $advancePayment->user_id)
+                    ->whereHas('items', fn($q) => $q->where('product_id', $advancePayment->product_id))
+                    ->where('status', 'pending_advance_payment')
+                    ->latest()
+                    ->first();
+            }
+
+            if ($order && $order->status === 'pending_advance_payment' && $order->isWholesaleOrImport()) {
+                try {
+                    app(\App\Services\WholesaleOrderStatusService::class)
+                        ->transition($order, 'advance_paid', auth()->user());
+                } catch (\Throwable $e) {
+                    \Log::error("Auto advance_paid transition failed for order {$order->id}: " . $e->getMessage());
+                }
+            }
+        }
 
         return response()->json([
             'success' => true,
