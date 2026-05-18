@@ -37,6 +37,10 @@ class Product extends Model
         'exporter_rating',
         'free_shipping',
         'offer_id',
+        'meta_title',
+        'meta_keywords',
+        'meta_description',
+        'video',
     ];
 
     protected $casts = [

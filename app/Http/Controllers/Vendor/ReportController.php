@@ -16,29 +16,72 @@ class ReportController extends Controller
     /**
      * Reports dashboard
      */
-    public function index()
+    public function index(Request $request)
     {
-        $vendorId = auth()->id();
-        
-        // Quick stats
+        $vendorId  = auth()->id();
+        $today     = now()->toDateString();
+        $yesterday = now()->subDay()->toDateString();
+        $dateFrom  = $request->get('date_from', now()->subDays(29)->format('Y-m-d'));
+        $dateTo    = $request->get('date_to', $today);
+
+        $base = Order::where('vendor_id', $vendorId);
+
         $stats = [
-            'total_sales' => OrderItem::whereHas('order', function($q) use ($vendorId) {
-                $q->where('vendor_id', $vendorId)
-                  ->whereIn('status', ['delivered', 'completed']);
-            })->sum('subtotal'),
-            
-            'total_orders' => Order::where('vendor_id', $vendorId)
-                ->whereIn('status', ['delivered', 'completed'])
-                ->count(),
-            
-            'total_products' => Product::where('vendor_id', $vendorId)->count(),
-            
-            'total_commission' => Transaction::where('vendor_id', $vendorId)
-                ->where('type', 'sale')
-                ->sum('amount'),
+            // Orders
+            'today_orders'     => (clone $base)->whereDate('created_at', $today)->count(),
+            'yesterday_orders' => (clone $base)->whereDate('created_at', $yesterday)->count(),
+            'total_orders'     => (clone $base)->count(),
+
+            // Products
+            'product_sell'     => OrderItem::whereHas('order', fn($q) =>
+                                    $q->where('vendor_id', $vendorId)
+                                      ->whereIn('status', ['delivered', 'completed'])
+                                  )->sum('quantity'),
+            'product_wishlist' => Wishlist::whereHas('product', fn($q) =>
+                                    $q->where('vendor_id', $vendorId)
+                                  )->count(),
+            'product_stock'    => Product::where('vendor_id', $vendorId)->sum('stock'),
+
+            // Returns & Refunds
+            'total_return'     => \App\Models\ReturnRequest::where('vendor_id', $vendorId)->count(),
+            'today_return'     => \App\Models\ReturnRequest::where('vendor_id', $vendorId)
+                                    ->whereDate('created_at', $today)->count(),
+
+            // Cancellations
+            'today_cancel'     => (clone $base)->where('status', 'cancelled')
+                                    ->whereDate('updated_at', $today)->count(),
+            'total_cancel'     => (clone $base)->where('status', 'cancelled')->count(),
+
+            // Exchange
+            'total_exchange'   => \App\Models\ReturnRequest::where('vendor_id', $vendorId)
+                                    ->where('type', 'exchange')->count(),
+            'today_exchange'   => \App\Models\ReturnRequest::where('vendor_id', $vendorId)
+                                    ->where('type', 'exchange')
+                                    ->whereDate('created_at', $today)->count(),
+
+            // Earnings
+            'total_sales'      => (clone $base)->whereIn('status', ['delivered', 'completed'])->sum('total'),
+            'total_commission' => Transaction::where('vendor_id', $vendorId)->where('type', 'sale')->sum('amount'),
+            'total_products'   => Product::where('vendor_id', $vendorId)->count(),
         ];
-        
-        return view('vendor.reports.index', compact('stats'));
+
+        // Orders per day for line chart (filtered range)
+        $chartData = (clone $base)
+            ->whereBetween('created_at', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'])
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('count', 'date');
+
+        // Order status breakdown for pie chart
+        $statusBreakdown = (clone $base)
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        return view('vendor.reports.index', compact(
+            'stats', 'chartData', 'statusBreakdown', 'dateFrom', 'dateTo'
+        ));
     }
     
     /**

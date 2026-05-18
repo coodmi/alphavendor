@@ -404,7 +404,8 @@
     <!-- Profile Header -->
     <div class="profile-header">
         @if($user->profile_image)
-            <img src="{{ asset('storage/' . $user->profile_image) }}" alt="Profile" class="profile-avatar-large">
+            @php $img = $user->profile_image; @endphp
+            <img src="{{ str_starts_with($img, 'http') ? $img : asset('storage/' . $img) }}" alt="Profile" class="profile-avatar-large">
         @else
             <div class="profile-avatar-placeholder-large">
                 {{ strtoupper(substr($user->name, 0, 1)) }}
@@ -486,7 +487,8 @@
             <div class="image-upload-section">
                 <div class="current-image">
                     @if($user->profile_image)
-                        <img src="{{ asset('storage/' . $user->profile_image) }}" alt="Profile"
+                        @php $img = $user->profile_image; @endphp
+                        <img src="{{ str_starts_with($img, 'http') ? $img : asset('storage/' . $img) }}" alt="Profile"
                             style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                     @else
                         <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 60px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">

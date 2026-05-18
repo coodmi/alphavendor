@@ -100,7 +100,8 @@
     <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); min-width: 250px;">
         <div style="display: flex; align-items: center; gap: 15px;">
             @if(Auth::user()->profile_image)
-                <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="Profile"
+                @php $img = Auth::user()->profile_image; @endphp
+                <img src="{{ str_starts_with($img, 'http') ? $img : asset('storage/' . $img) }}" alt="Profile"
                     style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #3498db;">
             @else
                 <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 600;">
