@@ -79,25 +79,84 @@
         color: #9ca3af;
     }
     
+    .charts-row {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 24px;
+        margin-bottom: 30px;
+        align-items: stretch;
+    }
+
     .chart-container {
         background: white;
         border-radius: 12px;
-        padding: 24px;
+        padding: 20px 24px 24px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin-bottom: 30px;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
     }
     
     .chart-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
+        flex-shrink: 0;
     }
     
     .chart-title {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 700;
         color: #1f2937;
+    }
+
+    .chart-title i {
+        color: #6366f1;
+        margin-right: 8px;
+    }
+
+    .chart-canvas-wrap {
+        position: relative;
+        width: 100%;
+        height: 280px;
+        flex: 1;
+        min-height: 240px;
+        max-height: 320px;
+    }
+
+    .chart-canvas-wrap--pie {
+        height: 260px;
+        max-height: 300px;
+    }
+
+    .chart-empty {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 280px;
+        color: #9ca3af;
+        text-align: center;
+        padding: 24px;
+    }
+
+    .chart-empty.is-visible {
+        display: flex;
+    }
+
+    .chart-empty i {
+        font-size: 40px;
+        margin-bottom: 12px;
+        opacity: 0.5;
+    }
+
+    .chart-empty p {
+        margin: 0;
+        font-size: 14px;
+        max-width: 220px;
+        line-height: 1.5;
     }
     
     .filter-section {
@@ -183,6 +242,12 @@
         background: #f9fafb;
     }
     
+    @media (max-width: 1024px) {
+        .charts-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
     @media (max-width: 768px) {
         .stats-grid {
             grid-template-columns: 1fr;
@@ -194,6 +259,14 @@
         
         .filter-group {
             width: 100%;
+        }
+
+        .chart-canvas-wrap,
+        .chart-canvas-wrap--pie,
+        .chart-empty {
+            height: 240px;
+            min-height: 220px;
+            max-height: 260px;
         }
     }
 </style>
@@ -338,13 +411,19 @@
     </div>
 
     <!-- Charts Row -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+    <div class="charts-row">
         <!-- Orders by Date Chart -->
         <div class="chart-container">
             <div class="chart-header">
                 <div class="chart-title"><i class="fas fa-chart-line"></i> Orders Over Time</div>
             </div>
-            <canvas id="ordersLineChart" height="300"></canvas>
+            <div id="ordersLineEmpty" class="chart-empty">
+                <i class="fas fa-chart-area"></i>
+                <p>No orders in this date range. Try a wider filter.</p>
+            </div>
+            <div class="chart-canvas-wrap" id="ordersLineWrap">
+                <canvas id="ordersLineChart"></canvas>
+            </div>
         </div>
 
         <!-- Orders by Status Pie Chart -->
@@ -352,12 +431,18 @@
             <div class="chart-header">
                 <div class="chart-title"><i class="fas fa-chart-pie"></i> Orders by Status</div>
             </div>
-            <canvas id="ordersPieChart" height="300"></canvas>
+            <div id="ordersPieEmpty" class="chart-empty">
+                <i class="fas fa-chart-pie"></i>
+                <p>No order status data for the selected period.</p>
+            </div>
+            <div class="chart-canvas-wrap chart-canvas-wrap--pie" id="ordersPieWrap">
+                <canvas id="ordersPieChart"></canvas>
+            </div>
         </div>
     </div>
 
     <!-- Top Selling Products -->
-    <div class="chart-container">
+    <div class="chart-container" style="margin-bottom: 30px;">
         <div class="chart-header">
             <div class="chart-title"><i class="fas fa-trophy"></i> Top 10 Net Selling Products (after returns)</div>
         </div>
@@ -392,85 +477,140 @@
 </div>
 
 <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-// Orders Line Chart
-const ordersData = @json($ordersByDate);
-const ordersLineCtx = document.getElementById('ordersLineChart').getContext('2d');
-new Chart(ordersLineCtx, {
-    type: 'line',
-    data: {
-        labels: ordersData.map(d => d.date),
-        datasets: [{
-            label: 'Orders',
-            data: ordersData.map(d => d.count),
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            tension: 0.4,
-            fill: true,
-            pointRadius: 4,
-            pointHoverRadius: 6
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    precision: 0
-                }
-            }
-        }
+(function () {
+    const ordersData = @json($ordersByDate);
+    const statusData = @json($ordersByStatus);
+
+    const statusColors = {
+        pending: '#f59e0b',
+        pending_advance_payment: '#f59e0b',
+        advance_paid: '#3b82f6',
+        order_confirmed: '#3b82f6',
+        processing: '#8b5cf6',
+        shipped: '#14b8a6',
+        delivered: '#10b981',
+        completed: '#10b981',
+        cancelled: '#ef4444'
+    };
+
+    const chartFont = { family: "'Inter', system-ui, sans-serif", size: 12 };
+    const gridColor = 'rgba(107, 114, 128, 0.12)';
+
+    function toggleChart(wrapId, emptyId, hasData) {
+        const wrap = document.getElementById(wrapId);
+        const empty = document.getElementById(emptyId);
+        if (!wrap || !empty) return;
+        wrap.style.display = hasData ? 'block' : 'none';
+        empty.classList.toggle('is-visible', !hasData);
     }
-});
 
-// Orders Pie Chart
-const statusData = @json($ordersByStatus);
-const statusColors = {
-    'pending': '#f59e0b',
-    'pending_advance_payment': '#f59e0b',
-    'advance_paid': '#3b82f6',
-    'order_confirmed': '#3b82f6',
-    'processing': '#8b5cf6',
-    'shipped': '#14b8a6',
-    'delivered': '#10b981',
-    'cancelled': '#ef4444'
-};
+    function formatStatusLabel(status) {
+        return status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
 
-const ordersPieCtx = document.getElementById('ordersPieChart').getContext('2d');
-new Chart(ordersPieCtx, {
-    type: 'pie',
-    data: {
-        labels: statusData.map(d => d.status.replace(/_/g, ' ').toUpperCase()),
-        datasets: [{
-            data: statusData.map(d => d.count),
-            backgroundColor: statusData.map(d => statusColors[d.status] || '#6b7280'),
-            borderWidth: 2,
-            borderColor: '#fff'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 15,
-                    font: {
-                        size: 12
+    const hasLineData = ordersData.length > 0 && ordersData.some(d => Number(d.count) > 0);
+    toggleChart('ordersLineWrap', 'ordersLineEmpty', hasLineData);
+
+    if (hasLineData) {
+        new Chart(document.getElementById('ordersLineChart'), {
+            type: 'line',
+            data: {
+                labels: ordersData.map(d => d.date),
+                datasets: [{
+                    label: 'Orders',
+                    data: ordersData.map(d => Number(d.count)),
+                    borderColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.08)',
+                    borderWidth: 2.5,
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: ordersData.length > 14 ? 0 : 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#4f46e5',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        padding: 12,
+                        titleFont: { size: 13, weight: '600' },
+                        bodyFont: { size: 12 },
+                        callbacks: {
+                            label: ctx => ` ${ctx.parsed.y} order${ctx.parsed.y === 1 ? '' : 's'}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: chartFont, maxRotation: 45, minRotation: 0, autoSkip: true, maxTicksLimit: 10 }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: gridColor },
+                        ticks: { font: chartFont, precision: 0, stepSize: 1 }
                     }
                 }
             }
-        }
+        });
     }
-});
+
+    const hasPieData = statusData.length > 0 && statusData.some(d => Number(d.count) > 0);
+    toggleChart('ordersPieWrap', 'ordersPieEmpty', hasPieData);
+
+    if (hasPieData) {
+        new Chart(document.getElementById('ordersPieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: statusData.map(d => formatStatusLabel(d.status)),
+                datasets: [{
+                    data: statusData.map(d => Number(d.count)),
+                    backgroundColor: statusData.map(d => statusColors[d.status] || '#94a3b8'),
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '58%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: chartFont,
+                            padding: 14,
+                            boxWidth: 12,
+                            boxHeight: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        padding: 12,
+                        callbacks: {
+                            label: ctx => {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = total ? Math.round((ctx.parsed / total) * 100) : 0;
+                                return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+})();
 </script>
 @endsection
