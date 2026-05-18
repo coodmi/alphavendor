@@ -1,108 +1,252 @@
-# Test Login Credentials for AlphaVendor
+# 🔐 Test Login Credentials for AlphaVendor
 
-## All accounts use the same password: `password123`
+## ⚠️ All test accounts use the same password: `password123`
 
 ---
 
-## 1. Admin Account
-- **Email:** admin@test.com
-- **Password:** password123
+## 🔴 1. ADMIN ACCOUNT (Super Admin)
+- **Email:** `admin@test.com`
+- **Password:** `password123`
 - **Role:** Administrator
-- **Access:** Full system access, manage all users, products, orders, settings
+- **Dashboard:** Admin Dashboard
+- **Access:** 
+  - Full system access
+  - Manage all users, products, orders
+  - Site settings & configuration
+  - Reports & analytics
+  - Manage categories, brands, attributes
+  - Approve products & orders
+  - Create reminders for sellers
+  - Set penalty rules
 
 ---
 
-## 2. Regular User/Customer Account
-- **Email:** user@test.com
-- **Password:** password123
-- **Role:** Customer
-- **Access:** Browse products, place orders, manage wishlist, view order history
+## 🟢 2. RETAILER ACCOUNT (Seller)
+- **Email:** `retailer@test.com`
+- **Password:** `password123`
+- **Role:** Retailer (Seller)
+- **Dashboard:** Retailer Dashboard
+- **Access:** 
+  - Add/Edit/Delete own products
+  - View own orders
+  - **Can ONLY mark orders as "Shipped"**
+  - Manage inventory & stock
+  - View product reviews & reply
+  - Wallet & withdrawals
+  - **Report Analysis Dashboard** 📊
+  - View reminders from admin
+  - Support tickets
 
 ---
 
-## 3. Retailer Account
-- **Email:** retailer@test.com
-- **Password:** password123
-- **Role:** Retailer
-- **Access:** Manage retail products, view orders, manage inventory, vendor dashboard
-
----
-
-## 4. Wholesaler Account
-- **Email:** wholesaler@test.com
-- **Password:** password123
+## 🔵 3. WHOLESALER ACCOUNT (Bulk Seller)
+- **Email:** `wholesaler@test.com`
+- **Password:** `password123`
 - **Role:** Wholesaler
-- **Access:** Manage wholesale products, bulk orders, vendor dashboard, minimum order quantities
+- **Dashboard:** Wholesaler Dashboard
+- **Access:** 
+  - Manage wholesale products
+  - Bulk orders with MOQ
+  - Vendor dashboard
+  - Advance payment workflow
+  - Same features as Retailer
 
 ---
 
-## 5. Exporter/Importer Account
-- **Email:** exporter@test.com
-- **Password:** password123
-- **Role:** Exporter (Import/Export)
-- **Access:** Manage import/export products, international orders, vendor dashboard
+## 🟡 4. EXPORTER/IMPORTER ACCOUNT
+- **Email:** `exporter@test.com`
+- **Password:** `password123`
+- **Role:** Exporter/Importer
+- **Dashboard:** Exporter Dashboard
+- **Access:** 
+  - Manage import/export products
+  - International orders
+  - Vendor dashboard
+  - Same features as Retailer
 
 ---
 
-## Existing Accounts in Database
-
-### Admin
-- admin@alphavendor.com (ID: 1)
-
-### Retailers
-- retailer@example.com (ID: 2)
-- retailer@vendor.com (ID: 6)
-- retailer2@vendor.com (ID: 9)
-
-### Wholesalers
-- wholesaler@example.com (ID: 3)
-- wholesaler@vendor.com (ID: 7)
-- wholesaler2@vendor.com (ID: 10)
-
-### Exporters/Importers
-- importer@example.com (ID: 4)
-- exporter@vendor.com (ID: 8)
-
-### Regular Users
-- user@example.com (ID: 5)
+## 🟣 5. REGULAR USER/CUSTOMER ACCOUNT
+- **Email:** `user@test.com`
+- **Password:** `password123`
+- **Role:** Customer
+- **Dashboard:** User Dashboard
+- **Access:** 
+  - Browse products
+  - Add to cart & wishlist
+  - Place orders
+  - View order history
+  - Request returns & refunds
+  - Submit support tickets
+  - Manage profile & addresses
 
 ---
 
-## Login URL
-- **Website:** https://armarketbd.com/login
-- **Local:** http://localhost/login
+## 🌐 LOGIN URLs
+
+### Live Site:
+- **URL:** https://armarketbd.com/login
+- **Admin Panel:** https://armarketbd.com/admin/dashboard
+- **Retailer Panel:** https://armarketbd.com/retailer/dashboard
+
+### Local Development:
+- **URL:** http://localhost/login
+- **Admin Panel:** http://localhost/admin/dashboard
+- **Retailer Panel:** http://localhost/retailer/dashboard
 
 ---
 
-## Notes
-- All test accounts (@test.com) have been created with password: `password123`
-- Existing accounts may have different passwords set by the system
-- To reset password for existing accounts, use the "Forgot Password" feature
-- Admin can reset any user password from the admin panel
+## 📝 EXISTING DATABASE ACCOUNTS
+
+### Admin Accounts:
+- `admin@alphavendor.com` (ID: 1) - May have different password
+
+### Retailer Accounts:
+- `retailer@example.com` (ID: 2)
+- `retailer@vendor.com` (ID: 6)
+- `retailer2@vendor.com` (ID: 9)
+
+### Wholesaler Accounts:
+- `wholesaler@example.com` (ID: 3)
+- `wholesaler@vendor.com` (ID: 7)
+- `wholesaler2@vendor.com` (ID: 10)
+
+### Exporter/Importer Accounts:
+- `importer@example.com` (ID: 4)
+- `exporter@vendor.com` (ID: 8)
+
+### Customer Accounts:
+- `user@example.com` (ID: 5)
+
+**Note:** Existing accounts may have different passwords. Use "Forgot Password" to reset.
 
 ---
 
-## Quick Test Steps
+## 🧪 QUICK TEST SCENARIOS
 
-1. **Test Customer Flow:**
-   - Login as: user@test.com
-   - Browse products
-   - Add to cart
-   - Place order
+### 1️⃣ Test Customer Shopping Flow:
+```
+Login: user@test.com / password123
+→ Browse products
+→ Add to cart
+→ Checkout
+→ Place order
+→ Track order status
+```
 
-2. **Test Vendor Flow:**
-   - Login as: retailer@test.com (or wholesaler/exporter)
-   - Access vendor dashboard
-   - Add products
-   - Manage orders
+### 2️⃣ Test Retailer/Seller Flow:
+```
+Login: retailer@test.com / password123
+→ Go to Retailer Dashboard
+→ Add new product (with all fields)
+→ View orders
+→ Mark order as "Shipped" (ONLY status seller can change)
+→ Check Report Analysis Dashboard 📊
+→ Reply to product reviews
+→ View reminders from admin
+→ Check wallet balance
+```
 
-3. **Test Admin Flow:**
-   - Login as: admin@test.com
-   - Access admin panel
-   - Manage users, products, orders
-   - Configure site settings
+### 3️⃣ Test Admin Flow:
+```
+Login: admin@test.com / password123
+→ Go to Admin Dashboard
+→ Approve products
+→ Manage all orders (change any status)
+→ Create reminder for sellers
+→ Set delivery penalty rules
+→ View reports & analytics
+→ Manage categories with meta fields
+```
+
+### 4️⃣ Test Report Analysis (Retailer):
+```
+Login: retailer@test.com / password123
+→ Sidebar → "Report Analysis"
+→ Select date range
+→ View statistics cards
+→ Check line chart (orders over time)
+→ Check pie chart (orders by status)
+→ View top 10 selling products
+```
 
 ---
 
-**Created:** April 20, 2026
-**Last Updated:** April 20, 2026
+## 🎯 KEY FEATURES TO TEST
+
+### ✅ Product Management:
+- Add product with minimum 5 images
+- Add meta keywords (minimum 5)
+- Set MOQ (Minimum Order Quantity)
+- Add supplier location
+- Add product video (optional)
+- After adding, should redirect to dashboard
+
+### ✅ Order Status Control:
+- **Retailer:** Can ONLY change to "Shipped"
+- **Admin/Employee:** Can change to any status
+- Test unauthorized status change (should show error)
+
+### ✅ Report Analysis:
+- Filter by date range
+- View all statistics
+- Check charts rendering
+- View top products
+
+### ✅ Category with Meta:
+- Add category with meta title
+- Add minimum 5 meta keywords
+- Add meta description
+- Upload category image
+
+### ✅ Reviews & Replies:
+- Customer leaves review
+- Seller views and replies
+- Reply shows on product page
+
+### ✅ Reminders:
+- Admin creates reminder for seller
+- Seller sees in "Reminders" inbox
+- Unread count badge shows
+- Mark as read functionality
+
+### ✅ Penalties:
+- Admin sets penalty rule (e.g., 3+ days = 500 BDT)
+- Order delivered late
+- Penalty auto-deducted from wallet
+- Seller gets notification
+
+---
+
+## 🔒 PASSWORD RESET
+
+If you need to reset password for any account:
+
+### Via Forgot Password:
+1. Go to login page
+2. Click "Forgot Password"
+3. Enter email
+4. Check email for reset link
+
+### Via Admin Panel:
+1. Login as admin
+2. Go to Users Management
+3. Select user
+4. Click "Reset Password"
+
+---
+
+## 📞 SUPPORT
+
+If you face any login issues:
+1. Clear browser cache
+2. Try incognito/private mode
+3. Check if account exists in database
+4. Verify password is correct
+5. Contact system administrator
+
+---
+
+**Created:** April 20, 2026  
+**Last Updated:** May 19, 2026  
+**Version:** 2.0
