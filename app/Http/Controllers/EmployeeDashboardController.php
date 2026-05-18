@@ -246,16 +246,14 @@ class EmployeeDashboardController extends Controller
             return redirect()->back()->with('success', 'Order status updated successfully.');
         }
 
-        // Retail → simple update
-        $order->update(['status' => $request->status]);
-
-        if ($order->user) {
-            Notification::create([
-                'user_id' => $order->user->id,
-                'title'   => 'Order Status Updated',
-                'message' => "Your order #{$order->id} status has been updated to " . ucfirst($request->status),
-                'type'    => 'info',
-            ]);
+        // Retail → state machine
+        try {
+            app(\App\Services\RetailOrderStatusService::class)
+                ->transition($order, $request->status, auth()->user());
+        } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Order status updated successfully.');

@@ -173,7 +173,7 @@
             <!-- Update Order Status -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="font-semibold text-lg mb-4">Order Status</h3>
-                @if(in_array($order->status, ['pending', 'processing']))
+                @if(in_array($order->status, ['order_confirmed', 'processing']))
                 <p class="text-sm text-gray-500 mb-4">
                     You can only mark this order as <strong>Shipped</strong> once it has been dispatched.
                 </p>
@@ -194,7 +194,7 @@
                     @endphp
                     <i class="fas fa-info-circle {{ $sc[$order->status] ?? 'text-gray-400' }}"></i>
                     <span class="text-sm text-gray-600">
-                        This order is <strong>{{ ucfirst($order->status) }}</strong>. No further status changes are available for vendors.
+                        This order is <strong>{{ \App\Helpers\OrderStatus::label($order->status) }}</strong>. No further status changes are available for vendors.
                     </span>
                 </div>
                 @endif

@@ -70,10 +70,11 @@
                                             @csrf
                                             @method('PATCH')
                                             @php
-                                                $service = app(\App\Services\WholesaleOrderStatusService::class);
+                                                $wholesaleService = app(\App\Services\WholesaleOrderStatusService::class);
+                                                $retailService    = app(\App\Services\RetailOrderStatusService::class);
                                                 $allowed = $order->isWholesaleOrImport()
-                                                    ? $service->allowedTransitionsFor($order, auth()->user())
-                                                    : array_keys(\App\Helpers\OrderStatus::all());
+                                                    ? $wholesaleService->allowedTransitionsFor($order, auth()->user())
+                                                    : $retailService->allowedTransitionsFor($order, auth()->user());
                                             @endphp
                                             <select name="status" onchange="this.form.submit()" class="text-sm border rounded px-2 py-1">
                                                 <option value="{{ $order->status }}" selected>

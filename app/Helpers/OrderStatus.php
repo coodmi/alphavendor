@@ -111,6 +111,55 @@ class OrderStatus
         return ['shipped'];
     }
 
+    // ──────────────────────────────────────────────────────────────────────────
+    // RETAIL ORDER STATE MACHINE
+    // ──────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Allowed transitions for retail orders.
+     *
+     * Rules:
+     *  - Seller (retailer) can ONLY set: shipped (from order_confirmed or processing)
+     *  - Admin / Employee control all other transitions
+     *  - delivered and cancelled are terminal states
+     *
+     * Format: [from_status => [to_status, ...]]
+     */
+    public static function retailTransitions(): array
+    {
+        return [
+            'pending'         => ['order_confirmed', 'cancelled'],
+            'order_confirmed' => ['processing', 'shipped', 'cancelled'],
+            'processing'      => ['shipped', 'cancelled'],
+            'shipped'         => ['delivered'],
+            'delivered'       => [],   // terminal
+            'cancelled'       => [],   // terminal
+        ];
+    }
+
+    /**
+     * Role permission map for retail order status transitions.
+     *
+     * Rules:
+     *  - order_confirmed : Admin / Employee only
+     *  - processing      : Admin / Employee only
+     *  - shipped         : Admin / Employee / Seller (retailer)
+     *  - delivered       : Admin / Employee only
+     *  - cancelled       : Admin / Employee only  ← seller CANNOT cancel
+     *
+     * Format: [target_status => [allowed_roles, ...]]
+     */
+    public static function retailRolePermissions(): array
+    {
+        return [
+            'order_confirmed' => ['admin', 'employee'],
+            'processing'      => ['admin', 'employee'],
+            'shipped'         => ['admin', 'employee', 'retailer'],
+            'delivered'       => ['admin', 'employee'],
+            'cancelled'       => ['admin', 'employee'],
+        ];
+    }
+
     /**
      * Determine initial status when order is placed.
      * Wholesale/Importer with advance payment setting → pending_advance_payment
@@ -126,6 +175,13 @@ class OrderStatus
 
     /**
      * Allowed transitions for wholesale/import orders.
+     *
+     * Rules:
+     *  - Seller (wholesaler/exporter/importer) can ONLY set: shipped (from processing)
+     *  - Cancel is allowed from: pending_advance_payment, advance_paid, order_confirmed, processing
+     *  - Cancel is NOT allowed after: shipped, delivered
+     *  - delivered is a terminal state
+     *
      * Format: [from_status => [to_status, ...]]
      */
     public static function wholesaleTransitions(): array
@@ -135,14 +191,23 @@ class OrderStatus
             'advance_paid'            => ['order_confirmed', 'cancelled'],
             'order_confirmed'         => ['processing', 'cancelled'],
             'processing'              => ['shipped', 'cancelled'],
-            'shipped'                 => ['delivered'],
-            'delivered'               => [],
-            'cancelled'               => [],
+            'shipped'                 => ['delivered'],   // ← no cancel after shipped
+            'delivered'               => [],              // terminal
+            'cancelled'               => [],              // terminal
         ];
     }
 
     /**
      * Role permission map for wholesale/import status transitions.
+     *
+     * Rules per your workflow:
+     *  - advance_paid    : Admin / Employee only (payment verification)
+     *  - order_confirmed : Admin / Employee only
+     *  - processing      : Admin / Employee only  ← seller CANNOT set processing
+     *  - shipped         : Admin / Employee / Seller (wholesaler, exporter, importer)
+     *  - delivered       : Admin / Employee only
+     *  - cancelled       : Admin / Employee only  ← seller CANNOT cancel
+     *
      * Format: [target_status => [allowed_roles, ...]]
      */
     public static function wholesaleRolePermissions(): array
@@ -150,8 +215,8 @@ class OrderStatus
         return [
             'advance_paid'    => ['admin', 'employee'],
             'order_confirmed' => ['admin', 'employee'],
-            'processing'      => ['admin', 'employee', 'wholesaler', 'exporter'],
-            'shipped'         => ['admin', 'employee', 'wholesaler', 'exporter'],
+            'processing'      => ['admin', 'employee'],                              // seller removed
+            'shipped'         => ['admin', 'employee', 'wholesaler', 'exporter', 'importer'],
             'delivered'       => ['admin', 'employee'],
             'cancelled'       => ['admin', 'employee'],
         ];

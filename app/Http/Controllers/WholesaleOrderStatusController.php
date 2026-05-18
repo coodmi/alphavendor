@@ -25,6 +25,8 @@ class WholesaleOrderStatusController extends Controller
             'status' => ['required', Rule::in(array_keys(OrderStatus::all()))],
         ]);
 
+        $actor = $request->user();
+
         // Load vendor relation if not already loaded
         $order->loadMissing('vendor');
 
@@ -35,8 +37,15 @@ class WholesaleOrderStatusController extends Controller
             ], 422);
         }
 
+        // Employee must have orders.update_status permission
+        if ($actor->isEmployee() && !$actor->hasPermission('orders.update_status')) {
+            return response()->json([
+                'message' => 'You do not have permission to update order status.',
+            ], 403);
+        }
+
         try {
-            $this->service->transition($order, $request->status, $request->user());
+            $this->service->transition($order, $request->status, $actor);
         } catch (UnauthorisedOrderTransitionException $e) {
             return response()->json(['message' => $e->getMessage()], 403);
         } catch (InvalidOrderTransitionException $e) {

@@ -78,10 +78,11 @@ class Order extends Model
 
     /**
      * Check if this order belongs to a wholesale or import vendor.
+     * Covers: wholesaler, exporter, importer roles.
      */
     public function isWholesaleOrImport(): bool
     {
-        return in_array($this->vendor->role ?? '', ['wholesaler', 'exporter']);
+        return in_array($this->vendor->role ?? '', ['wholesaler', 'exporter', 'importer']);
     }
 
     /**

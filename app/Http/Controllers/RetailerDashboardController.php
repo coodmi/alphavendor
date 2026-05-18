@@ -114,14 +114,22 @@ class RetailerDashboardController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|in:shipped'
+            'status' => 'required|in:shipped',
         ]);
 
-        if (!in_array($order->status, ['pending', 'processing'])) {
-            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Pending or Processing.');
+        // Retailer can only ship from: order_confirmed or processing
+        if (!in_array($order->status, ['order_confirmed', 'processing'])) {
+            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Order Confirmed or Processing.');
         }
 
-        $order->update(['status' => 'shipped']);
+        try {
+            app(\App\Services\RetailOrderStatusService::class)
+                ->transition($order, 'shipped', Auth::user());
+        } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Order marked as Shipped!');
     }}

@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <a href="{{ route('retailer.orders.show', $order) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                                    @if(in_array($order->status, ['pending', 'processing']))
+                                    @if(in_array($order->status, ['order_confirmed', 'processing']))
                                     <form action="{{ route('retailer.orders.update-status', $order) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('PATCH')

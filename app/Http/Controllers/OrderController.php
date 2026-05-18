@@ -379,12 +379,15 @@ class OrderController extends Controller
             return redirect()->back()->with('success', 'Order marked as Shipped!');
         }
 
-        // Retail vendor — simple shipped update
-        if (!in_array($order->status, ['pending', 'processing'])) {
-            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Pending or Processing.');
+        // Retail vendor — state machine (only shipped allowed)
+        try {
+            app(\App\Services\RetailOrderStatusService::class)
+                ->transition($order, 'shipped', Auth::user());
+        } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Order Confirmed or Processing.');
         }
-
-        $order->update(['status' => 'shipped']);
 
         return redirect()->back()->with('success', 'Order marked as Shipped!');
     }

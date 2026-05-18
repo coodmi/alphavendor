@@ -93,10 +93,11 @@
                     @csrf @method('PATCH')
                     <label class="block text-sm font-medium text-gray-700 mb-2">Update Status</label>
                     @php
-                        $service  = app(\App\Services\WholesaleOrderStatusService::class);
-                        $allowed  = $order->isWholesaleOrImport()
-                            ? $service->allowedTransitionsFor($order, auth()->user())
-                            : ['pending','processing','shipped','delivered','cancelled'];
+                        $wholesaleService = app(\App\Services\WholesaleOrderStatusService::class);
+                        $retailService    = app(\App\Services\RetailOrderStatusService::class);
+                        $allowed = $order->isWholesaleOrImport()
+                            ? $wholesaleService->allowedTransitionsFor($order, auth()->user())
+                            : $retailService->allowedTransitionsFor($order, auth()->user());
                     @endphp
                     <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent mb-3"
                         {{ empty($allowed) ? 'disabled' : '' }}>
