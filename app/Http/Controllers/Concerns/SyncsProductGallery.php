@@ -10,14 +10,17 @@ use Illuminate\Validation\ValidationException;
 
 trait SyncsProductGallery
 {
+    protected int $minGalleryImages = 2;
+
     protected function validateGalleryImages(Request $request, bool $isUpdate, Product $product = null): void
     {
+        $min = $this->minGalleryImages;
         $newCount = $request->hasFile('gallery_images') ? count($request->file('gallery_images')) : 0;
 
         if (! $isUpdate) {
-            if ($newCount < 5) {
+            if ($newCount < $min) {
                 throw ValidationException::withMessages([
-                    'gallery_images' => 'Please upload at least 5 product images.',
+                    'gallery_images' => "Please upload at least {$min} product images.",
                 ]);
             }
 
@@ -28,12 +31,46 @@ trait SyncsProductGallery
             return;
         }
 
-        $existingCount = $product->images()->count() + ($product->image ? 1 : 0);
+        $removeIds = array_map('intval', (array) $request->input('remove_gallery_ids', []));
+        $remaining = $product->images()->whereNotIn('id', $removeIds)->count();
+        $mainExtra = ($product->image && ! $product->images()->where('image', $product->image)->exists()) ? 1 : 0;
 
-        if ($existingCount + $newCount < 5) {
+        if ($remaining + $mainExtra + $newCount < $min) {
             throw ValidationException::withMessages([
-                'gallery_images' => 'Product must have at least 5 images in total.',
+                'gallery_images' => "Product must have at least {$min} images in total.",
             ]);
+        }
+    }
+
+    protected function removeMarkedGalleryImages(Product $product, Request $request): void
+    {
+        $ids = array_filter(array_map('intval', (array) $request->input('remove_gallery_ids', [])));
+
+        if ($ids === []) {
+            return;
+        }
+
+        foreach ($product->images()->whereIn('id', $ids)->get() as $img) {
+            if (! filter_var($img->image, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($img->image);
+            }
+            $img->delete();
+        }
+
+        $product->refresh();
+
+        if ($product->image && ! $product->images()->where('image', $product->image)->exists()) {
+            $first = $product->images()->orderBy('sort_order')->first();
+            $product->update(['image' => $first?->image]);
+        }
+    }
+
+    protected function deleteProductGalleryFiles(Product $product): void
+    {
+        foreach ($product->images as $img) {
+            if (! filter_var($img->image, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($img->image);
+            }
         }
     }
 

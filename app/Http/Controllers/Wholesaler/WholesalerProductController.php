@@ -70,7 +70,7 @@ class WholesalerProductController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'image_url' => 'nullable|url',
-            'gallery_images' => 'required|array|min:5',
+            'gallery_images' => 'required|array|min:2',
             'gallery_images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'price' => 'required|numeric|min:0',
             'old_price' => 'nullable|numeric|min:0',
@@ -132,6 +132,8 @@ class WholesalerProductController extends Controller
             'image_url' => 'nullable|url',
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'remove_gallery_ids' => 'nullable|array',
+            'remove_gallery_ids.*' => 'integer|exists:product_images,id',
             'price' => 'required|numeric|min:0',
             'old_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -164,9 +166,10 @@ class WholesalerProductController extends Controller
             }
             $validated['image'] = $validated['image_url'];
         }
-        unset($validated['image_url'], $validated['gallery_images']);
+        unset($validated['image_url'], $validated['gallery_images'], $validated['remove_gallery_ids']);
 
         $validated['is_featured'] = $request->has('is_featured');
+        $this->removeMarkedGalleryImages($product, $request);
         $product->update($validated);
         $this->syncGalleryImages($product, $request);
         $this->syncAttributes($product, $request);
@@ -188,11 +191,7 @@ class WholesalerProductController extends Controller
             Storage::disk('public')->delete($product->image);
         }
 
-        foreach ($product->images as $img) {
-            if (! filter_var($img->image, FILTER_VALIDATE_URL)) {
-                Storage::disk('public')->delete($img->image);
-            }
-        }
+        $this->deleteProductGalleryFiles($product);
 
         $product->delete();
 

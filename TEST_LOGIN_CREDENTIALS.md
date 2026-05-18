@@ -98,27 +98,32 @@
 
 ## 📝 EXISTING DATABASE ACCOUNTS
 
-### Admin Accounts:
-- `admin@alphavendor.com` (ID: 1) - May have different password
+### ⚠️ Existing Vendor Accounts (Password: `password`)
 
-### Retailer Accounts:
-- `retailer@example.com` (ID: 2)
-- `retailer@vendor.com` (ID: 6)
-- `retailer2@vendor.com` (ID: 9)
+These accounts already exist in the database with password: `password` (NOT password123)
 
-### Wholesaler Accounts:
-- `wholesaler@example.com` (ID: 3)
-- `wholesaler@vendor.com` (ID: 7)
-- `wholesaler2@vendor.com` (ID: 10)
+#### Retailer Accounts:
+- **Email:** `retailer@vendor.com` | **Password:** `password` | **Name:** Fashion Empire Store
+- **Email:** `retailer2@vendor.com` | **Password:** `password` | **Name:** Beauty Paradise
 
-### Exporter/Importer Accounts:
-- `importer@example.com` (ID: 4)
-- `exporter@vendor.com` (ID: 8)
+#### Wholesaler Accounts:
+- **Email:** `wholesaler@vendor.com` | **Password:** `password` | **Name:** Tech Electronics Hub
+- **Email:** `wholesaler2@vendor.com` | **Password:** `password` | **Name:** Sports World
 
-### Customer Accounts:
-- `user@example.com` (ID: 5)
+#### Exporter Account:
+- **Email:** `exporter@vendor.com` | **Password:** `password` | **Name:** Global Exports Inc
 
-**Note:** Existing accounts may have different passwords. Use "Forgot Password" to reset.
+### 🔧 How to Create Test Accounts
+
+If test accounts (@test.com) don't exist, run this command on the server:
+
+```bash
+php artisan test:create-accounts
+```
+
+This will create/update all test accounts with password: `password123`
+
+**Note:** If you can't login with test accounts, they may not exist in the database yet. Use the existing vendor accounts above OR run the command to create test accounts.
 
 ---
 

@@ -2,44 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\Category;
+use App\Http\Controllers\Concerns\SyncsProductGallery;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RetailerProductController extends Controller
 {
+    use SyncsProductGallery;
+
     public function index()
     {
-        // Get only products belonging to the authenticated retailer
-        $products = Product::with(['category', 'brand', 'attributes', 'specialOffer'])
+        $products = Product::with(['category', 'brand', 'attributes', 'specialOffer', 'images'])
             ->where('vendor_id', Auth::id())
             ->latest()
             ->get();
 
-        // Get categories and brands belonging to the authenticated retailer or created by admin (vendor_id = null)
-        $categories = Category::where(function($q) {
-                $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
-            })
+        $categories = Category::where(function ($q) {
+            $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
+        })
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
-        $brands = Brand::where(function($q) {
-                $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
-            })
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->get();
-        
-        // Get active special offers
-        $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
-        
-        // Get active shipping methods
-        $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
 
-        // Get global attributes
+        $brands = Brand::where(function ($q) {
+            $q->whereNull('vendor_id')->orWhere('vendor_id', Auth::id());
+        })
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
+        $shippingMethods = \App\Models\ShippingMethod::where('is_active', true)->orderBy('sort_order')->orderBy('zone')->get();
         $attributes = \App\Models\Attribute::orderBy('sort_order')->orderBy('name')->get();
 
         return view('retailer.products.index', compact('products', 'categories', 'brands', 'offers', 'shippingMethods', 'attributes'));
@@ -47,25 +44,30 @@ class RetailerProductController extends Controller
 
     public function store(Request $request)
     {
+        $this->validateProductMetaKeywords($request);
+        $this->validateGalleryImages($request, false);
+
         $validated = $request->validate([
-            'category_id'    => 'required|exists:categories,id',
-            'brand_id'       => 'nullable|exists:brands,id',
-            'name'           => 'required|string|max:255',
-            'description'    => 'nullable|string',
-            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
-            'image_url'      => 'nullable|url',
-            'price'          => 'required|numeric|min:0',
-            'old_price'      => 'nullable|numeric|min:0',
-            'stock'          => 'required|integer|min:0',
-            'sku'            => 'required|string|max:255|unique:products,sku',
-            'status'         => 'required|in:active,inactive,out_of_stock',
-            'is_featured'    => 'boolean',
-            'badge'          => 'nullable|string|max:50',
-            'minimum_order'  => 'nullable|integer|min:1',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'image_url' => 'nullable|url',
+            'gallery_images' => 'required|array|min:2',
+            'gallery_images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'price' => 'required|numeric|min:0',
+            'old_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'sku' => 'required|string|max:255|unique:products,sku',
+            'status' => 'required|in:active,inactive,out_of_stock',
+            'is_featured' => 'boolean',
+            'badge' => 'nullable|string|max:50',
+            'minimum_order' => 'nullable|integer|min:1',
             'supplier_location' => 'nullable|string|max:255',
-            'video'          => 'nullable|string|max:500',
-            'meta_title'     => 'nullable|string|max:255',
-            'meta_keywords'  => 'nullable|string|max:1000',
+            'video' => 'nullable|string|max:500',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
             'shipping_method_id' => 'nullable|exists:shipping_methods,id',
@@ -80,58 +82,54 @@ class RetailerProductController extends Controller
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $validated['image_url'];
         }
-        unset($validated['image_url']);
+        unset($validated['image_url'], $validated['gallery_images']);
 
         $validated['vendor_id'] = Auth::id();
         $validated['is_featured'] = $request->has('is_featured');
 
         $product = Product::create($validated);
-
-        // Sync attributes
-        if ($request->has('attributes')) {
-            $attributesData = [];
-            foreach ($request->attributes as $attributeId => $value) {
-                $attributesData[$attributeId] = ['value' => $value];
-            }
-            $product->attributes()->sync($attributesData);
-        }
+        $this->syncGalleryImages($product, $request);
+        $this->syncProductAttributes($product, $request);
 
         return response()->json([
             'success' => true,
             'message' => 'Product created successfully!',
-            'product' => $product->load(['category', 'brand'])
+            'product' => $product->load(['category', 'brand', 'images', 'attributes']),
         ]);
     }
 
     public function update(Request $request, Product $product)
     {
-        // Ensure retailer can only update their own products
         if ($product->vendor_id !== Auth::id()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized to update this product!'
-            ], 403);
+            return response()->json(['success' => false, 'message' => 'Unauthorized to update this product!'], 403);
         }
 
+        $this->validateProductMetaKeywords($request);
+        $this->validateGalleryImages($request, true, $product);
+
         $validated = $request->validate([
-            'category_id'    => 'required|exists:categories,id',
-            'brand_id'       => 'nullable|exists:brands,id',
-            'name'           => 'required|string|max:255',
-            'description'    => 'nullable|string',
-            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
-            'image_url'      => 'nullable|url',
-            'price'          => 'required|numeric|min:0',
-            'old_price'      => 'nullable|numeric|min:0',
-            'stock'          => 'required|integer|min:0',
-            'sku'            => 'required|string|max:255|unique:products,sku,' . $product->id,
-            'status'         => 'required|in:active,inactive,out_of_stock',
-            'is_featured'    => 'boolean',
-            'badge'          => 'nullable|string|max:50',
-            'minimum_order'  => 'nullable|integer|min:1',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'image_url' => 'nullable|url',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'remove_gallery_ids' => 'nullable|array',
+            'remove_gallery_ids.*' => 'integer|exists:product_images,id',
+            'price' => 'required|numeric|min:0',
+            'old_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
+            'status' => 'required|in:active,inactive,out_of_stock',
+            'is_featured' => 'boolean',
+            'badge' => 'nullable|string|max:50',
+            'minimum_order' => 'nullable|integer|min:1',
             'supplier_location' => 'nullable|string|max:255',
-            'video'          => 'nullable|string|max:500',
-            'meta_title'     => 'nullable|string|max:255',
-            'meta_keywords'  => 'nullable|string|max:1000',
+            'video' => 'nullable|string|max:500',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
             'shipping_method_id' => 'nullable|exists:shipping_methods,id',
@@ -141,65 +139,47 @@ class RetailerProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid category or brand selected!'], 422);
         }
 
-        // Handle image update
         if ($request->hasFile('image')) {
-            // Delete old image if it's a stored file
-            if ($product->image && !filter_var($product->image, FILTER_VALIDATE_URL)) {
+            if ($product->image && ! filter_var($product->image, FILTER_VALIDATE_URL)) {
                 Storage::disk('public')->delete($product->image);
             }
             $validated['image'] = $request->file('image')->store('products', 'public');
         } elseif ($request->filled('image_url')) {
-            // Delete old image if it's a stored file
-            if ($product->image && !filter_var($product->image, FILTER_VALIDATE_URL)) {
+            if ($product->image && ! filter_var($product->image, FILTER_VALIDATE_URL)) {
                 Storage::disk('public')->delete($product->image);
             }
             $validated['image'] = $validated['image_url'];
         }
-        unset($validated['image_url']);
+        unset($validated['image_url'], $validated['gallery_images'], $validated['remove_gallery_ids']);
 
         $validated['is_featured'] = $request->has('is_featured');
 
+        $this->removeMarkedGalleryImages($product, $request);
         $product->update($validated);
-
-        // Sync attributes
-        if ($request->has('attributes')) {
-            $attributesData = [];
-            foreach ($request->attributes as $attributeId => $value) {
-                $attributesData[$attributeId] = ['value' => $value];
-            }
-            $product->attributes()->sync($attributesData);
-        } else {
-            $product->attributes()->detach();
-        }
+        $this->syncGalleryImages($product, $request);
+        $this->syncProductAttributes($product, $request);
 
         return response()->json([
             'success' => true,
             'message' => 'Product updated successfully!',
-            'product' => $product->load(['category', 'brand'])
+            'product' => $product->load(['category', 'brand', 'images', 'attributes']),
         ]);
     }
 
     public function destroy(Product $product)
     {
-        // Ensure retailer can only delete their own products
         if ($product->vendor_id !== Auth::id()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized to delete this product!'
-            ], 403);
+            return response()->json(['success' => false, 'message' => 'Unauthorized to delete this product!'], 403);
         }
 
-        // Delete image if it's a stored file
-        if ($product->image && !filter_var($product->image, FILTER_VALIDATE_URL)) {
+        if ($product->image && ! filter_var($product->image, FILTER_VALIDATE_URL)) {
             Storage::disk('public')->delete($product->image);
         }
 
+        $this->deleteProductGalleryFiles($product);
         $product->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Product deleted successfully!'
-        ]);
+        return response()->json(['success' => true, 'message' => 'Product deleted successfully!']);
     }
 
     private function verifyCategoryAndBrand(array $validated): bool
@@ -227,5 +207,20 @@ class RetailerProductController extends Controller
         }
 
         return true;
+    }
+
+    private function syncProductAttributes(Product $product, Request $request): void
+    {
+        if ($request->has('attributes')) {
+            $attributesData = [];
+            foreach ($request->attributes as $attributeId => $value) {
+                if ($value !== null && $value !== '') {
+                    $attributesData[$attributeId] = ['value' => is_array($value) ? implode(', ', $value) : $value];
+                }
+            }
+            $product->attributes()->sync($attributesData);
+        } else {
+            $product->attributes()->detach();
+        }
     }
 }

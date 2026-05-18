@@ -188,6 +188,8 @@
                 </div>
             </div>
 
+            @include('partials.vendor-product-gallery')
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Price *</label>
@@ -447,6 +449,7 @@ function openAddModal() {
     document.querySelector('input[value="upload"]').checked = true;
     toggleImageSource();
     document.getElementById('imagePreview').classList.add('hidden');
+    if (typeof resetProductGallery === 'function') resetProductGallery();
     document.getElementById('productModal').classList.remove('hidden');
 }
 
@@ -475,6 +478,9 @@ function editProduct(product) {
     if (document.getElementById('productMetaTitle'))    document.getElementById('productMetaTitle').value = product.meta_title || '';
     if (document.getElementById('productMetaKeywords')) document.getElementById('productMetaKeywords').value = product.meta_keywords || '';
     if (document.getElementById('productMetaDescription')) document.getElementById('productMetaDescription').value = product.meta_description || '';
+    const galleryInput = document.getElementById('productGalleryImages');
+    if (galleryInput) galleryInput.removeAttribute('required');
+    if (typeof renderExistingGallery === 'function') renderExistingGallery(product);
 
     // Populate attribute values
     document.querySelectorAll('.attr-field').forEach(field => {
@@ -517,6 +523,7 @@ function editProduct(product) {
 
 function closeModal() {
     document.getElementById('productModal').classList.add('hidden');
+    if (typeof resetProductGallery === 'function') resetProductGallery();
 }
 
 function previewImageFile(event) {
@@ -609,6 +616,10 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
             kwField.focus();
             return;
         }
+    }
+
+    if (typeof validateProductGallery === 'function' && !validateProductGallery()) {
+        return;
     }
 
     const formData = new FormData(this);

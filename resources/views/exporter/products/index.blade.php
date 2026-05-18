@@ -203,6 +203,8 @@
                 </div>
             </div>
 
+            @include('partials.vendor-product-gallery')
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Price *</label>
@@ -348,6 +350,7 @@ function openAddModal() {
     document.querySelector('input[value="upload"]').checked = true;
     toggleImageSource();
     document.getElementById('imagePreview').classList.add('hidden');
+    if (typeof resetProductGallery === 'function') resetProductGallery();
     document.getElementById('productModal').classList.remove('hidden');
 }
 
@@ -382,6 +385,10 @@ function editProduct(product) {
         });
     }
 
+    const galleryInput = document.getElementById('productGalleryImages');
+    if (galleryInput) galleryInput.removeAttribute('required');
+    if (typeof renderExistingGallery === 'function') renderExistingGallery(product);
+
     // Show current image if exists
     if (product.image) {
         const isUrl = product.image.startsWith('http');
@@ -397,6 +404,7 @@ function editProduct(product) {
 
 function closeModal() {
     document.getElementById('productModal').classList.add('hidden');
+    if (typeof resetProductGallery === 'function') resetProductGallery();
 }
 
 function previewImageFile(event) {
@@ -479,6 +487,10 @@ function executeSoftDelete() {
 // Handle form submission with AJAX
 document.getElementById('productForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    if (typeof validateProductGallery === 'function' && !validateProductGallery()) {
+        return;
+    }
 
     const formData = new FormData(this);
     const url = editingProductId ? `/exporter/products/${editingProductId}` : '{{ route('exporter.products.store') }}';
