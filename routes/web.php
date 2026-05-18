@@ -509,6 +509,14 @@ Route::middleware('auth')->group(function () {
         Route::patch('/advance-payments/{advancePayment}/status', [App\Http\Controllers\Admin\AdvancePaymentController::class, 'updateStatus'])->name('advance-payments.update-status');
         Route::delete('/advance-payments/{advancePayment}', [App\Http\Controllers\Admin\AdvancePaymentController::class, 'destroy'])->name('advance-payments.destroy');
 
+        // Delivery Penalty Rules
+        Route::get('/delivery-penalty', [App\Http\Controllers\Admin\DeliveryPenaltyController::class, 'index'])->name('delivery-penalty.index');
+        Route::post('/delivery-penalty', [App\Http\Controllers\Admin\DeliveryPenaltyController::class, 'store'])->name('delivery-penalty.store');
+        Route::put('/delivery-penalty/{rule}', [App\Http\Controllers\Admin\DeliveryPenaltyController::class, 'update'])->name('delivery-penalty.update');
+        Route::patch('/delivery-penalty/{rule}/toggle', [App\Http\Controllers\Admin\DeliveryPenaltyController::class, 'toggle'])->name('delivery-penalty.toggle');
+        Route::delete('/delivery-penalty/{rule}', [App\Http\Controllers\Admin\DeliveryPenaltyController::class, 'destroy'])->name('delivery-penalty.destroy');
+        Route::post('/delivery-penalty/run-now', [App\Http\Controllers\Admin\DeliveryPenaltyController::class, 'runNow'])->name('delivery-penalty.run-now');
+
         // Withdrawal Management
         Route::get('/withdrawals', [App\Http\Controllers\Admin\WithdrawalManagementController::class, 'index'])->name('withdrawals.index');
         Route::get('/withdrawals/{withdrawal}', [App\Http\Controllers\Admin\WithdrawalManagementController::class, 'show'])->name('withdrawals.show');

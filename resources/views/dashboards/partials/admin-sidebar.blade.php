@@ -270,6 +270,10 @@
         <i class="fas fa-bell"></i>
         <span>Seller Reminders</span>
     </a>
+    <a href="{{ route('admin.delivery-penalty.index') }}" class="menu-item {{ request()->routeIs('admin.delivery-penalty*') ? 'active' : '' }}">
+        <i class="fas fa-gavel"></i>
+        <span>Delivery Penalty</span>
+    </a>
 </div>
 
 <div class="menu-section">

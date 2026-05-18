@@ -39,7 +39,11 @@ class WholesaleOrderStatusService
         }
 
         // 3. Apply the transition
-        $order->update(['status' => $newStatus]);
+        $updateData = ['status' => $newStatus];
+        if ($newStatus === 'order_confirmed' && !$order->confirmed_at) {
+            $updateData['confirmed_at'] = now();
+        }
+        $order->update($updateData);
 
         // 4. Write audit log — non-blocking
         try {

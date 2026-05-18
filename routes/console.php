@@ -8,5 +8,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Schedule violation checks
-Schedule::command('violations:check-orders')->hourly();
+// Check late delivery penalties daily at 8:00 AM
+Schedule::command('violations:check-orders')->dailyAt('08:00');

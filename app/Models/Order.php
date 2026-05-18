@@ -13,16 +13,18 @@ class Order extends Model
         'payment_method', 'shipping_address', 'shipping_city', 'shipping_state',
         'shipping_zip', 'shipping_country', 'phone', 'notes',
         'customer_name', 'customer_phone', 'customer_email',
-        'paid_at',
+        'paid_at', 'confirmed_at', 'penalty_applied',
         'paperfly_tracking_number', 'paperfly_merchant_order_ref', 'delivery_status',
         'tracking_history', 'picked_at', 'in_transit_at', 'delivered_at'
     ];
 
     protected $casts = [
-        'picked_at' => 'datetime',
-        'in_transit_at' => 'datetime',
-        'delivered_at' => 'datetime',
-        'paid_at' => 'datetime',
+        'picked_at'       => 'datetime',
+        'in_transit_at'   => 'datetime',
+        'delivered_at'    => 'datetime',
+        'paid_at'         => 'datetime',
+        'confirmed_at'    => 'datetime',
+        'penalty_applied' => 'boolean',
     ];
 
     public function user()
