@@ -238,12 +238,28 @@
         <div class="stat-card green">
             <div class="stat-header">
                 <div>
-                    <div class="stat-title">Product Sold</div>
+                    <div class="stat-title">Net Product Sold</div>
                     <div class="stat-value">{{ number_format($productSales) }}</div>
-                    <div class="stat-subtitle">Total units sold</div>
+                    <div class="stat-subtitle">Gross: {{ number_format($productSalesGross) }} − Returned: {{ number_format($returnedQuantity) }} units</div>
                 </div>
                 <div class="stat-icon green">
                     <i class="fas fa-box"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Net Revenue (after refunds) -->
+        <div class="stat-card purple">
+            <div class="stat-header">
+                <div>
+                    <div class="stat-title">Net Sales Revenue</div>
+                    <div class="stat-value">{{ currency($netRevenue) }}</div>
+                    <div class="stat-subtitle">
+                        Gross: {{ currency($grossRevenue) }} &minus; Refunded: {{ currency($totalRefundAmount) }}
+                    </div>
+                </div>
+                <div class="stat-icon purple">
+                    <i class="fas fa-coins"></i>
                 </div>
             </div>
         </div>
@@ -282,7 +298,9 @@
                 <div>
                     <div class="stat-title">Total Return & Refund</div>
                     <div class="stat-value">{{ number_format($totalReturns) }}</div>
-                    <div class="stat-subtitle">Today: {{ $todayReturns }}</div>
+                    <div class="stat-subtitle">
+                        Today: {{ $todayReturns }} | Completed: {{ $completedReturns }}
+                    </div>
                 </div>
                 <div class="stat-icon orange">
                     <i class="fas fa-undo"></i>
@@ -341,14 +359,15 @@
     <!-- Top Selling Products -->
     <div class="chart-container">
         <div class="chart-header">
-            <div class="chart-title"><i class="fas fa-trophy"></i> Top 10 Selling Products</div>
+            <div class="chart-title"><i class="fas fa-trophy"></i> Top 10 Net Selling Products (after returns)</div>
         </div>
         <table class="top-products-table">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Product Name</th>
-                    <th>Total Sold</th>
+                    <th>Net Sold</th>
+                    <th>Returned</th>
                 </tr>
             </thead>
             <tbody>
@@ -357,10 +376,11 @@
                     <td><strong>{{ $index + 1 }}</strong></td>
                     <td>{{ $product->name }}</td>
                     <td><span style="background: #dbeafe; color: #3b82f6; padding: 4px 12px; border-radius: 12px; font-weight: 600;">{{ number_format($product->total_sold) }} units</span></td>
+                    <td>{{ number_format($product->returned ?? 0) }} units</td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="3" style="text-align: center; padding: 40px; color: #9ca3af;">
+                    <td colspan="4" style="text-align: center; padding: 40px; color: #9ca3af;">
                         <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
                         No sales data available for the selected period
                     </td>
