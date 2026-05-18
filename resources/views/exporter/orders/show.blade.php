@@ -13,7 +13,7 @@
         <a href="{{ route('exporter.orders') }}" class="text-blue-600 hover:text-blue-800">
             <i class="fas fa-arrow-left mr-2"></i>Back to Orders
         </a>
-        @php $invoiceRoute = auth()->user()->role === 'importer' ? 'importer.orders.invoice' : 'exporter.orders.invoice'; @endphp
+        @php $invoiceRoute = \App\Support\VendorPortal::routePrefix() . '.orders.invoice'; @endphp
         <a href="{{ route($invoiceRoute, $order) }}" target="_blank"
             class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition">
             <i class="fas fa-file-invoice"></i> Print / Download Invoice

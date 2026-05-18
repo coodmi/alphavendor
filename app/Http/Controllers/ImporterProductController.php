@@ -47,13 +47,16 @@ class ImporterProductController extends Controller
         $offers = \App\Models\SpecialOffer::where('is_active', true)->orderBy('sort_order')->get();
         $attributes = \App\Models\Attribute::orderBy('sort_order')->orderBy('name')->get();
 
+        $portalPrefix = \App\Support\VendorPortal::routePrefix();
+
         return view('importer.products.index', compact(
             'products',
             'categories',
             'brands',
             'certifications',
             'offers',
-            'attributes'
+            'attributes',
+            'portalPrefix'
         ));
     }
 

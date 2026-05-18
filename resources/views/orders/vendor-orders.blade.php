@@ -11,10 +11,8 @@
         @include('dashboards.partials.retailer-sidebar')
     @elseif($userRole === 'wholesaler')
         @include('dashboards.partials.wholesaler-sidebar')
-    @elseif($userRole === 'exporter')
-        @include('dashboards.partials.exporter-sidebar')
-    @elseif($userRole === 'importer')
-        @include('dashboards.partials.importer-sidebar')
+    @elseif(in_array($userRole, ['exporter', 'importer']))
+        @include('dashboards.partials.vendor-portal-sidebar')
     @endif
 @endsection
 
@@ -88,6 +86,10 @@
                                 <a href="{{ route('retailer.orders.show', $order) }}" class="text-teal-700 hover:text-teal-900 font-medium">View Details</a>
                             @elseif(auth()->user()->role === 'wholesaler')
                                 <a href="{{ route('wholesaler.orders.show', $order) }}" class="text-teal-700 hover:text-teal-900 font-medium">View Details</a>
+                            @elseif(in_array(auth()->user()->role, ['exporter', 'importer']))
+                                @php $orderPrefix = \App\Support\VendorPortal::routePrefix(); @endphp
+                                <a href="{{ route($orderPrefix . '.orders.show', $order) }}" class="text-teal-700 hover:text-teal-900 font-medium mr-3">View</a>
+                                <a href="{{ route($orderPrefix . '.orders.invoice', $order) }}" target="_blank" class="text-teal-700 hover:text-teal-900 font-medium">Invoice</a>
                             @else
                                 <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-teal-700 hover:text-teal-900 font-medium">Invoice</a>
                             @endif

@@ -135,6 +135,13 @@ class ExporterBrandController extends Controller
             ], 403);
         }
 
+        if ($brand->products()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete this brand while products are assigned. Reassign or remove those products first.',
+            ], 422);
+        }
+
         // Delete logo if it's a stored file
         if ($brand->logo && !filter_var($brand->logo, FILTER_VALIDATE_URL)) {
             Storage::disk('public')->delete($brand->logo);

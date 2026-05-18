@@ -26,7 +26,9 @@ class ImporterCategoryController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('importer.categories.index', compact('categories', 'adminCategories'));
+        $portalPrefix = \App\Support\VendorPortal::routePrefix();
+
+        return view('importer.categories.index', compact('categories', 'adminCategories', 'portalPrefix'));
     }
 
     public function store(Request $request)

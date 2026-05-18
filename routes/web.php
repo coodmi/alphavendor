@@ -627,16 +627,26 @@ Route::middleware('auth')->group(function () {
         Route::delete('/brands/{brand}', [ExporterBrandController::class, 'destroy'])->name('brands.destroy');
 
         // Category management
-        Route::get('/categories', [ExporterCategoryController::class, 'index'])->name('categories');
-        Route::post('/categories', [ExporterCategoryController::class, 'store'])->name('categories.store');
-        Route::put('/categories/{category}', [ExporterCategoryController::class, 'update'])->name('categories.update');
-        Route::delete('/categories/{category}', [ExporterCategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::get('/categories', [ImporterCategoryController::class, 'index'])->name('categories');
+        Route::post('/categories', [ImporterCategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [ImporterCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [ImporterCategoryController::class, 'destroy'])->name('categories.destroy');
 
         // Product management
-        Route::get('/products', [ExporterProductController::class, 'index'])->name('products');
-        Route::post('/products', [ExporterProductController::class, 'store'])->name('products.store');
-        Route::put('/products/{product}', [ExporterProductController::class, 'update'])->name('products.update');
-        Route::delete('/products/{product}', [ExporterProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('/products', [ImporterProductController::class, 'index'])->name('products');
+        Route::post('/products', [ImporterProductController::class, 'store'])->name('products.store');
+        Route::put('/products/{product}', [ImporterProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [ImporterProductController::class, 'destroy'])->name('products.destroy');
+
+        // Report Analysis
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Vendor\ReportController::class, 'index'])->name('index');
+            Route::get('/product-sales', [App\Http\Controllers\Vendor\ReportController::class, 'productSales'])->name('product-sales');
+            Route::get('/product-wishlist', [App\Http\Controllers\Vendor\ReportController::class, 'productWishlist'])->name('product-wishlist');
+            Route::get('/product-stock', [App\Http\Controllers\Vendor\ReportController::class, 'productStock'])->name('product-stock');
+            Route::get('/commission-history', [App\Http\Controllers\Vendor\ReportController::class, 'commissionHistory'])->name('commission-history');
+            Route::get('/export/{type}', [App\Http\Controllers\Vendor\ReportController::class, 'export'])->name('export');
+        });
 
         // Attribute management
         Route::get('/attributes', [App\Http\Controllers\Exporter\AttributeController::class, 'index'])->name('attributes.index');

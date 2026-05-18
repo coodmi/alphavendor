@@ -4,8 +4,12 @@
 @section('page-title', 'Products')
 
 @section('sidebar-menu')
-    @include('dashboards.partials.importer-sidebar')
+    @include('dashboards.partials.vendor-portal-sidebar')
 @endsection
+
+@php
+    $portalPrefix = $portalPrefix ?? \App\Support\VendorPortal::routePrefix();
+@endphp
 
 @section('content')
 <div class="mb-8">
@@ -294,7 +298,7 @@
                     <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
                         <p class="text-sm text-teal-800">
                             <i class="fas fa-info-circle mr-2"></i>No certifications available.
-                            <a href="{{ route('importer.certifications') }}" class="font-semibold text-indigo-600 hover:text-indigo-700 underline">Create certifications</a> first to assign them to products.
+                            <a href="{{ route($portalPrefix.'.certifications') }}" class="font-semibold text-indigo-600 hover:text-indigo-700 underline">Create certifications</a> first to assign them to products.
                         </p>
                     </div>
                 @endif
@@ -481,7 +485,7 @@ function closeDeleteModal() {
 function executeSoftDelete() {
     if (!deleteTargetId) return;
 
-    fetch(`{{ url('importer/products') }}/${deleteTargetId}`, {
+    fetch(`{{ url($portalPrefix.'/products') }}/${deleteTargetId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -536,8 +540,8 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
 
     const formData = new FormData(this);
     const url = editingProductId
-        ? `{{ url('importer/products') }}/${editingProductId}`
-        : '{{ route('importer.products.store') }}';
+        ? `{{ url($portalPrefix.'/products') }}/${editingProductId}`
+        : '{{ route($portalPrefix . ".products.store") }}';
 
     fetch(url, {
         method: 'POST',

@@ -4,8 +4,12 @@
 @section('page-title', 'Categories')
 
 @section('sidebar-menu')
-    @include('dashboards.partials.importer-sidebar')
+    @include('dashboards.partials.vendor-portal-sidebar')
 @endsection
+
+@php
+    $portalPrefix = $portalPrefix ?? \App\Support\VendorPortal::routePrefix();
+@endphp
 
 @section('content')
 <div class="mb-8">
@@ -331,7 +335,7 @@ function closeDeleteModal() {
 function executeSoftDelete() {
     if (!deleteTargetId) return;
 
-    fetch(`{{ url('importer/categories') }}/${deleteTargetId}`, {
+    fetch(`{{ url($portalPrefix.'/categories') }}/${deleteTargetId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -378,8 +382,8 @@ document.getElementById('categoryForm').addEventListener('submit', function(e) {
 
     const formData = new FormData(this);
     const url = editingCategoryId
-        ? `{{ url('importer/categories') }}/${editingCategoryId}`
-        : '{{ route('importer.categories.store') }}';
+        ? `{{ url($portalPrefix.'/categories') }}/${editingCategoryId}`
+        : '{{ route($portalPrefix . ".categories.store") }}';
 
     fetch(url, {
         method: 'POST',
