@@ -266,6 +266,10 @@
         <i class="fas fa-comment-dots"></i>
         <span>Alpha AI Chat</span>
     </a>
+    <a href="{{ route('admin.reminders.index') }}" class="menu-item {{ request()->routeIs('admin.reminders*') ? 'active' : '' }}">
+        <i class="fas fa-bell"></i>
+        <span>Seller Reminders</span>
+    </a>
 </div>
 
 <div class="menu-section">

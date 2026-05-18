@@ -494,6 +494,13 @@ Route::middleware('auth')->group(function () {
         Route::patch('/tickets/{ticket}/assign', [App\Http\Controllers\Admin\TicketController::class, 'assign'])->name('tickets.assign');
         Route::delete('/tickets/{ticket}', [App\Http\Controllers\Admin\TicketController::class, 'destroy'])->name('tickets.destroy');
 
+        // Seller Reminders / Notices
+        Route::get('/reminders', [App\Http\Controllers\Admin\ReminderController::class, 'index'])->name('reminders.index');
+        Route::get('/reminders/create', [App\Http\Controllers\Admin\ReminderController::class, 'create'])->name('reminders.create');
+        Route::post('/reminders', [App\Http\Controllers\Admin\ReminderController::class, 'store'])->name('reminders.store');
+        Route::get('/reminders/{reminder}', [App\Http\Controllers\Admin\ReminderController::class, 'show'])->name('reminders.show');
+        Route::delete('/reminders/{reminder}', [App\Http\Controllers\Admin\ReminderController::class, 'destroy'])->name('reminders.destroy');
+
         // Advance Payments Management
         Route::get('/advance-payments/settings', [\App\Http\Controllers\Admin\AdvancePaymentSettingController::class, 'index'])->name('advance-payments.settings');
         Route::post('/advance-payments/settings', [\App\Http\Controllers\Admin\AdvancePaymentSettingController::class, 'update'])->name('advance-payments.settings.update');
@@ -824,6 +831,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/{ticket}', [App\Http\Controllers\Vendor\TicketController::class, 'show'])->name('show');
         Route::post('/{ticket}/reply', [App\Http\Controllers\Vendor\TicketController::class, 'reply'])->name('reply');
         Route::patch('/{ticket}/close', [App\Http\Controllers\Vendor\TicketController::class, 'close'])->name('close');
+    });
+
+    // Seller Reminders Inbox (retailer, wholesaler, exporter, importer)
+    Route::middleware('role:retailer,wholesaler,exporter,importer')->group(function () {
+        Route::get('/seller/reminders', [App\Http\Controllers\SellerReminderController::class, 'index'])->name('seller.reminders.index');
+        Route::post('/seller/reminders/{reminder}/read', [App\Http\Controllers\SellerReminderController::class, 'markRead'])->name('seller.reminders.read');
+        Route::post('/seller/reminders/mark-all-read', [App\Http\Controllers\SellerReminderController::class, 'markAllRead'])->name('seller.reminders.mark-all-read');
+        Route::get('/seller/reminders/unread-count', [App\Http\Controllers\SellerReminderController::class, 'unreadCount'])->name('seller.reminders.unread-count');
     });
 
     Route::post('/otp/send', [OtpController::class, 'send']);

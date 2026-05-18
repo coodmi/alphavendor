@@ -84,6 +84,18 @@
         <i class="fas fa-life-ring"></i>
         <span>Support Tickets</span>
     </a>
+    <a href="{{ route('seller.reminders.index') }}" class="menu-item {{ request()->routeIs('seller.reminders*') ? 'active' : '' }}">
+        <i class="fas fa-bell"></i>
+        <span>Reminders</span>
+        @php
+            $reminderCount = \App\Models\AdminReminder::whereHas('recipients', fn($q) =>
+                $q->where('user_id', auth()->id())->whereNull('admin_reminder_recipients.read_at')
+            )->count();
+        @endphp
+        @if($reminderCount > 0)
+            <span class="badge">{{ $reminderCount }}</span>
+        @endif
+    </a>
 </div>
 
 <div class="menu-section">
