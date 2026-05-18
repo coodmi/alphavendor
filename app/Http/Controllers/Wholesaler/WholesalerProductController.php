@@ -86,6 +86,7 @@ class WholesalerProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {
@@ -145,6 +146,7 @@ class WholesalerProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {

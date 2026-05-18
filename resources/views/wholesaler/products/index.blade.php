@@ -229,17 +229,28 @@
             </div>
 
             {{-- Special Offer --}}
-            @if(isset($offers) && $offers->count() > 0)
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Special Offer <span class="text-gray-400 font-normal">(Optional)</span></label>
-                <select name="special_offer_id" id="productOffer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                    <option value="">No Special Offer</option>
-                    @foreach($offers as $offer)
-                        <option value="{{ $offer->id }}">{{ $offer->name }}</option>
-                    @endforeach
-                </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Special Offer <span class="text-gray-400 font-normal">(Optional)</span></label>
+                    <select name="special_offer_id" id="productOffer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option value="">No Special Offer</option>
+                        @forelse($offers as $offer)
+                            <option value="{{ $offer->id }}">{{ $offer->name }}</option>
+                        @empty
+                            <option value="" disabled>No active offers — contact admin</option>
+                        @endforelse
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Shipping Method <span class="text-gray-400 font-normal">(Optional)</span></label>
+                    <select name="shipping_method_id" id="productShippingMethod" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option value="">Default Shipping</option>
+                        @foreach($shippingMethods as $method)
+                            <option value="{{ $method->id }}">{{ $method->name }}@if($method->zone) ({{ $method->zone }})@endif</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            @endif
 
             {{-- MOQ & Supplier Location --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -266,7 +277,7 @@
                 <input type="url" name="video" id="productVideo"
                        placeholder="https://youtube.com/watch?v=..."
                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                <p class="text-xs text-gray-400 mt-1">YouTube বা অন্য video link দিন</p>
+                <p class="text-xs text-gray-400 mt-1">Enter a YouTube or other video URL</p>
             </div>
 
             {{-- SEO / Meta Fields --}}
@@ -289,7 +300,7 @@
                            placeholder="keyword1, keyword2, keyword3, keyword4, keyword5"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
                            oninput="validateKeywords(this)">
-                    <p id="keywordHint" class="text-xs text-gray-400 mt-1">Comma দিয়ে আলাদা করুন, minimum 5টি keyword দিন</p>
+                    <p id="keywordHint" class="text-xs text-gray-400 mt-1">Separate keywords with commas (minimum 5)</p>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
@@ -462,6 +473,7 @@ function editProduct(product) {
     document.getElementById('productFeatured').checked = product.is_featured;
     // New fields
     if (document.getElementById('productOffer'))        document.getElementById('productOffer').value = product.special_offer_id || '';
+    if (document.getElementById('productShippingMethod')) document.getElementById('productShippingMethod').value = product.shipping_method_id || '';
     if (document.getElementById('productMOQ'))          document.getElementById('productMOQ').value = product.minimum_order || '';
     if (document.getElementById('productSupplierLocation')) document.getElementById('productSupplierLocation').value = product.supplier_location_id || '';
     const galleryInput = document.getElementById('productGalleryImages');
@@ -554,7 +566,7 @@ function closeDeleteModal() {
 function executeSoftDelete() {
     if (!deleteTargetId) return;
 
-    fetch(`/retailer/products/${deleteTargetId}`, {
+    fetch(`/wholesaler/products/${deleteTargetId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -600,14 +612,14 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
     if (kwField && kwField.value.trim()) {
         const kws = kwField.value.split(',').map(k => k.trim()).filter(k => k.length > 0);
         if (kws.length < 5) {
-            showToast('Meta Keywords minimum 5টি দিতে হবে (comma দিয়ে আলাদা করুন)', 'error');
+            showToast('Please enter at least 5 meta keywords separated by commas', 'error');
             kwField.focus();
             return;
         }
     }
 
     const formData = new FormData(this);
-    const url = editingProductId ? `/retailer/products/${editingProductId}` : '{{ route('wholesaler.products.store') }}';
+    const url = editingProductId ? `/wholesaler/products/${editingProductId}` : '{{ route('wholesaler.products.store') }}';
 
     fetch(url, {
         method: 'POST',
@@ -622,10 +634,7 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
         if (data.success) {
             showToast(data.message, 'success');
             closeModal();
-            // Redirect to retailer dashboard after successful product add/update
-            setTimeout(() => {
-                window.location.href = '{{ route('wholesaler.dashboard') }}';
-            }, 1000);
+            setTimeout(() => location.reload(), 800);
         } else {
             showToast(data.message || 'An error occurred', 'error');
         }
@@ -653,7 +662,7 @@ function validateKeywords(input) {
         hint.textContent = '✓ ' + kws.length + ' keywords added';
         hint.className = 'text-xs text-green-600 mt-1';
     } else {
-        hint.textContent = kws.length + '/5 keywords — minimum 5টি দিন';
+        hint.textContent = kws.length + '/5 keywords — minimum 5 required';
         hint.className = 'text-xs text-orange-500 mt-1';
     }
 }
