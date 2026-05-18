@@ -110,13 +110,11 @@
                                 <div class="text-sm font-bold text-teal-600"> {{ currency($order->total) }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                    {{ $order->status === 'pending' ? 'bg-teal-100 text-teal-800' : '' }}
-                                    {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
-                                    {{ $order->status === 'shipped' ? 'bg-purple-100 text-purple-800' : '' }}
-                                    {{ $order->status === 'delivered' ? 'bg-green-100 text-green-800' : '' }}
-                                    {{ $order->status === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}">
-                                    {{ ucfirst($order->status) }}
+                                @php
+                                    $statusColor = \App\Helpers\OrderStatus::color($order->status);
+                                @endphp
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $statusColor }}">
+                                    {{ \App\Helpers\OrderStatus::label($order->status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -162,21 +160,17 @@
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Update Order Status</h3>
-                
+
                 <form id="statusForm" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                         <select name="status" id="statusSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="pending">Pending</option>
-                            <option value="processing">Processing</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="delivered">Delivered</option>
-                            <option value="cancelled">Cancelled</option>
+                            {{-- Options injected dynamically by JS --}}
                         </select>
                     </div>
-                    
+
                     <div class="flex justify-end space-x-3">
                         <button type="button" onclick="closeStatusModal()" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
                             Cancel
@@ -191,9 +185,40 @@
     </div>
 </div>
 
+@php
+// Pass allowed statuses to JS as a JSON map
+$allowedStatusesJson = json_encode($orderAllowedStatuses ?? []);
+$statusLabels = \App\Helpers\OrderStatus::all();
+$statusLabelsJson = json_encode(array_map(fn($s) => $s['label'], $statusLabels));
+@endphp
+
 <script>
+const orderAllowedStatuses = @json($orderAllowedStatuses ?? []);
+const statusLabels = @json(array_map(fn($s) => $s['label'], \App\Helpers\OrderStatus::all()));
+
 function openStatusModal(orderId, currentStatus) {
-    document.getElementById('statusSelect').value = currentStatus;
+    const allowed = orderAllowedStatuses[orderId] || [];
+    const select  = document.getElementById('statusSelect');
+
+    // Build options
+    select.innerHTML = '';
+    if (allowed.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = currentStatus;
+        opt.textContent = statusLabels[currentStatus] ?? currentStatus;
+        select.appendChild(opt);
+        select.disabled = true;
+    } else {
+        select.disabled = false;
+        allowed.forEach(status => {
+            const opt = document.createElement('option');
+            opt.value = status;
+            opt.textContent = statusLabels[status] ?? status;
+            if (status === currentStatus) opt.selected = true;
+            select.appendChild(opt);
+        });
+    }
+
     document.getElementById('statusForm').action = `/employee/orders/${orderId}/status`;
     document.getElementById('statusModal').classList.remove('hidden');
 }
@@ -202,11 +227,8 @@ function closeStatusModal() {
     document.getElementById('statusModal').classList.add('hidden');
 }
 
-// Close modal when clicking outside
 document.getElementById('statusModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeStatusModal();
-    }
+    if (e.target === this) closeStatusModal();
 });
 </script>
 @endsection

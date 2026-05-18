@@ -176,6 +176,9 @@ Route::middleware('auth')->group(function () {
     // Generic order invoice route — works for all roles (customer, vendor, admin)
     Route::get('/orders/{order}/invoice', [\App\Http\Controllers\OrderController::class, 'invoice'])->name('orders.invoice');
 
+    // Wholesale/Import order status update — role-gated state machine
+    Route::patch('/orders/{order}/wholesale-status', [\App\Http\Controllers\WholesaleOrderStatusController::class, 'update'])->name('orders.wholesale-status');
+
     // Admin routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

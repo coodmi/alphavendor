@@ -75,4 +75,20 @@ class Order extends Model
     {
         return ($this->commission_amount ?? 0) + ($this->cod_commission_amount ?? 0);
     }
+
+    /**
+     * Check if this order belongs to a wholesale or import vendor.
+     */
+    public function isWholesaleOrImport(): bool
+    {
+        return in_array($this->vendor->role ?? '', ['wholesaler', 'exporter']);
+    }
+
+    /**
+     * Status change audit logs for this order.
+     */
+    public function statusLogs()
+    {
+        return $this->hasMany(\App\Models\OrderStatusLog::class);
+    }
 }

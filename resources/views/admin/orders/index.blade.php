@@ -69,9 +69,20 @@
                                         <form action="{{ route('admin.orders.update-status', $order) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('PATCH')
+                                            @php
+                                                $service = app(\App\Services\WholesaleOrderStatusService::class);
+                                                $allowed = $order->isWholesaleOrImport()
+                                                    ? $service->allowedTransitionsFor($order, auth()->user())
+                                                    : array_keys(\App\Helpers\OrderStatus::all());
+                                            @endphp
                                             <select name="status" onchange="this.form.submit()" class="text-sm border rounded px-2 py-1">
-                                                @foreach(\App\Helpers\OrderStatus::all() as $val => $cfg)
-                                                <option value="{{ $val }}" {{ $order->status === $val ? 'selected' : '' }}>{{ $cfg['label'] }}</option>
+                                                <option value="{{ $order->status }}" selected>
+                                                    {{ \App\Helpers\OrderStatus::label($order->status) }}
+                                                </option>
+                                                @foreach($allowed as $val)
+                                                    @if($val !== $order->status)
+                                                    <option value="{{ $val }}">{{ \App\Helpers\OrderStatus::label($val) }}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                         </form>

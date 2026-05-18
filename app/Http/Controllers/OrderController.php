@@ -352,14 +352,27 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $order = Order::where('vendor_id', Auth::id())->findOrFail($id);
+        $order = Order::where('vendor_id', Auth::id())->with('vendor')->findOrFail($id);
 
-        $validated = $request->validate([
-            'status' => 'required|in:shipped'
+        $request->validate([
+            'status' => 'required|in:shipped',
             // Vendors (wholesaler/importer) can ONLY mark as shipped
         ]);
 
-        // Only allow changing to shipped — and only if current status allows it
+        // Use the state machine for wholesale/import orders
+        if ($order->isWholesaleOrImport()) {
+            try {
+                app(\App\Services\WholesaleOrderStatusService::class)
+                    ->transition($order, 'shipped', Auth::user());
+            } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+                return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are in Processing status.');
+            }
+            return redirect()->back()->with('success', 'Order marked as Shipped!');
+        }
+
+        // Retail vendor — simple shipped update
         if (!in_array($order->status, ['pending', 'processing'])) {
             return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are Pending or Processing.');
         }

@@ -92,16 +92,27 @@
                 <form action="{{ route('employee.orders.update-status', $order) }}" method="POST" class="mt-4">
                     @csrf @method('PATCH')
                     <label class="block text-sm font-medium text-gray-700 mb-2">Update Status</label>
-                    <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent mb-3">
-                        <option value="pending"    {{ $order->status === 'pending'    ? 'selected' : '' }}>Pending</option>
-                        <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                        <option value="shipped"    {{ $order->status === 'shipped'    ? 'selected' : '' }}>Shipped</option>
-                        <option value="delivered"  {{ $order->status === 'delivered'  ? 'selected' : '' }}>Delivered</option>
-                        <option value="cancelled"  {{ $order->status === 'cancelled'  ? 'selected' : '' }}>Cancelled</option>
+                    @php
+                        $service  = app(\App\Services\WholesaleOrderStatusService::class);
+                        $allowed  = $order->isWholesaleOrImport()
+                            ? $service->allowedTransitionsFor($order, auth()->user())
+                            : ['pending','processing','shipped','delivered','cancelled'];
+                    @endphp
+                    <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent mb-3"
+                        {{ empty($allowed) ? 'disabled' : '' }}>
+                        @forelse($allowed as $status)
+                            <option value="{{ $status }}" {{ $order->status === $status ? 'selected' : '' }}>
+                                {{ \App\Helpers\OrderStatus::label($status) }}
+                            </option>
+                        @empty
+                            <option value="{{ $order->status }}">{{ \App\Helpers\OrderStatus::label($order->status) }} (no transitions available)</option>
+                        @endforelse
                     </select>
+                    @if(!empty($allowed))
                     <button type="submit" class="w-full px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-semibold hover:bg-teal-700 transition-colors">
                         Update Status
                     </button>
+                    @endif
                 </form>
                 @endif
             </div>

@@ -123,4 +123,37 @@ class OrderStatus
         }
         return 'pending';
     }
+
+    /**
+     * Allowed transitions for wholesale/import orders.
+     * Format: [from_status => [to_status, ...]]
+     */
+    public static function wholesaleTransitions(): array
+    {
+        return [
+            'pending_advance_payment' => ['advance_paid', 'cancelled'],
+            'advance_paid'            => ['order_confirmed', 'cancelled'],
+            'order_confirmed'         => ['processing', 'cancelled'],
+            'processing'              => ['shipped', 'cancelled'],
+            'shipped'                 => ['delivered'],
+            'delivered'               => [],
+            'cancelled'               => [],
+        ];
+    }
+
+    /**
+     * Role permission map for wholesale/import status transitions.
+     * Format: [target_status => [allowed_roles, ...]]
+     */
+    public static function wholesaleRolePermissions(): array
+    {
+        return [
+            'advance_paid'    => ['admin', 'employee'],
+            'order_confirmed' => ['admin', 'employee'],
+            'processing'      => ['admin', 'employee', 'wholesaler', 'exporter'],
+            'shipped'         => ['admin', 'employee', 'wholesaler', 'exporter'],
+            'delivered'       => ['admin', 'employee'],
+            'cancelled'       => ['admin', 'employee'],
+        ];
+    }
 }

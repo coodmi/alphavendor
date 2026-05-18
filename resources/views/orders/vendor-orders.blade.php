@@ -61,19 +61,13 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{-- Status badge --}}
                             @php
-                                $sc = [
-                                    'pending'    => 'bg-yellow-100 text-yellow-800',
-                                    'processing' => 'bg-blue-100 text-blue-800',
-                                    'shipped'    => 'bg-purple-100 text-purple-800',
-                                    'delivered'  => 'bg-green-100 text-green-800',
-                                    'cancelled'  => 'bg-red-100 text-red-800',
-                                ];
+                                $statusColor = \App\Helpers\OrderStatus::color($order->status);
                             @endphp
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $sc[$order->status] ?? 'bg-gray-100 text-gray-700' }}">
-                                {{ ucfirst($order->status) }}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
+                                {{ \App\Helpers\OrderStatus::label($order->status) }}
                             </span>
-                            {{-- Only show Mark Shipped button when eligible --}}
-                            @if(in_array($order->status, ['pending', 'processing']))
+                            {{-- Show "Mark Shipped" only when order is in Processing (wholesale/import) or pending/processing (retail) --}}
+                            @if($order->status === 'processing')
                             <form action="{{ route('vendor.orders.update-status', $order->id) }}" method="POST" class="mt-1.5">
                                 @csrf
                                 @method('PATCH')

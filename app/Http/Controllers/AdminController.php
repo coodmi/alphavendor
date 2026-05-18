@@ -406,6 +406,28 @@ class AdminController extends Controller
      */
     public function updateOrderStatus(Request $request, Order $order)
     {
+        $order->loadMissing('vendor');
+
+        // ── Wholesale / Import orders → role-gated state machine ─────────────
+        if ($order->isWholesaleOrImport()) {
+            $request->validate([
+                'status' => 'required|in:pending_advance_payment,advance_paid,order_confirmed,pending,processing,shipped,delivered,cancelled,refunded,exchange,returned',
+            ]);
+
+            try {
+                app(\App\Services\WholesaleOrderStatusService::class)
+                    ->transition($order, $request->status, $request->user());
+            } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+
+            \App\Services\NotificationService::orderStatusChanged($order->load('user'));
+            return redirect()->back()->with('success', 'Order status updated successfully!');
+        }
+
+        // ── Retail orders → existing logic ───────────────────────────────────
         $validated = $request->validate([
             'status' => 'required|in:pending_advance_payment,advance_paid,order_confirmed,pending,processing,shipped,delivered,cancelled,refunded,exchange,returned'
         ]);

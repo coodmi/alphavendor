@@ -183,11 +183,25 @@ class EmployeeDashboardController extends Controller
             return redirect()->route('employee.dashboard')->with('error', 'You do not have permission to view orders.');
         }
 
-        $orders = Order::with(['user', 'items.product'])
+        $orders = Order::with(['user', 'items.product', 'vendor'])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return view('employee.orders.index', compact('orders'));
+        // Build allowed transitions per order for the status dropdown
+        $service = app(\App\Services\WholesaleOrderStatusService::class);
+        $actor   = auth()->user();
+
+        $orderAllowedStatuses = [];
+        foreach ($orders as $order) {
+            if ($order->isWholesaleOrImport()) {
+                $orderAllowedStatuses[$order->id] = $service->allowedTransitionsFor($order, $actor);
+            } else {
+                // Retail: simple set
+                $orderAllowedStatuses[$order->id] = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+            }
+        }
+
+        return view('employee.orders.index', compact('orders', 'orderAllowedStatuses'));
     }
 
     /**
@@ -214,9 +228,25 @@ class EmployeeDashboardController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+            'status' => 'required|in:pending_advance_payment,advance_paid,order_confirmed,pending,processing,shipped,delivered,cancelled',
         ]);
 
+        $order->loadMissing('vendor');
+
+        // Wholesale/Import → state machine
+        if ($order->isWholesaleOrImport()) {
+            try {
+                app(\App\Services\WholesaleOrderStatusService::class)
+                    ->transition($order, $request->status, auth()->user());
+            } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+            return redirect()->back()->with('success', 'Order status updated successfully.');
+        }
+
+        // Retail → simple update
         $order->update(['status' => $request->status]);
 
         if ($order->user) {
@@ -224,7 +254,7 @@ class EmployeeDashboardController extends Controller
                 'user_id' => $order->user->id,
                 'title'   => 'Order Status Updated',
                 'message' => "Your order #{$order->id} status has been updated to " . ucfirst($request->status),
-                'type'    => 'info'
+                'type'    => 'info',
             ]);
         }
 
