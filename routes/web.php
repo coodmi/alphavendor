@@ -591,6 +591,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/attributes', [App\Http\Controllers\Wholesaler\AttributeController::class, 'store'])->name('attributes.store');
         Route::put('/attributes/{id}', [App\Http\Controllers\Wholesaler\AttributeController::class, 'update'])->name('attributes.update');
         Route::delete('/attributes/{id}', [App\Http\Controllers\Wholesaler\AttributeController::class, 'destroy'])->name('attributes.destroy');
+
+        // Report Analysis
+        Route::get('/reports', [App\Http\Controllers\Wholesaler\ReportController::class, 'index'])->name('reports.index');
     });
 
     // Exporter routes

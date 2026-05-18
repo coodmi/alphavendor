@@ -14,6 +14,10 @@
             <span class="badge">{{ $pendingReturns }}</span>
         @endif
     </a>
+    <a href="{{ route('wholesaler.reports.index') }}" class="menu-item {{ request()->routeIs('wholesaler.reports*') ? 'active' : '' }}">
+        <i class="fas fa-chart-bar"></i>
+        <span>Report Analysis</span>
+    </a>
 </div>
 
 <div class="menu-section">
@@ -69,10 +73,6 @@
     <a href="{{ route('withdrawals.index') }}" class="menu-item {{ request()->routeIs('withdrawals.index') ? 'active' : '' }}">
         <i class="fas fa-money-bill-wave"></i>
         <span>Withdrawals</span>
-    </a>
-    <a href="{{ route('vendor.reports.index') }}" class="menu-item {{ request()->routeIs('vendor.reports*') ? 'active' : '' }}">
-        <i class="fas fa-chart-bar"></i>
-        <span>Reports</span>
     </a>
 </div>
 

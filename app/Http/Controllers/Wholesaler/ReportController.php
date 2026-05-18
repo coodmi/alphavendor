@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Retailer;
+namespace App\Http\Controllers\Wholesaler;
 
 use App\Http\Controllers\Controller;
 use App\Services\VendorReportService;
@@ -14,6 +14,6 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        return view('retailer.reports.index', $this->reports->build($request));
+        return view('wholesaler.reports.index', $this->reports->build($request));
     }
 }
