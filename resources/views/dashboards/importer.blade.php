@@ -245,11 +245,38 @@
         </div>
 
         <div class="dashboard-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+                <h2 style="margin:0;">Report Analysis</h2>
+                <a href="{{ route('importer.reports.index') }}" style="padding:10px 18px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">
+                    <i class="fas fa-chart-pie"></i> View Full Report Analysis
+                </a>
+            </div>
+            @isset($reportSummary)
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;">
+                @foreach([
+                    ['Today Orders','today_orders','fa-shopping-cart','#3b82f6'],
+                    ['Yesterday Orders','yesterday_orders','fa-calendar-day','#6366f1'],
+                    ['Today Returns','today_return','fa-undo','#ef4444'],
+                    ['Today Cancels','today_cancel','fa-ban','#f97316'],
+                    ['Today Exchange','today_exchange','fa-exchange-alt','#0ea5e9'],
+                    ['Product Sell','product_sell','fa-tag','#14b8a6'],
+                    ['Product Stock','product_stock','fa-warehouse','#f59e0b'],
+                ] as [$label, $key, $icon, $color])
+                <div style="background:#f8fafc;border-radius:10px;padding:14px;border-left:4px solid {{ $color }};">
+                    <div style="font-size:22px;font-weight:700;color:#1e293b;">{{ number_format($reportSummary[$key] ?? 0) }}</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:4px;"><i class="fas {{ $icon }}" style="color:{{ $color }};margin-right:4px;"></i>{{ $label }}</div>
+                </div>
+                @endforeach
+            </div>
+            @endisset
+        </div>
+
+        <div class="dashboard-section">
             <h2>Quick Actions</h2>
             <div class="action-buttons">
                 <a href="{{ route('importer.products') }}" class="btn btn-primary">Add Import Product</a>
-                <a href="#" class="btn btn-success">View Orders</a>
-                <a href="#" class="btn btn-info">Shipping Management</a>
+                <a href="{{ route('vendor.orders') }}" class="btn btn-success">View Orders</a>
+                <a href="{{ route('importer.reports.index') }}" class="btn btn-info">Report Analysis</a>
             </div>
         </div>
 

@@ -39,7 +39,11 @@ class ExporterDashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('dashboards.exporter', compact('wallet', 'totalProducts', 'totalOrders', 'pendingOrders', 'recentOrders', 'certifications'));
+        $reportSummary = app(\App\Http\Controllers\Vendor\ReportController::class)->summary($vendorId);
+
+        $view = Auth::user()->role === 'importer' ? 'dashboards.importer' : 'dashboards.exporter';
+
+        return view($view, compact('wallet', 'totalProducts', 'totalOrders', 'pendingOrders', 'recentOrders', 'certifications', 'reportSummary'));
     }
 
     /**

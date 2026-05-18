@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ReturnRequest;
 use App\Models\Wishlist;
 use App\Models\Transaction;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,64 +27,115 @@ class ReportController extends Controller
         $dateFrom  = $request->get('date_from', now()->subDays(29)->format('Y-m-d'));
         $dateTo    = $request->get('date_to', $today);
 
+        $rangeStart = $dateFrom . ' 00:00:00';
+        $rangeEnd   = $dateTo . ' 23:59:59';
+
         $base = Order::where('vendor_id', $vendorId);
+        $ordersInRange = (clone $base)->whereBetween('created_at', [$rangeStart, $rangeEnd]);
+        $returnsBase = ReturnRequest::where('vendor_id', $vendorId);
+
+        $deliveredOrderFilter = fn ($q) => $q->where('vendor_id', $vendorId)
+            ->whereIn('status', ['delivered', 'completed']);
 
         $stats = [
-            // Orders
             'today_orders'     => (clone $base)->whereDate('created_at', $today)->count(),
             'yesterday_orders' => (clone $base)->whereDate('created_at', $yesterday)->count(),
             'total_orders'     => (clone $base)->count(),
+            'period_orders'    => (clone $ordersInRange)->count(),
 
-            // Products
-            'product_sell'     => OrderItem::whereHas('order', fn($q) =>
-                                    $q->where('vendor_id', $vendorId)
-                                      ->whereIn('status', ['delivered', 'completed'])
-                                  )->sum('quantity'),
-            'product_wishlist' => Wishlist::whereHas('product', fn($q) =>
-                                    $q->where('vendor_id', $vendorId)
-                                  )->count(),
-            'product_stock'    => Product::where('vendor_id', $vendorId)->sum('stock'),
+            'product_sell'     => (int) OrderItem::whereHas('order', function ($q) use ($vendorId, $rangeStart, $rangeEnd) {
+                $q->where('vendor_id', $vendorId)
+                    ->whereIn('status', ['delivered', 'completed'])
+                    ->whereBetween('created_at', [$rangeStart, $rangeEnd]);
+            })->sum('quantity'),
+            'product_wishlist' => Wishlist::whereHas('product', fn ($q) => $q->where('vendor_id', $vendorId))->count(),
+            'product_stock'    => (int) Product::where('vendor_id', $vendorId)->sum('stock'),
 
-            // Returns & Refunds
-            'total_return'     => \App\Models\ReturnRequest::where('vendor_id', $vendorId)->count(),
-            'today_return'     => \App\Models\ReturnRequest::where('vendor_id', $vendorId)
-                                    ->whereDate('created_at', $today)->count(),
+            'total_return'     => (clone $returnsBase)->whereBetween('created_at', [$rangeStart, $rangeEnd])->count(),
+            'today_return'     => (clone $returnsBase)->whereDate('created_at', $today)->count(),
 
-            // Cancellations
-            'today_cancel'     => (clone $base)->where('status', 'cancelled')
-                                    ->whereDate('updated_at', $today)->count(),
-            'total_cancel'     => (clone $base)->where('status', 'cancelled')->count(),
+            'today_cancel'     => (clone $base)->where('status', 'cancelled')->whereDate('updated_at', $today)->count(),
+            'total_cancel'     => (clone $base)->where('status', 'cancelled')
+                ->whereBetween('updated_at', [$rangeStart, $rangeEnd])->count(),
 
-            // Exchange
-            'total_exchange'   => \App\Models\ReturnRequest::where('vendor_id', $vendorId)
-                                    ->where('type', 'exchange')->count(),
-            'today_exchange'   => \App\Models\ReturnRequest::where('vendor_id', $vendorId)
-                                    ->where('type', 'exchange')
-                                    ->whereDate('created_at', $today)->count(),
+            'total_exchange'   => (clone $returnsBase)->where('type', 'exchange')
+                ->whereBetween('created_at', [$rangeStart, $rangeEnd])->count(),
+            'today_exchange'   => (clone $returnsBase)->where('type', 'exchange')
+                ->whereDate('created_at', $today)->count(),
 
-            // Earnings
-            'total_sales'      => (clone $base)->whereIn('status', ['delivered', 'completed'])->sum('total'),
+            'total_sales'      => (clone $ordersInRange)->whereIn('status', ['delivered', 'completed'])->sum('total'),
             'total_commission' => Transaction::where('vendor_id', $vendorId)->where('type', 'sale')->sum('amount'),
             'total_products'   => Product::where('vendor_id', $vendorId)->count(),
         ];
 
-        // Orders per day for line chart (filtered range)
-        $chartData = (clone $base)
-            ->whereBetween('created_at', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'])
+        $rawChart = (clone $ordersInRange)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
             ->orderBy('date')
             ->pluck('count', 'date');
 
-        // Order status breakdown for pie chart
-        $statusBreakdown = (clone $base)
+        $chartData = collect();
+        $period = CarbonPeriod::create(Carbon::parse($dateFrom), Carbon::parse($dateTo));
+        foreach ($period as $day) {
+            $key = $day->format('Y-m-d');
+            $chartData[$key] = (int) ($rawChart[$key] ?? 0);
+        }
+
+        $statusBreakdown = (clone $ordersInRange)
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status');
 
+        $activityChart = [
+            'Returns & Refunds' => $stats['total_return'],
+            'Cancelled Orders'  => $stats['total_cancel'],
+            'Exchanges'         => $stats['total_exchange'],
+        ];
+
+        $topProductsChart = DB::table('order_items')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->where('products.vendor_id', $vendorId)
+            ->whereIn('order_items.order_id', function ($query) use ($vendorId, $rangeStart, $rangeEnd) {
+                $query->select('id')
+                    ->from('orders')
+                    ->where('vendor_id', $vendorId)
+                    ->whereIn('status', ['delivered', 'completed'])
+                    ->whereBetween('created_at', [$rangeStart, $rangeEnd]);
+            })
+            ->select('products.name', DB::raw('SUM(order_items.quantity) as qty'))
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('qty')
+            ->limit(8)
+            ->pluck('qty', 'name');
+
         return view('vendor.reports.index', compact(
-            'stats', 'chartData', 'statusBreakdown', 'dateFrom', 'dateTo'
+            'stats',
+            'chartData',
+            'statusBreakdown',
+            'activityChart',
+            'topProductsChart',
+            'dateFrom',
+            'dateTo'
         ));
+    }
+
+    public function summary(int $vendorId): array
+    {
+        $today = now()->toDateString();
+        $yesterday = now()->subDay()->toDateString();
+        $base = Order::where('vendor_id', $vendorId);
+        $returnsBase = ReturnRequest::where('vendor_id', $vendorId);
+
+        return [
+            'today_orders'     => (clone $base)->whereDate('created_at', $today)->count(),
+            'yesterday_orders' => (clone $base)->whereDate('created_at', $yesterday)->count(),
+            'today_return'     => (clone $returnsBase)->whereDate('created_at', $today)->count(),
+            'today_cancel'     => (clone $base)->where('status', 'cancelled')->whereDate('updated_at', $today)->count(),
+            'today_exchange'   => (clone $returnsBase)->where('type', 'exchange')->whereDate('created_at', $today)->count(),
+            'product_sell'     => (int) OrderItem::whereHas('order', fn ($q) => $q->where('vendor_id', $vendorId)
+                ->whereIn('status', ['delivered', 'completed']))->sum('quantity'),
+            'product_stock'    => (int) Product::where('vendor_id', $vendorId)->sum('stock'),
+        ];
     }
     
     /**

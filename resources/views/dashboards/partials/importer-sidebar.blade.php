@@ -54,9 +54,9 @@
         <i class="fas fa-money-bill-wave"></i>
         <span>Withdrawals</span>
     </a>
-    <a href="{{ route('vendor.reports.index') }}" class="menu-item {{ request()->routeIs('vendor.reports*') ? 'active' : '' }}">
-        <i class="fas fa-chart-bar"></i>
-        <span>Reports</span>
+    <a href="{{ route('importer.reports.index') }}" class="menu-item {{ request()->routeIs('importer.reports*') || request()->routeIs('vendor.reports*') ? 'active' : '' }}">
+        <i class="fas fa-chart-pie"></i>
+        <span>Report Analysis</span>
     </a>
 </div>
 

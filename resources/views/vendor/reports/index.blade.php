@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
-@section('title', 'Report Analytics')
-@section('page-title', 'Report Analytics')
+@section('title', 'Report Analysis')
+@section('page-title', 'Report Analysis')
 
 @section('sidebar-menu')
     @php $userRole = auth()->user()->role; @endphp
@@ -42,12 +42,13 @@
     </form>
 
     {{-- Row 1: Orders --}}
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         @php
         $cards1 = [
-            ['label'=>'Today Total Orders',     'value'=>$stats['today_orders'],     'icon'=>'fa-shopping-cart',  'bg'=>'bg-blue-500'],
-            ['label'=>'Yesterday Total Orders', 'value'=>$stats['yesterday_orders'], 'icon'=>'fa-calendar-day',   'bg'=>'bg-indigo-500'],
-            ['label'=>'Total Orders',           'value'=>$stats['total_orders'],     'icon'=>'fa-boxes',          'bg'=>'bg-purple-500'],
+            ['label'=>'Today Total Orders',        'value'=>$stats['today_orders'],     'icon'=>'fa-shopping-cart',  'bg'=>'bg-blue-500'],
+            ['label'=>'Yesterday Total Orders',    'value'=>$stats['yesterday_orders'], 'icon'=>'fa-calendar-day',   'bg'=>'bg-indigo-500'],
+            ['label'=>'Orders in Selected Period', 'value'=>$stats['period_orders'],    'icon'=>'fa-calendar-alt',   'bg'=>'bg-violet-500'],
+            ['label'=>'All-Time Total Orders',     'value'=>$stats['total_orders'],     'icon'=>'fa-boxes',          'bg'=>'bg-purple-500'],
         ];
         @endphp
         @foreach($cards1 as $c)
@@ -67,9 +68,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         @php
         $cards2 = [
-            ['label'=>'Product Sell (Qty)',  'value'=>number_format($stats['product_sell']),     'icon'=>'fa-tag',        'bg'=>'bg-teal-500'],
-            ['label'=>'Product Wishlist',    'value'=>number_format($stats['product_wishlist']), 'icon'=>'fa-heart',      'bg'=>'bg-pink-500'],
-            ['label'=>'Total Stock (Qty)',   'value'=>number_format($stats['product_stock']),    'icon'=>'fa-warehouse',  'bg'=>'bg-orange-500'],
+            ['label'=>'Product Sell (Period)', 'value'=>number_format($stats['product_sell']),     'icon'=>'fa-tag',        'bg'=>'bg-teal-500'],
+            ['label'=>'Product Wishlist',      'value'=>number_format($stats['product_wishlist']), 'icon'=>'fa-heart',      'bg'=>'bg-pink-500'],
+            ['label'=>'Product Stock',         'value'=>number_format($stats['product_stock']),    'icon'=>'fa-warehouse',  'bg'=>'bg-orange-500'],
         ];
         @endphp
         @foreach($cards2 as $c)
@@ -89,12 +90,12 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         @php
         $cards3 = [
-            ['label'=>'Total Return & Refund',  'value'=>$stats['total_return'],   'icon'=>'fa-undo',        'color'=>'text-red-600',    'bg'=>'bg-red-50'],
-            ['label'=>'Today Return & Refund',  'value'=>$stats['today_return'],   'icon'=>'fa-undo-alt',    'color'=>'text-red-500',    'bg'=>'bg-red-50'],
-            ['label'=>'Today Cancel Orders',    'value'=>$stats['today_cancel'],   'icon'=>'fa-times-circle','color'=>'text-orange-600', 'bg'=>'bg-orange-50'],
-            ['label'=>'Total Cancel Orders',    'value'=>$stats['total_cancel'],   'icon'=>'fa-ban',         'color'=>'text-orange-500', 'bg'=>'bg-orange-50'],
-            ['label'=>'Total Exchange',         'value'=>$stats['total_exchange'], 'icon'=>'fa-exchange-alt','color'=>'text-blue-600',   'bg'=>'bg-blue-50'],
-            ['label'=>'Today Exchange',         'value'=>$stats['today_exchange'], 'icon'=>'fa-retweet',     'color'=>'text-blue-500',   'bg'=>'bg-blue-50'],
+            ['label'=>'Return & Refund (Period)', 'value'=>$stats['total_return'],   'icon'=>'fa-undo',        'color'=>'text-red-600',    'bg'=>'bg-red-50'],
+            ['label'=>'Today Return & Refund',    'value'=>$stats['today_return'],   'icon'=>'fa-undo-alt',    'color'=>'text-red-500',    'bg'=>'bg-red-50'],
+            ['label'=>'Today Cancel Orders',      'value'=>$stats['today_cancel'],   'icon'=>'fa-times-circle','color'=>'text-orange-600', 'bg'=>'bg-orange-50'],
+            ['label'=>'Cancel Orders (Period)',   'value'=>$stats['total_cancel'],   'icon'=>'fa-ban',         'color'=>'text-orange-500', 'bg'=>'bg-orange-50'],
+            ['label'=>'Exchange (Period)',        'value'=>$stats['total_exchange'], 'icon'=>'fa-exchange-alt','color'=>'text-blue-600',   'bg'=>'bg-blue-50'],
+            ['label'=>'Today Exchange',           'value'=>$stats['today_exchange'], 'icon'=>'fa-retweet',     'color'=>'text-blue-500',   'bg'=>'bg-blue-50'],
         ];
         @endphp
         @foreach($cards3 as $c)
@@ -153,14 +154,35 @@
         </div>
     </div>
 
+    {{-- Charts row 2 --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h3 class="font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-bar text-teal-500 mr-2"></i>
+                Returns, Cancels &amp; Exchanges
+                <span class="text-xs text-gray-400 font-normal ml-2">Selected period</span>
+            </h3>
+            <canvas id="activityChart" height="120"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h3 class="font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-pie text-pink-500 mr-2"></i>
+                Top Product Sales
+                <span class="text-xs text-gray-400 font-normal ml-2">Selected period</span>
+            </h3>
+            <canvas id="productsChart" height="120"></canvas>
+        </div>
+    </div>
+
     {{-- Quick Links to detailed reports --}}
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         @php
+        $reportPrefix = auth()->user()->role === 'importer' ? 'importer.reports' : 'vendor.reports';
         $links = [
-            ['label'=>'Product Sales',      'route'=>'vendor.reports.product-sales',      'icon'=>'fa-chart-bar',   'color'=>'bg-indigo-600'],
-            ['label'=>'Wishlist Report',    'route'=>'vendor.reports.product-wishlist',   'icon'=>'fa-heart',       'color'=>'bg-pink-600'],
-            ['label'=>'Stock Report',       'route'=>'vendor.reports.product-stock',      'icon'=>'fa-boxes',       'color'=>'bg-teal-600'],
-            ['label'=>'Commission History', 'route'=>'vendor.reports.commission-history', 'icon'=>'fa-money-bill',  'color'=>'bg-green-600'],
+            ['label'=>'Product Sales',      'route'=>$reportPrefix . '.product-sales',      'icon'=>'fa-chart-bar',   'color'=>'bg-indigo-600'],
+            ['label'=>'Wishlist Report',    'route'=>$reportPrefix . '.product-wishlist',   'icon'=>'fa-heart',       'color'=>'bg-pink-600'],
+            ['label'=>'Stock Report',       'route'=>$reportPrefix . '.product-stock',      'icon'=>'fa-boxes',       'color'=>'bg-teal-600'],
+            ['label'=>'Commission History', 'route'=>$reportPrefix . '.commission-history', 'icon'=>'fa-money-bill',  'color'=>'bg-green-600'],
         ];
         @endphp
         @foreach($links as $l)
@@ -234,6 +256,50 @@ new Chart(document.getElementById('statusChart'), {
         responsive: true,
         plugins: { legend: { display: false } },
         cutout: '65%',
+    }
+});
+
+// Activity bar chart
+const activityData = @json($activityChart ?? []);
+new Chart(document.getElementById('activityChart'), {
+    type: 'bar',
+    data: {
+        labels: Object.keys(activityData),
+        datasets: [{
+            label: 'Count',
+            data: Object.values(activityData),
+            backgroundColor: ['#ef4444', '#f97316', '#3b82f6'],
+            borderRadius: 8,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+    }
+});
+
+// Top products pie chart
+const productLabels = @json(($topProductsChart ?? collect())->keys());
+const productValues = @json(($topProductsChart ?? collect())->values());
+const productPalette = ['#6366f1','#ec4899','#14b8a6','#f59e0b','#8b5cf6','#22c55e','#ef4444','#06b6d4'];
+
+new Chart(document.getElementById('productsChart'), {
+    type: 'pie',
+    data: {
+        labels: productLabels,
+        datasets: [{
+            data: productValues,
+            backgroundColor: productPalette.slice(0, productLabels.length),
+            borderWidth: 2,
+            borderColor: '#fff',
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+        }
     }
 });
 </script>

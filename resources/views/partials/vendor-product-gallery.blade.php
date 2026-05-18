@@ -1,9 +1,15 @@
-<div class="mt-4 border border-indigo-100 rounded-xl p-4 bg-indigo-50/40">
+@php
+    $galleryMin = $galleryMin ?? 1;
+    $galleryMax = $galleryMax ?? 4;
+@endphp
+<div class="mt-4 border border-indigo-100 rounded-xl p-4 bg-indigo-50/40 product-gallery-block"
+     data-gallery-min="{{ $galleryMin }}"
+     data-gallery-max="{{ $galleryMax }}">
     <label class="block text-sm font-semibold text-gray-700 mb-1">
-        Product Gallery Images <span class="text-red-500">*</span>
+        Product Images <span class="text-red-500">*</span>
     </label>
-    <p class="text-xs text-gray-500 mb-3">Upload 1 to 4 images (JPEG, PNG, GIF, WEBP). Select multiple files at once.</p>
-    <p id="galleryLimitHint" class="text-xs text-indigo-600 mb-2 font-medium">0 / 4 images selected</p>
+    <p class="text-xs text-gray-500 mb-3">Upload {{ $galleryMin }} to {{ $galleryMax }} images (JPEG, PNG, GIF, WEBP). Select multiple files at once.</p>
+    <p id="galleryLimitHint" class="text-xs text-indigo-600 mb-2 font-medium">0 / {{ $galleryMax }} images selected</p>
     <input type="file"
            name="gallery_images[]"
            id="productGalleryImages"
@@ -23,9 +29,15 @@
 @once
 @push('scripts')
 <script>
-const PRODUCT_GALLERY_MIN = 1;
-const PRODUCT_GALLERY_MAX = 4;
 let galleryMarkedForRemoval = new Set();
+
+function getGalleryConfig() {
+    const block = document.querySelector('.product-gallery-block');
+    return {
+        min: parseInt(block?.dataset.galleryMin || '1', 10),
+        max: parseInt(block?.dataset.galleryMax || '4', 10),
+    };
+}
 
 function productGalleryImageUrl(path) {
     if (!path) return '';
@@ -37,20 +49,24 @@ function getGalleryExistingCount() {
 }
 
 function getGalleryRemainingSlots() {
-    return PRODUCT_GALLERY_MAX - (getGalleryExistingCount() - galleryMarkedForRemoval.size);
+    const { max } = getGalleryConfig();
+    return max - (getGalleryExistingCount() - galleryMarkedForRemoval.size);
 }
 
 function updateGalleryLimitHint(newFileCount = 0) {
     const hint = document.getElementById('galleryLimitHint');
     if (!hint) return;
+    const { min, max } = getGalleryConfig();
     const existing = getGalleryExistingCount() - galleryMarkedForRemoval.size;
     const total = existing + newFileCount;
-    hint.textContent = `${total} / ${PRODUCT_GALLERY_MAX} images (${PRODUCT_GALLERY_MAX - total} slot${PRODUCT_GALLERY_MAX - total === 1 ? '' : 's'} left)`;
+    const left = max - total;
+    hint.textContent = `${total} / ${max} images (${left} slot${left === 1 ? '' : 's'} left, minimum ${min} required)`;
 }
 
 function resetProductGallery() {
     galleryMarkedForRemoval = new Set();
     const input = document.getElementById('productGalleryImages');
+    const { min } = getGalleryConfig();
     if (input) {
         input.value = '';
         input.setAttribute('required', 'required');
@@ -80,7 +96,8 @@ function previewGalleryFiles(event) {
 
     if (files.length > maxNew) {
         if (typeof showToast === 'function') {
-            showToast(`You can add at most ${maxNew} more image(s) (maximum ${PRODUCT_GALLERY_MAX} total).`, 'error');
+            const { max } = getGalleryConfig();
+            showToast(`You can add at most ${maxNew} more image(s) (maximum ${max} total).`, 'error');
         }
         files = files.slice(0, maxNew);
     }
@@ -154,9 +171,10 @@ function renderExistingGallery(product) {
         container.appendChild(box);
     });
 
+    const { max } = getGalleryConfig();
     if (input) {
         input.value = '';
-        input.disabled = images.length >= PRODUCT_GALLERY_MAX;
+        input.disabled = images.length >= max;
     }
     updateGalleryLimitHint(0);
 }
@@ -193,21 +211,22 @@ function toggleRemoveGalleryImage(id, btn) {
 }
 
 function validateProductGallery() {
+    const { min, max } = getGalleryConfig();
     const input = document.getElementById('productGalleryImages');
     const newCount = input?.files?.length || 0;
     const existing = getGalleryExistingCount() - galleryMarkedForRemoval.size;
     const total = existing + newCount;
 
-    if (total < PRODUCT_GALLERY_MIN) {
+    if (total < min) {
         if (typeof showToast === 'function') {
-            showToast(`Please add at least ${PRODUCT_GALLERY_MIN} product image(s).`, 'error');
+            showToast(`Please add at least ${min} product image(s).`, 'error');
         }
         input?.focus();
         return false;
     }
-    if (total > PRODUCT_GALLERY_MAX) {
+    if (total > max) {
         if (typeof showToast === 'function') {
-            showToast(`You can upload a maximum of ${PRODUCT_GALLERY_MAX} product images.`, 'error');
+            showToast(`You can upload a maximum of ${max} product images.`, 'error');
         }
         input?.focus();
         return false;
