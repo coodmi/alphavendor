@@ -176,6 +176,37 @@
                 </label>
             </div>
 
+            {{-- SEO / Meta Fields --}}
+            <div class="border border-gray-200 rounded-xl p-4 bg-gray-50 space-y-4">
+                <h4 class="text-sm font-bold text-gray-600 uppercase tracking-wide">
+                    <i class="fas fa-search text-indigo-400 mr-1"></i> SEO / Meta (Optional)
+                </h4>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
+                    <input type="text" name="meta_title" id="categoryMetaTitle"
+                           placeholder="SEO title for this category"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Meta Keywords
+                        <span class="text-xs text-gray-400 font-normal ml-1">(minimum 5, comma separated)</span>
+                    </label>
+                    <input type="text" name="meta_keywords" id="categoryMetaKeywords"
+                           placeholder="keyword1, keyword2, keyword3, keyword4, keyword5"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                           oninput="validateCatKeywords(this)">
+                    <p id="catKeywordHint" class="text-xs text-gray-400 mt-1">Comma দিয়ে আলাদা করুন, minimum 5টি keyword দিন</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
+                    <textarea name="meta_description" id="categoryMetaDescription" rows="2"
+                              placeholder="Short description for search engines"
+                              maxlength="500"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white resize-none"></textarea>
+                </div>
+            </div>
+
             <div class="flex gap-3 justify-end pt-4 border-t border-gray-200">
                 <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-150">
                     Cancel
@@ -254,6 +285,10 @@ function editCategory(category) {
     document.getElementById('categoryDescription').value = category.description || '';
     document.getElementById('categorySortOrder').value = category.sort_order;
     document.getElementById('categoryStatus').checked = category.is_active;
+    // Meta fields
+    if (document.getElementById('categoryMetaTitle'))       document.getElementById('categoryMetaTitle').value = category.meta_title || '';
+    if (document.getElementById('categoryMetaKeywords'))    document.getElementById('categoryMetaKeywords').value = category.meta_keywords || '';
+    if (document.getElementById('categoryMetaDescription')) document.getElementById('categoryMetaDescription').value = category.meta_description || '';
 
     // Show current image if exists
     if (category.image) {
@@ -353,6 +388,17 @@ function executeSoftDelete() {
 document.getElementById('categoryForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    // Validate meta keywords minimum 5
+    const kwField = document.getElementById('categoryMetaKeywords');
+    if (kwField && kwField.value.trim()) {
+        const kws = kwField.value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+        if (kws.length < 5) {
+            showToast('Meta Keywords minimum 5টি দিতে হবে (comma দিয়ে আলাদা করুন)', 'error');
+            kwField.focus();
+            return;
+        }
+    }
+
     const formData = new FormData(this);
     const url = editingCategoryId ? `/retailer/categories/${editingCategoryId}` : '{{ route('retailer.categories.store') }}';
 
@@ -387,6 +433,18 @@ window.onclick = function(event) {
     }
     if (event.target.id === 'deleteModal') {
         closeDeleteModal();
+    }
+}
+
+function validateCatKeywords(input) {
+    const kws = input.value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+    const hint = document.getElementById('catKeywordHint');
+    if (kws.length >= 5) {
+        hint.textContent = '✓ ' + kws.length + ' keywords added';
+        hint.className = 'text-xs text-green-600 mt-1';
+    } else {
+        hint.textContent = kws.length + '/5 keywords — minimum 5টি দিন';
+        hint.className = 'text-xs text-orange-500 mt-1';
     }
 }
 </script>

@@ -36,7 +36,10 @@ class RetailerCategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'image_url' => 'nullable|url',
             'is_active' => 'boolean',
-            'sort_order' => 'nullable|integer'
+            'sort_order' => 'nullable|integer',
+            'meta_title'       => 'nullable|string|max:255',
+            'meta_keywords'    => 'nullable|string|max:1000',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
         // Handle image upload or URL
@@ -86,7 +89,10 @@ class RetailerCategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'image_url' => 'nullable|url',
             'is_active' => 'boolean',
-            'sort_order' => 'nullable|integer'
+            'sort_order' => 'nullable|integer',
+            'meta_title'       => 'nullable|string|max:255',
+            'meta_keywords'    => 'nullable|string|max:1000',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
         // Handle image update

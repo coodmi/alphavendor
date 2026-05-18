@@ -553,6 +553,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/{order}', [RetailerDashboardController::class, 'showOrder'])->name('orders.show');
         Route::get('/orders/{order}/invoice', [App\Http\Controllers\OrderController::class, 'invoice'])->name('orders.invoice');
         Route::patch('/orders/{order}/status', [RetailerDashboardController::class, 'updateOrderStatus'])->name('orders.update-status');
+        
+        // Report Analysis
+        Route::get('/reports', [App\Http\Controllers\Retailer\ReportController::class, 'index'])->name('reports.index');
     });
 
     // Wholesaler routes

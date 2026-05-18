@@ -48,19 +48,26 @@ class RetailerProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'nullable|exists:brands,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_url' => 'nullable|url',
-            'price' => 'required|numeric|min:0',
-            'old_price' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'sku' => 'required|string|max:255|unique:products,sku',
-            'status' => 'required|in:active,inactive,out_of_stock',
-            'is_featured' => 'boolean',
-            'badge' => 'nullable|string|max:50'
+            'category_id'    => 'required|exists:categories,id',
+            'brand_id'       => 'nullable|exists:brands,id',
+            'name'           => 'required|string|max:255',
+            'description'    => 'nullable|string',
+            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'image_url'      => 'nullable|url',
+            'price'          => 'required|numeric|min:0',
+            'old_price'      => 'nullable|numeric|min:0',
+            'stock'          => 'required|integer|min:0',
+            'sku'            => 'required|string|max:255|unique:products,sku',
+            'status'         => 'required|in:active,inactive,out_of_stock',
+            'is_featured'    => 'boolean',
+            'badge'          => 'nullable|string|max:50',
+            'minimum_order'  => 'nullable|integer|min:1',
+            'supplier_location' => 'nullable|string|max:255',
+            'video'          => 'nullable|string|max:500',
+            'meta_title'     => 'nullable|string|max:255',
+            'meta_keywords'  => 'nullable|string|max:1000',
+            'meta_description' => 'nullable|string|max:500',
+            'special_offer_id' => 'nullable|exists:special_offers,id',
         ]);
 
         // Verify category belongs to this retailer or is admin-created
@@ -127,19 +134,26 @@ class RetailerProductController extends Controller
         }
 
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'nullable|exists:brands,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_url' => 'nullable|url',
-            'price' => 'required|numeric|min:0',
-            'old_price' => 'nullable|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
-            'status' => 'required|in:active,inactive,out_of_stock',
-            'is_featured' => 'boolean',
-            'badge' => 'nullable|string|max:50'
+            'category_id'    => 'required|exists:categories,id',
+            'brand_id'       => 'nullable|exists:brands,id',
+            'name'           => 'required|string|max:255',
+            'description'    => 'nullable|string',
+            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'image_url'      => 'nullable|url',
+            'price'          => 'required|numeric|min:0',
+            'old_price'      => 'nullable|numeric|min:0',
+            'stock'          => 'required|integer|min:0',
+            'sku'            => 'required|string|max:255|unique:products,sku,' . $product->id,
+            'status'         => 'required|in:active,inactive,out_of_stock',
+            'is_featured'    => 'boolean',
+            'badge'          => 'nullable|string|max:50',
+            'minimum_order'  => 'nullable|integer|min:1',
+            'supplier_location' => 'nullable|string|max:255',
+            'video'          => 'nullable|string|max:500',
+            'meta_title'     => 'nullable|string|max:255',
+            'meta_keywords'  => 'nullable|string|max:1000',
+            'meta_description' => 'nullable|string|max:500',
+            'special_offer_id' => 'nullable|exists:special_offers,id',
         ]);
 
         // Verify category belongs to this retailer or is admin-created
