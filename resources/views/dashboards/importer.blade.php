@@ -7,7 +7,15 @@
     @include('dashboards.partials.vendor-portal-sidebar')
 @endsection
 
-@php $reportsRoute = \App\Support\VendorPortal::reportsRoute(); @endphp
+@php
+    $reportsRoute = \App\Support\VendorPortal::reportsRoute();
+    $unreadReminderCount = \App\Models\AdminReminder::unreadForUser(auth()->id())->count();
+    $latestUnreadReminders = \App\Models\AdminReminder::unreadForUser(auth()->id())
+        ->with('sender')
+        ->latest()
+        ->take(3)
+        ->get();
+@endphp
 
 @section('content')
 <!-- Verification Alert Banner -->
@@ -57,6 +65,27 @@
         </div>
     </div>
     @endif
+@endif
+
+@if($unreadReminderCount > 0)
+<div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 220px;">
+            <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600;">
+                <i class="fas fa-bell"></i> {{ $unreadReminderCount }} New Reminder{{ $unreadReminderCount > 1 ? 's' : '' }} from Admin
+            </h3>
+            @foreach($latestUnreadReminders as $adminReminder)
+            <p style="margin: 0 0 6px 0; opacity: 0.95; font-size: 14px;">
+                <strong>{{ $adminReminder->title }}</strong>
+                — {{ Str::limit($adminReminder->message, 80) }}
+            </p>
+            @endforeach
+        </div>
+        <a href="{{ route('seller.reminders.index') }}" style="background: white; color: #4f46e5; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; white-space: nowrap; align-self: center;">
+            <i class="fas fa-inbox"></i> View All Reminders
+        </a>
+    </div>
+</div>
 @endif
 
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">

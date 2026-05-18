@@ -99,9 +99,7 @@
         <i class="fas fa-clock"></i>
         <span>Reminders</span>
         @php
-            $reminderCount = \App\Models\AdminReminder::whereHas('recipients', fn ($q) =>
-                $q->where('user_id', auth()->id())->whereNull('admin_reminder_recipients.read_at')
-            )->count();
+            $reminderCount = \App\Models\AdminReminder::unreadForUser(auth()->id())->count();
         @endphp
         @if($reminderCount > 0)
             <span class="badge">{{ $reminderCount }}</span>

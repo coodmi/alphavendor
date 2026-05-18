@@ -6,8 +6,7 @@
     @php $role = auth()->user()->role; @endphp
     @if($role === 'retailer')       @include('dashboards.partials.retailer-sidebar')
     @elseif($role === 'wholesaler') @include('dashboards.partials.wholesaler-sidebar')
-    @elseif($role === 'exporter')   @include('dashboards.partials.exporter-sidebar')
-    @elseif($role === 'importer')   @include('dashboards.partials.importer-sidebar')
+    @elseif(in_array($role, ['exporter', 'importer'])) @include('dashboards.partials.vendor-portal-sidebar')
     @endif
 @endsection
 

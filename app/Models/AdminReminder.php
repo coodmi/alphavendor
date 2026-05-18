@@ -23,8 +23,25 @@ class AdminReminder extends Model
     public function recipients()
     {
         return $this->belongsToMany(User::class, 'admin_reminder_recipients', 'reminder_id', 'user_id')
-                    ->withPivot('read_at')
-                    ->withTimestamps();
+            ->withPivot('read_at');
+    }
+
+    /**
+     * Reminders delivered to a specific seller.
+     */
+    public function scopeForUser($query, int $userId)
+    {
+        return $query->whereHas('recipients', function ($q) use ($userId) {
+            $q->where('users.id', $userId);
+        });
+    }
+
+    public function scopeUnreadForUser($query, int $userId)
+    {
+        return $query->whereHas('recipients', function ($q) use ($userId) {
+            $q->where('users.id', $userId)
+                ->whereNull('admin_reminder_recipients.read_at');
+        });
     }
 
     /**

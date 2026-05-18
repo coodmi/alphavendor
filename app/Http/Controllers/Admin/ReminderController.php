@@ -65,8 +65,12 @@ class ReminderController extends Controller
 
         // Resolve target user IDs
         $userIds = match ($validated['recipient_type']) {
-            'all'      => User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])->pluck('id')->toArray(),
-            'role'     => User::where('role', $validated['recipient_role'])->pluck('id')->toArray(),
+            'all' => User::whereIn('role', ['retailer', 'wholesaler', 'exporter', 'importer'])->pluck('id')->toArray(),
+            'role' => match ($validated['recipient_role']) {
+                // Live importer dashboard users often have role "exporter"
+                'importer', 'exporter' => User::whereIn('role', ['importer', 'exporter'])->pluck('id')->toArray(),
+                default => User::where('role', $validated['recipient_role'])->pluck('id')->toArray(),
+            },
             'specific' => $validated['recipient_ids'],
         };
 
@@ -84,18 +88,23 @@ class ReminderController extends Controller
             'recipient_role' => $validated['recipient_role'] ?? null,
         ]);
 
-        // Attach recipients (pivot)
-        $reminder->recipients()->attach($userIds);
+        // Attach recipients (pivot — no timestamps on this table)
+        $pivotRows = collect($userIds)->mapWithKeys(fn ($id) => [(int) $id => ['read_at' => null]])->all();
+        $reminder->recipients()->attach($pivotRows);
 
         // Also push into the existing Notification system so the bell badge lights up
         foreach ($userIds as $uid) {
-            \App\Models\Notification::create([
-                'user_id' => $uid,
-                'type'    => $validated['type'],
-                'title'   => '📌 ' . $validated['title'],
-                'message' => $validated['message'],
-                'data'    => ['url' => '/seller/reminders', 'reminder_id' => $reminder->id],
-            ]);
+            try {
+                \App\Models\Notification::create([
+                    'user_id' => $uid,
+                    'type'    => $validated['type'],
+                    'title'   => '📌 ' . $validated['title'],
+                    'message' => $validated['message'],
+                    'data'    => ['url' => '/seller/reminders', 'reminder_id' => $reminder->id],
+                ]);
+            } catch (\Throwable $e) {
+                \Log::warning('Reminder bell notification failed for user ' . $uid . ': ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.reminders.index')

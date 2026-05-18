@@ -117,7 +117,9 @@ class CheckOrderViolations extends Command
                 'recipient_role' => null,
             ]);
 
-            $reminder->recipients()->attach($order->vendor_id);
+            $reminder->recipients()->attach([
+                $order->vendor_id => ['read_at' => null],
+            ]);
 
             // Also push to bell notification
             \App\Models\Notification::create([

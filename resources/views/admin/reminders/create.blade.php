@@ -106,8 +106,8 @@
                     <option value="">-- Choose Role --</option>
                     <option value="retailer"   {{ old('recipient_role') === 'retailer'   ? 'selected' : '' }}>Retailer</option>
                     <option value="wholesaler" {{ old('recipient_role') === 'wholesaler' ? 'selected' : '' }}>Wholesaler</option>
-                    <option value="exporter"   {{ old('recipient_role') === 'exporter'   ? 'selected' : '' }}>Exporter</option>
-                    <option value="importer"   {{ old('recipient_role') === 'importer'   ? 'selected' : '' }}>Importer</option>
+                    <option value="exporter"   {{ old('recipient_role') === 'exporter'   ? 'selected' : '' }}>Exporter / Importer</option>
+                    <option value="importer"   {{ old('recipient_role') === 'importer'   ? 'selected' : '' }}>Importer / Exporter</option>
                 </select>
             </div>
 
