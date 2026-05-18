@@ -615,7 +615,10 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
         if (data.success) {
             showToast(data.message, 'success');
             closeModal();
-            setTimeout(() => location.reload(), 1000);
+            // Redirect to retailer dashboard after successful product add/update
+            setTimeout(() => {
+                window.location.href = '{{ route('retailer.dashboard') }}';
+            }, 1000);
         } else {
             showToast(data.message || 'An error occurred', 'error');
         }
