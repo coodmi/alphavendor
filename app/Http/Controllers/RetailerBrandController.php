@@ -13,6 +13,7 @@ class RetailerBrandController extends Controller
     {
         $brands = Brand::where('vendor_id', Auth::id())
             ->with('parent')
+            ->withCount('products')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();

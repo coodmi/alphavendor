@@ -22,19 +22,34 @@ class Brand extends Model
         'is_active' => 'boolean',
     ];
 
-    /**
-     * Get products for this brand
-     */
+    public function setNameAttribute($value): void
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = Str::slug($value);
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);
     }
 
-    /**
-     * Get the vendor who owns this brand
-     */
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Brand::class, 'parent_brand_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Brand::class, 'parent_brand_id');
+    }
+
+    public function isAdminBrand(): bool
+    {
+        return is_null($this->vendor_id);
     }
 }
