@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Wholesaler;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Concerns\SyncsProductGallery;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class WholesalerCategoryController extends Controller
 {
+    use SyncsProductGallery;
+
     public function index()
     {
         $categories = Category::where('vendor_id', Auth::id())
@@ -19,7 +22,6 @@ class WholesalerCategoryController extends Controller
             ->orderBy('name')
             ->get();
 
-        // Get admin categories for dropdown
         $adminCategories = Category::whereNull('vendor_id')
             ->where('is_active', true)
             ->orderBy('name')
@@ -30,17 +32,21 @@ class WholesalerCategoryController extends Controller
 
     public function store(Request $request)
     {
+        $this->validateCategoryMetaKeywords($request);
+
         $validated = $request->validate([
             'parent_category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255|unique:categories,name',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'image_url' => 'nullable|url',
             'is_active' => 'boolean',
-            'sort_order' => 'nullable|integer'
+            'sort_order' => 'nullable|integer',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'required|string|max:1000',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
-        // Handle image upload or URL
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('categories', 'public');
         } elseif ($request->filled('image_url')) {
@@ -52,12 +58,11 @@ class WholesalerCategoryController extends Controller
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
         $validated['vendor_id'] = Auth::id();
 
-        // Verify parent category is an admin category
         $parentCategory = Category::find($validated['parent_category_id']);
-        if ($parentCategory && !$parentCategory->isAdminCategory()) {
+        if ($parentCategory && ! $parentCategory->isAdminCategory()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Parent category must be an admin category!'
+                'message' => 'Parent category must be an admin category!',
             ], 422);
         }
 
@@ -66,40 +71,41 @@ class WholesalerCategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category created successfully!',
-            'category' => $category
+            'category' => $category,
         ]);
     }
 
     public function update(Request $request, Category $category)
     {
-        // Ensure wholesaler can only update their own categories
         if ($category->vendor_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized to update this category!'
+                'message' => 'Unauthorized to update this category!',
             ], 403);
         }
+
+        $this->validateCategoryMetaKeywords($request);
 
         $validated = $request->validate([
             'parent_category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'image_url' => 'nullable|url',
             'is_active' => 'boolean',
-            'sort_order' => 'nullable|integer'
+            'sort_order' => 'nullable|integer',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'required|string|max:1000',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
-        // Handle image update
         if ($request->hasFile('image')) {
-            // Delete old image if it's a stored file
-            if ($category->image && !filter_var($category->image, FILTER_VALIDATE_URL)) {
+            if ($category->image && ! filter_var($category->image, FILTER_VALIDATE_URL)) {
                 Storage::disk('public')->delete($category->image);
             }
             $validated['image'] = $request->file('image')->store('categories', 'public');
         } elseif ($request->filled('image_url')) {
-            // Delete old image if it's a stored file
-            if ($category->image && !filter_var($category->image, FILTER_VALIDATE_URL)) {
+            if ($category->image && ! filter_var($category->image, FILTER_VALIDATE_URL)) {
                 Storage::disk('public')->delete($category->image);
             }
             $validated['image'] = $validated['image_url'];
@@ -114,30 +120,27 @@ class WholesalerCategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category updated successfully!',
-            'category' => $category->load('products')
+            'category' => $category->load('products'),
         ]);
     }
 
     public function destroy(Category $category)
     {
-        // Ensure wholesaler can only delete their own categories
         if ($category->vendor_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized to delete this category!'
+                'message' => 'Unauthorized to delete this category!',
             ], 403);
         }
 
-        // Check if category has products
         if ($category->products()->count() > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Cannot delete category with associated products!'
+                'message' => 'Cannot delete category with associated products!',
             ], 422);
         }
 
-        // Delete image if it's a stored file
-        if ($category->image && !filter_var($category->image, FILTER_VALIDATE_URL)) {
+        if ($category->image && ! filter_var($category->image, FILTER_VALIDATE_URL)) {
             Storage::disk('public')->delete($category->image);
         }
 
@@ -145,7 +148,7 @@ class WholesalerCategoryController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Category deleted successfully!'
+            'message' => 'Category deleted successfully!',
         ]);
     }
 }

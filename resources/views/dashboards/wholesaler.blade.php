@@ -118,15 +118,39 @@
         <div class="dashboard-section">
             <h2>Quick Actions</h2>
             <div class="action-buttons">
-                <a href="#" class="btn btn-primary">Add Bulk Product</a>
-                <a href="#" class="btn btn-success">View Orders</a>
-                <a href="#" class="btn btn-info">Manage Inventory</a>
+                <a href="{{ route('wholesaler.products') }}" class="btn btn-primary">Add Product</a>
+                <a href="{{ route('wholesaler.orders') }}" class="btn btn-success">View Orders</a>
+                <a href="{{ route('wholesaler.categories') }}" class="btn btn-info">Manage Categories</a>
+                <a href="{{ route('withdrawals.payment-methods') }}" class="btn btn-info">Payment Methods</a>
+                <a href="{{ route('vendor.tickets.create') }}" class="btn btn-primary">New Ticket</a>
+                <a href="{{ route('wholesaler.reports.index') }}" class="btn btn-success">Report Analysis</a>
             </div>
         </div>
 
         <div class="dashboard-section">
-            <h2>Recent Activity</h2>
-            <p>No recent activity yet. Start by adding your first wholesale product!</p>
+            <h2>Recent Orders</h2>
+            @if(isset($recentOrders) && $recentOrders->count() > 0)
+                <div style="overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead><tr style="background:#f8f9fa;text-align:left;">
+                            <th style="padding:10px;">Order #</th><th style="padding:10px;">Customer</th><th style="padding:10px;">Total</th><th style="padding:10px;">Status</th><th style="padding:10px;"></th>
+                        </tr></thead>
+                        <tbody>
+                        @foreach($recentOrders as $order)
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:10px;">{{ $order->order_number }}</td>
+                                <td style="padding:10px;">{{ $order->user->name ?? 'N/A' }}</td>
+                                <td style="padding:10px;">{{ currency($order->total) }}</td>
+                                <td style="padding:10px;">{{ ucfirst(str_replace('_',' ',$order->status)) }}</td>
+                                <td style="padding:10px;"><a href="{{ route('wholesaler.orders.show', $order) }}">View</a></td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p>No recent orders yet.</p>
+            @endif
         </div>
     </div>
 </div>

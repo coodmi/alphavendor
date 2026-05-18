@@ -84,9 +84,13 @@
                             {{ $order->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <button onclick="viewOrderDetails({{ $order->id }})" class="text-teal-700 hover:text-teal-900">
-                                View Details
-                            </button>
+                            @if(auth()->user()->role === 'retailer')
+                                <a href="{{ route('retailer.orders.show', $order) }}" class="text-teal-700 hover:text-teal-900 font-medium">View Details</a>
+                            @elseif(auth()->user()->role === 'wholesaler')
+                                <a href="{{ route('wholesaler.orders.show', $order) }}" class="text-teal-700 hover:text-teal-900 font-medium">View Details</a>
+                            @else
+                                <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-teal-700 hover:text-teal-900 font-medium">Invoice</a>
+                            @endif
                         </td>
                     </tr>
                 @empty
@@ -105,10 +109,4 @@
     </div>
 </div>
 
-<script>
-function viewOrderDetails(orderId) {
-    // Simple implementation - you can enhance this
-    alert('Order details coming soon! Order ID: ' + orderId);
-}
-</script>
 @endsection

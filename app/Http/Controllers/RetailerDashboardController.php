@@ -132,4 +132,5 @@ class RetailerDashboardController extends Controller
         }
 
         return redirect()->back()->with('success', 'Order marked as Shipped!');
-    }}
+    }
+}

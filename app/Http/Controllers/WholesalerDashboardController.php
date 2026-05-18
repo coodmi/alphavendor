@@ -2,37 +2,110 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\VendorWallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product;
-use App\Models\Order;
-use App\Models\VendorWallet;
 
 class WholesalerDashboardController extends Controller
 {
-    /**
-     * Show wholesaler dashboard
-     */
     public function index()
     {
         $vendorId = Auth::id();
 
-        // Get or create wallet
         $wallet = VendorWallet::firstOrCreate(
             ['vendor_id' => $vendorId],
             ['balance' => 0, 'pending_balance' => 0, 'total_earned' => 0, 'total_withdrawn' => 0]
         );
 
-        // Get statistics
         $totalProducts = Product::where('vendor_id', $vendorId)->count();
         $totalOrders = Order::where('vendor_id', $vendorId)->count();
         $pendingOrders = Order::where('vendor_id', $vendorId)->where('status', 'pending')->count();
+
+        $ordersByStatus = Order::where('vendor_id', $vendorId)
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        $thisMonthSales = Order::where('vendor_id', $vendorId)
+            ->whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))
+            ->sum('vendor_earning');
+
+        $lastMonthSales = Order::where('vendor_id', $vendorId)
+            ->whereMonth('created_at', date('m', strtotime('-1 month')))
+            ->whereYear('created_at', date('Y', strtotime('-1 month')))
+            ->sum('vendor_earning');
+
+        $avgOrderValue = $totalOrders > 0
+            ? Order::where('vendor_id', $vendorId)->avg('vendor_earning')
+            : 0;
+
         $recentOrders = Order::where('vendor_id', $vendorId)
             ->with(['user', 'items'])
             ->latest()
             ->take(5)
             ->get();
 
-        return view('dashboards.wholesaler', compact('wallet', 'totalProducts', 'totalOrders', 'pendingOrders', 'recentOrders'));
+        return view('dashboards.wholesaler', compact(
+            'wallet',
+            'totalProducts',
+            'totalOrders',
+            'pendingOrders',
+            'recentOrders',
+            'ordersByStatus',
+            'thisMonthSales',
+            'lastMonthSales',
+            'avgOrderValue'
+        ));
+    }
+
+    public function orders()
+    {
+        $orders = Order::where('vendor_id', Auth::id())
+            ->with(['user', 'items.product'])
+            ->latest()
+            ->paginate(15);
+
+        return view('wholesaler.orders.index', compact('orders'));
+    }
+
+    public function showOrder(Order $order)
+    {
+        if ($order->vendor_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $order->load(['user', 'items.product']);
+
+        return view('wholesaler.orders.show', compact('order'));
+    }
+
+    public function updateOrderStatus(Request $request, Order $order)
+    {
+        if ($order->vendor_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:shipped',
+        ]);
+
+        if (! in_array($order->status, ['order_confirmed', 'processing', 'advance_paid'])) {
+            return redirect()->back()->with('error', 'You can only mark orders as Shipped when they are confirmed or processing.');
+        }
+
+        try {
+            app(\App\Services\RetailOrderStatusService::class)
+                ->transition($order, 'shipped', Auth::user());
+        } catch (\App\Exceptions\UnauthorisedOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\App\Exceptions\InvalidOrderTransitionException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Order marked as Shipped!');
     }
 }

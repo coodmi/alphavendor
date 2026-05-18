@@ -113,6 +113,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Invoice</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -155,6 +156,22 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $transaction->created_at->format('M d, Y') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                @if($transaction->order_id && $transaction->order)
+                                    @php
+                                        $invoiceRoute = match(auth()->user()->role) {
+                                            'retailer' => 'retailer.orders.invoice',
+                                            'wholesaler' => 'wholesaler.orders.invoice',
+                                            default => 'orders.invoice',
+                                        };
+                                    @endphp
+                                    <a href="{{ route($invoiceRoute, $transaction->order) }}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                        <i class="fas fa-file-invoice"></i> View
+                                    </a>
+                                @else
+                                    <span class="text-gray-400">—</span>
+                                @endif
                             </td>
                         </tr>
                     @empty

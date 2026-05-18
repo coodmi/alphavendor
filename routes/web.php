@@ -562,6 +562,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:wholesaler')->prefix('wholesaler')->name('wholesaler.')->group(function () {
         Route::get('/dashboard', [WholesalerDashboardController::class, 'index'])->name('dashboard');
 
+        // Orders
+        Route::get('/orders', [WholesalerDashboardController::class, 'orders'])->name('orders');
+        Route::get('/orders/{order}', [WholesalerDashboardController::class, 'showOrder'])->name('orders.show');
+        Route::get('/orders/{order}/invoice', [App\Http\Controllers\OrderController::class, 'invoice'])->name('orders.invoice');
+        Route::patch('/orders/{order}/status', [WholesalerDashboardController::class, 'updateOrderStatus'])->name('orders.update-status');
+
         // Brand management
         Route::get('/brands', [WholesalerBrandController::class, 'index'])->name('brands');
         Route::post('/brands', [WholesalerBrandController::class, 'store'])->name('brands.store');

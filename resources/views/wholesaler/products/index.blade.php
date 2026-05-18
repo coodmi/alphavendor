@@ -81,10 +81,10 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button data-product='@json($product)' onclick="editProductFromData(this)" class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
+                        <button onclick='editProduct(@json($product))' class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </button>
-                        <button onclick="confirmDelete({{ $product->id }}, '{{ addslashes($product->name) }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
+                        <button onclick="confirmDelete({{ $product->id }}, '{{ $product->name }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
                             <i class="fas fa-trash mr-1"></i> Delete
                         </button>
                     </td>
@@ -207,23 +207,6 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Minimum Order Quantity *</label>
-                    <input type="number" name="minimum_order" id="productMinOrder" min="1" value="1" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Supplier Location *</label>
-                    <select name="supplier_location_id" id="productSupplierLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
-                        <option value="">Select Supplier Location</option>
-                        @foreach($supplierLocations as $location)
-                            <option value="{{ $location->id }}">{{ $location->name }}{{ $location->country ? ' - ' . $location->country : '' }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
                     <select name="status" id="productStatus" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                         <option value="active">Active</option>
@@ -244,6 +227,153 @@
                     <span class="ml-3 text-sm font-medium text-gray-700">Featured Product</span>
                 </label>
             </div>
+
+            {{-- Special Offer --}}
+            @if(isset($offers) && $offers->count() > 0)
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Special Offer <span class="text-gray-400 font-normal">(Optional)</span></label>
+                <select name="special_offer_id" id="productOffer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="">No Special Offer</option>
+                    @foreach($offers as $offer)
+                        <option value="{{ $offer->id }}">{{ $offer->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
+
+            {{-- MOQ & Supplier Location --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Min Order (MOQ) *</label>
+                    <input type="number" name="minimum_order" id="productMOQ" min="1" required
+                           placeholder="e.g. 10"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Supplier Location *</label>
+                    <select name="supplier_location_id" id="productSupplierLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option value="">Select location</option>
+                        @foreach($supplierLocations as $loc)
+                            <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            {{-- Product Video --}}
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Product Video URL <span class="text-gray-400 font-normal">(Optional)</span></label>
+                <input type="url" name="video" id="productVideo"
+                       placeholder="https://youtube.com/watch?v=..."
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <p class="text-xs text-gray-400 mt-1">YouTube বা অন্য video link দিন</p>
+            </div>
+
+            {{-- SEO / Meta Fields --}}
+            <div class="border border-gray-200 rounded-xl p-4 bg-gray-50 space-y-4">
+                <h4 class="text-sm font-bold text-gray-600 uppercase tracking-wide">
+                    <i class="fas fa-search text-indigo-400 mr-1"></i> SEO / Meta (Optional)
+                </h4>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
+                    <input type="text" name="meta_title" id="productMetaTitle"
+                           placeholder="SEO title for this product"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Meta Keywords
+                        <span class="text-xs text-gray-400 font-normal ml-1">(minimum 5, comma separated)</span>
+                    </label>
+                    <input type="text" name="meta_keywords" id="productMetaKeywords"
+                           placeholder="keyword1, keyword2, keyword3, keyword4, keyword5"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                           oninput="validateKeywords(this)">
+                    <p id="keywordHint" class="text-xs text-gray-400 mt-1">Comma দিয়ে আলাদা করুন, minimum 5টি keyword দিন</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
+                    <textarea name="meta_description" id="productMetaDescription" rows="2"
+                              placeholder="Short description for search engines (max 160 chars)"
+                              maxlength="500"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white resize-none"></textarea>
+                </div>
+            </div>
+
+            @if(isset($attributes) && $attributes->count() > 0)
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Product Attributes</label>
+                <div class="space-y-4 border border-gray-200 rounded-xl p-4 bg-gray-50">
+                    @foreach($attributes as $attr)
+                    <div class="bg-white rounded-lg border border-gray-100 p-3">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                            {{ $attr->name }}
+                            @if($attr->is_required)<span class="text-red-500 ml-0.5">*</span>@endif
+                        </label>
+
+                        @if($attr->type === 'select' && $attr->options)
+                        {{-- Multi-select tag picker --}}
+                        <div id="select-picker-{{ $attr->id }}">
+                            <div class="flex flex-wrap gap-2 mb-2" id="selected-tags-{{ $attr->id }}"></div>
+                            <div class="flex flex-wrap gap-1.5">
+                                @foreach($attr->options as $opt)
+                                <button type="button"
+                                        onclick="toggleSelectOption({{ $attr->id }}, '{{ $opt }}')"
+                                        id="opt-{{ $attr->id }}-{{ Str::slug($opt) }}"
+                                        class="px-3 py-1 text-xs font-medium border border-gray-300 rounded-full bg-white hover:border-indigo-500 hover:text-indigo-600 transition-all select-option-btn">
+                                    {{ $opt }}
+                                </button>
+                                @endforeach
+                            </div>
+                            <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                   id="selectValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                        </div>
+
+                        @elseif($attr->type === 'color')
+                        {{-- Multi-color picker --}}
+                        <div id="color-picker-{{ $attr->id }}">
+                            <div class="flex flex-wrap gap-2 mb-2" id="swatches-{{ $attr->id }}"></div>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="colorInput-{{ $attr->id }}" value="#000000"
+                                       class="h-9 w-12 border border-gray-300 rounded-lg cursor-pointer">
+                                <button type="button" onclick="addColor({{ $attr->id }})"
+                                        class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">
+                                    + Add Color
+                                </button>
+                            </div>
+                            <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                   id="colorValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                        </div>
+
+                        @elseif($attr->type === 'number')
+                        {{-- Single number --}}
+                        <input type="number" name="attributes[{{ $attr->id }}]"
+                               placeholder="Enter {{ $attr->name }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none attr-field"
+                               data-attr-id="{{ $attr->id }}"
+                               {{ $attr->is_required ? 'required' : '' }}>
+
+                        @else
+                        {{-- Multi-text tag input --}}
+                        <div id="text-picker-{{ $attr->id }}">
+                            <div class="flex flex-wrap gap-1.5 mb-2" id="text-tags-{{ $attr->id }}"></div>
+                            <div class="flex gap-2">
+                                <input type="text" id="textInput-{{ $attr->id }}"
+                                       placeholder="Type and press Enter or +"
+                                       class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                                       onkeydown="if(event.key==='Enter'){event.preventDefault();addTextTag({{ $attr->id }});}">
+                                <button type="button" onclick="addTextTag({{ $attr->id }})"
+                                        class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition">+</button>
+                            </div>
+                            <input type="hidden" name="attributes[{{ $attr->id }}]"
+                                   id="textValue-{{ $attr->id }}" class="attr-field" data-attr-id="{{ $attr->id }}">
+                        </div>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
             <div class="flex gap-3 justify-end pt-4 border-t border-gray-200">
                 <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-150">
@@ -303,6 +433,8 @@ function toggleImageSource() {
 
 function openAddModal() {
     editingProductId = null;
+    const gi = document.getElementById('productGalleryImages');
+    if (gi) gi.setAttribute('required','required');
     document.getElementById('modalTitle').textContent = 'Add Product';
     document.getElementById('formMethod').value = 'POST';
     document.getElementById('productForm').reset();
@@ -310,11 +442,6 @@ function openAddModal() {
     toggleImageSource();
     document.getElementById('imagePreview').classList.add('hidden');
     document.getElementById('productModal').classList.remove('hidden');
-}
-
-function editProductFromData(button) {
-    const product = JSON.parse(button.getAttribute('data-product'));
-    editProduct(product);
 }
 
 function editProduct(product) {
@@ -330,11 +457,45 @@ function editProduct(product) {
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productOldPrice').value = product.old_price || '';
     document.getElementById('productStock').value = product.stock;
-    document.getElementById('productMinOrder').value = product.minimum_order || 1;
-    document.getElementById('productSupplierLocation').value = product.supplier_location_id || '';
     document.getElementById('productStatus').value = product.status;
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productFeatured').checked = product.is_featured;
+    // New fields
+    if (document.getElementById('productOffer'))        document.getElementById('productOffer').value = product.special_offer_id || '';
+    if (document.getElementById('productMOQ'))          document.getElementById('productMOQ').value = product.minimum_order || '';
+    if (document.getElementById('productSupplierLocation')) document.getElementById('productSupplierLocation').value = product.supplier_location_id || '';
+    const galleryInput = document.getElementById('productGalleryImages');
+    if (galleryInput) galleryInput.removeAttribute('required');
+    if (document.getElementById('productVideo'))        document.getElementById('productVideo').value = product.video || '';
+    if (document.getElementById('productMetaTitle'))    document.getElementById('productMetaTitle').value = product.meta_title || '';
+    if (document.getElementById('productMetaKeywords')) document.getElementById('productMetaKeywords').value = product.meta_keywords || '';
+    if (document.getElementById('productMetaDescription')) document.getElementById('productMetaDescription').value = product.meta_description || '';
+
+    // Populate attribute values
+    document.querySelectorAll('.attr-field').forEach(field => {
+        const attrId = field.dataset.attrId;
+        const attrData = product.attributes ? product.attributes.find(a => a.id == attrId) : null;
+        const val = attrData ? (attrData.pivot ? attrData.pivot.value : '') : '';
+
+        if (field.type === 'hidden') {
+            if (document.getElementById('swatches-' + attrId)) {
+                // Multi-color
+                document.getElementById('swatches-' + attrId).innerHTML = '';
+                field.value = '';
+                if (val) initColorSwatches(attrId, val);
+            } else if (document.getElementById('selectValue-' + attrId) === field) {
+                // Multi-select options
+                initSelectOptions(attrId, val);
+            } else if (document.getElementById('textValue-' + attrId) === field) {
+                // Multi-text tags
+                initTextTags(attrId, val);
+            } else {
+                field.value = val;
+            }
+        } else {
+            field.value = val;
+        }
+    });
 
     // Show current image if exists
     if (product.image) {
@@ -393,7 +554,7 @@ function closeDeleteModal() {
 function executeSoftDelete() {
     if (!deleteTargetId) return;
 
-    fetch(`/wholesaler/products/${deleteTargetId}`, {
+    fetch(`/retailer/products/${deleteTargetId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -434,8 +595,19 @@ function executeSoftDelete() {
 document.getElementById('productForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    // Validate meta keywords minimum 5
+    const kwField = document.getElementById('productMetaKeywords');
+    if (kwField && kwField.value.trim()) {
+        const kws = kwField.value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+        if (kws.length < 5) {
+            showToast('Meta Keywords minimum 5টি দিতে হবে (comma দিয়ে আলাদা করুন)', 'error');
+            kwField.focus();
+            return;
+        }
+    }
+
     const formData = new FormData(this);
-    const url = editingProductId ? `/wholesaler/products/${editingProductId}` : '{{ route('wholesaler.products.store') }}';
+    const url = editingProductId ? `/retailer/products/${editingProductId}` : '{{ route('wholesaler.products.store') }}';
 
     fetch(url, {
         method: 'POST',
@@ -450,7 +622,10 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
         if (data.success) {
             showToast(data.message, 'success');
             closeModal();
-            setTimeout(() => location.reload(), 1000);
+            // Redirect to retailer dashboard after successful product add/update
+            setTimeout(() => {
+                window.location.href = '{{ route('wholesaler.dashboard') }}';
+            }, 1000);
         } else {
             showToast(data.message || 'An error occurred', 'error');
         }
@@ -469,6 +644,126 @@ window.onclick = function(event) {
     if (event.target.id === 'deleteModal') {
         closeDeleteModal();
     }
+}
+
+function validateKeywords(input) {
+    const kws = input.value.split(',').map(k => k.trim()).filter(k => k.length > 0);
+    const hint = document.getElementById('keywordHint');
+    if (kws.length >= 5) {
+        hint.textContent = '✓ ' + kws.length + ' keywords added';
+        hint.className = 'text-xs text-green-600 mt-1';
+    } else {
+        hint.textContent = kws.length + '/5 keywords — minimum 5টি দিন';
+        hint.className = 'text-xs text-orange-500 mt-1';
+    }
+}
+
+// ── Multi-Color Picker ──────────────────────────────────────────────────────
+function addColor(attrId) {
+    const hex = document.getElementById('colorInput-' + attrId).value;
+    const hidden = document.getElementById('colorValue-' + attrId);
+    const swatches = document.getElementById('swatches-' + attrId);
+
+    // Avoid duplicates
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(hex)) return;
+    existing.push(hex);
+    hidden.value = existing.join(',');
+
+    // Render swatch
+    const swatch = document.createElement('div');
+    swatch.className = 'relative group';
+    swatch.innerHTML = `
+        <div style="width:32px;height:32px;border-radius:6px;background:${hex};border:2px solid #e5e7eb;cursor:default;" title="${hex}"></div>
+        <button type="button" onclick="removeColor(${attrId},'${hex}')"
+                style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#ef4444;color:white;border:none;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+    `;
+    swatch.dataset.color = hex;
+    swatches.appendChild(swatch);
+}
+
+function removeColor(attrId, hex) {
+    const hidden = document.getElementById('colorValue-' + attrId);
+    const swatches = document.getElementById('swatches-' + attrId);
+    hidden.value = hidden.value.split(',').filter(c => c !== hex).join(',');
+    swatches.querySelectorAll('[data-color]').forEach(el => {
+        if (el.dataset.color === hex) el.remove();
+    });
+}
+
+function initColorSwatches(attrId, value) {
+    if (!value) return;
+    value.split(',').forEach(hex => {
+        if (!hex) return;
+        document.getElementById('colorInput-' + attrId).value = hex;
+        addColor(attrId);
+    });
+}
+
+// ── Multi-Select Tag Picker ─────────────────────────────────────────────────
+function toggleSelectOption(attrId, value) {
+    const hidden = document.getElementById('selectValue-' + attrId);
+    const btn = document.getElementById('opt-' + attrId + '-' + value.toLowerCase().replace(/[^a-z0-9]/g, '-'));
+    const existing = hidden.value ? hidden.value.split(',') : [];
+
+    if (existing.includes(value)) {
+        // Deselect
+        hidden.value = existing.filter(v => v !== value).join(',');
+        if (btn) { btn.classList.remove('bg-indigo-600','text-white','border-indigo-600'); btn.classList.add('bg-white','border-gray-300'); }
+    } else {
+        // Select
+        existing.push(value);
+        hidden.value = existing.join(',');
+        if (btn) { btn.classList.add('bg-indigo-600','text-white','border-indigo-600'); btn.classList.remove('bg-white','border-gray-300'); }
+    }
+}
+
+function initSelectOptions(attrId, value) {
+    if (!value) return;
+    // Reset all buttons first
+    document.querySelectorAll(`[id^="opt-${attrId}-"]`).forEach(btn => {
+        btn.classList.remove('bg-indigo-600','text-white','border-indigo-600');
+        btn.classList.add('bg-white','border-gray-300');
+    });
+    document.getElementById('selectValue-' + attrId).value = '';
+    value.split(',').forEach(v => { if (v) toggleSelectOption(attrId, v.trim()); });
+}
+
+// ── Multi-Text Tag Input ────────────────────────────────────────────────────
+function addTextTag(attrId) {
+    const input = document.getElementById('textInput-' + attrId);
+    const val = input.value.trim();
+    if (!val) return;
+    const hidden = document.getElementById('textValue-' + attrId);
+    const tags = document.getElementById('text-tags-' + attrId);
+    const existing = hidden.value ? hidden.value.split(',') : [];
+    if (existing.includes(val)) { input.value = ''; return; }
+    existing.push(val);
+    hidden.value = existing.join(',');
+
+    const tag = document.createElement('span');
+    tag.className = 'inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full';
+    tag.dataset.val = val;
+    tag.innerHTML = `${val} <button type="button" onclick="removeTextTag(${attrId},'${val.replace(/'/g,"\\'")}',this.parentElement)" class="text-indigo-400 hover:text-red-500 font-bold leading-none">×</button>`;
+    tags.appendChild(tag);
+    input.value = '';
+}
+
+function removeTextTag(attrId, val, tagEl) {
+    const hidden = document.getElementById('textValue-' + attrId);
+    hidden.value = hidden.value.split(',').filter(v => v !== val).join(',');
+    tagEl.remove();
+}
+
+function initTextTags(attrId, value) {
+    if (!value) return;
+    document.getElementById('text-tags-' + attrId).innerHTML = '';
+    document.getElementById('textValue-' + attrId).value = '';
+    value.split(',').forEach(v => {
+        if (!v.trim()) return;
+        document.getElementById('textInput-' + attrId).value = v.trim();
+        addTextTag(attrId);
+    });
 }
 </script>
 @endsection
