@@ -650,41 +650,57 @@
 }
 
 /* ============================================
-   BOTTOM NAV STRIP
+   BOTTOM NAV STRIP → TOP NAV STRIP (under header)
    ============================================ */
 .mobile-nav-strip {
     display: none;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
     background: #0d5c63;
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
-    z-index: 997;
-    padding: 6px 0 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    z-index: 998;
+    padding: 0;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.mobile-nav-strip::-webkit-scrollbar {
+    display: none;
 }
 
 .mobile-nav-strip a {
-    flex: 1;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: rgba(255,255,255,0.65);
+    color: rgba(255,255,255,0.75);
     text-decoration: none;
-    font-size: 10px;
-    padding: 6px 4px;
-    transition: color 0.2s;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 8px 14px;
+    transition: color 0.2s, background 0.2s;
     min-height: unset !important;
     min-width: unset !important;
     gap: 3px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
 }
 
 .mobile-nav-strip a.active,
 .mobile-nav-strip a:hover {
     color: #FFB833;
+    border-bottom-color: #FFB833;
+    background: rgba(255,255,255,0.08);
 }
 
 .mobile-nav-strip a i {
-    font-size: 19px;
+    font-size: 16px;
 }
 
 /* ============================================
@@ -694,7 +710,17 @@
     .mobile-menu-toggle { display: flex; align-items: center; }
     .navbar { display: none !important; }
     .mobile-nav-strip { display: flex; }
-    body { padding-bottom: 58px; }
+
+    /* Remove bottom padding (nav is now at top, not bottom) */
+    body { padding-bottom: 0; }
+
+    /* Header sticky on mobile */
+    .header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 999 !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15) !important;
+    }
 
     /* Fix touch targets only for nav items, not all buttons */
     .mobile-nav-items a,
