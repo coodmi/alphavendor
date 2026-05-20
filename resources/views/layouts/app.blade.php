@@ -666,19 +666,51 @@
     
     @stack('scripts')
 
-    {{-- Mobile: set CSS variable for header height so nav strip sticks right below --}}
     <script>
-    (function() {
-        function setHeaderHeightVar() {
-            if (window.innerWidth > 768) return;
-            var header = document.querySelector('.header');
-            if (!header) return;
-            var h = header.getBoundingClientRect().height;
-            document.documentElement.style.setProperty('--header-height', h + 'px');
+    // Mobile: fix header + nav strip at top (Amazon style)
+    (function () {
+        if (window.innerWidth > 768) return;
+
+        var header   = document.querySelector('.header');
+        var navStrip = document.getElementById('mobileNavStrip');
+        if (!header || !navStrip) return;
+
+        function applyFixedLayout() {
+            if (window.innerWidth > 768) {
+                // Reset on desktop
+                header.style.position   = '';
+                header.style.top        = '';
+                navStrip.style.position = '';
+                navStrip.style.top      = '';
+                document.body.style.paddingTop = '';
+                return;
+            }
+
+            // Measure header height BEFORE fixing it
+            header.style.position = 'fixed';
+            header.style.top      = '0';
+            header.style.left     = '0';
+            header.style.right    = '0';
+            header.style.zIndex   = '1000';
+
+            var headerH  = header.offsetHeight;
+
+            navStrip.style.position = 'fixed';
+            navStrip.style.top      = headerH + 'px';
+            navStrip.style.left     = '0';
+            navStrip.style.right    = '0';
+            navStrip.style.zIndex   = '999';
+
+            var navH = navStrip.offsetHeight;
+
+            // Push content below both bars
+            document.body.style.paddingTop = (headerH + navH) + 'px';
         }
-        document.addEventListener('DOMContentLoaded', setHeaderHeightVar);
-        window.addEventListener('resize', setHeaderHeightVar);
-        window.addEventListener('load', setHeaderHeightVar);
+
+        // Run immediately and on resize/load
+        applyFixedLayout();
+        window.addEventListener('resize', applyFixedLayout);
+        window.addEventListener('load',   applyFixedLayout);
     })();
     </script>
 </body>
