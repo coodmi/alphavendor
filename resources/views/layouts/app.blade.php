@@ -675,5 +675,27 @@
     </script>
     
     @stack('scripts')
+
+    {{-- Mobile: dynamically position nav strip below header --}}
+    <script>
+    (function() {
+        function fixMobileNav() {
+            if (window.innerWidth > 768) return;
+
+            var header  = document.querySelector('.header');
+            var navStrip = document.getElementById('mobileNavStrip');
+            if (!header || !navStrip) return;
+
+            var headerH = header.getBoundingClientRect().height;
+            navStrip.style.top = headerH + 'px';
+            document.body.style.paddingTop = (headerH + navStrip.getBoundingClientRect().height) + 'px';
+        }
+
+        // Run on load and resize
+        document.addEventListener('DOMContentLoaded', fixMobileNav);
+        window.addEventListener('resize', fixMobileNav);
+        window.addEventListener('load', fixMobileNav);
+    })();
+    </script>
 </body>
 </html>

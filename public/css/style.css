@@ -727,7 +727,7 @@ body {
 @media (max-width: 768px) {
     .header-top {
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
     }
 
     .logo {

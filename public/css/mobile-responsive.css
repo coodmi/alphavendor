@@ -654,7 +654,7 @@
    ============================================ */
 .mobile-nav-strip {
     display: none;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -683,7 +683,7 @@
     text-decoration: none;
     font-size: 11px;
     font-weight: 500;
-    padding: 8px 14px;
+    padding: 8px 16px;
     transition: color 0.2s, background 0.2s;
     min-height: unset !important;
     min-width: unset !important;
@@ -700,7 +700,7 @@
 }
 
 .mobile-nav-strip a i {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 /* ============================================
@@ -711,21 +711,48 @@
     .navbar { display: none !important; }
     .mobile-nav-strip { display: flex; }
 
-    /* Remove bottom padding (nav is now at top, not bottom) */
-    body { padding-bottom: 0; }
-
-    /* Header sticky on mobile */
+    /* Header fixed at top */
     .header {
-        position: sticky !important;
+        position: fixed !important;
         top: 0 !important;
-        z-index: 999 !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.15) !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+        width: 100% !important;
     }
 
-    /* Fix touch targets only for nav items, not all buttons */
+    /* Nav strip fixed just below header */
+    .mobile-nav-strip {
+        top: 71px !important; /* header height on mobile */
+        z-index: 999 !important;
+    }
+
+    /* Push page content down so it's not hidden behind fixed header+nav */
+    body {
+        padding-top: 115px !important; /* header(71px) + nav(44px) */
+        padding-bottom: 0 !important;
+    }
+
+    /* Fix touch targets */
     .mobile-nav-items a,
     .mobile-nav-strip a {
         min-height: 44px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Smaller header on very small screens */
+    .header {
+        padding: 10px 0 !important;
+    }
+
+    .mobile-nav-strip {
+        top: 62px !important;
+    }
+
+    body {
+        padding-top: 106px !important; /* header(62px) + nav(44px) */
     }
 }
 
