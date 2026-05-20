@@ -90,7 +90,7 @@
     @endif
 @endif
 
-<div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">
+<div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;" class="welcome-header-grid">
     <div>
         <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
         <p style="color: #7f8c8d;">Manage your retail business efficiently.</p>

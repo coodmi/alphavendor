@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard-mobile.css') }}">
     <style>
         * {
             margin: 0;
@@ -437,38 +438,23 @@
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                padding: 15px;
+            /* ===== HEADER ===== */
+            .dashboard-header {
+                padding: 10px 14px 10px 60px;
+                gap: 8px;
             }
 
-            .content-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-                padding: 15px;
+            .header-left h1 {
+                font-size: 16px;
+                font-weight: 600;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 160px;
             }
 
-            .content-header h1 {
-                font-size: 20px;
-            }
-
-            .header-actions {
-                width: 100%;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .stat-card {
-                padding: 20px;
-            }
-
-            .stat-value {
-                font-size: 28px;
+            .header-right {
+                gap: 10px;
             }
 
             .profile-info {
@@ -483,21 +469,44 @@
                 font-size: 18px;
             }
 
-            .header-right {
-                gap: 15px;
+            /* ===== CONTENT AREA ===== */
+            .content-area {
+                padding: 14px 12px;
             }
 
-            /* Make tables scrollable on mobile */
-            .table-container {
+            /* ===== STATS GRID ===== */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 14px 12px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+
+            .stat-label {
+                font-size: 12px;
+            }
+
+            /* ===== TABLES ===== */
+            .table-container,
+            .overflow-x-auto,
+            table {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
+                display: block;
+                width: 100%;
             }
 
             table {
-                min-width: 600px;
+                min-width: 550px;
             }
 
-            /* Form adjustments */
+            /* ===== FORMS ===== */
             .form-row {
                 flex-direction: column;
             }
@@ -506,12 +515,23 @@
                 width: 100% !important;
             }
 
-            /* Button adjustments */
-            .btn {
-                width: 100%;
-                justify-content: center;
+            /* ===== GRID LAYOUTS ===== */
+            .grid-cols-2,
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: 1fr !important;
             }
 
+            /* Tailwind grid overrides */
+            .md\:grid-cols-2,
+            .md\:grid-cols-3,
+            .md\:grid-cols-4,
+            .lg\:grid-cols-3,
+            .lg\:grid-cols-4 {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* ===== BUTTONS ===== */
             .btn-group {
                 flex-direction: column;
                 width: 100%;
@@ -520,36 +540,145 @@
             .btn-group .btn {
                 width: 100%;
             }
-        }
 
-        @media (max-width: 480px) {
-            .sidebar-toggle {
-                top: 10px;
-                left: 10px;
+            /* ===== NOTIFICATION DROPDOWN ===== */
+            #notificationDropdown {
+                width: calc(100vw - 24px) !important;
+                right: -50px !important;
+                left: auto !important;
+                max-width: 360px;
             }
 
-            .main-content {
-                padding: 10px;
+            /* ===== PROFILE DROPDOWN ===== */
+            .profile-dropdown {
+                right: 0;
+                min-width: 200px;
             }
 
+            /* ===== CONTENT HEADER ===== */
             .content-header {
-                padding: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 12px;
             }
 
             .content-header h1 {
                 font-size: 18px;
             }
 
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            /* ===== CARDS ===== */
+            .card {
+                padding: 14px;
+            }
+
+            /* ===== FLEX LAYOUTS ===== */
+            .flex-row-mobile {
+                flex-direction: column !important;
+            }
+
+            /* ===== TAILWIND RESPONSIVE OVERRIDES ===== */
+            .sm\:flex-row {
+                flex-direction: column !important;
+            }
+
+            /* ===== MODALS ===== */
+            .modal-content,
+            [id$="Modal"] > div {
+                width: 95vw !important;
+                max-width: 95vw !important;
+                margin: 10px auto !important;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            /* ===== SIDEBAR TOGGLE BUTTON ===== */
+            .sidebar-toggle {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                top: 12px;
+                left: 12px;
+                z-index: 1100;
+                width: 38px;
+                height: 38px;
+                background: #2c3e50;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            }
+
+            /* ===== SIDEBAR ===== */
+            .sidebar {
+                left: -260px !important;
+                transform: none !important;
+                transition: left 0.3s ease !important;
+            }
+
+            .sidebar.active {
+                left: 0 !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header {
+                padding: 10px 10px 10px 56px;
+            }
+
+            .header-left h1 {
+                font-size: 14px;
+                max-width: 120px;
+            }
+
+            .content-area {
+                padding: 10px 8px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
             .stat-card {
-                padding: 15px;
+                padding: 12px 10px;
             }
 
             .stat-value {
-                font-size: 24px;
+                font-size: 20px;
             }
 
             .stat-label {
-                font-size: 12px;
+                font-size: 11px;
+            }
+
+            /* Notification dropdown full width on very small screens */
+            #notificationDropdown {
+                width: calc(100vw - 16px) !important;
+                right: -60px !important;
+            }
+
+            /* Sidebar toggle */
+            .sidebar-toggle {
+                top: 10px;
+                left: 10px;
+                width: 36px;
+                height: 36px;
+                font-size: 15px;
             }
         }
     </style>
@@ -587,6 +716,10 @@
                         {{ ucfirst(Auth::user()->role) }}
                     @endif
                 </span>
+                <!-- Mobile Close Button -->
+                <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <nav class="sidebar-menu">
                 @if(Auth::user()->isAdmin())
@@ -601,11 +734,8 @@
         <div class="main-content">
             <!-- Header -->
             <header class="dashboard-header">
-                <div class="header-left">
-                    <button class="sidebar-toggle" onclick="toggleSidebar()">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1>@yield('page-title', 'Dashboard')</h1>
+                <div class="header-left" style="display:flex;align-items:center;gap:10px;min-width:0;">
+                    <h1 style="margin:0;">@yield('page-title', 'Dashboard')</h1>
                 </div>
                 <div class="header-right">
                     <div class="notification-icon" id="notificationBell" onclick="toggleNotificationDropdown()" style="cursor: pointer; position: relative;">
@@ -1068,23 +1198,25 @@
         // Mobile Sidebar Toggle for Dashboard
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
 
             function openSidebar() {
                 sidebar.classList.add('active');
                 sidebarOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                document.body.classList.add('sidebar-open');
             }
 
             function closeSidebar() {
                 sidebar.classList.remove('active');
                 sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                document.body.classList.remove('sidebar-open');
             }
 
             if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function() {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     if (sidebar.classList.contains('active')) {
                         closeSidebar();
                     } else {
@@ -1093,11 +1225,29 @@
                 });
             }
 
+            if (sidebarCloseBtn) {
+                sidebarCloseBtn.addEventListener('click', closeSidebar);
+            }
+
             if (sidebarOverlay) {
                 sidebarOverlay.addEventListener('click', closeSidebar);
             }
 
-            // Sidebar stays open - removed auto-close on menu click
+            // Close sidebar on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            });
+
+            // On desktop resize, reset sidebar state
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 1024) {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-open');
+                }
+            });
         });
     </script>
 </body>
