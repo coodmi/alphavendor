@@ -141,24 +141,14 @@
 
     <!-- Mobile Nav Strip (visible on mobile only, sticky under header) -->
     <div class="mobile-nav-strip" id="mobileNavStrip">
-        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
-            <i class="fas fa-home"></i>Home
-        </a>
-        <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">
-            <i class="fas fa-shopping-bag"></i>Shop
-        </a>
-        <a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">
-            <i class="fas fa-store"></i>Retail
-        </a>
-        <a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">
-            <i class="fas fa-boxes"></i>Wholesale
-        </a>
-        <a href="{{ route('import') }}" class="{{ request()->routeIs('import') ? 'active' : '' }}">
-            <i class="fas fa-ship"></i>Import
-        </a>
-        <a href="{{ route('sellers.index') }}" class="{{ request()->routeIs('sellers.*') ? 'active' : '' }}">
-            <i class="fas fa-users"></i>Sellers
-        </a>
+        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+        <a href="{{ route('shop') }}" class="{{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a>
+        <a href="{{ route('retail') }}" class="{{ request()->routeIs('retail') ? 'active' : '' }}">Retail</a>
+        <a href="{{ route('wholesale') }}" class="{{ request()->routeIs('wholesale') ? 'active' : '' }}">Wholesale</a>
+        <a href="{{ route('import') }}" class="{{ request()->routeIs('import') ? 'active' : '' }}">Import</a>
+        <a href="{{ route('sellers.index') }}" class="{{ request()->routeIs('sellers.*') ? 'active' : '' }}">Sellers</a>
+        <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About Us</a>
+        <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact Us</a>
     </div>
 
     <!-- Mobile Navigation Overlay -->

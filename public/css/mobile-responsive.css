@@ -653,54 +653,62 @@
 }
 
 /* ============================================
-   MOBILE NAV STRIP - UNDER HEADER (Amazon style)
+   MOBILE NAV STRIP - Amazon style horizontal menu
    ============================================ */
 .mobile-nav-strip {
     display: none;
     background: #0d5c63;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    z-index: 998;
-    padding: 0;
     width: 100%;
     overflow-x: auto;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* NOT fixed by default - will be fixed via JS after header */
+    white-space: nowrap;
+    /* sticky under header */
+    position: sticky;
+    top: var(--header-height, 71px);
+    z-index: 999;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .mobile-nav-strip::-webkit-scrollbar {
     display: none;
 }
 
+/* Links: inline, text only, no icons */
 .mobile-nav-strip a {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.75);
+    display: inline-block;
+    color: rgba(255,255,255,0.85);
     text-decoration: none;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 500;
-    padding: 8px 16px;
-    transition: color 0.2s, background 0.2s;
-    min-height: unset !important;
-    min-width: unset !important;
-    gap: 3px;
+    padding: 10px 14px;
     white-space: nowrap;
     border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    min-height: unset !important;
+    min-width: unset !important;
+    vertical-align: middle;
 }
 
-.mobile-nav-strip a.active,
-.mobile-nav-strip a:hover {
+.mobile-nav-strip a:first-child {
+    padding-left: 16px;
+}
+
+.mobile-nav-strip a:last-child {
+    padding-right: 16px;
+}
+
+.mobile-nav-strip a.active {
     color: #FFB833;
     border-bottom-color: #FFB833;
-    background: rgba(255,255,255,0.08);
+    font-weight: 600;
 }
 
-.mobile-nav-strip a i {
-    font-size: 18px;
+.mobile-nav-strip a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.1);
 }
 
 /* ============================================
@@ -709,7 +717,7 @@
 @media (max-width: 768px) {
     .mobile-menu-toggle { display: flex; align-items: center; }
     .navbar { display: none !important; }
-    .mobile-nav-strip { display: flex; }
+    .mobile-nav-strip { display: block; }
 
     /* Header sticky */
     .header {
@@ -720,14 +728,7 @@
         width: 100% !important;
     }
 
-    /* Nav strip sticky, right below header */
-    .mobile-nav-strip {
-        position: sticky !important;
-        top: var(--header-height, 71px) !important;
-        z-index: 999 !important;
-    }
-
-    /* No extra padding needed - sticky doesn't remove from flow */
+    /* No extra body padding needed - sticky keeps flow */
     body {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
