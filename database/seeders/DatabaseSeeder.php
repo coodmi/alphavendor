@@ -18,21 +18,22 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             VendorSeeder::class,
-            CategorySeeder::class,      // Admin categories
-            BrandSeeder::class,          // Admin brands
-            ProductSeeder::class,        // Admin products
-            RetailerBrandSeeder::class,      // Retailer brands
-            RetailerCategorySeeder::class,   // Retailer categories
-            RetailerProductsSeeder::class,   // Retailer products
-            WholesalerBrandSeeder::class,    // Wholesaler brands
-            WholesalerCategorySeeder::class, // Wholesaler categories
-            WholesalerProductSeeder::class,  // Wholesaler products
-            ExporterBrandSeeder::class,      // Exporter brands
-            ExporterCategorySeeder::class,   // Exporter categories
-            ExporterProductSeeder::class,    // Exporter products
-            CertificationSeeder::class,      // Exporter certifications
-            BannerSeeder::class,             // Homepage banners
-            SpecialOfferSeeder::class,       // Special offers (incl. demo)
+            CategorySeeder::class,
+            BrandSeeder::class,
+            ProductSeeder::class,
+            RetailerBrandSeeder::class,
+            RetailerCategorySeeder::class,
+            RetailerProductsSeeder::class,
+            WholesalerBrandSeeder::class,
+            WholesalerCategorySeeder::class,
+            WholesalerProductSeeder::class,
+            ExporterBrandSeeder::class,
+            ExporterCategorySeeder::class,
+            ExporterProductSeeder::class,
+            CertificationSeeder::class,
+            BannerSeeder::class,
+            SpecialOfferSeeder::class,
+            TestAccountsSeeder::class,   // ← test accounts (password: password123)
         ]);
     }
 }

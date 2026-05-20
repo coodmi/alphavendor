@@ -7,7 +7,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 @media (max-width: 768px) {
-    body { overflow-x: hidden; }
+    /* overflow-x hidden on body blocks sticky positioning - use clip instead */
+    body {
+        overflow-x: clip;
+    }
 
     .container {
         padding-left: 16px !important;
@@ -650,14 +653,10 @@
 }
 
 /* ============================================
-   BOTTOM NAV STRIP → TOP NAV STRIP (under header)
+   MOBILE NAV STRIP - UNDER HEADER (Amazon style)
    ============================================ */
 .mobile-nav-strip {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     background: #0d5c63;
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
     z-index: 998;
@@ -667,6 +666,7 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    /* NOT fixed by default - will be fixed via JS after header */
 }
 
 .mobile-nav-strip::-webkit-scrollbar {
@@ -711,48 +711,26 @@
     .navbar { display: none !important; }
     .mobile-nav-strip { display: flex; }
 
-    /* Header fixed at top */
+    /* Header sticky */
     .header {
-        position: fixed !important;
+        position: sticky !important;
         top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
         z-index: 1000 !important;
         box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
         width: 100% !important;
     }
 
-    /* Nav strip fixed just below header */
+    /* Nav strip sticky, right below header */
     .mobile-nav-strip {
-        top: 71px !important; /* header height on mobile */
+        position: sticky !important;
+        top: var(--header-height, 71px) !important;
         z-index: 999 !important;
     }
 
-    /* Push page content down so it's not hidden behind fixed header+nav */
+    /* No extra padding needed - sticky doesn't remove from flow */
     body {
-        padding-top: 115px !important; /* header(71px) + nav(44px) */
+        padding-top: 0 !important;
         padding-bottom: 0 !important;
-    }
-
-    /* Fix touch targets */
-    .mobile-nav-items a,
-    .mobile-nav-strip a {
-        min-height: 44px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Smaller header on very small screens */
-    .header {
-        padding: 10px 0 !important;
-    }
-
-    .mobile-nav-strip {
-        top: 62px !important;
-    }
-
-    body {
-        padding-top: 106px !important; /* header(62px) + nav(44px) */
     }
 }
 
