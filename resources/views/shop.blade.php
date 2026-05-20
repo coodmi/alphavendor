@@ -236,22 +236,22 @@
                         </a>
                         @if(in_array($vendorRole, ['wholesaler', 'exporter']))
                         {{-- Wholesale / Import: Add to Cart + Pay Advance --}}
-                        <div class="quick-add-btn-group" style="display:flex;gap:6px;padding:10px 12px 12px;">
-                            <button class="quick-add-btn" style="flex:1;font-size:12px;padding:9px 6px;" onclick="event.preventDefault(); addToCart({{ $product->id }})">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                        <div class="quick-add-btn-group">
+                            <button class="quick-add-btn" onclick="event.preventDefault(); addToCart({{ $product->id }})">
+                                <i class="fas fa-shopping-cart"></i> <span>Add to Cart</span>
                             </button>
-                            <a href="{{ route('product.show', $product->id) }}#advance" class="quick-add-btn" style="flex:1;font-size:12px;padding:9px 6px;background:linear-gradient(135deg,#3b82f6,#6366f1);text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;border-radius:8px;color:#fff;font-weight:600;">
-                                <i class="fas fa-money-check-alt"></i> Pay Advance
+                            <a href="{{ route('product.show', $product->id) }}#advance" class="quick-add-btn" style="background:linear-gradient(135deg,#3b82f6,#6366f1);text-decoration:none;">
+                                <i class="fas fa-money-check-alt"></i> <span>Pay Advance</span>
                             </a>
                         </div>
                         @else
                         {{-- Retail: Add to Cart + Buy Now --}}
-                        <div class="quick-add-btn-group" style="display:flex;gap:6px;padding:10px 12px 12px;">
-                            <button class="quick-add-btn" style="flex:1;font-size:12px;padding:9px 6px;" onclick="event.preventDefault(); addToCart({{ $product->id }})">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                        <div class="quick-add-btn-group">
+                            <button class="quick-add-btn" onclick="event.preventDefault(); addToCart({{ $product->id }})">
+                                <i class="fas fa-shopping-cart"></i> <span>Add to Cart</span>
                             </button>
-                            <a href="{{ route('product.show', $product->id) }}" class="quick-add-btn" style="flex:1;font-size:12px;padding:9px 6px;background:linear-gradient(135deg,#0d5c63,#0a4a52);text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;border-radius:8px;color:#fff;font-weight:600;">
-                                <i class="fas fa-bolt"></i> Buy Now
+                            <a href="{{ route('product.show', $product->id) }}" class="quick-add-btn" style="background:linear-gradient(135deg,#0d5c63,#0a4a52);text-decoration:none;">
+                                <i class="fas fa-bolt"></i> <span>Buy Now</span>
                             </a>
                         </div>
                         @endif

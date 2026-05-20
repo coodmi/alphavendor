@@ -29,8 +29,8 @@
         @endif
     </a>
     <a href="{{ route('retailer.reports.index') }}" class="menu-item {{ request()->routeIs('retailer.reports*') ? 'active' : '' }}">
-        <i class="fas fa-chart-bar"></i>
-        <span>Report Analysis</span>
+        <i class="fas fa-chart-pie"></i>
+        <span>Report & Analysis</span>
     </a>
 </div>
 
