@@ -39,22 +39,24 @@
     /* Sidebar becomes slide-in drawer */
     .sidebar {
         position: fixed !important;
-        left: -270px !important;
+        left: -280px !important;
         top: 0;
         height: 100vh;
         z-index: 1050;
-        transition: left 0.3s ease !important;
+        transition: left 0.28s cubic-bezier(.4,0,.2,1) !important;
         transform: none !important;
         box-shadow: none;
+        width: 280px !important;
     }
 
     .sidebar.active {
         left: 0 !important;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.3) !important;
+        box-shadow: 4px 0 24px rgba(0,0,0,0.35) !important;
     }
 
     .main-content {
         margin-left: 0 !important;
+        width: 100% !important;
     }
 
     #sidebarToggle {
@@ -66,7 +68,7 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0,0,0,0.55);
         z-index: 1040;
         backdrop-filter: blur(2px);
     }

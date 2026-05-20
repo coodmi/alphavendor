@@ -426,181 +426,49 @@
             }
         }
 
-        /* Dashboard Mobile Responsive Styles */
+        /* ===== MOBILE DASHBOARD - Full Screen Professional ===== */
         @media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+            /* Sidebar: full-height slide-in drawer */
+            .sidebar {
+                position: fixed !important;
+                top: 0 !important;
+                left: -280px !important;
+                width: 280px !important;
+                height: 100vh !important;
+                z-index: 1050 !important;
+                transition: left 0.28s cubic-bezier(.4,0,.2,1) !important;
+                transform: none !important;
+                box-shadow: none !important;
+                overflow-y: auto !important;
             }
 
-            .content-header h1 {
-                font-size: 22px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            /* ===== HEADER ===== */
-            .dashboard-header {
-                padding: 10px 14px 10px 60px;
-                gap: 8px;
+            .sidebar.active {
+                left: 0 !important;
+                box-shadow: 4px 0 24px rgba(0,0,0,0.35) !important;
             }
 
-            .header-left h1 {
-                font-size: 16px;
-                font-weight: 600;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 160px;
-            }
-
-            .header-right {
-                gap: 10px;
-            }
-
-            .profile-info {
+            /* Overlay covers full screen */
+            .sidebar-overlay {
                 display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.55);
+                z-index: 1040;
+                backdrop-filter: blur(2px);
+                -webkit-backdrop-filter: blur(2px);
             }
 
-            .profile-dropdown-icon {
-                display: none;
-            }
+            .sidebar-overlay.active { display: block; }
 
-            .notification-icon {
-                font-size: 18px;
-            }
-
-            /* ===== CONTENT AREA ===== */
-            .content-area {
-                padding: 14px 12px;
-            }
-
-            /* ===== STATS GRID ===== */
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .stat-card {
-                padding: 14px 12px;
-            }
-
-            .stat-value {
-                font-size: 22px;
-            }
-
-            .stat-label {
-                font-size: 12px;
-            }
-
-            /* ===== TABLES ===== */
-            .table-container,
-            .overflow-x-auto,
-            table {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                display: block;
-                width: 100%;
-            }
-
-            table {
-                min-width: 550px;
-            }
-
-            /* ===== FORMS ===== */
-            .form-row {
-                flex-direction: column;
-            }
-
-            .form-group {
+            /* Main content: full width */
+            .main-content {
+                margin-left: 0 !important;
                 width: 100% !important;
             }
 
-            /* ===== GRID LAYOUTS ===== */
-            .grid-cols-2,
-            .grid-cols-3,
-            .grid-cols-4 {
-                grid-template-columns: 1fr !important;
-            }
-
-            /* Tailwind grid overrides */
-            .md\:grid-cols-2,
-            .md\:grid-cols-3,
-            .md\:grid-cols-4,
-            .lg\:grid-cols-3,
-            .lg\:grid-cols-4 {
-                grid-template-columns: 1fr !important;
-            }
-
-            /* ===== BUTTONS ===== */
-            .btn-group {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn-group .btn {
-                width: 100%;
-            }
-
-            /* ===== NOTIFICATION DROPDOWN ===== */
-            #notificationDropdown {
-                width: calc(100vw - 24px) !important;
-                right: -50px !important;
-                left: auto !important;
-                max-width: 360px;
-            }
-
-            /* ===== PROFILE DROPDOWN ===== */
-            .profile-dropdown {
-                right: 0;
-                min-width: 200px;
-            }
-
-            /* ===== CONTENT HEADER ===== */
-            .content-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-                padding: 12px;
-            }
-
-            .content-header h1 {
-                font-size: 18px;
-            }
-
-            .header-actions {
-                width: 100%;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-
-            /* ===== CARDS ===== */
-            .card {
-                padding: 14px;
-            }
-
-            /* ===== FLEX LAYOUTS ===== */
-            .flex-row-mobile {
-                flex-direction: column !important;
-            }
-
-            /* ===== TAILWIND RESPONSIVE OVERRIDES ===== */
-            .sm\:flex-row {
-                flex-direction: column !important;
-            }
-
-            /* ===== MODALS ===== */
-            .modal-content,
-            [id$="Modal"] > div {
-                width: 95vw !important;
-                max-width: 95vw !important;
-                margin: 10px auto !important;
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-
-            /* ===== SIDEBAR TOGGLE BUTTON ===== */
-            .sidebar-toggle {
+            /* Hamburger button */
+            #sidebarToggle {
                 display: flex !important;
                 align-items: center;
                 justify-content: center;
@@ -608,78 +476,106 @@
                 top: 12px;
                 left: 12px;
                 z-index: 1100;
-                width: 38px;
-                height: 38px;
+                width: 40px;
+                height: 40px;
                 background: #2c3e50;
                 color: white;
                 border: none;
                 border-radius: 8px;
-                font-size: 16px;
+                font-size: 17px;
                 cursor: pointer;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             }
 
-            /* ===== SIDEBAR ===== */
-            .sidebar {
-                left: -260px !important;
-                transform: none !important;
-                transition: left 0.3s ease !important;
+            /* Header: full width, compact */
+            .dashboard-header {
+                padding: 0 12px 0 60px !important;
+                height: 56px !important;
+                display: flex !important;
+                align-items: center !important;
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 1000 !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
             }
 
-            .sidebar.active {
-                left: 0 !important;
+            .header-left h1 {
+                font-size: 15px !important;
+                font-weight: 600 !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 160px;
             }
 
-            .main-content {
-                margin-left: 0 !important;
+            .header-right { gap: 10px !important; }
+            .profile-info { display: none !important; }
+            .profile-dropdown-icon { display: none !important; }
+
+            /* Content area: full width, proper padding */
+            .content-area {
+                padding: 14px 12px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Stats: 2 columns */
+            .dashboard-stats,
+            .stats-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            /* Tables: scrollable */
+            .overflow-x-auto,
+            .table-container {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table { min-width: 480px; }
+
+            /* Modals: full width */
+            [id$="Modal"] > div,
+            .modal-content {
+                width: 95vw !important;
+                max-width: 95vw !important;
+                margin: 20px auto !important;
+                max-height: 88vh !important;
+                overflow-y: auto !important;
+            }
+
+            /* Notification dropdown */
+            #notificationDropdown {
+                width: calc(100vw - 20px) !important;
+                right: -40px !important;
+                top: 56px !important;
+            }
+
+            /* Profile dropdown */
+            .profile-dropdown {
+                right: 0 !important;
+                top: 56px !important;
             }
         }
 
         @media (max-width: 480px) {
             .dashboard-header {
-                padding: 10px 10px 10px 56px;
+                padding: 0 10px 0 56px !important;
+                height: 52px !important;
             }
 
-            .header-left h1 {
-                font-size: 14px;
-                max-width: 120px;
-            }
+            .header-left h1 { font-size: 13px !important; max-width: 120px; }
 
-            .content-area {
-                padding: 10px 8px;
-            }
+            .content-area { padding: 10px 8px !important; }
 
+            .dashboard-stats,
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
+                gap: 8px !important;
             }
 
-            .stat-card {
-                padding: 12px 10px;
-            }
-
-            .stat-value {
-                font-size: 20px;
-            }
-
-            .stat-label {
-                font-size: 11px;
-            }
-
-            /* Notification dropdown full width on very small screens */
-            #notificationDropdown {
-                width: calc(100vw - 16px) !important;
-                right: -60px !important;
-            }
-
-            /* Sidebar toggle */
-            .sidebar-toggle {
-                top: 10px;
-                left: 10px;
-                width: 36px;
-                height: 36px;
-                font-size: 15px;
-            }
+            .stat-card { padding: 12px 10px !important; }
         }
     </style>
     @stack('styles')
