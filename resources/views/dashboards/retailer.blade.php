@@ -258,7 +258,7 @@
                             @foreach($recentOrders as $order)
                                 <tr style="border-bottom: 1px solid #dee2e6;">
                                     <td style="padding: 12px;">
-                                        <a href="{{ route('orders.show', $order->id) }}" style="color: #3498db; text-decoration: none; font-weight: 600;">
+                                        <a href="{{ route('retailer.orders.show', $order->id) }}" style="color: #3498db; text-decoration: none; font-weight: 600;">
                                             #{{ $order->order_number }}
                                         </a>
                                     </td>
