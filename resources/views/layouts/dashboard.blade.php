@@ -1113,11 +1113,7 @@
             if (sidebarToggle) {
                 sidebarToggle.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    if (sidebar.classList.contains('active')) {
-                        closeSidebar();
-                    } else {
-                        openSidebar();
-                    }
+                    sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
                 });
             }
 
@@ -1129,14 +1125,12 @@
                 sidebarOverlay.addEventListener('click', closeSidebar);
             }
 
-            // Close sidebar on ESC key
+            // ESC key closes sidebar
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-                    closeSidebar();
-                }
+                if (e.key === 'Escape') closeSidebar();
             });
 
-            // On desktop resize, reset sidebar state
+            // Reset on desktop resize
             window.addEventListener('resize', function() {
                 if (window.innerWidth > 1024) {
                     sidebar.classList.remove('active');

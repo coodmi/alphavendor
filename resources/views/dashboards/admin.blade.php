@@ -319,7 +319,7 @@
 
 <!-- Dashboard Section -->
 <div id="dashboard-section" class="content-section">
-<div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">
+<div class="welcome-header-grid" style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 30px; align-items: start;">
     <div>
         <h2 style="font-size: 28px; color: #2c3e50; margin-bottom: 5px;">Welcome back, {{ Auth::user()->name }}!</h2>
         <p style="color: #7f8c8d;">Here's what's happening with your platform today.</p>
