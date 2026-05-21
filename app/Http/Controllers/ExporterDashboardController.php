@@ -92,12 +92,16 @@ class ExporterDashboardController extends Controller
      */
     public function showOrder(Order $order)
     {
-        // Ensure the order belongs to this exporter
-        if ($order->vendor_id !== Auth::id()) {
-            abort(403, 'Unauthorized access to this order.');
-        }
+        $order = Order::where('id', $order->id)
+            ->where('vendor_id', Auth::id())
+            ->with(['user', 'items.product'])
+            ->first();
 
-        $order->load(['user', 'items.product']);
+        if (! $order) {
+            $prefix = \App\Support\VendorPortal::routePrefix();
+            return redirect()->route($prefix . '.orders')
+                ->with('error', 'Order not found or you do not have permission to view it.');
+        }
 
         return view('exporter.orders.show', compact('order'));
     }

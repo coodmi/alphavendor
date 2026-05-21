@@ -90,14 +90,16 @@ class RetailerDashboardController extends Controller
      */
     public function showOrder(Order $order)
     {
-        $vendorId = Auth::id();
+        // Re-fetch ensuring this order belongs to this vendor
+        $order = Order::where('id', $order->id)
+            ->where('vendor_id', Auth::id())
+            ->with(['user', 'items.product'])
+            ->first();
 
-        // Make sure retailer can only view their own orders
-        if ($order->vendor_id !== $vendorId) {
-            abort(403, 'Unauthorized action.');
+        if (! $order) {
+            return redirect()->route('retailer.orders')
+                ->with('error', 'Order not found or you do not have permission to view it.');
         }
-
-        $order->load(['user', 'items.product']);
 
         return view('retailer.orders.show', compact('order'));
     }
@@ -109,7 +111,7 @@ class RetailerDashboardController extends Controller
     {
         $vendorId = Auth::id();
 
-        if ($order->vendor_id !== $vendorId) {
+        if ((int) $order->vendor_id !== (int) $vendorId) {
             abort(403, 'Unauthorized action.');
         }
 

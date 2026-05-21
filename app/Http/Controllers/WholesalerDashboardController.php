@@ -74,18 +74,22 @@ class WholesalerDashboardController extends Controller
 
     public function showOrder(Order $order)
     {
-        if ($order->vendor_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $order = Order::where('id', $order->id)
+            ->where('vendor_id', Auth::id())
+            ->with(['user', 'items.product'])
+            ->first();
 
-        $order->load(['user', 'items.product']);
+        if (! $order) {
+            return redirect()->route('wholesaler.orders')
+                ->with('error', 'Order not found or you do not have permission to view it.');
+        }
 
         return view('wholesaler.orders.show', compact('order'));
     }
 
     public function updateOrderStatus(Request $request, Order $order)
     {
-        if ($order->vendor_id !== Auth::id()) {
+        if ((int) $order->vendor_id !== (int) Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
