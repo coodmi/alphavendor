@@ -48,6 +48,10 @@
                 <i class="fas fa-shopping-cart"></i>
                 <span>Shopping Cart</span>
             </a>
+            <a href="{{ route('advance-payments.user') }}" class="menu-item {{ request()->routeIs('advance-payments.user') ? 'active' : '' }}">
+                <i class="fas fa-money-check-alt"></i>
+                <span>Advance Payments</span>
+            </a>
         </div>
 
         <div class="menu-section">

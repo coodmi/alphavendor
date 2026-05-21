@@ -52,6 +52,27 @@ class AdvancePaymentController extends Controller
             'status'               => 'pending',
         ]);
 
+        // ── Notify all admins & employees about new advance payment ──
+        $notifyUsers = \App\Models\User::whereIn('role', ['admin', 'employee'])->pluck('id');
+        foreach ($notifyUsers as $uid) {
+            \App\Models\Notification::create([
+                'user_id' => $uid,
+                'type'    => 'warning',
+                'title'   => 'New Advance Payment Request',
+                'message' => Auth::user()->name . " submitted an advance payment of ৳{$advanceAmount} for \"{$product->name}\" (Qty: {$validated['quantity']}). Transaction: " . ($validated['transaction_id'] ?? 'N/A'),
+                'data'    => json_encode(['url' => '/admin/advance-payments']),
+            ]);
+        }
+
+        // ── Notify the customer ──
+        \App\Models\Notification::create([
+            'user_id' => Auth::id(),
+            'type'    => 'success',
+            'title'   => 'Advance Payment Submitted',
+            'message' => "Your advance payment of ৳{$advanceAmount} for \"{$product->name}\" has been submitted successfully. We will verify and update you shortly.",
+            'data'    => json_encode(['url' => '/advance-payments']),
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => 'Advance payment request submitted! We will contact you shortly.',

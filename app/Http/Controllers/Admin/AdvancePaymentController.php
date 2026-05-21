@@ -86,6 +86,26 @@ class AdvancePaymentController extends Controller
 
         $advancePayment->update($data);
 
+        // ── Notify customer about status change ──
+        $statusMessages = [
+            'approved'  => ['type' => 'success', 'title' => 'Advance Payment Approved ✅',  'msg' => "Your advance payment of ৳{$advancePayment->advance_amount} for \"{$advancePayment->product->name}\" has been approved. Please proceed to place your order."],
+            'paid'      => ['type' => 'success', 'title' => 'Advance Payment Confirmed ✅', 'msg' => "Your advance payment of ৳{$advancePayment->advance_amount} for \"{$advancePayment->product->name}\" has been confirmed as paid."],
+            'completed' => ['type' => 'success', 'title' => 'Advance Payment Completed ✅','msg' => "Your advance payment for \"{$advancePayment->product->name}\" is completed."],
+            'rejected'  => ['type' => 'error',   'title' => 'Advance Payment Rejected ❌',  'msg' => "Your advance payment for \"{$advancePayment->product->name}\" was rejected." . ($validated['admin_notes'] ? " Reason: {$validated['admin_notes']}" : '')],
+            'cancelled' => ['type' => 'warning', 'title' => 'Advance Payment Cancelled',   'msg' => "Your advance payment for \"{$advancePayment->product->name}\" has been cancelled."],
+        ];
+
+        if (isset($statusMessages[$validated['status']])) {
+            $n = $statusMessages[$validated['status']];
+            \App\Models\Notification::create([
+                'user_id' => $advancePayment->user_id,
+                'type'    => $n['type'],
+                'title'   => $n['title'],
+                'message' => $n['msg'],
+                'data'    => json_encode(['url' => '/advance-payments']),
+            ]);
+        }
+
         // ── When advance payment is approved/paid → update linked order status ──
         if (in_array($validated['status'], ['approved', 'paid', 'completed'])) {
             $order = null;
@@ -105,10 +125,29 @@ class AdvancePaymentController extends Controller
                     ->first();
             }
 
+            // 3. Fallback: find by user_id + vendor_id
+            if (!$order) {
+                $order = \App\Models\Order::with('vendor')
+                    ->where('user_id', $advancePayment->user_id)
+                    ->where('vendor_id', $advancePayment->vendor_id)
+                    ->where('status', 'pending_advance_payment')
+                    ->latest()
+                    ->first();
+            }
+
             if ($order && $order->status === 'pending_advance_payment' && $order->isWholesaleOrImport()) {
                 try {
                     app(\App\Services\WholesaleOrderStatusService::class)
                         ->transition($order, 'advance_paid', auth()->user());
+
+                    // Notify customer about order status change
+                    \App\Models\Notification::create([
+                        'user_id' => $order->user_id,
+                        'type'    => 'info',
+                        'title'   => 'Order Status Updated 📦',
+                        'message' => "Your order #{$order->order_number} status has been updated to: Advance Paid. Admin will confirm your order shortly.",
+                        'data'    => json_encode(['url' => "/orders/{$order->id}"]),
+                    ]);
                 } catch (\Throwable $e) {
                     \Log::error("Auto advance_paid transition failed for order {$order->id}: " . $e->getMessage());
                 }

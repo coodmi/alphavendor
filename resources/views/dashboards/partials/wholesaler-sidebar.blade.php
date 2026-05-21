@@ -16,6 +16,12 @@
         @php $pendingReturns = \App\Models\ReturnRequest::where('vendor_id', auth()->id())->where('status', 'pending')->count(); @endphp
         @if($pendingReturns > 0)<span class="badge">{{ $pendingReturns }}</span>@endif
     </a>
+    <a href="{{ route('advance-payments.user') }}" class="menu-item {{ request()->routeIs('advance-payments.user') ? 'active' : '' }}">
+        <i class="fas fa-money-check-alt"></i>
+        <span>Advance Payments</span>
+        @php $pendingAP = \App\Models\AdvancePayment::where('user_id', auth()->id())->where('status','pending')->count(); @endphp
+        @if($pendingAP > 0)<span class="badge">{{ $pendingAP }}</span>@endif
+    </a>
     <a href="{{ route('wholesaler.reports.index') }}" class="menu-item {{ request()->routeIs('wholesaler.reports*') ? 'active' : '' }}">
         <i class="fas fa-chart-bar"></i>
         <span>Report Analysis</span>

@@ -19,6 +19,16 @@
             <span class="badge">{{ $pendingReturns }}</span>
         @endif
     </a>
+    <a href="{{ route('advance-payments.user') }}" class="menu-item {{ request()->routeIs('advance-payments.user') ? 'active' : '' }}">
+        <i class="fas fa-money-check-alt"></i>
+        <span>Advance Payments</span>
+        @php
+            $pendingAP = \App\Models\AdvancePayment::where('user_id', auth()->id())->where('status','pending')->count();
+        @endphp
+        @if($pendingAP > 0)
+            <span class="badge">{{ $pendingAP }}</span>
+        @endif
+    </a>
     <a href="{{ route($reportsRoute) }}" class="menu-item {{ request()->routeIs($prefix . '.reports*') || request()->routeIs('vendor.reports*') ? 'active' : '' }}">
         <i class="fas fa-chart-pie"></i>
         <span>Report Analysis</span>
