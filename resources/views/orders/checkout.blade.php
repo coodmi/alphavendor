@@ -141,6 +141,7 @@
                         <!-- Hidden fields for required data -->
                         <input type="hidden" name="shipping_country" value="Bangladesh">
                         <input type="hidden" name="shipping_city" id="shipping_city_hidden" value="">
+                        {{-- Note: shipping_district is submitted via the visible <select> above; no duplicate hidden field --}}
                         <input type="hidden" name="delivery_charge" value="0">
                     @push('scripts')
                     <script>
@@ -205,7 +206,8 @@
                                     document.getElementById('phone').value = '';
                                     divisionSelect.value = '';
                                     districtSelect.innerHTML = '<option value="">Select Division First</option>';
-                                    districtSelect.disabled = true;
+                                    districtSelect.style.opacity = '0.5';
+                                    districtSelect.style.pointerEvents = 'none';
                                     cityHidden.value = '';
                                 }
                             });
@@ -231,14 +233,25 @@
                                 districtSelect.appendChild(option);
                             });
                             
-                            // Enable district select if division is selected
+                            // Enable/disable district select based on division selection
                             if (selectedDivision) {
                                 districtSelect.disabled = false;
+                                districtSelect.style.opacity = '1';
                             } else {
-                                districtSelect.disabled = true;
+                                // Don't truly disable — use pointer-events so value still submits
                                 districtSelect.innerHTML = '<option value="">Select Division First</option>';
+                                districtSelect.style.opacity = '0.5';
+                                districtSelect.style.pointerEvents = 'none';
                             }
                         });
+
+                        // Ensure district is never truly disabled on form submit (disabled fields don't submit)
+                        const checkoutForm = districtSelect.closest('form');
+                        if (checkoutForm) {
+                            checkoutForm.addEventListener('submit', function() {
+                                districtSelect.disabled = false;
+                            });
+                        }
 
                         // Update hidden city field when district changes
                         districtSelect.addEventListener('change', function() {

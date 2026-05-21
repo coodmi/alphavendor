@@ -69,18 +69,32 @@ class OrderController extends Controller
     public function store(Request $request)
         {
             $validated = $request->validate([
-                'shipping_address' => 'required|string',
-                'shipping_city' => 'required|string',
-                'shipping_state' => 'nullable|string',
-                'shipping_country' => 'required|string',
-                'phone' => 'required|string',
-                'payment_method' => 'required|string',
-                'delivery_charge' => 'nullable|numeric|min:0',
-                'notes' => 'nullable|string',
+                'shipping_address'    => 'required|string',
+                'shipping_city'       => 'nullable|string',
+                'shipping_district'   => 'required|string',
+                'shipping_state'      => 'required|string',
+                'shipping_country'    => 'required|string',
+                'phone'               => 'required|string',
+                'payment_method'      => 'required|string',
+                'delivery_charge'     => 'nullable|numeric|min:0',
+                'notes'               => 'nullable|string',
                 // Manual payment fields
-                'sender_number' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
-                'transaction_id' => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
+                'sender_number'       => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
+                'transaction_id'      => 'required_if:payment_method,bkash,nagad,rocket|nullable|string',
+            ], [
+                'shipping_address.required'  => 'Street address দিতে হবে।',
+                'shipping_district.required' => 'District সিলেক্ট করতে হবে।',
+                'shipping_state.required'    => 'Division সিলেক্ট করতে হবে।',
+                'phone.required'             => 'Phone number দিতে হবে।',
+                'payment_method.required'    => 'Payment method সিলেক্ট করতে হবে।',
             ]);
+
+            // Use district as city if city is empty
+            if (empty($validated['shipping_city'])) {
+                $validated['shipping_city'] = $validated['shipping_district']
+                    ?? $validated['shipping_state']
+                    ?? 'N/A';
+            }
 
             $cart = Session::get('cart', []);
 
