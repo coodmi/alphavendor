@@ -96,17 +96,20 @@
 
                         <!-- Category (Optional) -->
                         <div>
-                            <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">Category <span class="text-gray-400 font-normal">(Optional)</span></label>
-                            <select id="category" name="category"
+                            <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">Category <span class="text-gray-400 font-normal">(Optional)</span></label>
+                            <select id="category_id" name="category_id"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 <option value="">Select a category</option>
-                                <option value="general"   {{ old('category') === 'general'   ? 'selected' : '' }}>General Inquiry</option>
-                                <option value="technical" {{ old('category') === 'technical' ? 'selected' : '' }}>Technical Issue</option>
-                                <option value="billing"   {{ old('category') === 'billing'   ? 'selected' : '' }}>Billing & Payments</option>
-                                <option value="product"   {{ old('category') === 'product'   ? 'selected' : '' }}>Product Related</option>
-                                <option value="order"     {{ old('category') === 'order'     ? 'selected' : '' }}>Order Issue</option>
-                                <option value="other"     {{ old('category') === 'other'     ? 'selected' : '' }}>Other</option>
+                                @forelse($categories ?? [] as $cat)
+                                    <option value="{{ $cat->id }}" {{ (string) old('category_id') === (string) $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                @empty
+                                    <option value="" disabled {{ old('category') ? '' : 'selected' }}>—</option>
+                                @endforelse
                             </select>
+                            @if(($categories ?? collect())->isEmpty())
+                                <input type="hidden" name="category" value="{{ old('category', 'general') }}">
+                                <p class="mt-1 text-sm text-gray-500">Categories will appear after admin setup. Your ticket will still be submitted.</p>
+                            @endif
                         </div>
 
                         <!-- Priority -->

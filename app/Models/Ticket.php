@@ -126,4 +126,22 @@ class Ticket extends Model
             default => 'gray'
         };
     }
+
+    public function getCategoryLabelAttribute(): string
+    {
+        $category = $this->relationLoaded('category')
+            ? $this->getRelation('category')
+            : ($this->category_id ? $this->category()->first() : null);
+
+        return $category?->name ?? 'General';
+    }
+
+    public function getLastReplyAtAttribute()
+    {
+        $latest = $this->relationLoaded('latestReply')
+            ? $this->getRelation('latestReply')
+            : $this->latestReply;
+
+        return $latest?->created_at ?? $this->last_activity_at;
+    }
 }

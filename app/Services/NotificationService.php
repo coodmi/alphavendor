@@ -59,7 +59,7 @@ class NotificationService
 
         if ($isAdminReply) {
             // Notify ticket owner
-            self::send($ticket->user_id, 'info', 'Ticket Reply', "Admin replied to your ticket #{$ticket->ticket_number}.", ['url' => "/tickets/{$ticket->id}"]);
+            self::send($ticket->user_id, 'info', 'Ticket Reply', "Admin replied to your ticket #{$ticket->ticket_number}.", ['url' => "/vendor/tickets/{$ticket->id}"]);
         } else {
             // Notify admins
             self::sendToAdmins('warning', 'Ticket Reply', "{$replierUser->name} replied to ticket #{$ticket->ticket_number}.", ['url' => "/admin/tickets/{$ticket->id}"]);

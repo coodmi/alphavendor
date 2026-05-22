@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\TicketCategory;
 use App\Models\TicketMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
     public function index()
     {
         $tickets = Ticket::where('user_id', auth()->id())
-            ->with(['latestReply'])
+            ->with(['category', 'latestReply'])
             ->latest()
             ->paginate(20);
 
@@ -28,7 +30,13 @@ class TicketController extends Controller
 
     public function create()
     {
-        return view('vendor.tickets.create');
+        $categories = TicketCategory::query()
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
+
+        return view('vendor.tickets.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -41,36 +49,63 @@ class TicketController extends Controller
             'category_id' => 'nullable|exists:ticket_categories,id',
         ]);
 
-        $ticket = Ticket::create([
-            'user_id'     => auth()->id(),
-            'subject'     => $request->subject,
-            'description' => $request->description,
-            'priority'    => $request->priority,
-            'category_id' => $request->category_id ?: null,
-            'status'      => 'open',
-        ]);
+        $categoryId = $request->category_id
+            ?: TicketCategory::resolveIdFromSlug($request->category);
 
-        \App\Services\NotificationService::ticketCreated($ticket);
+        try {
+            $ticket = DB::transaction(function () use ($request, $categoryId) {
+                $ticket = Ticket::create([
+                    'user_id'     => auth()->id(),
+                    'subject'     => $request->subject,
+                    'description' => $request->description,
+                    'priority'    => $request->priority,
+                    'category_id' => $categoryId,
+                    'status'      => 'open',
+                ]);
 
-        return redirect()->route('vendor.tickets.show', $ticket)
-            ->with('success', 'Ticket created successfully');
+                TicketMessage::create([
+                    'ticket_id'   => $ticket->id,
+                    'user_id'     => auth()->id(),
+                    'message'     => $request->description,
+                    'is_internal' => false,
+                    'is_staff'    => false,
+                ]);
+
+                return $ticket;
+            });
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()
+                ->route('vendor.tickets.create')
+                ->withInput()
+                ->with('error', 'Could not submit your ticket. Please try again or contact support.');
+        }
+
+        try {
+            \App\Services\NotificationService::ticketCreated($ticket);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return redirect()
+            ->route('vendor.tickets.show', $ticket)
+            ->with('success', 'Ticket submitted successfully. Our support team will respond soon.');
     }
 
     public function show(Ticket $ticket)
     {
-        // Ensure user can only view their own tickets
         if ($ticket->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access');
         }
 
-        $ticket->load(['replies.user', 'assignedTo']);
+        $ticket->load(['category', 'replies.user', 'assignedTo']);
 
         return view('vendor.tickets.show', compact('ticket'));
     }
 
     public function reply(Request $request, Ticket $ticket)
     {
-        // Ensure user can only reply to their own tickets
         if ($ticket->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access');
         }
@@ -79,26 +114,30 @@ class TicketController extends Controller
             'message' => 'required|string',
         ]);
 
-        \App\Models\TicketMessage::create([
+        TicketMessage::create([
             'ticket_id'   => $ticket->id,
             'user_id'     => auth()->id(),
             'message'     => $request->message,
             'is_internal' => false,
+            'is_staff'    => false,
         ]);
 
         $ticket->update([
             'last_activity_at' => now(),
-            'status'           => 'in_progress',
+            'status'           => $ticket->status === 'open' ? 'in_progress' : $ticket->status,
         ]);
 
-        \App\Services\NotificationService::ticketReplied($ticket, auth()->user());
+        try {
+            \App\Services\NotificationService::ticketReplied($ticket, auth()->user());
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         return redirect()->back()->with('success', 'Reply sent successfully');
     }
 
     public function close(Ticket $ticket)
     {
-        // Ensure user can only close their own tickets
         if ($ticket->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access');
         }

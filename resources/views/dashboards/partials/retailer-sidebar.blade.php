@@ -80,7 +80,7 @@
 
 <div class="menu-section">
     <div class="menu-section-title">SUPPORT</div>
-    <a href="{{ route('vendor.tickets.index') }}" class="menu-item {{ request()->routeIs('vendor.tickets.index') ? 'active' : '' }}">
+    <a href="{{ route('vendor.tickets.index') }}" class="menu-item {{ request()->routeIs('vendor.tickets*') ? 'active' : '' }}">
         <i class="fas fa-life-ring"></i>
         <span>Support Tickets</span>
     </a>

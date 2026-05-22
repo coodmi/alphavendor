@@ -12,7 +12,7 @@ class TicketController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Ticket::with(['user', 'assignedTo', 'latestReply']);
+        $query = Ticket::with(['user', 'category', 'assignedTo', 'latestReply']);
 
         // Filters
         if ($request->filled('status')) {
@@ -24,7 +24,10 @@ class TicketController extends Controller
         }
 
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            $categoryId = \App\Models\TicketCategory::resolveIdFromSlug($request->category);
+            if ($categoryId) {
+                $query->where('category_id', $categoryId);
+            }
         }
 
         if ($request->filled('search')) {
@@ -53,7 +56,7 @@ class TicketController extends Controller
 
     public function show(Ticket $ticket)
     {
-        $ticket->load(['user', 'assignedTo', 'replies.user']);
+        $ticket->load(['user', 'category', 'assignedTo', 'replies.user']);
         $admins = User::where('role', 'admin')->get();
         
         return view('admin.tickets.show', compact('ticket', 'admins'));
@@ -87,7 +90,7 @@ class TicketController extends Controller
     public function updateStatus(Request $request, Ticket $ticket)
     {
         $request->validate([
-            'status' => 'required|in:open,in_progress,waiting_response,resolved,closed',
+            'status' => 'required|in:open,in_progress,pending_customer,resolved,closed',
         ]);
 
         $data = ['status' => $request->status];

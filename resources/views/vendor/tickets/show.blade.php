@@ -87,7 +87,7 @@
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
                                 {{ $ticket->status === 'open' ? 'bg-blue-100 text-blue-800' : '' }}
                                 {{ $ticket->status === 'in_progress' ? 'bg-teal-100 text-teal-800' : '' }}
-                                {{ $ticket->status === 'waiting_response' ? 'bg-teal-100 text-teal-900' : '' }}
+                                {{ $ticket->status === 'pending_customer' ? 'bg-teal-100 text-teal-900' : '' }}
                                 {{ $ticket->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
                                 {{ $ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
                                 {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}
@@ -99,7 +99,7 @@
                         <p class="mt-1">
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
                                 {{ $ticket->priority === 'low' ? 'bg-green-100 text-green-800' : '' }}
-                                {{ $ticket->priority === 'medium' ? 'bg-teal-100 text-teal-800' : '' }}
+                                {{ $ticket->priority === 'normal' ? 'bg-blue-100 text-blue-800' : '' }}
                                 {{ $ticket->priority === 'high' ? 'bg-teal-100 text-teal-900' : '' }}
                                 {{ $ticket->priority === 'urgent' ? 'bg-red-100 text-red-800' : '' }}">
                                 {{ ucfirst($ticket->priority) }}
@@ -108,7 +108,7 @@
                     </div>
                     <div>
                         <label class="text-sm font-semibold text-gray-600">Category</label>
-                        <p class="text-gray-900 mt-1">{{ ucfirst($ticket->category) }}</p>
+                        <p class="text-gray-900 mt-1">{{ $ticket->category_label }}</p>
                     </div>
                 </div>
 
@@ -172,19 +172,19 @@
                         <textarea name="message" rows="4" required
                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                   placeholder="Type your message here..."></textarea>
-                        <div class="mt-4 flex justify-between">
-                            <form action="{{ route('vendor.tickets.close', $ticket) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
-                                        onclick="return confirm('Are you sure you want to close this ticket?')">
-                                    Close Ticket
-                                </button>
-                            </form>
+                        <div class="mt-4 flex justify-between items-center gap-4">
                             <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                                 Send Reply
                             </button>
                         </div>
+                    </form>
+                    <form action="{{ route('vendor.tickets.close', $ticket) }}" method="POST" class="mt-4">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                                onclick="return confirm('Are you sure you want to close this ticket?')">
+                            Close Ticket
+                        </button>
                     </form>
                 </div>
             </div>

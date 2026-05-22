@@ -91,7 +91,7 @@
                         <option value="">All Status</option>
                         <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
                         <option value="in_progress" {{ request('status') === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="waiting_response" {{ request('status') === 'waiting_response' ? 'selected' : '' }}>Waiting Response</option>
+                        <option value="pending_customer" {{ request('status') === 'pending_customer' ? 'selected' : '' }}>Pending Customer</option>
                         <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Resolved</option>
                         <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
                     </select>
@@ -100,7 +100,7 @@
                     <select name="priority" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">All Priority</option>
                         <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>Low</option>
-                        <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="normal" {{ request('priority') === 'normal' ? 'selected' : '' }}>Normal</option>
                         <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>High</option>
                         <option value="urgent" {{ request('priority') === 'urgent' ? 'selected' : '' }}>Urgent</option>
                     </select>
@@ -158,13 +158,13 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        {{ ucfirst($ticket->category) }}
+                                        {{ $ticket->category_label }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
                                         {{ $ticket->priority === 'low' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $ticket->priority === 'medium' ? 'bg-teal-100 text-teal-800' : '' }}
+                                        {{ $ticket->priority === 'normal' ? 'bg-blue-100 text-blue-800' : '' }}
                                         {{ $ticket->priority === 'high' ? 'bg-teal-100 text-teal-900' : '' }}
                                         {{ $ticket->priority === 'urgent' ? 'bg-red-100 text-red-800' : '' }}">
                                         {{ ucfirst($ticket->priority) }}
@@ -174,7 +174,7 @@
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full
                                         {{ $ticket->status === 'open' ? 'bg-blue-100 text-blue-800' : '' }}
                                         {{ $ticket->status === 'in_progress' ? 'bg-teal-100 text-teal-800' : '' }}
-                                        {{ $ticket->status === 'waiting_response' ? 'bg-teal-100 text-teal-900' : '' }}
+                                        {{ $ticket->status === 'pending_customer' ? 'bg-teal-100 text-teal-900' : '' }}
                                         {{ $ticket->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
                                         {{ $ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
                                         {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}

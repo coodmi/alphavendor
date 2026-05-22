@@ -124,7 +124,7 @@
 <div class="menu-section">
     <div class="menu-section-title">Communication</div>
     @if($u->hasAnyPermission(['tickets.view','tickets.reply','tickets.close']))
-    <a href="{{ route('admin.tickets') }}" class="menu-item {{ request()->routeIs('admin.tickets*') ? 'active' : '' }}">
+    <a href="{{ route('admin.tickets.index') }}" class="menu-item {{ request()->routeIs('admin.tickets*') ? 'active' : '' }}">
         <i class="fas fa-ticket-alt"></i>
         <span>Support Tickets</span>
     </a>

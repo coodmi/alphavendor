@@ -27,4 +27,21 @@ class TicketCategory extends Model
     {
         return $this->hasMany(Ticket::class, 'category_id');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public static function resolveIdFromSlug(?string $slug): ?int
+    {
+        if (! $slug) {
+            return null;
+        }
+
+        $normalized = $slug === 'order' ? 'orders' : $slug;
+
+        return static::where('slug', $normalized)->value('id')
+            ?? static::where('slug', $slug)->value('id');
+    }
 }

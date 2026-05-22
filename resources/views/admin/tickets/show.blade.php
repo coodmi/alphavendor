@@ -34,7 +34,7 @@
                         </div>
                         <div>
                             <label class="text-sm font-semibold text-gray-600">Category</label>
-                            <p class="text-gray-900">{{ ucfirst($ticket->category) }}</p>
+                            <p class="text-gray-900">{{ $ticket->category_label }}</p>
                         </div>
                         <div>
                             <label class="text-sm font-semibold text-gray-600">Created</label>
@@ -53,7 +53,7 @@
                                 <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                                     <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Open</option>
                                     <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                    <option value="waiting_response" {{ $ticket->status === 'waiting_response' ? 'selected' : '' }}>Waiting Response</option>
+                                    <option value="pending_customer" {{ $ticket->status === 'pending_customer' ? 'selected' : '' }}>Pending Customer</option>
                                     <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
                                     <option value="closed" {{ $ticket->status === 'closed' ? 'selected' : '' }}>Closed</option>
                                 </select>
@@ -68,7 +68,7 @@
                                 @method('PATCH')
                                 <select name="priority" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                                     <option value="low" {{ $ticket->priority === 'low' ? 'selected' : '' }}>Low</option>
-                                    <option value="medium" {{ $ticket->priority === 'medium' ? 'selected' : '' }}>Medium</option>
+                                    <option value="normal" {{ $ticket->priority === 'normal' ? 'selected' : '' }}>Normal</option>
                                     <option value="high" {{ $ticket->priority === 'high' ? 'selected' : '' }}>High</option>
                                     <option value="urgent" {{ $ticket->priority === 'urgent' ? 'selected' : '' }}>Urgent</option>
                                 </select>
