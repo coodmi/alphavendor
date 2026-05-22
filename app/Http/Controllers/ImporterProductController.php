@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\NormalizesProductShippingCharges;
 use App\Http\Controllers\Concerns\SyncsProductGallery;
 use App\Models\Brand;
 use App\Models\Category;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImporterProductController extends Controller
 {
-    use SyncsProductGallery;
+    use NormalizesProductShippingCharges, SyncsProductGallery;
 
     protected int $minGalleryImages = 5;
 
@@ -62,6 +63,7 @@ class ImporterProductController extends Controller
 
     public function store(Request $request)
     {
+        $this->mergeProductShippingCharges($request);
         $this->validateProductMetaKeywords($request);
         $this->validateGalleryImages($request, false);
 
@@ -91,6 +93,8 @@ class ImporterProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {
@@ -125,6 +129,7 @@ class ImporterProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized to update this product!'], 403);
         }
 
+        $this->mergeProductShippingCharges($request);
         $this->validateProductMetaKeywords($request);
         $this->validateGalleryImages($request, true, $product);
 
@@ -156,6 +161,8 @@ class ImporterProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {

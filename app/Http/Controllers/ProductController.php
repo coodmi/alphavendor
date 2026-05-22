@@ -240,6 +240,8 @@ class ProductController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string|max:500',
             'meta_description' => 'nullable|string|max:500',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         // Remove attributes from validated so Product::create doesn't choke on it
@@ -325,6 +327,8 @@ class ProductController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string|max:500',
             'meta_description' => 'nullable|string|max:500',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         $attributesInput = $request->input('attributes', []);

@@ -270,6 +270,8 @@
             {{-- 9. Product Attributes --}}
             @include('partials.product-attributes-form')
 
+            @include('partials.product-shipping-charge-fields')
+
             {{-- 10. MOQ, Certifications, Importer Rating, Supplier Location --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
@@ -387,6 +389,12 @@ function editProduct(product) {
     document.getElementById('productFeatured').checked = !!product.is_featured;
     document.getElementById('productMinOrder').value = product.minimum_order || 1;
     document.getElementById('productLocation').value = product.supplier_location || '';
+    if (document.getElementById('productShippingInsideDhaka')) {
+        document.getElementById('productShippingInsideDhaka').value = product.shipping_charge_inside_dhaka ?? '';
+    }
+    if (document.getElementById('productShippingOutsideDhaka')) {
+        document.getElementById('productShippingOutsideDhaka').value = product.shipping_charge_outside_dhaka ?? '';
+    }
     document.getElementById('exporterRating').value = product.exporter_rating || '';
 
     if (document.getElementById('productOffer')) {

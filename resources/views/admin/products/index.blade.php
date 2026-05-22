@@ -409,6 +409,8 @@
                     <small style="color: #7f8c8d;">Select the shipping method for this product</small>
                 </div>
 
+                @include('partials.product-shipping-charge-fields')
+
                 <!-- Product Attributes -->
                 <div style="margin-top: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Attributes</label>
@@ -699,6 +701,12 @@ function editProduct(product) {
     document.getElementById('productMetaDescription').value = product.meta_description || '';
     document.getElementById('productFeatured').checked = product.is_featured;
     document.getElementById('productBadge').value = product.badge || '';
+    if (document.getElementById('productShippingInsideDhaka')) {
+        document.getElementById('productShippingInsideDhaka').value = product.shipping_charge_inside_dhaka ?? '';
+    }
+    if (document.getElementById('productShippingOutsideDhaka')) {
+        document.getElementById('productShippingOutsideDhaka').value = product.shipping_charge_outside_dhaka ?? '';
+    }
     document.getElementById('imageRequiredLabel').textContent = '';
     document.getElementById('productImage').required = false;
 

@@ -16,6 +16,8 @@ class Product extends Model
         'brand_id',
         'special_offer_id',
         'shipping_method_id',
+        'shipping_charge_inside_dhaka',
+        'shipping_charge_outside_dhaka',
         'name',
         'slug',
         'description',
@@ -46,6 +48,8 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'old_price' => 'decimal:2',
+        'shipping_charge_inside_dhaka' => 'decimal:2',
+        'shipping_charge_outside_dhaka' => 'decimal:2',
         'rating' => 'decimal:2',
         'is_featured' => 'boolean',
         'free_shipping' => 'boolean',
@@ -108,6 +112,37 @@ class Product extends Model
     public function supplierLocation()
     {
         return $this->belongsTo(SupplierLocation::class);
+    }
+
+    /**
+     * Shipping charge lines to show on the product detail page (only set values).
+     *
+     * @return array<int, array{label: string, amount: float}>
+     */
+    public function getShippingChargeLinesAttribute(): array
+    {
+        $lines = [];
+
+        if ($this->shipping_charge_inside_dhaka !== null) {
+            $lines[] = [
+                'label' => 'Inside Dhaka',
+                'amount' => (float) $this->shipping_charge_inside_dhaka,
+            ];
+        }
+
+        if ($this->shipping_charge_outside_dhaka !== null) {
+            $lines[] = [
+                'label' => 'Outside Dhaka',
+                'amount' => (float) $this->shipping_charge_outside_dhaka,
+            ];
+        }
+
+        return $lines;
+    }
+
+    public function hasShippingChargeDisplay(): bool
+    {
+        return $this->shipping_charge_lines !== [];
     }
 
     /**

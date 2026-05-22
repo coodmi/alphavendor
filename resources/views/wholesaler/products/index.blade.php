@@ -244,16 +244,9 @@
                         @endforelse
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Shipping Method <span class="text-gray-400 font-normal">(Optional)</span></label>
-                    <select name="shipping_method_id" id="productShippingMethod" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                        <option value="">Default Shipping</option>
-                        @foreach($shippingMethods as $method)
-                            <option value="{{ $method->id }}">{{ $method->name }}@if($method->zone) ({{ $method->zone }})@endif</option>
-                        @endforeach
-                    </select>
-                </div>
             </div>
+
+            @include('partials.product-shipping-charge-fields')
 
             {{-- MOQ & Supplier Location --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -475,7 +468,12 @@ function editProduct(product) {
     document.getElementById('productFeatured').checked = product.is_featured;
     // New fields
     if (document.getElementById('productOffer'))        document.getElementById('productOffer').value = product.special_offer_id || '';
-    if (document.getElementById('productShippingMethod')) document.getElementById('productShippingMethod').value = product.shipping_method_id || '';
+    if (document.getElementById('productShippingInsideDhaka')) {
+        document.getElementById('productShippingInsideDhaka').value = product.shipping_charge_inside_dhaka ?? '';
+    }
+    if (document.getElementById('productShippingOutsideDhaka')) {
+        document.getElementById('productShippingOutsideDhaka').value = product.shipping_charge_outside_dhaka ?? '';
+    }
     if (document.getElementById('productMOQ'))          document.getElementById('productMOQ').value = product.minimum_order || '';
     if (document.getElementById('productSupplierLocation')) document.getElementById('productSupplierLocation').value = product.supplier_location_id || '';
     const galleryInput = document.getElementById('productGalleryImages');

@@ -347,13 +347,21 @@
                         </div>
                     </div>
                     @endif
+                    @foreach($product->shipping_charge_lines as $shippingLine)
                     <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
                         <i class="fas fa-truck text-teal-600 text-xl"></i>
                         <div class="flex-1">
-                            <div class="text-xs text-gray-500">Shipping</div>
-                            <div class="font-semibold text-gray-800">Free Delivery</div>
+                            <div class="text-xs text-gray-500">Shipping — {{ $shippingLine['label'] }}</div>
+                            <div class="font-semibold text-gray-800">
+                                @if($shippingLine['amount'] <= 0)
+                                    Free
+                                @else
+                                    {{ currency($shippingLine['amount']) }}
+                                @endif
+                            </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>

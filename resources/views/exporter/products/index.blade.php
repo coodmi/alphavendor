@@ -249,6 +249,8 @@
                 </div>
             </div>
 
+            @include('partials.product-shipping-charge-fields')
+
             <!-- Export Certifications -->
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Export Certifications</label>
@@ -372,6 +374,12 @@ function editProduct(product) {
     document.getElementById('productStatus').value = product.status;
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productLocation').value = product.supplier_location || '';
+    if (document.getElementById('productShippingInsideDhaka')) {
+        document.getElementById('productShippingInsideDhaka').value = product.shipping_charge_inside_dhaka ?? '';
+    }
+    if (document.getElementById('productShippingOutsideDhaka')) {
+        document.getElementById('productShippingOutsideDhaka').value = product.shipping_charge_outside_dhaka ?? '';
+    }
     document.getElementById('productFeatured').checked = product.is_featured;
     document.getElementById('exporterRating').value = product.exporter_rating || '';
 

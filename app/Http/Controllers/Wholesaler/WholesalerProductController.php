@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wholesaler;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Concerns\NormalizesProductShippingCharges;
 use App\Http\Controllers\Concerns\SyncsProductGallery;
 use App\Models\Attribute;
 use App\Models\Brand;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 class WholesalerProductController extends Controller
 {
-    use SyncsProductGallery;
+    use NormalizesProductShippingCharges, SyncsProductGallery;
 
     public function index()
     {
@@ -60,6 +61,7 @@ class WholesalerProductController extends Controller
 
     public function store(Request $request)
     {
+        $this->mergeProductShippingCharges($request);
         $this->validateProductMetaKeywords($request);
         $this->validateGalleryImages($request, false);
 
@@ -86,7 +88,8 @@ class WholesalerProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
-            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {
@@ -122,6 +125,7 @@ class WholesalerProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized!'], 403);
         }
 
+        $this->mergeProductShippingCharges($request);
         $this->validateProductMetaKeywords($request);
         $this->validateGalleryImages($request, true, $product);
 
@@ -150,7 +154,8 @@ class WholesalerProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
-            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {

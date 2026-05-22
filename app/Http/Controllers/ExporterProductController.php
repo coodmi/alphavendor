@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\NormalizesProductShippingCharges;
 use App\Http\Controllers\Concerns\SyncsProductGallery;
 use App\Models\Brand;
 use App\Models\Category;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ExporterProductController extends Controller
 {
-    use SyncsProductGallery;
+    use NormalizesProductShippingCharges, SyncsProductGallery;
 
     public function index()
     {
@@ -49,6 +50,7 @@ class ExporterProductController extends Controller
 
     public function store(Request $request)
     {
+        $this->mergeProductShippingCharges($request);
         $this->validateGalleryImages($request, false);
 
         $validated = $request->validate([
@@ -72,6 +74,8 @@ class ExporterProductController extends Controller
             'certifications' => 'nullable|array',
             'certifications.*' => 'string',
             'exporter_rating' => 'nullable|numeric|min:0|max:5',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {
@@ -106,6 +110,7 @@ class ExporterProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized to update this product!'], 403);
         }
 
+        $this->mergeProductShippingCharges($request);
         $this->validateGalleryImages($request, true, $product);
 
         $validated = $request->validate([
@@ -131,6 +136,8 @@ class ExporterProductController extends Controller
             'certifications' => 'nullable|array',
             'certifications.*' => 'string',
             'exporter_rating' => 'nullable|numeric|min:0|max:5',
+            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
+            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {
