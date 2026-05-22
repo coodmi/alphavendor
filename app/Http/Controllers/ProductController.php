@@ -117,6 +117,7 @@ class ProductController extends Controller
             $data = $request->only([
                 'name', 'sku', 'category_id', 'vendor_id', 'brand_id',
                 'price', 'old_price', 'stock', 'description', 'badge',
+                'meta_title', 'meta_keywords', 'meta_description',
             ]);
 
             // Need at least a name or price to save
@@ -144,6 +145,9 @@ class ProductController extends Controller
             if (!empty($data['old_price']))   $updateData['old_price']   = $data['old_price'];
             if (!empty($data['description'])) $updateData['description'] = $data['description'];
             if (!empty($data['badge']))       $updateData['badge']       = $data['badge'];
+            if (array_key_exists('meta_title', $data))       $updateData['meta_title']       = $data['meta_title'] ?: null;
+            if (array_key_exists('meta_keywords', $data))    $updateData['meta_keywords']    = $data['meta_keywords'] ?: null;
+            if (array_key_exists('meta_description', $data)) $updateData['meta_description'] = $data['meta_description'] ?: null;
 
             // Handle image if provided
             if ($request->hasFile('image')) {
@@ -233,6 +237,9 @@ class ProductController extends Controller
             'attributes.*' => 'nullable|string|max:255',
             'additional_images' => 'nullable|array',
             'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
         // Remove attributes from validated so Product::create doesn't choke on it
@@ -315,7 +322,13 @@ class ProductController extends Controller
             'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'delete_images' => 'nullable|array',
             'delete_images.*' => 'integer',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:500',
         ]);
+
+        $attributesInput = $request->input('attributes', []);
+        unset($validated['attributes'], $validated['additional_images'], $validated['delete_images']);
 
         if ($request->hasFile('image')) {
             // Delete old image

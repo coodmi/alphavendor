@@ -328,6 +328,8 @@
                     <textarea name="description" id="productDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
                 </div>
 
+                @include('admin.partials.product-seo-fields')
+
                 <!-- Product Image -->
                 <div style="margin-top: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Main Product Image <span id="imageRequiredLabel">*</span></label>
@@ -644,6 +646,9 @@ function openAddModal() {
                     if (p.old_price)   document.getElementById('productOldPrice').value    = p.old_price;
                     if (p.stock)       document.getElementById('productStock').value       = p.stock;
                     if (p.description) document.getElementById('productDescription').value = p.description;
+                    if (p.meta_title) document.getElementById('productMetaTitle').value = p.meta_title;
+                    if (p.meta_keywords) document.getElementById('productMetaKeywords').value = p.meta_keywords;
+                    if (p.meta_description) document.getElementById('productMetaDescription').value = p.meta_description;
                     if (p.badge)       document.getElementById('productBadge').value       = p.badge;
                     // Expand more fields
                     document.getElementById('moreFields').style.display = 'block';
@@ -689,6 +694,9 @@ function editProduct(product) {
     document.getElementById('productStock').value = product.stock;
     document.getElementById('productStatus').value = product.status;
     document.getElementById('productDescription').value = product.description || '';
+    document.getElementById('productMetaTitle').value = product.meta_title || '';
+    document.getElementById('productMetaKeywords').value = product.meta_keywords || '';
+    document.getElementById('productMetaDescription').value = product.meta_description || '';
     document.getElementById('productFeatured').checked = product.is_featured;
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('imageRequiredLabel').textContent = '';
@@ -860,6 +868,9 @@ async function saveDraftToServer() {
     formData.append('old_price',   document.getElementById('productOldPrice')?.value || '');
     formData.append('stock',       document.getElementById('productStock')?.value || '');
     formData.append('description', document.getElementById('productDescription')?.value || '');
+    formData.append('meta_title', document.getElementById('productMetaTitle')?.value || '');
+    formData.append('meta_keywords', document.getElementById('productMetaKeywords')?.value || '');
+    formData.append('meta_description', document.getElementById('productMetaDescription')?.value || '');
     formData.append('badge',       document.getElementById('productBadge')?.value || '');
 
     // Pass existing draft_id if we have one (to update same draft)

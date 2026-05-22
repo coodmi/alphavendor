@@ -4941,6 +4941,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <textarea name="description" id="productDescription" rows="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"></textarea>
             </div>
 
+            @include('admin.partials.product-seo-fields')
+
             <div style="margin-top: 20px;">
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Product Image <span id="productImageRequiredLabel">*</span></label>
                 <input type="file" name="image" id="productImage" accept="image/*" onchange="previewProductImage(event)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
@@ -8689,6 +8691,9 @@ function editProduct(product) {
     document.getElementById('productStock').value = product.stock;
     document.getElementById('productStatus').value = product.status;
     document.getElementById('productDescription').value = product.description || '';
+    document.getElementById('productMetaTitle').value = product.meta_title || '';
+    document.getElementById('productMetaKeywords').value = product.meta_keywords || '';
+    document.getElementById('productMetaDescription').value = product.meta_description || '';
     document.getElementById('productFeatured').checked = product.is_featured;
     document.getElementById('productBadge').value = product.badge || '';
     document.getElementById('productImageRequiredLabel').textContent = '';
