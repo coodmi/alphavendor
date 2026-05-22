@@ -45,7 +45,45 @@ function productGalleryImageUrl(path) {
 }
 
 function getGalleryExistingCount() {
-    return document.querySelectorAll('#galleryExisting [data-gallery-id]').length;
+    const rows = document.querySelectorAll('#galleryExisting [data-gallery-id]').length;
+    const legacy = document.querySelectorAll('#galleryExisting [data-gallery-legacy]').length;
+    return rows + legacy;
+}
+
+function hasLegacyMainImagePreview() {
+    const preview = document.getElementById('imagePreview');
+    const img = document.getElementById('previewImg');
+    return !!(preview && !preview.classList.contains('hidden') && img?.src);
+}
+
+function isEditingProduct() {
+    return typeof editingProductId !== 'undefined' && editingProductId;
+}
+
+function editProductFromData(button) {
+    try {
+        const raw = button.getAttribute('data-product');
+        if (!raw) {
+            throw new Error('Missing product data');
+        }
+        editProduct(JSON.parse(raw));
+    } catch (error) {
+        console.error('editProductFromData:', error);
+        if (typeof showToast === 'function') {
+            showToast('Could not load this product for editing. Please refresh and try again.', 'error');
+        }
+    }
+}
+
+async function parseSellerProductResponse(response) {
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const message = data.message
+            || (data.errors && Object.values(data.errors).flat().join(' '))
+            || 'An error occurred while saving the product';
+        throw new Error(message);
+    }
+    return data;
 }
 
 function getGalleryRemainingSlots() {
@@ -145,6 +183,25 @@ function renderExistingGallery(product) {
     container.innerHTML = '';
 
     const images = product.images || [];
+    if (images.length === 0 && product.image) {
+        wrap.classList.remove('hidden');
+        const box = document.createElement('div');
+        box.className = 'relative group';
+        box.dataset.galleryLegacy = '1';
+        box.innerHTML = `
+            <img src="${productGalleryImageUrl(product.image)}" alt="Main product image" class="w-full h-20 object-cover rounded-lg border border-gray-200">
+            <span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-gray-800/80 text-white text-[10px]">Main image</span>
+        `;
+        container.appendChild(box);
+        if (input) {
+            input.value = '';
+            input.removeAttribute('required');
+            input.disabled = false;
+        }
+        updateGalleryLimitHint(0);
+        return;
+    }
+
     if (images.length === 0) {
         wrap.classList.add('hidden');
         if (input) {
@@ -218,6 +275,9 @@ function validateProductGallery() {
     const total = existing + newCount;
 
     if (total < min) {
+        if (isEditingProduct() && (existing > 0 || hasLegacyMainImagePreview())) {
+            return true;
+        }
         if (typeof showToast === 'function') {
             showToast(`Please add at least ${min} product image(s).`, 'error');
         }

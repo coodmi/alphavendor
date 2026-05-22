@@ -96,7 +96,7 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onclick='editProduct(@json($product))' class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
+                        <button type="button" data-product='@json($product)' onclick="editProductFromData(this)" class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-150 mr-2">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </button>
                         <button onclick="confirmDelete({{ $product->id }}, '{{ $product->name }}')" class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-150">
@@ -234,6 +234,7 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="out_of_stock">Out of Stock</option>
+                        <option value="draft">Draft</option>
                     </select>
                 </div>
 
@@ -503,18 +504,14 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
             'Accept': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(response => parseSellerProductResponse(response))
     .then(data => {
-        if (data.success) {
-            showToast(data.message, 'success');
-            closeModal();
-            setTimeout(() => location.reload(), 1000);
-        } else {
-            showToast(data.message || 'An error occurred', 'error');
-        }
+        showToast(data.message, 'success');
+        closeModal();
+        setTimeout(() => location.reload(), 1000);
     })
     .catch(error => {
-        showToast('An error occurred while saving the product', 'error');
+        showToast(error.message || 'An error occurred while saving the product', 'error');
         console.error('Error:', error);
     });
 });

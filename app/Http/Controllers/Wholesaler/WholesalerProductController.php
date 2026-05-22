@@ -78,7 +78,7 @@ class WholesalerProductController extends Controller
             'minimum_order' => 'required|integer|min:1',
             'supplier_location_id' => 'required|exists:supplier_locations,id',
             'sku' => 'required|string|max:255|unique:products,sku',
-            'status' => 'required|in:active,inactive,out_of_stock',
+            'status' => 'required|in:active,inactive,out_of_stock,draft',
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50',
             'video' => 'nullable|string|max:500',
@@ -137,10 +137,10 @@ class WholesalerProductController extends Controller
             'price' => 'required|numeric|min:0',
             'old_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'minimum_order' => 'required|integer|min:1',
-            'supplier_location_id' => 'required|exists:supplier_locations,id',
+            'minimum_order' => 'nullable|integer|min:1',
+            'supplier_location_id' => 'nullable|exists:supplier_locations,id',
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
-            'status' => 'required|in:active,inactive,out_of_stock',
+            'status' => 'required|in:active,inactive,out_of_stock,draft',
             'is_featured' => 'boolean',
             'badge' => 'nullable|string|max:50',
             'video' => 'nullable|string|max:500',
@@ -153,6 +153,11 @@ class WholesalerProductController extends Controller
 
         if (! $this->verifyCategoryAndBrand($validated)) {
             return response()->json(['success' => false, 'message' => 'Invalid category or brand!'], 422);
+        }
+
+        $validated['minimum_order'] = $validated['minimum_order'] ?? $product->minimum_order ?? 1;
+        if (empty($validated['supplier_location_id'])) {
+            unset($validated['supplier_location_id']);
         }
 
         if ($request->hasFile('image')) {

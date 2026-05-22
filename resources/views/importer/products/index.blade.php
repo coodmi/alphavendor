@@ -188,6 +188,7 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="out_of_stock">Out of Stock</option>
+                        <option value="draft">Draft</option>
                     </select>
                 </div>
             </div>
@@ -366,11 +367,6 @@ function openAddModal() {
     }
     document.querySelectorAll('input[name="certifications[]"]').forEach(cb => { cb.checked = false; });
     document.getElementById('productModal').classList.remove('hidden');
-}
-
-function editProductFromData(button) {
-    const product = JSON.parse(button.getAttribute('data-product'));
-    editProduct(product);
 }
 
 function editProduct(product) {

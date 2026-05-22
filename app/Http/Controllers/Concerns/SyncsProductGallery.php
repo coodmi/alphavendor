@@ -39,14 +39,20 @@ trait SyncsProductGallery
             return;
         }
 
+        $this->ensureGalleryFromMainImage($product);
+
         $removeIds = array_map('intval', (array) $request->input('remove_gallery_ids', []));
         $remaining = $product->images()->whereNotIn('id', $removeIds)->count();
         $total = $remaining + $newCount;
 
         if ($total < $min) {
-            throw ValidationException::withMessages([
-                'gallery_images' => "Product must have at least {$min} gallery image(s).",
-            ]);
+            $hasLegacyMainOnly = $remaining === 0 && $newCount === 0 && ! empty($product->image);
+
+            if (! $hasLegacyMainOnly) {
+                throw ValidationException::withMessages([
+                    'gallery_images' => "Product must have at least {$min} gallery image(s).",
+                ]);
+            }
         }
         if ($total > $max) {
             throw ValidationException::withMessages([
@@ -110,6 +116,20 @@ trait SyncsProductGallery
                 $product->update(['image' => $first->image]);
             }
         }
+    }
+
+    protected function ensureGalleryFromMainImage(Product $product): void
+    {
+        if ($product->images()->exists() || empty($product->image)) {
+            return;
+        }
+
+        $product->images()->create([
+            'image' => $product->image,
+            'sort_order' => 0,
+        ]);
+
+        $product->refresh();
     }
 
     protected function validateProductMetaKeywords(Request $request): void
