@@ -94,22 +94,19 @@
                             @enderror
                         </div>
 
-                        <!-- Category -->
+                        <!-- Category (Optional) -->
                         <div>
-                            <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
-                            <select id="category" name="category" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('category') border-red-500 @enderror">
+                            <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">Category <span class="text-gray-400 font-normal">(Optional)</span></label>
+                            <select id="category" name="category"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 <option value="">Select a category</option>
-                                <option value="general" {{ old('category') === 'general' ? 'selected' : '' }}>General Inquiry</option>
+                                <option value="general"   {{ old('category') === 'general'   ? 'selected' : '' }}>General Inquiry</option>
                                 <option value="technical" {{ old('category') === 'technical' ? 'selected' : '' }}>Technical Issue</option>
-                                <option value="billing" {{ old('category') === 'billing' ? 'selected' : '' }}>Billing & Payments</option>
-                                <option value="product" {{ old('category') === 'product' ? 'selected' : '' }}>Product Related</option>
-                                <option value="order" {{ old('category') === 'order' ? 'selected' : '' }}>Order Issue</option>
-                                <option value="other" {{ old('category') === 'other' ? 'selected' : '' }}>Other</option>
+                                <option value="billing"   {{ old('category') === 'billing'   ? 'selected' : '' }}>Billing & Payments</option>
+                                <option value="product"   {{ old('category') === 'product'   ? 'selected' : '' }}>Product Related</option>
+                                <option value="order"     {{ old('category') === 'order'     ? 'selected' : '' }}>Order Issue</option>
+                                <option value="other"     {{ old('category') === 'other'     ? 'selected' : '' }}>Other</option>
                             </select>
-                            @error('category')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
                         </div>
 
                         <!-- Priority -->
@@ -118,9 +115,9 @@
                             <select id="priority" name="priority" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('priority') border-red-500 @enderror">
                                 <option value="">Select priority</option>
-                                <option value="low" {{ old('priority') === 'low' ? 'selected' : '' }}>Low - General question</option>
-                                <option value="medium" {{ old('priority') === 'medium' ? 'selected' : '' }}>Medium - Need assistance</option>
-                                <option value="high" {{ old('priority') === 'high' ? 'selected' : '' }}>High - Important issue</option>
+                                <option value="low"    {{ old('priority') === 'low'    ? 'selected' : '' }}>Low - General question</option>
+                                <option value="normal" {{ old('priority') === 'normal' ? 'selected' : '' }}>Normal - Need assistance</option>
+                                <option value="high"   {{ old('priority') === 'high'   ? 'selected' : '' }}>High - Important issue</option>
                                 <option value="urgent" {{ old('priority') === 'urgent' ? 'selected' : '' }}>Urgent - Critical problem</option>
                             </select>
                             @error('priority')

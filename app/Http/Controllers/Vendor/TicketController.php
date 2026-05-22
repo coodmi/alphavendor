@@ -37,6 +37,7 @@ class TicketController extends Controller
             'subject'     => 'required|string|max:255',
             'description' => 'required|string',
             'priority'    => 'required|in:low,normal,high,urgent',
+            'category'    => 'nullable|string|max:100',
             'category_id' => 'nullable|exists:ticket_categories,id',
         ]);
 
