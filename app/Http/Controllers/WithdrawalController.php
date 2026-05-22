@@ -76,6 +76,19 @@ class WithdrawalController extends Controller
 
             DB::commit();
 
+            // ── Notify all admins & employees about new withdrawal request ──
+            $seller = Auth::user();
+            $notifyUsers = \App\Models\User::whereIn('role', ['admin', 'employee'])->pluck('id');
+            foreach ($notifyUsers as $uid) {
+                \App\Models\Notification::create([
+                    'user_id' => $uid,
+                    'type'    => 'warning',
+                    'title'   => 'New Withdrawal Request 💸',
+                    'message' => $seller->name . ' has requested a withdrawal of ৳' . number_format($validated['amount'], 2) . ' (Ref: ' . $withdrawal->withdrawal_number . ').',
+                    'data'    => json_encode(['url' => '/admin/withdrawals']),
+                ]);
+            }
+
             return redirect()->route('withdrawals.index')->with('success', 'Withdrawal request submitted successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
