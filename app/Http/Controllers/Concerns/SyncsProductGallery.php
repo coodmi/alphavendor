@@ -14,7 +14,7 @@ trait SyncsProductGallery
 
     protected int $maxGalleryImages = 4;
 
-    protected function validateGalleryImages(Request $request, bool $isUpdate, Product $product = null): void
+    protected function validateGalleryImages(Request $request, bool $isUpdate, ?Product $product = null): void
     {
         $min = $this->minGalleryImages;
         $max = $this->maxGalleryImages;
