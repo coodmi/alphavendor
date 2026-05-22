@@ -91,10 +91,10 @@
                                 <td class="px-6 py-4">{{ $item->quantity }}</td>
                                 <td class="px-6 py-4 text-right font-semibold"> {{ currency($item->subtotal) }}</td>
                                 <td class="px-6 py-4 text-center">
-                                    @if(in_array($order->status, ['delivered']) && !$item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
+                                    @if(in_array($order->status, ['shipped', 'delivered']) && !$item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
                                         <a href="{{ route('customer.returns.create', ['order_item_id' => $item->id]) }}" 
                                            class="inline-block px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 text-sm">
-                                            <i class="fas fa-undo mr-1"></i> Return/Refund
+                                            <i class="fas fa-undo mr-1"></i> Return / Exchange
                                         </a>
                                     @elseif($item->returns()->whereNotIn('status', ['rejected', 'cancelled'])->exists())
                                         <span class="text-sm text-gray-500">Return Requested</span>

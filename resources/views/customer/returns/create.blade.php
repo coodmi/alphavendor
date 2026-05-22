@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Request Return/Refund')
+@section('title', 'Request Return or Exchange')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
@@ -12,7 +12,13 @@
         </div>
 
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Request Return/Refund</h2>
+            @if(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Request Return or Exchange</h2>
 
             <!-- Product Info -->
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
@@ -114,11 +120,19 @@
 
                 <!-- Exchange Product (shown only when exchange is selected) -->
                 <div id="exchange-section" class="mb-6 hidden">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Exchange With Product</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Exchange With Product <span class="text-gray-400 font-normal">(Optional)</span></label>
                     <select name="exchange_product_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        <option value="">Select a product</option>
-                        <!-- This would be populated with similar products -->
+                        <option value="">Select a product (or describe in notes below)</option>
+                        @foreach($exchangeProducts as $product)
+                            <option value="{{ $product->id }}" {{ old('exchange_product_id') == $product->id ? 'selected' : '' }}>
+                                {{ $product->name }} — {{ currency($product->price) }}
+                            </option>
+                        @endforeach
                     </select>
+                    <p class="text-sm text-gray-500 mt-1">Choose another product from the same seller, or leave blank and add details in Additional Notes.</p>
+                    @error('exchange_product_id')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Customer Notes -->
@@ -150,10 +164,8 @@ document.querySelectorAll('input[name="type"]').forEach(radio => {
         const exchangeSection = document.getElementById('exchange-section');
         if (this.value === 'exchange') {
             exchangeSection.classList.remove('hidden');
-            exchangeSection.querySelector('select').required = true;
         } else {
             exchangeSection.classList.add('hidden');
-            exchangeSection.querySelector('select').required = false;
         }
     });
 });
