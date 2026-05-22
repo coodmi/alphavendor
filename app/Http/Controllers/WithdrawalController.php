@@ -66,12 +66,13 @@ class WithdrawalController extends Controller
 
             // Create transaction record
             Transaction::create([
-                'vendor_id' => $vendorId,
+                'vendor_id'          => $vendorId,
+                'withdrawal_id'      => $withdrawal->id,
                 'transaction_number' => 'TXN-WD-' . time() . '-' . rand(1000, 9999),
-                'type' => 'withdrawal',
-                'amount' => $validated['amount'],
-                'status' => 'pending',
-                'description' => 'Withdrawal request #' . $withdrawal->withdrawal_number
+                'type'               => 'withdrawal',
+                'amount'             => $validated['amount'],
+                'status'             => 'pending',
+                'description'        => 'Withdrawal request #' . $withdrawal->withdrawal_number
             ]);
 
             DB::commit();

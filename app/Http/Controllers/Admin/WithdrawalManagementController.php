@@ -97,7 +97,7 @@ class WithdrawalManagementController extends Controller
 
             // Update transaction status
             Transaction::where('vendor_id', $withdrawal->vendor_id)
-                ->where('description', 'like', '%' . $withdrawal->withdrawal_number . '%')
+                ->where('withdrawal_id', $withdrawal->id)
                 ->update(['status' => 'approved']);
 
             DB::commit();
@@ -134,11 +134,11 @@ class WithdrawalManagementController extends Controller
 
             // Update transaction status
             Transaction::where('vendor_id', $withdrawal->vendor_id)
-                ->where('description', 'like', '%' . $withdrawal->withdrawal_number . '%')
+                ->where('withdrawal_id', $withdrawal->id)
                 ->update([
-                    'status' => 'completed',
-                    'description' => 'Withdrawal completed #' . $withdrawal->withdrawal_number . 
-                                   ($validated['transaction_reference'] ?? '' ? ' - Ref: ' . $validated['transaction_reference'] : '')
+                    'status'      => 'completed',
+                    'description' => 'Withdrawal completed #' . $withdrawal->withdrawal_number .
+                                     (($validated['transaction_reference'] ?? '') ? ' - Ref: ' . $validated['transaction_reference'] : '')
                 ]);
 
             DB::commit();
@@ -177,7 +177,7 @@ class WithdrawalManagementController extends Controller
 
             // Update transaction status
             Transaction::where('vendor_id', $withdrawal->vendor_id)
-                ->where('description', 'like', '%' . $withdrawal->withdrawal_number . '%')
+                ->where('withdrawal_id', $withdrawal->id)
                 ->update(['status' => 'rejected']);
 
             // Create refund transaction

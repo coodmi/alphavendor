@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     protected $fillable = [
-        'vendor_id', 'order_id', 'transaction_number', 'type',
+        'vendor_id', 'order_id', 'withdrawal_id', 'transaction_number', 'type',
         'amount', 'status', 'description'
     ];
 
@@ -19,5 +19,10 @@ class Transaction extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function withdrawal()
+    {
+        return $this->belongsTo(\App\Models\Withdrawal::class);
     }
 }
