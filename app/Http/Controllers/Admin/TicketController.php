@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Models\TicketReply;
+use App\Models\TicketMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -65,16 +65,18 @@ class TicketController extends Controller
             'message' => 'required|string',
         ]);
 
-        $reply = TicketReply::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => auth()->id(),
-            'message' => $request->message,
-            'is_admin_reply' => true,
+        TicketMessage::create([
+            'ticket_id'   => $ticket->id,
+            'user_id'     => auth()->id(),
+            'message'     => $request->message,
+            'is_internal' => false,
+            'is_staff'    => true,
         ]);
 
         $ticket->update([
-            'last_reply_at' => now(),
-            'status' => 'in_progress',
+            'last_activity_at'  => now(),
+            'status'            => 'in_progress',
+            'first_response_at' => $ticket->first_response_at ?? now(),
         ]);
 
         \App\Services\NotificationService::ticketReplied($ticket, auth()->user());
@@ -120,7 +122,7 @@ class TicketController extends Controller
     public function updatePriority(Request $request, Ticket $ticket)
     {
         $request->validate([
-            'priority' => 'required|in:low,medium,high,urgent',
+            'priority' => 'required|in:low,normal,high,urgent',
         ]);
 
         $ticket->update(['priority' => $request->priority]);

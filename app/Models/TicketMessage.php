@@ -14,6 +14,7 @@ class TicketMessage extends Model
         'user_id',
         'message',
         'is_internal',
+        'is_staff',
         'attachments',
     ];
 

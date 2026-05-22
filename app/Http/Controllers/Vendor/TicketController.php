@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Models\TicketReply;
+use App\Models\TicketMessage;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -34,19 +34,19 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'subject' => 'required|string|max:255',
+            'subject'     => 'required|string|max:255',
             'description' => 'required|string',
-            'priority' => 'required|in:low,normal,high,urgent',
+            'priority'    => 'required|in:low,normal,high,urgent',
             'category_id' => 'nullable|exists:ticket_categories,id',
         ]);
 
         $ticket = Ticket::create([
-            'user_id' => auth()->id(),
-            'subject' => $request->subject,
+            'user_id'     => auth()->id(),
+            'subject'     => $request->subject,
             'description' => $request->description,
-            'priority' => $request->priority,
-            'category_id' => $request->category_id,
-            'status' => 'open',
+            'priority'    => $request->priority,
+            'category_id' => $request->category_id ?: null,
+            'status'      => 'open',
         ]);
 
         \App\Services\NotificationService::ticketCreated($ticket);
@@ -78,16 +78,16 @@ class TicketController extends Controller
             'message' => 'required|string',
         ]);
 
-        TicketReply::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => auth()->id(),
-            'message' => $request->message,
-            'is_admin_reply' => false,
+        \App\Models\TicketMessage::create([
+            'ticket_id'   => $ticket->id,
+            'user_id'     => auth()->id(),
+            'message'     => $request->message,
+            'is_internal' => false,
         ]);
 
         $ticket->update([
-            'last_reply_at' => now(),
-            'status' => 'in_progress',
+            'last_activity_at' => now(),
+            'status'           => 'in_progress',
         ]);
 
         \App\Services\NotificationService::ticketReplied($ticket, auth()->user());
