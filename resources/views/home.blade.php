@@ -861,9 +861,9 @@
                                                 <span class="text-sm text-gray-400 line-through">{{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
-                                        @if($product->supplier_location)
+                                        @if($product->display_supplier_location)
                                             <p class="text-xs text-gray-500 flex items-center gap-1">
-                                                <i class="fas fa-map-marker-alt"></i> {{ $product->supplier_location }}
+                                                <i class="fas fa-map-marker-alt"></i> {{ $product->display_supplier_location }}
                                             </p>
                                         @endif
                                     </div>
@@ -943,9 +943,9 @@
                                                 <span class="text-sm text-gray-400 line-through">{{ currency($product->old_price) }}</span>
                                             @endif
                                         </div>
-                                        @if($product->supplier_location)
+                                        @if($product->display_supplier_location)
                                             <p class="text-xs text-gray-500 flex items-center gap-1">
-                                                <i class="fas fa-shipping-fast"></i> Ships from {{ $product->supplier_location }}
+                                                <i class="fas fa-shipping-fast"></i> Ships from {{ $product->display_supplier_location }}
                                             </p>
                                         @endif
                                     </div>

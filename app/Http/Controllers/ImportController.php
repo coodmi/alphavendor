@@ -19,7 +19,7 @@ class ImportController extends Controller
         $importerIds = User::where('role', 'exporter')->pluck('id');
 
         // Base query for products from importers
-        $query = Product::with(['category', 'brand', 'vendor'])
+        $query = Product::with(['category', 'brand', 'vendor', 'supplierLocation'])
             ->whereIn('vendor_id', $importerIds)
             ->where('status', 'active');
 

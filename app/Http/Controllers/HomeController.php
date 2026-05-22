@@ -63,7 +63,8 @@ class HomeController extends Controller
 
         // Get wholesaler vendor IDs
         $wholesalerIds = User::where('role', 'wholesaler')->pluck('id');
-        $wholesalerProducts = Product::whereIn('vendor_id', $wholesalerIds)
+        $wholesalerProducts = Product::with('supplierLocation')
+            ->whereIn('vendor_id', $wholesalerIds)
             ->where('status', 'active')
             ->orderBy('created_at', 'desc')
             ->take(4)

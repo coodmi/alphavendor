@@ -22,7 +22,7 @@ class WholesaleController extends Controller
             ->get();
 
         // Build query for wholesale products
-        $query = Product::with(['category', 'brand', 'vendor'])
+        $query = Product::with(['category', 'brand', 'vendor', 'supplierLocation'])
             ->whereHas('vendor', function($q) {
                 $q->where('role', 'wholesaler')
                   ->where('status', 'active');

@@ -111,6 +111,31 @@ class Product extends Model
     }
 
     /**
+     * Human-readable supplier location for storefront (string field or linked location).
+     */
+    public function getDisplaySupplierLocationAttribute(): ?string
+    {
+        if (filled($this->supplier_location)) {
+            return $this->supplier_location;
+        }
+
+        $location = $this->relationLoaded('supplierLocation')
+            ? $this->supplierLocation
+            : ($this->supplier_location_id ? $this->supplierLocation()->first() : null);
+
+        if (! $location) {
+            return null;
+        }
+
+        $parts = array_values(array_unique(array_filter([
+            $location->name,
+            $location->country,
+        ])));
+
+        return $parts !== [] ? implode(', ', $parts) : null;
+    }
+
+    /**
      * Get discount percentage
      */
     public function getDiscountPercentageAttribute()

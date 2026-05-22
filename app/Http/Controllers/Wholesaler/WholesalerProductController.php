@@ -93,6 +93,8 @@ class WholesalerProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid category or brand!'], 422);
         }
 
+        $this->applySupplierLocationLabel($validated);
+
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('products', 'public');
         } elseif ($request->filled('image_url')) {
@@ -158,6 +160,8 @@ class WholesalerProductController extends Controller
         $validated['minimum_order'] = $validated['minimum_order'] ?? $product->minimum_order ?? 1;
         if (empty($validated['supplier_location_id'])) {
             unset($validated['supplier_location_id']);
+        } else {
+            $this->applySupplierLocationLabel($validated);
         }
 
         if ($request->hasFile('image')) {
@@ -243,5 +247,20 @@ class WholesalerProductController extends Controller
         } else {
             $product->attributes()->detach();
         }
+    }
+
+    private function applySupplierLocationLabel(array &$validated): void
+    {
+        if (empty($validated['supplier_location_id'])) {
+            return;
+        }
+
+        $location = SupplierLocation::find($validated['supplier_location_id']);
+        if (! $location) {
+            return;
+        }
+
+        $parts = array_values(array_unique(array_filter([$location->name, $location->country])));
+        $validated['supplier_location'] = $parts !== [] ? implode(', ', $parts) : $location->name;
     }
 }

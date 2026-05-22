@@ -16,7 +16,7 @@ class ExportController extends Controller
         $exporterIds = User::where('role', 'exporter')->pluck('id');
 
         // Base query for products from exporters
-        $query = Product::with(['category', 'brand', 'vendor'])
+        $query = Product::with(['category', 'brand', 'vendor', 'supplierLocation'])
             ->whereIn('vendor_id', $exporterIds)
             ->where('status', 'active');
 

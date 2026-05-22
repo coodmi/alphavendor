@@ -329,6 +329,24 @@
                         </div>
                     </div>
                     @endif
+                    @if($product->display_supplier_location)
+                    <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-map-marker-alt text-teal-600 text-xl"></i>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500">Supplier Location</div>
+                            <div class="font-semibold text-gray-800">{{ $product->display_supplier_location }}</div>
+                        </div>
+                    </div>
+                    @endif
+                    @if($product->minimum_order && $product->minimum_order > 1)
+                    <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-boxes text-teal-600 text-xl"></i>
+                        <div class="flex-1">
+                            <div class="text-xs text-gray-500">Minimum Order</div>
+                            <div class="font-semibold text-gray-800">{{ $product->minimum_order }} units</div>
+                        </div>
+                    </div>
+                    @endif
                     <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
                         <i class="fas fa-truck text-teal-600 text-xl"></i>
                         <div class="flex-1">

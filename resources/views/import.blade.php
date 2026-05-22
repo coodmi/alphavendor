@@ -320,10 +320,10 @@
                                 <i class="fas fa-industry text-teal-600"></i>
                                 <span>{{ $product->vendor->name ?? 'Unknown Vendor' }}</span>
                             </div>
-                            @if($product->supplier_location)
+                            @if($product->display_supplier_location)
                             <div class="flex items-center gap-1 text-xs text-gray-600 mb-2">
                                 <i class="fas fa-map-marker-alt text-teal-600"></i>
-                                <span>{{ $product->supplier_location }}</span>
+                                <span>{{ $product->display_supplier_location }}</span>
                             </div>
                             @endif
                             <div class="flex items-center gap-1 mb-2">
