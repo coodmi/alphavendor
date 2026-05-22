@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ReturnRequest;
@@ -79,6 +80,11 @@ class ReturnController extends Controller
             return back()->with('error', 'Return quantity cannot exceed ordered quantity');
         }
 
+        // Ensure product exists
+        if (! $orderItem->product) {
+            return back()->with('error', 'Product not found for this order item.');
+        }
+
         // Handle image uploads
         $images = [];
         if ($request->hasFile('images')) {
@@ -89,20 +95,40 @@ class ReturnController extends Controller
         }
 
         $return = ReturnRequest::create([
-            'order_id' => $orderItem->order_id,
-            'order_item_id' => $orderItem->id,
-            'user_id' => auth()->id(),
-            'vendor_id' => $orderItem->product->vendor_id,
-            'product_id' => $orderItem->product_id,
-            'type' => $request->type,
-            'reason' => $request->reason,
-            'reason_details' => $request->reason_details,
-            'quantity' => $request->quantity,
-            'amount' => $orderItem->price * $request->quantity,
-            'customer_notes' => $request->customer_notes,
-            'images' => $images,
-            'exchange_product_id' => $request->exchange_product_id,
-            'status' => 'pending',
+            'order_id'             => $orderItem->order_id,
+            'order_item_id'        => $orderItem->id,
+            'user_id'              => auth()->id(),
+            'vendor_id'            => $orderItem->product->vendor_id,
+            'product_id'           => $orderItem->product_id,
+            'type'                 => $request->type,
+            'reason'               => $request->reason,
+            'reason_details'       => $request->reason_details,
+            'quantity'             => $request->quantity,
+            'amount'               => $orderItem->price * $request->quantity,
+            'customer_notes'       => $request->customer_notes,
+            'images'               => $images,
+            'exchange_product_id'  => $request->exchange_product_id ?: null,
+            'status'               => 'pending',
+        ]);
+
+        // Notify admin & vendor
+        $notifyUsers = \App\Models\User::whereIn('role', ['admin', 'employee'])->pluck('id');
+        foreach ($notifyUsers as $uid) {
+            \App\Models\Notification::create([
+                'user_id' => $uid,
+                'type'    => 'warning',
+                'title'   => 'New Return/Exchange Request',
+                'message' => auth()->user()->name . ' submitted a ' . $request->type . ' request for order #' . $orderItem->order->order_number . '.',
+                'data'    => json_encode(['url' => '/admin/returns/' . $return->id]),
+            ]);
+        }
+        // Notify vendor
+        \App\Models\Notification::create([
+            'user_id' => $orderItem->product->vendor_id,
+            'type'    => 'warning',
+            'title'   => 'New Return/Exchange Request',
+            'message' => 'A customer submitted a ' . $request->type . ' request for order #' . $orderItem->order->order_number . '.',
+            'data'    => json_encode(['url' => '/vendor/returns/' . $return->id]),
         ]);
 
         return redirect()->route('customer.returns.show', $return)
