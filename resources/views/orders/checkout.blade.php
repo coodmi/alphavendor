@@ -14,6 +14,17 @@
 <div class="container mx-auto px-4 py-12">
     <h1 class="text-3xl font-bold mb-8">Checkout</h1>
 
+    @if($errors->any())
+        <div class="mb-6 p-4 bg-red-50 border border-red-300 rounded-lg">
+            <p class="font-semibold text-red-700 mb-2">অর্ডার ফর্মে তথ্য ঠিক করুন:</p>
+            <ul class="list-disc list-inside text-red-600 text-sm space-y-1">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if(session('error'))
         <div class="mb-6 p-4 bg-red-50 border border-red-300 rounded-lg flex items-start gap-3">
             <i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5"></i>
@@ -42,7 +53,7 @@
                             <i class="fas fa-box text-amber-500"></i>
                             <span class="text-sm font-medium text-gray-800">{{ $item['name'] }}</span>
                         </div>
-                        <a href="{{ route('products.show', $item['id']) }}"
+                        <a href="{{ route('product.show', $item['id']) }}"
                            class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg font-semibold transition-colors">
                             <i class="fas fa-money-check-alt mr-1"></i> Pay Advance
                         </a>
@@ -142,7 +153,7 @@
                         <input type="hidden" name="shipping_country" value="Bangladesh">
                         <input type="hidden" name="shipping_city" id="shipping_city_hidden" value="">
                         {{-- Note: shipping_district is submitted via the visible <select> above; no duplicate hidden field --}}
-                        <input type="hidden" name="delivery_charge" value="0">
+                        <input type="hidden" name="delivery_charge" id="delivery_charge" value="0">
                     @push('scripts')
                     <script>
                     // Bangladesh divisions and their districts
@@ -157,11 +168,110 @@
                         'Mymensingh': ['Jamalpur', 'Mymensingh', 'Netrokona', 'Sherpur']
                     };
 
+                    const cartShipping = @json(collect($cart)->map(fn ($item) => [
+                        'inside' => $item['shipping_charge_inside_dhaka'] ?? null,
+                        'outside' => $item['shipping_charge_outside_dhaka'] ?? null,
+                    ])->values());
+                    const subtotalAmount = {{ $total }};
+
+                    function setDistrictValue(districtSelect, district) {
+                        if (!district) return false;
+                        const normalized = district.trim().toLowerCase();
+                        for (const opt of districtSelect.options) {
+                            if (opt.value && opt.value.toLowerCase() === normalized) {
+                                districtSelect.value = opt.value;
+                                return true;
+                            }
+                        }
+                        const opt = document.createElement('option');
+                        opt.value = district;
+                        opt.textContent = district;
+                        districtSelect.appendChild(opt);
+                        districtSelect.value = district;
+                        return true;
+                    }
+
+                    function calcShippingCharge(district) {
+                        const inside = String(district || '').trim().toLowerCase() === 'dhaka';
+                        let charge = 0;
+                        let hasCharge = false;
+                        cartShipping.forEach(item => {
+                            const raw = inside ? item.inside : item.outside;
+                            if (raw !== null && raw !== '' && !isNaN(parseFloat(raw))) {
+                                hasCharge = true;
+                                charge = Math.max(charge, parseFloat(raw));
+                            }
+                        });
+                        return { charge, hasCharge, inside };
+                    }
+
+                    function updateShippingSummary() {
+                        const district = document.getElementById('shipping_district')?.value || '';
+                        const deliveryInput = document.getElementById('delivery_charge');
+                        const shippingDisplay = document.getElementById('shippingChargeDisplay');
+                        const zoneLabel = document.getElementById('shippingZoneLabel');
+                        const grandTotal = document.getElementById('orderGrandTotal');
+                        const { charge, hasCharge, inside } = calcShippingCharge(district);
+
+                        if (!district) {
+                            if (shippingDisplay) shippingDisplay.textContent = 'Select district';
+                            if (zoneLabel) zoneLabel.textContent = '';
+                            if (deliveryInput) deliveryInput.value = '0';
+                            if (grandTotal) grandTotal.textContent = '৳' + subtotalAmount.toFixed(2);
+                            return;
+                        }
+
+                        if (zoneLabel) {
+                            zoneLabel.textContent = inside ? '(Inside Dhaka)' : '(Outside Dhaka)';
+                        }
+
+                        if (!hasCharge) {
+                            if (shippingDisplay) shippingDisplay.textContent = '—';
+                            if (deliveryInput) deliveryInput.value = '0';
+                        } else if (charge <= 0) {
+                            if (shippingDisplay) shippingDisplay.textContent = 'Free';
+                            if (deliveryInput) deliveryInput.value = '0';
+                        } else {
+                            if (shippingDisplay) shippingDisplay.textContent = '৳' + charge.toFixed(2);
+                            if (deliveryInput) deliveryInput.value = charge.toFixed(2);
+                        }
+
+                        const shipping = hasCharge ? Math.max(0, charge) : 0;
+                        if (grandTotal) grandTotal.textContent = '৳' + (subtotalAmount + shipping).toFixed(2);
+                    }
+
                     document.addEventListener('DOMContentLoaded', function() {
                         const divisionSelect = document.getElementById('shipping_division');
                         const districtSelect = document.getElementById('shipping_district');
                         const cityHidden = document.getElementById('shipping_city_hidden');
                         const savedAddressSelect = document.getElementById('savedAddressSelect');
+
+                        function applySavedAddressOption(selectedOption) {
+                            const firstName = selectedOption.getAttribute('data-first-name');
+                            const lastName = selectedOption.getAttribute('data-last-name');
+                            const address = selectedOption.getAttribute('data-address');
+                            const state = selectedOption.getAttribute('data-state');
+                            const district = selectedOption.getAttribute('data-district');
+                            const phone = selectedOption.getAttribute('data-phone');
+
+                            document.getElementById('first_name').value = firstName || '';
+                            document.getElementById('last_name').value = lastName || '';
+                            document.getElementById('address').value = address || '';
+                            document.getElementById('phone').value = phone || '';
+
+                            if (state) {
+                                divisionSelect.value = state;
+                                divisionSelect.dispatchEvent(new Event('change'));
+                                setTimeout(function() {
+                                    if (district && setDistrictValue(districtSelect, district)) {
+                                        districtSelect.dispatchEvent(new Event('change'));
+                                    }
+                                    updateShippingSummary();
+                                }, 150);
+                            } else {
+                                updateShippingSummary();
+                            }
+                        }
 
                         // Handle saved address selection
                         if (savedAddressSelect) {
@@ -169,35 +279,7 @@
                                 const selectedOption = this.options[this.selectedIndex];
                                 
                                 if (this.value) {
-                                    // Get data from selected option
-                                    const firstName = selectedOption.getAttribute('data-first-name');
-                                    const lastName = selectedOption.getAttribute('data-last-name');
-                                    const address = selectedOption.getAttribute('data-address');
-                                    const state = selectedOption.getAttribute('data-state');
-                                    const district = selectedOption.getAttribute('data-district');
-                                    const phone = selectedOption.getAttribute('data-phone');
-                                    
-                                    // Fill form fields
-                                    document.getElementById('first_name').value = firstName || '';
-                                    document.getElementById('last_name').value = lastName || '';
-                                    document.getElementById('address').value = address || '';
-                                    document.getElementById('phone').value = phone || '';
-                                    
-                                    // Set division
-                                    if (state) {
-                                        divisionSelect.value = state;
-                                        // Trigger change event to populate districts
-                                        divisionSelect.dispatchEvent(new Event('change'));
-                                        
-                                        // Wait a moment for districts to populate, then select the district
-                                        setTimeout(function() {
-                                            if (district) {
-                                                districtSelect.value = district;
-                                                // Trigger change to update hidden city field
-                                                districtSelect.dispatchEvent(new Event('change'));
-                                            }
-                                        }, 100);
-                                    }
+                                    applySavedAddressOption(selectedOption);
                                 } else {
                                     // Clear form if "Select an address" is chosen
                                     document.getElementById('first_name').value = '';
@@ -209,12 +291,13 @@
                                     districtSelect.style.opacity = '0.5';
                                     districtSelect.style.pointerEvents = 'none';
                                     cityHidden.value = '';
+                                    updateShippingSummary();
                                 }
                             });
                             
                             // Auto-fill if default address is selected on page load
                             if (savedAddressSelect.value) {
-                                savedAddressSelect.dispatchEvent(new Event('change'));
+                                applySavedAddressOption(savedAddressSelect.options[savedAddressSelect.selectedIndex]);
                             }
                         }
 
@@ -256,7 +339,11 @@
                         // Update hidden city field when district changes
                         districtSelect.addEventListener('change', function() {
                             cityHidden.value = this.value;
+                            districtSelect.disabled = false;
+                            updateShippingSummary();
                         });
+
+                        updateShippingSummary();
                     });
                     </script>
                     @endpush
@@ -466,12 +553,12 @@
                             <span class="font-semibold"> {{ currency($total) }}</span>
                         </div>
                         <div class="flex justify-between text-sm text-gray-600">
-                            <span>Shipping</span>
-                            <span class="font-semibold">Calculated at checkout</span>
+                            <span>Shipping <span id="shippingZoneLabel" class="text-gray-400 text-xs"></span></span>
+                            <span class="font-semibold" id="shippingChargeDisplay">Select district</span>
                         </div>
                         <div class="flex justify-between text-lg font-bold pt-2 border-t">
                             <span>Total</span>
-                            <span class="text-teal-600"> {{ currency($total) }}</span>
+                            <span class="text-teal-600" id="orderGrandTotal"> {{ currency($total) }}</span>
                         </div>
                     </div>
 

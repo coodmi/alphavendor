@@ -515,12 +515,12 @@ function toggleWishlist(productId, button) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            if (data.added) {
+            if (data.inWishlist) {
                 icon.classList.remove('far');
-                icon.classList.add('fas');
+                icon.classList.add('fas', 'text-red-500');
                 showToast('Added to wishlist!', 'success');
             } else {
-                icon.classList.remove('fas');
+                icon.classList.remove('fas', 'text-red-500');
                 icon.classList.add('far');
                 showToast('Removed from wishlist', 'success');
             }

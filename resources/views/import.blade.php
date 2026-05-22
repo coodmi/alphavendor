@@ -292,9 +292,15 @@
                                 <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">{{ $product->badge }}</span>
                             @endif
                             <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation();">
+                                @auth
+                                <button type="button" data-wishlist-product="{{ $product->id }}" class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Add to Wishlist" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ $product->id }}, this);">
                                     <i class="far fa-heart"></i>
                                 </button>
+                                @else
+                                <button type="button" class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Login to add to wishlist" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('login') }}';">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                @endauth
                                 <button class="bg-white p-2 rounded-full shadow-md hover:bg-teal-600 hover:text-white transition-colors" title="Quick View" onclick="event.preventDefault(); event.stopPropagation();">
                                     <i class="far fa-eye"></i>
                                 </button>

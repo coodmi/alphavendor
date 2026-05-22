@@ -223,9 +223,15 @@
                                 <i class="fas fa-money-check-alt"></i>
                                 Pay Advance
                             </button>
-                            <button type="button" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Add to Wishlist">
+                            @auth
+                            <button type="button" data-wishlist-product="{{ $product->id }}" onclick="toggleWishlist({{ $product->id }}, this)" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Add to Wishlist">
                                 <i class="far fa-heart"></i>
                             </button>
+                            @else
+                            <button type="button" onclick="window.location.href='{{ route('login') }}'" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Login to add to wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            @endauth
                         </div>
                     </form>
 
@@ -287,9 +293,15 @@
                                 <i class="fas fa-bolt"></i>
                                 Buy Now
                             </button>
-                            <button type="button" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Add to Wishlist">
+                            @auth
+                            <button type="button" data-wishlist-product="{{ $product->id }}" onclick="toggleWishlist({{ $product->id }}, this)" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Add to Wishlist">
                                 <i class="far fa-heart"></i>
                             </button>
+                            @else
+                            <button type="button" onclick="window.location.href='{{ route('login') }}'" class="w-12 h-12 bg-white border-2 border-teal-600 text-teal-600 rounded-lg text-xl hover:bg-teal-600 hover:text-white transition-all duration-300" title="Login to add to wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            @endauth
                         </div>
                     </form>
                     @endif
@@ -1510,4 +1522,5 @@
     });
 </script>
 
+@include('partials.wishlist-scripts')
 @endsection

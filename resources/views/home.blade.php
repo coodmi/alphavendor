@@ -282,10 +282,15 @@
                                         @endif
                                         <div
                                             class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span
-                                                class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
+                                            @auth
+                                            <button type="button" data-wishlist-product="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ $product->id }}, this);" class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-heart text-sm"></i>
-                                            </span>
+                                            </button>
+                                            @else
+                                            <button type="button" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('login') }}';" class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
+                                                <i class="far fa-heart text-sm"></i>
+                                            </button>
+                                            @endauth
                                             <span
                                                 class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-eye text-sm"></i>
@@ -756,10 +761,15 @@
                                         @endif
                                         <div
                                             class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span
-                                                class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
+                                            @auth
+                                            <button type="button" data-wishlist-product="{{ $product->id }}" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist({{ $product->id }}, this);" class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-heart text-sm"></i>
-                                            </span>
+                                            </button>
+                                            @else
+                                            <button type="button" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('login') }}';" class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
+                                                <i class="far fa-heart text-sm"></i>
+                                            </button>
+                                            @endauth
                                             <span
                                                 class="w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-teal-600 hover:text-white transition-colors">
                                                 <i class="far fa-eye text-sm"></i>

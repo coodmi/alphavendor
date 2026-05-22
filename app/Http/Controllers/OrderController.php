@@ -45,7 +45,42 @@ class OrderController extends Controller
         // Get user's saved addresses
         $addresses = auth()->check() ? auth()->user()->addresses()->orderBy('is_default', 'desc')->get() : collect();
 
+        foreach ($cart as $key => $item) {
+            $product = Product::find($item['id']);
+            $cart[$key]['shipping_charge_inside_dhaka'] = $product?->shipping_charge_inside_dhaka;
+            $cart[$key]['shipping_charge_outside_dhaka'] = $product?->shipping_charge_outside_dhaka;
+        }
+        Session::put('cart', $cart);
+
         return view('orders.checkout', compact('cart', 'addresses', 'hasAdvanceRequired', 'advanceRequiredItems', 'advanceSettings'));
+    }
+
+    private function isInsideDhaka(string $district, string $state): bool
+    {
+        return strtolower(trim($district)) === 'dhaka';
+    }
+
+    private function calculateDeliveryChargeForItems(array $items, string $district, string $state): float
+    {
+        $insideDhaka = $this->isInsideDhaka($district, $state);
+        $charge = 0.0;
+
+        foreach ($items as $item) {
+            $product = Product::find($item['id']);
+            if (! $product) {
+                continue;
+            }
+
+            $itemCharge = $insideDhaka
+                ? $product->shipping_charge_inside_dhaka
+                : $product->shipping_charge_outside_dhaka;
+
+            if ($itemCharge !== null) {
+                $charge = max($charge, (float) $itemCharge);
+            }
+        }
+
+        return $charge;
     }
     public function invoice(Order $order)
         {
@@ -131,7 +166,6 @@ class OrderController extends Controller
             }
             // ────────────────────────────────────────────────────────────────────
 
-            $deliveryCharge = $validated['delivery_charge'] ?? 0;
             $commissionService = new \App\Services\CommissionService();
 
             DB::beginTransaction();
@@ -153,6 +187,12 @@ class OrderController extends Controller
 
                 // Create separate order for each vendor
                 foreach ($ordersByVendor as $vendorId => $items) {
+                    $deliveryCharge = $this->calculateDeliveryChargeForItems(
+                        $items,
+                        $validated['shipping_district'],
+                        $validated['shipping_state'] ?? ''
+                    );
+
                     // Calculate commission using the new service
                     $commissionData = $commissionService->calculateOrderCommission(
                         $items,
@@ -214,6 +254,7 @@ class OrderController extends Controller
                         'shipping_address' => $validated['shipping_address'],
                         'shipping_city' => $validated['shipping_city'],
                         'shipping_state' => $validated['shipping_state'] ?? '',
+                        'shipping_zip' => $validated['shipping_district'] ?? $validated['shipping_city'] ?? 'N/A',
                         'shipping_country' => $validated['shipping_country'],
                         'phone' => $validated['phone'],
                         'notes' => $validated['notes'] ?? ''

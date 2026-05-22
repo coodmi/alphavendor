@@ -26,6 +26,10 @@ class UserAddressController extends Controller
             'is_default' => 'boolean',
         ]);
 
+        if (empty($validated['city'])) {
+            $validated['city'] = $validated['district'];
+        }
+
         $validated['user_id'] = auth()->id();
 
         $address = UserAddress::create($validated);
@@ -60,6 +64,10 @@ class UserAddressController extends Controller
             'phone' => 'required|string|max:20',
             'is_default' => 'boolean',
         ]);
+
+        if (empty($validated['city'])) {
+            $validated['city'] = $validated['district'];
+        }
 
         $address->update($validated);
 

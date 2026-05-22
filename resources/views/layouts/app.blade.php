@@ -664,6 +664,7 @@
         });
     </script>
     
+    @include('partials.wishlist-scripts')
     @stack('scripts')
 
     <script>

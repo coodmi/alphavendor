@@ -812,5 +812,18 @@ document.getElementById('modal_division').addEventListener('change', function() 
         district.innerHTML += `<option value="${d}">${d}</option>`;
     });
 });
+
+const addressForm = document.querySelector('#addAddressModal form');
+if (addressForm) {
+    addressForm.addEventListener('submit', function() {
+        const district = document.getElementById('modal_district')?.value;
+        const cityInput = addressForm.querySelector('[name="city"]');
+        if (cityInput && !cityInput.value.trim() && district) {
+            cityInput.value = district;
+        }
+        const districtSelect = document.getElementById('modal_district');
+        if (districtSelect) districtSelect.disabled = false;
+    });
+}
 </script>
 @endsection
