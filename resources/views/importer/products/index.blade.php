@@ -270,7 +270,7 @@
             {{-- 9. Product Attributes --}}
             @include('partials.product-attributes-form')
 
-            @include('partials.product-shipping-charge-fields')
+            @include('partials.product-import-delivery-fields')
 
             {{-- 10. MOQ, Certifications, Importer Rating, Supplier Location --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -389,11 +389,14 @@ function editProduct(product) {
     document.getElementById('productFeatured').checked = !!product.is_featured;
     document.getElementById('productMinOrder').value = product.minimum_order || 1;
     document.getElementById('productLocation').value = product.supplier_location || '';
-    if (document.getElementById('productShippingInsideDhaka')) {
-        document.getElementById('productShippingInsideDhaka').value = product.shipping_charge_inside_dhaka ?? '';
+    if (document.getElementById('productWeightKg')) {
+        document.getElementById('productWeightKg').value = product.weight_kg ?? '';
     }
-    if (document.getElementById('productShippingOutsideDhaka')) {
-        document.getElementById('productShippingOutsideDhaka').value = product.shipping_charge_outside_dhaka ?? '';
+    if (document.getElementById('productImportCountry')) {
+        document.getElementById('productImportCountry').value = product.import_country ?? '';
+    }
+    if (document.getElementById('productBangladeshImportCost')) {
+        document.getElementById('productBangladeshImportCost').value = product.bangladesh_import_cost ?? '';
     }
     document.getElementById('exporterRating').value = product.exporter_rating || '';
 

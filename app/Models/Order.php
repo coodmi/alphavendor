@@ -9,7 +9,9 @@ class Order extends Model
     protected $fillable = [
         'order_number', 'user_id', 'vendor_id', 'subtotal', 'commission_amount',
         'commission_rate', 'cod_commission_amount', 'cod_commission_rate', 
-        'vendor_earning', 'total', 'total_amount', 'delivery_charge', 'status', 'payment_status',
+        'vendor_earning', 'total', 'total_amount', 'delivery_charge',
+        'delivery_base_charge', 'delivery_weight_charge', 'delivery_import_cost', 'delivery_breakdown',
+        'status', 'payment_status',
         'payment_method', 'shipping_address', 'shipping_city', 'shipping_state',
         'shipping_zip', 'shipping_country', 'phone', 'notes',
         'customer_name', 'customer_phone', 'customer_email',
@@ -19,6 +21,10 @@ class Order extends Model
     ];
 
     protected $casts = [
+        'delivery_base_charge' => 'decimal:2',
+        'delivery_weight_charge' => 'decimal:2',
+        'delivery_import_cost' => 'decimal:2',
+        'delivery_breakdown' => 'array',
         'picked_at'       => 'datetime',
         'in_transit_at'   => 'datetime',
         'delivered_at'    => 'datetime',

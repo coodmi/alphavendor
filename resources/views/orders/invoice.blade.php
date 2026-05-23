@@ -177,6 +177,15 @@
             <span>Delivery Charge</span>
             <span>{{ $delivery > 0 ? '৳' . number_format($delivery, 2) : 'Free' }}</span>
         </div>
+        @if($delivery > 0 && ($order->delivery_base_charge || $order->delivery_weight_charge || $order->delivery_import_cost))
+        <div class="totals-row text-sm text-gray-600" style="font-size:11px;line-height:1.5;">
+            <span style="text-align:left;">
+                @if($order->delivery_base_charge) Base: ৳{{ number_format($order->delivery_base_charge, 2) }}@endif
+                @if($order->delivery_weight_charge) · Weight: ৳{{ number_format($order->delivery_weight_charge, 2) }}@endif
+                @if($order->delivery_import_cost) · Import: ৳{{ number_format($order->delivery_import_cost, 2) }}@endif
+            </span>
+        </div>
+        @endif
 
         {{-- Total Order Amount --}}
         <div class="totals-row" style="font-weight:600; color:#1e293b; border-bottom:2px solid #e2e8f0; padding-bottom:10px; margin-bottom:4px;">

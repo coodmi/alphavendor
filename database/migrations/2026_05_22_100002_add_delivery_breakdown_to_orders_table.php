@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->decimal('delivery_base_charge', 10, 2)->default(0)->after('delivery_charge');
+            $table->decimal('delivery_weight_charge', 10, 2)->default(0)->after('delivery_base_charge');
+            $table->decimal('delivery_import_cost', 10, 2)->default(0)->after('delivery_weight_charge');
+            $table->json('delivery_breakdown')->nullable()->after('delivery_import_cost');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn([
+                'delivery_base_charge',
+                'delivery_weight_charge',
+                'delivery_import_cost',
+                'delivery_breakdown',
+            ]);
+        });
+    }
+};

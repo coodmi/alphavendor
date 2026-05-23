@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            @include('partials.product-shipping-charge-fields')
+            @include('partials.product-delivery-weight-fields')
 
             {{-- MOQ & Supplier Location --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -465,11 +465,8 @@ function editProduct(product) {
     document.getElementById('productFeatured').checked = product.is_featured;
     // New fields
     if (document.getElementById('productOffer'))        document.getElementById('productOffer').value = product.special_offer_id || '';
-    if (document.getElementById('productShippingInsideDhaka')) {
-        document.getElementById('productShippingInsideDhaka').value = product.shipping_charge_inside_dhaka ?? '';
-    }
-    if (document.getElementById('productShippingOutsideDhaka')) {
-        document.getElementById('productShippingOutsideDhaka').value = product.shipping_charge_outside_dhaka ?? '';
+    if (document.getElementById('productWeightKg')) {
+        document.getElementById('productWeightKg').value = product.weight_kg ?? '';
     }
     if (document.getElementById('productMOQ'))          document.getElementById('productMOQ').value = product.minimum_order || '';
     if (document.getElementById('productSupplierLocation')) document.getElementById('productSupplierLocation').value = product.supplier_location || '';

@@ -129,6 +129,10 @@
             <span class="ml-auto bg-teal-600 text-white text-xs px-2 py-1 rounded-full">{{ $categoriesWithoutCommission }}</span>
         @endif
     </a>
+    <a href="{{ route('admin.shipping-settings.index') }}" class="menu-item {{ request()->routeIs('admin.shipping-settings*') ? 'active' : '' }}">
+        <i class="fas fa-truck-loading"></i>
+        <span>Shipping Settings</span>
+    </a>
     <a href="{{ route('admin.delivery.index') }}" class="menu-item {{ request()->routeIs('admin.delivery*') ? 'active' : '' }}">
         <i class="fas fa-shipping-fast"></i>
         <span>Delivery Management</span>

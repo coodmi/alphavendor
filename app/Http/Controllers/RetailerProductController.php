@@ -72,8 +72,7 @@ class RetailerProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
-            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
-            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
+            'weight_kg' => 'required|numeric|min:0.001',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {
@@ -136,8 +135,7 @@ class RetailerProductController extends Controller
             'meta_keywords' => 'nullable|string|max:1000',
             'meta_description' => 'nullable|string|max:500',
             'special_offer_id' => 'nullable|exists:special_offers,id',
-            'shipping_charge_inside_dhaka' => 'nullable|numeric|min:0',
-            'shipping_charge_outside_dhaka' => 'nullable|numeric|min:0',
+            'weight_kg' => 'required|numeric|min:0.001',
         ]);
 
         if (! $this->verifyCategoryAndBrand($validated)) {

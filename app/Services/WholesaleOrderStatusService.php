@@ -45,6 +45,14 @@ class WholesaleOrderStatusService
         }
         $order->update($updateData);
 
+        if (in_array($newStatus, ['order_confirmed', 'ready_for_bangladesh_delivery'], true)) {
+            try {
+                app(\App\Services\CourierShipmentService::class)->maybeCreateShipment($order->fresh());
+            } catch (\Throwable $e) {
+                \Log::error("Courier auto-create failed for order {$order->id}: " . $e->getMessage());
+            }
+        }
+
         // 4. Write audit log — non-blocking
         try {
             OrderStatusLog::create([

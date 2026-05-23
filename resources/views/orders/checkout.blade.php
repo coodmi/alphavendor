@@ -168,11 +168,10 @@
                         'Mymensingh': ['Jamalpur', 'Mymensingh', 'Netrokona', 'Sherpur']
                     };
 
-                    const cartShipping = @json(collect($cart)->map(fn ($item) => [
-                        'inside' => $item['shipping_charge_inside_dhaka'] ?? null,
-                        'outside' => $item['shipping_charge_outside_dhaka'] ?? null,
-                    ])->values());
                     const subtotalAmount = {{ $total }};
+                    const cartHasImport = @json(!empty($cartHasImport));
+                    const calculateDeliveryUrl = @json(route('orders.calculate-delivery'));
+                    const csrfToken = @json(csrf_token());
 
                     function setDistrictValue(districtSelect, district) {
                         if (!district) return false;
@@ -191,53 +190,74 @@
                         return true;
                     }
 
-                    function calcShippingCharge(district) {
-                        const inside = String(district || '').trim().toLowerCase() === 'dhaka';
-                        let charge = 0;
-                        let hasCharge = false;
-                        cartShipping.forEach(item => {
-                            const raw = inside ? item.inside : item.outside;
-                            if (raw !== null && raw !== '' && !isNaN(parseFloat(raw))) {
-                                hasCharge = true;
-                                charge = Math.max(charge, parseFloat(raw));
-                            }
-                        });
-                        return { charge, hasCharge, inside };
-                    }
+                    function renderDeliveryBreakdown(data) {
+                        const box = document.getElementById('deliveryBreakdownBox');
+                        if (!box) return;
 
-                    function updateShippingSummary() {
-                        const district = document.getElementById('shipping_district')?.value || '';
-                        const deliveryInput = document.getElementById('delivery_charge');
-                        const shippingDisplay = document.getElementById('shippingChargeDisplay');
-                        const zoneLabel = document.getElementById('shippingZoneLabel');
-                        const grandTotal = document.getElementById('orderGrandTotal');
-                        const { charge, hasCharge, inside } = calcShippingCharge(district);
-
-                        if (!district) {
-                            if (shippingDisplay) shippingDisplay.textContent = 'Select district';
-                            if (zoneLabel) zoneLabel.textContent = '';
-                            if (deliveryInput) deliveryInput.value = '0';
-                            if (grandTotal) grandTotal.textContent = '৳' + subtotalAmount.toFixed(2);
+                        if (!data || !data.district) {
+                            box.classList.add('hidden');
+                            box.innerHTML = '';
                             return;
                         }
 
-                        if (zoneLabel) {
-                            zoneLabel.textContent = inside ? '(Inside Dhaka)' : '(Outside Dhaka)';
+                        let html = '';
+                        if (cartHasImport && data.is_import_order) {
+                            (data.import_lines || []).forEach(line => {
+                                html += `<div>Imported From: <strong>${line.import_country || '—'}</strong></div>`;
+                                html += `<div>Import Cost (${line.import_country || 'Origin'} → Bangladesh): ৳${Number(line.import_cost).toFixed(2)}</div>`;
+                            });
+                            html += `<div>Bangladesh Delivery (${data.district}): ৳${(Number(data.base_charge) + Number(data.weight_charge)).toFixed(2)}</div>`;
+                            html += `<div class="font-semibold text-gray-800 pt-1">Total Delivery Charge: ৳${Number(data.delivery_charge).toFixed(2)}</div>`;
+                        } else {
+                            html += `<div>District base (${data.district}): ৳${Number(data.base_charge).toFixed(2)}</div>`;
+                            if (Number(data.weight_charge) > 0) {
+                                html += `<div>Weight charge (${data.total_weight_kg || '?'} kg): ৳${Number(data.weight_charge).toFixed(2)}</div>`;
+                            }
                         }
 
-                        if (!hasCharge) {
-                            if (shippingDisplay) shippingDisplay.textContent = '—';
+                        box.innerHTML = html;
+                        box.classList.remove('hidden');
+                    }
+
+                    async function updateShippingSummary() {
+                        const district = document.getElementById('shipping_district')?.value || '';
+                        const deliveryInput = document.getElementById('delivery_charge');
+                        const shippingDisplay = document.getElementById('shippingChargeDisplay');
+                        const grandTotal = document.getElementById('orderGrandTotal');
+
+                        if (!district) {
+                            if (shippingDisplay) shippingDisplay.textContent = 'Select district';
                             if (deliveryInput) deliveryInput.value = '0';
-                        } else if (charge <= 0) {
-                            if (shippingDisplay) shippingDisplay.textContent = 'Free';
-                            if (deliveryInput) deliveryInput.value = '0';
-                        } else {
+                            if (grandTotal) grandTotal.textContent = '৳' + subtotalAmount.toFixed(2);
+                            renderDeliveryBreakdown(null);
+                            return;
+                        }
+
+                        if (shippingDisplay) shippingDisplay.textContent = 'Calculating…';
+
+                        try {
+                            const res = await fetch(calculateDeliveryUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                },
+                                body: JSON.stringify({ shipping_district: district }),
+                            });
+                            const data = await res.json();
+                            const charge = Number(data.delivery_charge || 0);
+
                             if (shippingDisplay) shippingDisplay.textContent = '৳' + charge.toFixed(2);
                             if (deliveryInput) deliveryInput.value = charge.toFixed(2);
+                            if (grandTotal) grandTotal.textContent = '৳' + (subtotalAmount + charge).toFixed(2);
+                            renderDeliveryBreakdown(data);
+                        } catch (e) {
+                            if (shippingDisplay) shippingDisplay.textContent = '—';
+                            if (deliveryInput) deliveryInput.value = '0';
+                            if (grandTotal) grandTotal.textContent = '৳' + subtotalAmount.toFixed(2);
+                            renderDeliveryBreakdown(null);
                         }
-
-                        const shipping = hasCharge ? Math.max(0, charge) : 0;
-                        if (grandTotal) grandTotal.textContent = '৳' + (subtotalAmount + shipping).toFixed(2);
                     }
 
                     document.addEventListener('DOMContentLoaded', function() {
@@ -547,17 +567,18 @@
                         @endforeach
                     </div>
 
-                    <div class="border-t pt-4 space-y-2 mb-6">
+                    <div class="border-t pt-4 space-y-2 mb-4">
                         <div class="flex justify-between text-sm text-gray-600">
                             <span>Subtotal</span>
-                            <span class="font-semibold"> {{ currency($total) }}</span>
+                            <span class="font-semibold" id="checkoutSubtotal"> {{ currency($total) }}</span>
                         </div>
                         <div class="flex justify-between text-sm text-gray-600">
-                            <span>Shipping <span id="shippingZoneLabel" class="text-gray-400 text-xs"></span></span>
+                            <span>Delivery Charge</span>
                             <span class="font-semibold" id="shippingChargeDisplay">Select district</span>
                         </div>
+                        <div id="deliveryBreakdownBox" class="hidden text-xs text-gray-600 bg-gray-50 rounded-lg p-3 space-y-1 border border-gray-100"></div>
                         <div class="flex justify-between text-lg font-bold pt-2 border-t">
-                            <span>Total</span>
+                            <span>Grand Total</span>
                             <span class="text-teal-600" id="orderGrandTotal"> {{ currency($total) }}</span>
                         </div>
                     </div>

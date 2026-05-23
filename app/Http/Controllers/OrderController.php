@@ -13,6 +13,7 @@ use App\Models\VendorWallet;
 use App\Models\Transaction;
 use App\Models\CommissionSetting;
 use App\Models\ManualPayment;
+use App\Services\DeliveryCalculationService;
 
 class OrderController extends Controller
 {
@@ -45,42 +46,51 @@ class OrderController extends Controller
         // Get user's saved addresses
         $addresses = auth()->check() ? auth()->user()->addresses()->orderBy('is_default', 'desc')->get() : collect();
 
-        foreach ($cart as $key => $item) {
-            $product = Product::find($item['id']);
-            $cart[$key]['shipping_charge_inside_dhaka'] = $product?->shipping_charge_inside_dhaka;
-            $cart[$key]['shipping_charge_outside_dhaka'] = $product?->shipping_charge_outside_dhaka;
-        }
-        Session::put('cart', $cart);
-
-        return view('orders.checkout', compact('cart', 'addresses', 'hasAdvanceRequired', 'advanceRequiredItems', 'advanceSettings'));
-    }
-
-    private function isInsideDhaka(string $district, string $state): bool
-    {
-        return strtolower(trim($district)) === 'dhaka';
-    }
-
-    private function calculateDeliveryChargeForItems(array $items, string $district, string $state): float
-    {
-        $insideDhaka = $this->isInsideDhaka($district, $state);
-        $charge = 0.0;
-
-        foreach ($items as $item) {
-            $product = Product::find($item['id']);
-            if (! $product) {
-                continue;
+        $cartHasImport = collect($cart)->contains(function ($item) {
+            $role = $item['vendor_role'] ?? null;
+            if (! $role) {
+                $vendor = \App\Models\User::find($item['vendor_id'] ?? 0);
+                $role = $vendor->role ?? 'retailer';
             }
 
-            $itemCharge = $insideDhaka
-                ? $product->shipping_charge_inside_dhaka
-                : $product->shipping_charge_outside_dhaka;
+            return $role === 'importer';
+        });
 
-            if ($itemCharge !== null) {
-                $charge = max($charge, (float) $itemCharge);
-            }
+        return view('orders.checkout', compact(
+            'cart',
+            'addresses',
+            'hasAdvanceRequired',
+            'advanceRequiredItems',
+            'advanceSettings',
+            'cartHasImport'
+        ));
+    }
+
+    public function calculateDelivery(Request $request, DeliveryCalculationService $deliveryService)
+    {
+        $validated = $request->validate([
+            'shipping_district' => 'required|string|max:100',
+        ]);
+
+        $cart = Session::get('cart', []);
+        if (empty($cart)) {
+            return response()->json(['delivery_charge' => 0, 'vendor_breakdowns' => []]);
         }
 
-        return $charge;
+        $result = $deliveryService->calculateForCart(array_values($cart), $validated['shipping_district']);
+
+        return response()->json($result);
+    }
+
+    private function applyDeliveryToOrder(array $deliveryResult): array
+    {
+        return [
+            'delivery_charge' => $deliveryResult['delivery_charge'],
+            'delivery_base_charge' => $deliveryResult['base_charge'],
+            'delivery_weight_charge' => $deliveryResult['weight_charge'],
+            'delivery_import_cost' => $deliveryResult['import_cost'],
+            'delivery_breakdown' => $deliveryResult,
+        ];
     }
     public function invoice(Order $order)
         {
@@ -167,6 +177,7 @@ class OrderController extends Controller
             // ────────────────────────────────────────────────────────────────────
 
             $commissionService = new \App\Services\CommissionService();
+            $deliveryService = app(DeliveryCalculationService::class);
 
             DB::beginTransaction();
 
@@ -187,11 +198,12 @@ class OrderController extends Controller
 
                 // Create separate order for each vendor
                 foreach ($ordersByVendor as $vendorId => $items) {
-                    $deliveryCharge = $this->calculateDeliveryChargeForItems(
+                    $deliveryResult = $deliveryService->calculateForVendorItems(
                         $items,
-                        $validated['shipping_district'],
-                        $validated['shipping_state'] ?? ''
+                        $validated['shipping_district']
                     );
+                    $deliveryCharge = $deliveryResult['delivery_charge'];
+                    $deliveryFields = $this->applyDeliveryToOrder($deliveryResult);
 
                     // Calculate commission using the new service
                     $commissionData = $commissionService->calculateOrderCommission(
@@ -236,7 +248,7 @@ class OrderController extends Controller
                         $advanceSettings->is_mandatory
                     );
 
-                    $order = Order::create([
+                    $order = Order::create(array_merge([
                         'order_number' => 'ORD-' . time() . '-' . rand(1000, 9999),
                         'user_id' => Auth::id(),
                         'vendor_id' => $vendorId,
@@ -247,7 +259,6 @@ class OrderController extends Controller
                         'cod_commission_rate' => $commissionData['cod_commission_rate'],
                         'vendor_earning' => $vendorEarning,
                         'total' => max(0, $total),
-                        'delivery_charge' => $deliveryCharge,
                         'status' => $initialStatus,
                         'payment_status' => 'unpaid',
                         'payment_method' => $validated['payment_method'],
@@ -257,8 +268,8 @@ class OrderController extends Controller
                         'shipping_zip' => $validated['shipping_district'] ?? $validated['shipping_city'] ?? 'N/A',
                         'shipping_country' => $validated['shipping_country'],
                         'phone' => $validated['phone'],
-                        'notes' => $validated['notes'] ?? ''
-                    ]);
+                        'notes' => $validated['notes'] ?? '',
+                    ], $deliveryFields));
 
                     // Track coupon usage
                     if ($appliedCouponCode && $couponDiscount > 0) {

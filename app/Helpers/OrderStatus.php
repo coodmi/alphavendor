@@ -28,6 +28,12 @@ class OrderStatus
                 'icon'   => 'fa-check-circle',
                 'hex'    => '#6366f1',
             ],
+            'ready_for_bangladesh_delivery' => [
+                'label'  => 'Ready for Bangladesh Delivery',
+                'color'  => 'bg-emerald-100 text-emerald-700',
+                'icon'   => 'fa-plane-arrival',
+                'hex'    => '#10b981',
+            ],
             'pending' => [
                 'label'  => 'Pending',
                 'color'  => 'bg-yellow-100 text-yellow-700',
@@ -189,8 +195,9 @@ class OrderStatus
         return [
             'pending_advance_payment' => ['advance_paid', 'cancelled'],
             'advance_paid'            => ['order_confirmed', 'cancelled'],
-            'order_confirmed'         => ['processing', 'cancelled'],
-            'processing'              => ['shipped', 'cancelled'],
+            'order_confirmed'         => ['processing', 'ready_for_bangladesh_delivery', 'cancelled'],
+            'ready_for_bangladesh_delivery' => ['shipped', 'cancelled'],
+            'processing'              => ['shipped', 'ready_for_bangladesh_delivery', 'cancelled'],
             'shipped'                 => ['delivered'],   // ← no cancel after shipped
             'delivered'               => [],              // terminal
             'cancelled'               => [],              // terminal
@@ -215,6 +222,7 @@ class OrderStatus
         return [
             'advance_paid'    => ['admin', 'employee'],
             'order_confirmed' => ['admin', 'employee'],
+            'ready_for_bangladesh_delivery' => ['admin', 'employee', 'importer'],
             'processing'      => ['admin', 'employee'],                              // seller removed
             'shipped'         => ['admin', 'employee', 'wholesaler', 'exporter', 'importer'],
             'delivered'       => ['admin', 'employee'],

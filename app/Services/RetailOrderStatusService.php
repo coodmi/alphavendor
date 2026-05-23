@@ -45,6 +45,14 @@ class RetailOrderStatusService
         }
         $order->update($updateData);
 
+        if ($newStatus === 'order_confirmed') {
+            try {
+                app(\App\Services\CourierShipmentService::class)->maybeCreateShipment($order->fresh());
+            } catch (\Throwable $e) {
+                \Log::error("Courier auto-create failed for order {$order->id}: " . $e->getMessage());
+            }
+        }
+
         // 4. Write audit log — non-blocking
         try {
             OrderStatusLog::create([

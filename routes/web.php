@@ -331,6 +331,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/newsletter/export', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'export'])->name('newsletter.export');
         Route::delete('/shipping-methods/{shippingMethod}', [\App\Http\Controllers\Admin\ShippingMethodController::class, 'destroy'])->name('shipping-methods.destroy');
 
+        // AR Market BD — district base + per-kg delivery settings
+        Route::get('/shipping-settings', [\App\Http\Controllers\Admin\ShippingSettingsController::class, 'index'])->name('shipping-settings.index');
+        Route::put('/shipping-settings/global', [\App\Http\Controllers\Admin\ShippingSettingsController::class, 'updateGlobal'])->name('shipping-settings.update-global');
+        Route::put('/shipping-settings/districts/bulk', [\App\Http\Controllers\Admin\ShippingSettingsController::class, 'bulkUpdateDistricts'])->name('shipping-settings.districts-bulk');
+        Route::put('/shipping-settings/districts/{districtDeliveryCharge}', [\App\Http\Controllers\Admin\ShippingSettingsController::class, 'updateDistrict'])->name('shipping-settings.district-update');
+
         // Order management
         Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
         Route::get('/orders/{order}', [AdminController::class, 'showOrder'])->name('orders.show');
@@ -806,6 +812,7 @@ Route::middleware('auth')->group(function () {
 
     // Order routes
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::post('/checkout/calculate-delivery', [OrderController::class, 'calculateDelivery'])->name('orders.calculate-delivery');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/success', [OrderController::class, 'success'])->name('orders.success');
     Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my-orders');
