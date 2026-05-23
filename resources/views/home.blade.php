@@ -775,18 +775,6 @@
                                                 <i class="far fa-eye text-sm"></i>
                                             </span>
                                         </div>
-                                        <div class="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                                            <button
-                                                onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
-                                                class="flex-1 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2">
-                                                <i class="fas fa-shopping-cart"></i> Add to Cart
-                                            </button>
-                                            <button
-                                                onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
-                                                class="flex-1 py-3 bg-gradient-to-r from-teal-700 to-teal-800 text-white font-semibold hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2">
-                                                <i class="fas fa-bolt"></i> Buy Now
-                                            </button>
-                                        </div>
                                     </div>
                                     <div class="p-4">
                                         <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 h-12">{{ $product->name }}</h4>
@@ -798,11 +786,22 @@
                                             <span class="text-gray-500 text-xs ml-1">({{ $product->reviews_count ?? 0 }})</span>
                                         </div>
                                         <div class="flex items-center gap-2 mb-3">
-                                            <span class="text-xl font-bold text-teal-700"> {{ currency($product->price) }}</span>
+                                            <span class="text-xl font-bold text-teal-700">{{ currency($product->price) }}</span>
                                             @if($product->old_price && $product->old_price > $product->price)
-                                                <span
-                                                    class="text-sm text-gray-400 line-through"> {{ currency($product->old_price) }}</span>
+                                                <span class="text-sm text-gray-400 line-through">{{ currency($product->old_price) }}</span>
                                             @endif
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button type="button"
+                                                onclick="event.preventDefault(); event.stopPropagation(); quickAddToCart({{ $product->id }}, this);"
+                                                class="flex-1 py-2.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-600 transition-all flex items-center justify-center gap-2 text-sm">
+                                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                                            </button>
+                                            <button type="button"
+                                                onclick="event.preventDefault(); event.stopPropagation(); buyNow({{ $product->id }}, this);"
+                                                class="flex-1 py-2.5 bg-gradient-to-r from-teal-700 to-teal-800 text-white rounded-lg font-medium hover:from-teal-800 hover:to-teal-900 transition-all flex items-center justify-center gap-2 text-sm">
+                                                <i class="fas fa-bolt"></i> Buy Now
+                                            </button>
                                         </div>
                                     </div>
                                 </a>
