@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\OtpVerification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Http;
+use App\Services\MimSmsClient;
 use App\Services\OtpMessageBuilder;
+use App\Support\BangladeshPhone;
 use Illuminate\Support\Facades\Session;
 
 class PasswordResetController extends Controller
@@ -27,35 +28,35 @@ class PasswordResetController extends Controller
      */
     public function sendResetOtp(Request $request)
     {
-        // Normalize mobile number before validation
         if ($request->has('mobile_number')) {
-            $normalized = $this->normalizeMobile($request->mobile_number);
-            $request->merge(['mobile_number' => $normalized]);
+            $request->merge(['mobile_number' => BangladeshPhone::normalize($request->mobile_number)]);
         }
 
-        $request->validate([
-            'mobile_number' => 'required|string|exists:users,mobile_number',
-        ]);
+        $normalized = $request->mobile_number;
 
-        // Get user
-        $user = User::where('mobile_number', $request->mobile_number)->first();
-        
-        if (!$user) {
-            return back()->withErrors(['mobile_number' => 'No account found with this mobile number.']);
+        $user = User::query()
+            ->whereIn('mobile_number', [
+                $normalized,
+                ltrim($normalized, '+'),
+                BangladeshPhone::forMimSms($normalized),
+            ])
+            ->first();
+
+        if (! $user) {
+            return back()->withErrors(['mobile_number' => 'No account found with this mobile number.'])->withInput();
         }
 
-        // Format phone number - ensure it has country code
-        $mobileNumber = $request->mobile_number;
-        if (substr($mobileNumber, 0, 2) === '01') {
-            $mobileNumber = '88' . $mobileNumber; // Add Bangladesh country code
-        }
+        $request->merge(['mobile_number' => BangladeshPhone::normalize($user->mobile_number)]);
 
         // Generate OTP
         $otp = rand(100000, 999999);
         
         // Store OTP
         OtpVerification::updateOrCreate(
-            ['phone_number' => $request->mobile_number],
+            [
+                'phone_number' => $request->mobile_number,
+                'purpose' => 'password_reset',
+            ],
             [
                 'otp_code' => $otp,
                 'purpose' => 'password_reset',
@@ -87,29 +88,18 @@ class PasswordResetController extends Controller
 
             // Get message template and replace {otp} placeholder
             $message = OtpMessageBuilder::build((string) $otp);
+            $smsResult = app(MimSmsClient::class)->send($request->mobile_number, $message);
 
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post('https://api.mimsms.com/api/SmsSending/SMS', [
-                'ApiKey' => config('services.mimsms.apikey'),
-                'MobileNumber' => $mobileNumber,
-                'SenderName' => config('services.mimsms.sender_name'),
-                'CampaignName' => config('services.mimsms.campaign_name', ''),
-                'UserName' => config('services.mimsms.username'),
-                'TransactionType' => 'T',
-                'MessageId' => '',
-                'Message' => $message,
-                'CampaignId' => 'null',
-                'SmsData' => null,
-                'Telco' => ''
-            ]);
+            if (! ($smsResult['success'] ?? false)) {
+                \Log::error('Password reset OTP SMS failed', [
+                    'mobile' => $request->mobile_number,
+                    'error' => $smsResult['error'] ?? 'unknown',
+                ]);
 
-            \Log::info('MiMSMS Password Reset OTP API response', [
-                'mobile' => $mobileNumber,
-                'otp' => $otp,
-                'response' => $response->json(),
-                'status' => $response->status(),
-            ]);
+                return back()->withErrors([
+                    'mobile_number' => 'OTP SMS পাঠানো যায়নি। নম্বর চেক করে আবার চেষ্টা করুন।',
+                ])->withInput();
+            }
 
             return redirect()->route('password.otp.form')
                 ->with('mobile_number', $request->mobile_number)
@@ -266,15 +256,14 @@ class PasswordResetController extends Controller
         // Generate new OTP
         $otp = rand(100000, 999999);
         
-        // Format phone number - ensure it has country code
-        $formattedMobile = $mobile;
-        if (substr($mobile, 0, 2) === '01') {
-            $formattedMobile = '88' . $mobile; // Add Bangladesh country code
-        }
-        
+        $mobile = BangladeshPhone::normalize($mobile);
+
         // Update OTP record
         OtpVerification::updateOrCreate(
-            ['phone_number' => $mobile],
+            [
+                'phone_number' => $mobile,
+                'purpose' => 'password_reset',
+            ],
             [
                 'otp_code' => $otp,
                 'purpose' => 'password_reset',
@@ -305,42 +294,18 @@ class PasswordResetController extends Controller
 
             // Get message template and replace {otp} placeholder
             $message = OtpMessageBuilder::build((string) $otp);
+            $smsResult = app(MimSmsClient::class)->send($mobile, $message);
 
-            $response = Http::timeout(30)->withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post('https://api.mimsms.com/api/SmsSending/SMS', [
-                'ApiKey' => config('services.mimsms.apikey'),
-                'MobileNumber' => $formattedMobile,
-                'SenderName' => config('services.mimsms.sender_name'),
-                'CampaignName' => config('services.mimsms.campaign_name', ''),
-                'UserName' => config('services.mimsms.username'),
-                'TransactionType' => 'T',
-                'MessageId' => '',
-                'Message' => $message,
-                'CampaignId' => 'null',
-                'SmsData' => null,
-                'Telco' => ''
-            ]);
-
-            \Log::info('MiMSMS Resend Password Reset OTP', [
-                'mobile' => $formattedMobile,
-                'response' => $response->json(),
-                'status' => $response->status(),
-            ]);
-
-            if ($response->successful()) {
-                $responseData = $response->json();
-                if (isset($responseData['statusCode']) && $responseData['statusCode'] == '200') {
-                    return response()->json([
-                        'success' => true, 
-                        'message' => 'OTP sent successfully!'
-                    ]);
-                }
+            if ($smsResult['success'] ?? false) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'OTP sent successfully!',
+                ]);
             }
 
             return response()->json([
-                'success' => false, 
-                'message' => 'Failed to send OTP. Please try again.'
+                'success' => false,
+                'message' => $smsResult['error'] ?? 'Failed to send OTP. Please try again.',
             ], 500);
 
         } catch (\Exception $e) {
@@ -356,13 +321,4 @@ class PasswordResetController extends Controller
         }
     }
 
-    private function normalizeMobile(string $number): string
-    {
-        $digits = preg_replace('/[^0-9]/', '', $number);
-        if (strlen($digits) === 13 && str_starts_with($digits, '880')) return '+' . $digits;
-        if (strlen($digits) === 11 && str_starts_with($digits, '0'))   return '+880' . substr($digits, 1);
-        if (strlen($digits) === 10 && str_starts_with($digits, '1'))   return '+880' . $digits;
-        if (str_starts_with($number, '+880')) return $number;
-        return '+880' . $digits;
-    }
 }
