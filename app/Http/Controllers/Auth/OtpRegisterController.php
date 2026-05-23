@@ -135,7 +135,7 @@ class OtpRegisterController extends Controller
 
             \Log::info('MiMSMS Registration OTP API response', [
                 'mobile' => $sessionData['mobile_number'],
-                'otp' => $otp, // Log OTP for debugging (remove in production)
+                'message_sent' => $message,
                 'response' => $response->json(),
                 'status' => $response->status(),
             ]);
@@ -397,6 +397,7 @@ class OtpRegisterController extends Controller
 
             \Log::info('MiMSMS Resend OTP API response', [
                 'mobile' => $pending['mobile_number'],
+                'message_sent' => $message,
                 'response' => $response->json(),
                 'status' => $response->status(),
             ]);
