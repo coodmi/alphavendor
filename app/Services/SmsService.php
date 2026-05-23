@@ -89,8 +89,11 @@ class SmsService
                 'user_agent' => request()->userAgent(),
             ]);
 
-            // Prepare OTP message
-            $message = $this->getOtpMessage($otpCode, $purpose);
+            // Prepare OTP message (global template)
+            $message = OtpMessageBuilder::build(
+                $otpCode,
+                (int) config('sms.otp_expiry_minutes', OtpMessageBuilder::expiryMinutes())
+            );
 
             // Send SMS
             $response = $this->send($phoneNumber, $message, 'otp', $userId);
@@ -295,23 +298,6 @@ class SmsService
     {
         $length = (int) config('sms.otp_length', 6);
         return str_pad(random_int(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);
-    }
-
-    /**
-     * Get OTP message template
-     */
-    protected function getOtpMessage($otpCode, $purpose)
-    {
-        $templates = [
-            'registration' => "Welcome! Your registration OTP is: {$otpCode}. Valid for " . (int) config('sms.otp_expiry_minutes', 10) . " minutes.",
-            'login' => "Your login OTP is: {$otpCode}. Valid for " . (int) config('sms.otp_expiry_minutes', 10) . " minutes.",
-            'password_reset' => "Your password reset OTP is: {$otpCode}. Valid for " . (int) config('sms.otp_expiry_minutes', 10) . " minutes.",
-            'phone_verification' => "Your phone verification OTP is: {$otpCode}. Valid for " . (int) config('sms.otp_expiry_minutes', 10) . " minutes.",
-            'transaction' => "Your transaction OTP is: {$otpCode}. Valid for " . (int) config('sms.otp_expiry_minutes', 10) . " minutes.",
-            'verification' => "Your verification OTP is: {$otpCode}. Valid for " . (int) config('sms.otp_expiry_minutes', 10) . " minutes.",
-        ];
-
-        return $templates[$purpose] ?? $templates['verification'];
     }
 
     /**

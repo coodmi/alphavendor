@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use App\Services\OtpMessageBuilder;
 
 class SettingController extends Controller
 {
@@ -14,8 +15,8 @@ class SettingController extends Controller
             'MIMSMS_TOKEN' => Setting::getValue('MIMSMS_TOKEN'),
             'MIMSMS_USERNAME' => Setting::getValue('MIMSMS_USERNAME'),
             'MIMSMS_SENDER' => Setting::getValue('MIMSMS_SENDER'),
-            'OTP_EXPIRY' => Setting::getValue('OTP_EXPIRY', 5),
-            'OTP_TEMPLATE' => Setting::getValue('OTP_TEMPLATE', 'Your OTP is: {otp}'),
+            'OTP_EXPIRY' => OtpMessageBuilder::expiryMinutes(),
+            'OTP_TEMPLATE' => OtpMessageBuilder::getTemplate(),
         ];
         return view('admin.settings.otp', compact('settings'));
     }
@@ -34,8 +35,13 @@ class SettingController extends Controller
 
             // Save settings to database
             foreach ($validated as $key => $value) {
-                Setting::setValue($key, $value ?? ''); // Handle null values
+                Setting::setValue($key, $value ?? '');
             }
+
+            OtpMessageBuilder::persistTemplate(
+                $validated['OTP_TEMPLATE'],
+                (int) $validated['OTP_EXPIRY']
+            );
 
             // Also update .env file for immediate use
             $this->updateEnvFile([
@@ -43,6 +49,7 @@ class SettingController extends Controller
                 'MIMSMS_USERNAME' => $validated['MIMSMS_USERNAME'],
                 'MIMSMS_SENDER_NAME' => $validated['MIMSMS_SENDER'],
                 'OTP_EXPIRY_MINUTES' => $validated['OTP_EXPIRY'],
+                'OTP_SMS_TEMPLATE' => $validated['OTP_TEMPLATE'],
             ]);
 
             // Clear config cache

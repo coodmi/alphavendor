@@ -95,12 +95,12 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">
                         OTP SMS Message Template <span class="text-red-500">*</span>
                     </label>
-                    <textarea name="otp_sms_template" rows="3"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600" 
-                           placeholder="Your OTP is: {otp}. Valid for 15 minutes. Do not share this code." required>{{ $settings['otp_sms_template'] ?? 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.' }}</textarea>
+                    <textarea name="otp_sms_template" rows="5"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-600 focus:border-teal-600 font-mono text-sm" 
+                           placeholder="Welcome to AR Market BD ! Your verification code : {otp}&#10;Valid for 15 minutes.&#10;For security, do not share this code." required>{{ $settings['otp_sms_template'] ?? '' }}</textarea>
                     <p class="mt-1 text-sm text-gray-500">
-                        <span class="font-semibold">Use {otp} placeholder</span> where the OTP code should appear. 
-                        Example: "Your OTP is: {otp}. Valid for 15 minutes."
+                        <span class="font-semibold">সব OTP SMS</span> (registration, login, password reset, API) এই টেমপ্লেট ব্যবহার করবে।
+                        <code>{otp}</code> = কোড, <code>{expiry}</code> = মিনিট (ঐচ্ছিক)।
                     </p>
                 </div>
             </div>

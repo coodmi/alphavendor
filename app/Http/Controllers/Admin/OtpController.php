@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\OtpVerification;
 use Illuminate\Support\Facades\Http;
+use App\Services\OtpMessageBuilder;
 
 class OtpController extends Controller
 {
@@ -31,7 +32,7 @@ class OtpController extends Controller
             'SenderName' => 'iSMS',
             'UserName' => env('MIMSMS_USERNAME'),
             'TransactionType' => 'T',
-            'Message' => "Your OTP is: {$otp->otp_code}",
+            'Message' => OtpMessageBuilder::build((string) $otp->otp_code),
         ]);
         \Log::info('Admin resent OTP', ['otp_id' => $otp->id, 'response' => $response->json()]);
         return back()->with('success', 'OTP resent successfully!');

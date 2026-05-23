@@ -10,6 +10,7 @@ use App\Models\OtpVerification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use App\Services\OtpMessageBuilder;
 
 class OtpRegisterController extends Controller
 {
@@ -80,7 +81,7 @@ class OtpRegisterController extends Controller
                 'otp_code' => $otp,
                 'purpose' => 'registration',
                 'status' => 'pending',
-                'expires_at' => Carbon::now()->addMinutes(15),
+                'expires_at' => Carbon::now()->addMinutes(OtpMessageBuilder::expiryMinutes()),
                 'attempts' => 0,
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
@@ -105,9 +106,7 @@ class OtpRegisterController extends Controller
                     ->with('success', "TEST MODE: Your OTP is {$otp}");
             }
 
-            // Get message template and replace {otp} placeholder
-            $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
-            $message = str_replace('{otp}', $otp, $template);
+            $message = OtpMessageBuilder::build((string) $otp);
 
             // Format phone number to 880 format
             $mobileNumber = $sessionData['mobile_number'];
@@ -347,7 +346,7 @@ class OtpRegisterController extends Controller
                 'otp_code' => $otp,
                 'purpose' => 'registration',
                 'status' => 'pending',
-                'expires_at' => Carbon::now()->addMinutes(15),
+                'expires_at' => Carbon::now()->addMinutes(OtpMessageBuilder::expiryMinutes()),
                 'attempts' => 0,
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
@@ -371,9 +370,7 @@ class OtpRegisterController extends Controller
                 ]);
             }
 
-            // Get message template and replace {otp} placeholder
-            $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
-            $message = str_replace('{otp}', $otp, $template);
+            $message = OtpMessageBuilder::build((string) $otp);
 
             $resendMobile = preg_replace('/[^0-9]/', '', $pending['mobile_number']);
             if (str_starts_with($resendMobile, '0')) {

@@ -491,16 +491,7 @@ class ProfessionalSmsService implements SmsServiceInterface
 
     private function buildOtpMessage(string $otpCode, string $purpose, int $expiryMinutes): string
     {
-        $templates = $this->config['templates']['otp'] ?? [];
-        
-        $template = $templates[$purpose] ?? $templates['phone_verification'] ?? 
-                   "Your verification code is: {{otp}}. Valid for {{expiry}} minutes.";
-
-        return str_replace(
-            ['{{otp}}', '{{expiry}}'],
-            [$otpCode, $expiryMinutes],
-            $template
-        );
+        return \App\Services\OtpMessageBuilder::build($otpCode, $expiryMinutes);
     }
 
     private function calculateSmsCost(string $message): float

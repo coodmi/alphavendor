@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use App\Services\OtpMessageBuilder;
 
 class OtpSettingsController extends Controller
 {
@@ -18,8 +19,8 @@ class OtpSettingsController extends Controller
             'mimsms_username' => env('MIMSMS_USERNAME', ''),
             'mimsms_sender_name' => env('MIMSMS_SENDER_NAME', ''),
             'mimsms_campaign_name' => env('MIMSMS_CAMPAIGN_NAME', ''),
-            'otp_sms_template' => env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.'),
-            'otp_expiry_minutes' => env('OTP_EXPIRY_MINUTES', 5),
+            'otp_sms_template' => OtpMessageBuilder::getTemplate(),
+            'otp_expiry_minutes' => OtpMessageBuilder::expiryMinutes(),
             'otp_max_attempts' => env('OTP_MAX_ATTEMPTS', 3),
             'sms_test_mode' => env('SMS_TEST_MODE', false),
         ];
@@ -80,6 +81,11 @@ class OtpSettingsController extends Controller
         // Write back to .env
         file_put_contents($envPath, $envContent);
 
+        OtpMessageBuilder::persistTemplate(
+            $request->otp_sms_template,
+            (int) $request->otp_expiry_minutes
+        );
+
         // Clear config cache
         Artisan::call('config:clear');
         Artisan::call('cache:clear');
@@ -106,9 +112,7 @@ class OtpSettingsController extends Controller
 
             $otp = rand(100000, 999999);
             
-            // Get message template and replace {otp} placeholder
-            $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
-            $message = str_replace('{otp}', $otp, $template);
+            $message = OtpMessageBuilder::build((string) $otp);
             
             $response = \Illuminate\Support\Facades\Http::withHeaders([
                 'Content-Type' => 'application/json',

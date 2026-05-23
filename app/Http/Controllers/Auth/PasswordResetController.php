@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\OtpVerification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use App\Services\OtpMessageBuilder;
 use Illuminate\Support\Facades\Session;
 
 class PasswordResetController extends Controller
@@ -59,7 +60,7 @@ class PasswordResetController extends Controller
                 'otp_code' => $otp,
                 'purpose' => 'password_reset',
                 'status' => 'pending',
-                'expires_at' => Carbon::now()->addMinutes(15),
+                'expires_at' => Carbon::now()->addMinutes(OtpMessageBuilder::expiryMinutes()),
                 'attempts' => 0,
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
@@ -85,8 +86,7 @@ class PasswordResetController extends Controller
             }
 
             // Get message template and replace {otp} placeholder
-            $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
-            $message = str_replace('{otp}', $otp, $template);
+            $message = OtpMessageBuilder::build((string) $otp);
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -279,7 +279,7 @@ class PasswordResetController extends Controller
                 'otp_code' => $otp,
                 'purpose' => 'password_reset',
                 'status' => 'pending',
-                'expires_at' => Carbon::now()->addMinutes(15),
+                'expires_at' => Carbon::now()->addMinutes(OtpMessageBuilder::expiryMinutes()),
                 'attempts' => 0,
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
@@ -304,8 +304,7 @@ class PasswordResetController extends Controller
             }
 
             // Get message template and replace {otp} placeholder
-            $template = env('OTP_SMS_TEMPLATE', 'Your OTP is: {otp}. Valid for 15 minutes. Do not share this code.');
-            $message = str_replace('{otp}', $otp, $template);
+            $message = OtpMessageBuilder::build((string) $otp);
 
             $response = Http::timeout(30)->withHeaders([
                 'Content-Type' => 'application/json',

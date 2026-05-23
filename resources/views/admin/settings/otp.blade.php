@@ -55,9 +55,9 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label class="block font-semibold mb-1">OTP SMS Template</label>
-                <input type="text" name="OTP_TEMPLATE" value="{{ $settings['OTP_TEMPLATE'] }}" class="w-full border rounded px-3 py-2" required>
-                <small class="text-gray-500">Use <code>{otp}</code> where the OTP should appear.</small>
+                <label class="block font-semibold mb-1">OTP SMS Template (সব OTP-তে একই)</label>
+                <textarea name="OTP_TEMPLATE" rows="5" class="w-full border rounded px-3 py-2 font-mono text-sm" required>{{ $settings['OTP_TEMPLATE'] }}</textarea>
+                <small class="text-gray-500">Use <code>{otp}</code> for the code. Optional: <code>{expiry}</code> for minutes.</small>
                 @error('OTP_TEMPLATE')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
